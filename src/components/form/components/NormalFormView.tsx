@@ -1,8 +1,9 @@
 import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import FieldRenderer from './FieldRenderer';
-import { intializeForm } from '../../../utils';
+import FieldRenderer from './FieldRenderer.js';
+import { intializeForm } from '../utils.js';
+import type { BaseFormViewProps } from "../Form.types.js";
 
 export default function NormalFormView({
   title,
@@ -10,18 +11,18 @@ export default function NormalFormView({
   data,
   onSubmit = (values) => { console.log(values) },
   onCancel = () => { }
-}) {
+}: BaseFormViewProps) {
   const fields = Object.values(groupedFields).flat();
   console.log("groupedFields", groupedFields);
   console.log("fields", fields)
 
-  const initialValues = {};
+  const initialValues: Record<string, any> = {};
   const validationSchema = {};
-  Object.keys(groupedFields).forEach((step) => {
-    intializeForm(groupedFields[step], initialValues, validationSchema)
-  })
+  Object.entries(groupedFields).forEach(([step, fields]) => {
+    intializeForm(fields, initialValues, validationSchema);
+  });
 
-  if (Object.keys(data).length > 0) {
+  if (data && Object.keys(data).length > 0) {
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {

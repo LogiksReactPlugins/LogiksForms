@@ -1,35 +1,35 @@
 import React from "react";
 
-import { determineViewMode, groupFields } from "../../utils";
+import { determineViewMode, groupFields } from "./utils.js";
 
-import AccordionFormView from "./components/AccordionFormView";
-import TabFormView from "./components/TabFormView";
-import NormalFormView from "./components/NormalFormView";
+import AccordionFormView from "./components/AccordionFormView.js";
+import TabFormView from "./components/TabFormView.js";
+import NormalFormView from "./components/NormalFormView.js";
+import type { FormProps } from "./Form.types.js";
 
-
-export default function LogiskFrom({ formJson, data, onSubmit, onCancel }) {
+export default function LogiskForm({ formJson, data, onSubmit, onCancel }: FormProps) {
   const viewMode = determineViewMode(formJson);
   const groupedFields = groupFields(formJson.fields);
-
-  const formVeiw = {
+  const safeData = data ?? {};
+  const formView = {
     "accordion": <AccordionFormView
       title={formJson.title}
       groupedFields={groupedFields}
-      data={data}
+      data={safeData}
       onSubmit={onSubmit}
       onCancel={onCancel}
     />,
     "tab": <TabFormView
       title={formJson.title}
       groupedFields={groupedFields}
-      data={data}
+      data={safeData}
       onSubmit={onSubmit}
       onCancel={onCancel}
     />,
     "normal": <NormalFormView
       title={formJson.title}
       groupedFields={groupedFields}
-      data={data}
+      data={safeData}
       onSubmit={onSubmit}
       onCancel={onCancel}
     />
@@ -37,7 +37,13 @@ export default function LogiskFrom({ formJson, data, onSubmit, onCancel }) {
 
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
     {
-      formVeiw[viewMode]
+      formView[viewMode] ?? <NormalFormView
+        title={formJson.title}
+        groupedFields={groupedFields}
+        data={safeData}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+      />
     }
   </div>
 };

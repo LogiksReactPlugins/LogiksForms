@@ -1,8 +1,9 @@
 import React from 'react'
-import FieldRenderer from "./FieldRenderer";
+import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { intializeForm } from '../../../utils';
+import { intializeForm } from '../utils.js';
+import type { BaseFormViewProps } from "../Form.types.js";
 
 
 export default function TabFormView({
@@ -11,21 +12,20 @@ export default function TabFormView({
   data,
   onSubmit = (values) => { console.log(values) },
   onCancel = () => { }
-}) {
+}: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
-  const stepperForm = {};
-  const initialValues = {};
-
-  Object.keys(groupedFields).forEach((step) => {
+  const stepperForm: Record<string, Record<string, Yup.AnySchema>> = {};
+  const initialValues: Record<string, any> = {};
+  Object.entries(groupedFields).forEach(([step, fields]) => {
     const validationSchema = {};
-    intializeForm(groupedFields[step], initialValues, validationSchema)
-    groupedFields[step]
+    intializeForm(fields, initialValues, validationSchema)
     stepperForm[step] = validationSchema;
-  })
+  });
 
-  if (Object.keys(data).length > 0) {
+
+  if (data && Object.keys(data).length > 0) {
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {
@@ -33,12 +33,17 @@ export default function TabFormView({
       }
     });
   }
+  const currentStepKey = groupNames[activeTabIndex] ?? null;
 
+  const currentStepSchema: Record<string, Yup.AnySchema> =
+    (currentStepKey && stepperForm[currentStepKey])
+      ? stepperForm[currentStepKey]
+      : {};
 
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-    validationSchema: Yup.object().shape(stepperForm[groupNames[activeTabIndex]]),
+    validationSchema: Yup.object().shape(currentStepSchema),
     onSubmit: (values) => {
 
       if (activeTabIndex < groupNames.length - 1) {
@@ -133,7 +138,7 @@ export default function TabFormView({
           <form onSubmit={formik.handleSubmit} className="p-8 max-w-6xl mx-auto">
             {/* Fields Container */}
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-              {groupedFields[groupNames[activeTabIndex]].map((field, index) => (
+              {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
                 <FieldRenderer key={field.name} field={field} formik={formik} />
               ))}
             </div>

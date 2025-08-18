@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import type { FieldRendererProps } from '../Form.types.js';
 
 
-export default function FieldRenderer({ field, formik }) {
+export default function FieldRenderer({ field, formik }: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState('');
   const key = field.name;
@@ -37,7 +38,7 @@ export default function FieldRenderer({ field, formik }) {
               value={formik.values[key]}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              placeholder={`Enter ${field.label.toLowerCase()}...`}
+              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}...`}
               disabled={field.disabled}
             />
             {/* Animated border glow */}
@@ -46,7 +47,7 @@ export default function FieldRenderer({ field, formik }) {
           </div>
           {formik.touched[key] && formik.errors[key] &&
 
-            <span className="error-message">{formik.errors[key]}</span>
+            <span className="error-message">{String(formik.errors[key])}</span>
           }
         </div>
       );
@@ -66,7 +67,7 @@ export default function FieldRenderer({ field, formik }) {
               onChange={formik.handleChange}
               disabled={field.disabled}
             >
-              <option value="" disabled >Select {field.label.toLowerCase()}...</option>
+              <option value="" disabled >Select {field.label ?? field.name.toLowerCase()}...</option>
               {Object.entries(field.options || {}).map(([val, label]) => (
                 <option key={val} value={val} className="py-2">
                   {label}
@@ -75,7 +76,7 @@ export default function FieldRenderer({ field, formik }) {
             </select>
             {formik.touched[key] && formik.errors[key] &&
 
-              <span className="error-message">{formik.errors[key]}</span>
+              <span className="error-message">{String(formik.errors[key])}</span>
             }
             {/* Custom dropdown arrow */}
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -104,9 +105,9 @@ export default function FieldRenderer({ field, formik }) {
               value={formik.values[key]}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              placeholder={`Enter ${field.label.toLowerCase()}...`}
+              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}...`}
               disabled={field.disabled}
-             
+
             />
             {/* Animated border glow */}
             <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
@@ -114,7 +115,7 @@ export default function FieldRenderer({ field, formik }) {
           </div>
           {formik.touched[key] && formik.errors[key] &&
 
-            <span className="error-message">{formik.errors[key]}</span>
+            <span className="error-message">{String(formik.errors[key])}</span>
           }
         </div>
       );

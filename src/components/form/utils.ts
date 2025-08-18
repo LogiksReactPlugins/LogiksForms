@@ -1,5 +1,6 @@
 import * as Yup from "yup";
-export function determineViewMode(json) {
+import type { FormJson, FormField } from "./Form.types.js";
+export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
 
   const fields = Object.values(json.fields || {});
@@ -8,8 +9,9 @@ export function determineViewMode(json) {
   return hasGroup ? 'tab' : 'normal';
 }
 
-export function groupFields(fields) {
-  const grouped = {};
+export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
+  const grouped: Record<string, FormField[]> = {};
+
   const defaultGroup = 'General';
   Object.entries(fields).forEach(([key, config]) => {
     const group = config.group || defaultGroup;
@@ -20,7 +22,11 @@ export function groupFields(fields) {
   return grouped;
 }
 
-export const intializeForm = (formFields, initialValues, validationSchema) => {
+export const intializeForm = (
+  formFields: FormField[],
+  initialValues: Record<string, any>,
+  validationSchema: Record<string, Yup.AnySchema>
+) => {
   formFields.forEach((field) => {
     let fieldName = field.name;
     const value = fieldName === "blocked" || fieldName === "blacklist" ? "false" : ""
@@ -49,3 +55,21 @@ export const intializeForm = (formFields, initialValues, validationSchema) => {
   })
 }
 
+
+export const tailwindGrid = {
+  12: "lg:grid-cols-1",
+  6: "lg:grid-cols-2",
+  4: "lg:grid-cols-3",
+  3: "lg:grid-cols-4",
+  2: "lg:grid-cols-6",
+  1: "lg:grid-cols-12"
+}
+
+export const tailwindCols = {
+  12: "lg:col-span-12",
+  6: "lg:col-span-6",
+  4: "lg:col-span-4",
+  3: "lg:col-span-3",
+  2: "lg:col-span-2",
+  1: "lg:col-span-1"
+};
