@@ -35,11 +35,13 @@ export default function LogiskForm({ formJson = {title:"", fields: {}, source: {
     />
   }
 
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
+  return <div className="h-full  relative overflow-hidden">
     {
       formView[viewMode] ?? formView.normal
     }
   </div>
 };
+
+// bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100
 
 
