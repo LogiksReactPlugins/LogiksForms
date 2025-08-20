@@ -1,23 +1,18 @@
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
- 
-
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
 }
+
+input[type="file"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  filter: invert(0.5);
+}
+
 .error-message {
   color: #dc2626;
   font-size: 0.75rem;
@@ -26,5 +21,3 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: block;
   font-weight: 400;
 }
-
-

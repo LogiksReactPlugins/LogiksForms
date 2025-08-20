@@ -4,7 +4,7 @@ import type { FormikProps } from "formik";
 export interface FormField {
     name: string;
     label?: string;
-    width?: number;
+    width?: number | string;
     options?:Record<string, any>,
     group?: string;
     type?: string;

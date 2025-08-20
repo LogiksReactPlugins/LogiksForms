@@ -7,9 +7,9 @@ import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
 
-export default function LogiskForm({ formJson, data, onSubmit, onCancel }: FormProps) {
+export default function LogiskForm({ formJson = {title:"", fields: {}, source: {} }, data, onSubmit, onCancel }: FormProps) {
   const viewMode = determineViewMode(formJson);
-  const groupedFields = groupFields(formJson.fields);
+  const groupedFields = groupFields(formJson.fields ?? {});
   const safeData = data ?? {};
   const formView = {
     "accordion": <AccordionFormView
@@ -37,13 +37,7 @@ export default function LogiskForm({ formJson, data, onSubmit, onCancel }: FormP
 
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
     {
-      formView[viewMode] ?? <NormalFormView
-        title={formJson.title}
-        groupedFields={groupedFields}
-        data={safeData}
-        onSubmit={onSubmit}
-        onCancel={onCancel}
-      />
+      formView[viewMode] ?? formView.normal
     }
   </div>
 };

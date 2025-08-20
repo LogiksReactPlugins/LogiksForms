@@ -28,7 +28,11 @@ export default function FieldRenderer({ field, formik }: FieldRendererProps) {
     case "textarea":
       return (
         <div className="relative">
-          <label className={labelClasses}>{field.label}</label>
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+
+          </label>
           <div className="relative">
             <textarea
 
@@ -38,7 +42,7 @@ export default function FieldRenderer({ field, formik }: FieldRendererProps) {
               value={formik.values[key]}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}...`}
+              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}`}
               disabled={field.disabled}
             />
             {/* Animated border glow */}
@@ -56,7 +60,11 @@ export default function FieldRenderer({ field, formik }: FieldRendererProps) {
     case "dataSelector":
       return (
         <div className="relative">
-          <label className={labelClasses}>{field.label}</label>
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+
+          </label>
           <div className="relative">
             <select
               className={`${baseInputClasses} ${focusClasses} appearance-none cursor-pointer pr-12`}
@@ -95,7 +103,11 @@ export default function FieldRenderer({ field, formik }: FieldRendererProps) {
     default:
       return (
         <div className="relative">
-          <label className={labelClasses}>{field.label}</label>
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+
+          </label>
           <div className="relative">
             <input
               type={field.type || "text"}
@@ -105,7 +117,7 @@ export default function FieldRenderer({ field, formik }: FieldRendererProps) {
               value={formik.values[key]}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}...`}
+              placeholder={`Enter ${field.label ?? field.name.toLowerCase()}`}
               disabled={field.disabled}
 
             />

@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm } from '../utils.js';
+import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
 import type { BaseFormViewProps } from "../Form.types.js";
 
 export default function NormalFormView({
@@ -52,11 +52,17 @@ export default function NormalFormView({
       <h2 className="text-xl font-bold mb-4">{title}</h2>
       <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-in fade-in duration-300">
         <form onSubmit={formik.handleSubmit} className="p-8 max-w-6xl mx-auto">
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+          <div className='grid grid-cols-12 gap-4'>
 
 
-            {fields.map((field) => (
-              <FieldRenderer key={field.name} field={field} formik={formik} />
+            {fields.map((field, index) => (
+              <div
+                key={field?.name ?? `field-${index}`}
+                className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
+                  }`}
+              >
+                <FieldRenderer key={field.name} field={field} formik={formik} />
+              </div>
             ))}
 
           </div>

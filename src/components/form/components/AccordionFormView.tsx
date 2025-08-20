@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm } from '../utils.js';
+import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
 import type { BaseFormViewProps } from "../Form.types.js";
 
@@ -49,8 +49,6 @@ export default function AccordionFormView({
     }
   })
 
-  console.log("formik", formik.values);
-  console.log("formik", formik.errors)
   return (
 
     <div className="relative z-10 p-6 max-w-6xl w-full mx-auto">
@@ -70,9 +68,15 @@ export default function AccordionFormView({
           <div className="space-y-2">
             {Object.entries(groupedFields).map(([group, fields], index) => (
               <Accordion key={group} title={group} isFirst={index === 0}>
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field) => (
-                    <FieldRenderer key={field.name} field={field} formik={formik} />
+                    <div
+                      key={field?.name ?? `field-${index}`}
+                      className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
+                        }`}
+                    >
+                      <FieldRenderer key={field.name} field={field} formik={formik} />
+                    </div>
                   ))}
                 </div>
               </Accordion>
