@@ -10,8 +10,9 @@ export default function TabFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { console.log(values) },
-  onCancel = () => { }
+  onSubmit = (values) => { },
+  onCancel = () => { },
+   methods = {}
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
@@ -20,7 +21,7 @@ export default function TabFormView({
   const initialValues: Record<string, any> = {};
   Object.entries(groupedFields).forEach(([step, fields]) => {
     const validationSchema = {};
-    intializeForm(fields, initialValues, validationSchema)
+    intializeForm(fields, initialValues, validationSchema);
     stepperForm[step] = validationSchema;
   });
 
@@ -58,8 +59,9 @@ export default function TabFormView({
     }
   })
 
-  console.log("formik.errors", formik.errors)
-  console.log("activeTabIndex", activeTabIndex)
+  console.log("formik",formik.values)
+
+
   const handlePrevious = () => {
     setActiveTabIndex(pre => {
       if (pre > 0) {
@@ -70,35 +72,26 @@ export default function TabFormView({
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-
+    <div className=" max-w-full  m-4">
       {/* Modern Tab Navigation */}
       <div className="relative">
-        {/* Background pill that slides */}
-        <div className="relative bg-gray-100 rounded-t-2xl p-2 shadow-inner">
-          <div
-            className="absolute top-2 bottom-2 bg-white rounded-xl shadow-lg transition-all duration-300 ease-out"
-            style={{
-              width: `${100 / groupNames.length}%`,
-              left: `${(activeTabIndex * 100) / groupNames.length}%`
-            }}
-          ></div>
-
+        <div className="relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner">
           {/* Tab buttons */}
-          <nav className="relative flex">
+          <nav className="relative flex" >
             {groupNames.map((group, index) => (
               <button
                 key={group}
                 type="button"
                 onClick={() => setActiveTabIndex(index)}
-                className={`relative flex-1 py-4 px-6 rounded-xl text-sm font-semibold transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${activeTabIndex === index
-                  ? 'text-blue-700 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-800'
+                className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
+                  ? 'text-action bg-white'
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
                   }`}
+
               >
                 <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
                   {/* Add icons based on common tab names */}
-               
+
                   {group}
                 </span>
               </button>
@@ -108,56 +101,55 @@ export default function TabFormView({
       </div>
 
       {/* Content Area with Animation */}
-      <div className="relative ">
+     
         <div
           key={groupNames[activeTabIndex]}
-          className="bg-white rounded-b-2xl shadow-xl border border-gray-100 p-8 animate-in fade-in duration-300"
+          className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
         >
           {/* Content Header */}
 
-          <form onSubmit={formik.handleSubmit} className="p-8 max-w-6xl mx-auto">
+          <form onSubmit={formik.handleSubmit} className="w-full mx-auto">
             {/* Fields Container */}
-            <div className='grid grid-cols-12 gap-2'>
+            <div className='grid grid-cols-12 gap-4'>
               {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
                 <div
                   key={field?.name ?? `field-${index}`}
                   className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
                     }`}
                 >
-                  <FieldRenderer key={field.name} field={field} formik={formik} />
+                  <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} />
                 </div>
               ))}
             </div>
-            <div className={`mt-4 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}>
-              {activeTabIndex > 0 && <button onClick={handlePrevious} type="button" className="px-5 py-3 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-purple-300 hover:text-purple-600 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200">
+            <div className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}>
+              {activeTabIndex > 0 && <button onClick={handlePrevious} type="button" className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                 Previous
               </button>}
 
               <div className='space-x-3'>
-                <button onClick={onCancel} type="button" className="px-5 py-3 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-purple-300 hover:text-purple-600 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200">
+                <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                   Cancel
                 </button>
-                <button type='submit' className="px-5 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                   Save
                 </button>
               </div>
-
-
-
-
-
             </div>
           </form>
           {/* Progress Indicator */}
-          <div className="mt-8 pt-6 border-t border-gray-100">
+          <div className="mt-2 pt-3  border-t border-gray-100">
             <div className="flex items-center justify-between text-sm text-gray-500">
-              <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
+              <div className="flex items-center">
+                <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
+                <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
+              </div>
+
               <div className="flex gap-1">
                 {groupNames.map((_, index) => (
                   <div
                     key={index}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
-                      ? 'bg-blue-500 w-6'
+                      ? 'bg-action w-6'
                       : 'bg-gray-300'
                       }`}
                   ></div>
@@ -166,7 +158,7 @@ export default function TabFormView({
             </div>
           </div>
         </div>
-      </div>
+      
     </div>
   );
 };

@@ -3,15 +3,15 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
-import Accordion from './Accordion.js'
+import Card from './Card.js'
 import type { BaseFormViewProps } from "../Form.types.js";
 
 
-export default function AccordionFormView({
+export default function CardFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => {  },
+  onSubmit = (values) => { console.log(values) },
   onCancel = () => { },
   methods={}
 }: BaseFormViewProps) {
@@ -21,9 +21,10 @@ export default function AccordionFormView({
   const validationSchema = {};
 
   Object.entries(groupedFields).forEach(([step, fields]) => {
+
     intializeForm(fields, initialValues, validationSchema);
   });
-
+ 
 
   if (data && Object.keys(data).length > 0) {
     // Update initialValues based on records
@@ -55,7 +56,7 @@ export default function AccordionFormView({
         <form onSubmit={formik.handleSubmit} className="p-4 mx-auto">
           <div className="space-y-2">
             {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
-              <Accordion key={group} title={group} isFirst={index === 0}>
+              <Card key={group} title={group}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field) => (
                     <div
@@ -63,11 +64,11 @@ export default function AccordionFormView({
                       className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
                         }`}
                     >
-                      <FieldRenderer key={field.name} field={field} formik={formik} methods={methods}/>
+                      <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} />
                     </div>
                   ))}
                 </div>
-              </Accordion>
+              </Card>
             ))}
           </div>
 

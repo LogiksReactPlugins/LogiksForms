@@ -2,11 +2,13 @@ import * as Yup from "yup";
 import type { FormJson, FormField } from "./Form.types.js";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
+  if (json.template === 'simple') return 'simple';
+  if (json.template === 'cards') return 'cards';
 
   const fields = Object.values(json.fields || {});
   const hasGroup = fields.some((field) => field.group);
 
-  return hasGroup ? 'tab' : 'normal';
+  return hasGroup ? 'tab' : 'simple';
 }
 
 export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
@@ -28,32 +30,65 @@ export const intializeForm = (
   validationSchema: Record<string, Yup.AnySchema>
 ) => {
   formFields.forEach((field) => {
-    let fieldName = field.name;
-    const value = fieldName === "blocked" || fieldName === "blacklist" ? "false" : ""
-    initialValues[fieldName] = value;
+    const fieldName = field?.name;
+
+    // Set default initial value depending on type
+    
+    if (field?.type === "checkbox") {
+
+      if (field?.multiple === true) {
+        initialValues[fieldName] = []; // multiple checkbox group → array
+      } else {
+        initialValues[fieldName] = false; // single checkbox → boolean
+      }
+    } else if (fieldName === "blocked" || fieldName === "blacklist") {
+      initialValues[fieldName] = "false"; // boolean checkboxes
+    } else {
+      initialValues[fieldName] = "";
+    }
+
+    // Build validation schema
     if (field?.required) {
-      // Handle validation regex safely
-      const regex = field?.regex
-        ? new RegExp(field.regex)
-        : null;
+      const regex = field?.regex ? new RegExp(field.regex) : null;
 
-      let validation = Yup.string();
-
-      if (regex) {
-        validation = validation.matches(
-          regex,
-          field?.error_message || "Invalid input"
+      if (field?.type === "checkbox") {
+        // Validation for checkbox groups
+        if (field?.multiple === true) {
+          validationSchema[fieldName] = Yup.array()
+            .of(Yup.string())
+            .min(1, field?.placeholder || "Please select at least one option")
+            .required(field?.placeholder || "This field is required");
+        } else {
+          validationSchema[fieldName] = Yup.boolean()
+            .oneOf([true], field?.placeholder || "Please select")
+            .required(field?.placeholder || "This field is required");
+        }
+      } else {
+        // Default: string validation
+        let validation = Yup.string();
+        if (regex) {
+          validation = validation.matches(
+            regex,
+            field?.error_message || "Invalid input"
+          );
+        }
+        validationSchema[fieldName] = validation.required(
+          field?.placeholder || field?.field_error || "This field is required"
         );
       }
-
-      validationSchema[fieldName] = validation.required(
-        field?.placeholder || field?.field_error || "This field is required"
-      );
     } else {
-      validationSchema[fieldName] = Yup.string()
+      // Not required
+      if (field?.type === "checkbox") {
+        validationSchema[fieldName] = field?.multiple === true
+          ? Yup.array().of(Yup.string())
+          : Yup.boolean();
+      } else {
+        validationSchema[fieldName] = Yup.string();
+      }
     }
-  })
-}
+  });
+};
+
 
 
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;

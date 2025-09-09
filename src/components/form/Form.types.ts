@@ -1,19 +1,25 @@
 
 import type { FormikProps } from "formik";
-
+import type { AxiosRequestConfig } from "axios";
 export interface FormField {
     name: string;
     label?: string;
     width?: number | string;
-    options?:Record<string, any>,
+    options?: Record<string, any>,
     group?: string;
     type?: string;
     regex?: string;
-    required?: boolean;  
-    disabled?: boolean;         
+    required?: boolean;
+    disabled?: boolean;
     error_message?: string;      // error message if regex fails
     placeholder?: string;        // input placeholder
     field_error?: string;
+    axiosObject?: AxiosRequestConfig,
+    valueKey?: string,
+    labelKey?: string,
+    source?: Record<string, any>,
+    multiple?:boolean,
+    icon?:string
 }
 
 
@@ -28,9 +34,9 @@ export interface FormJson {
 export interface FormProps {
 
     formJson: FormJson;
-    data?: Record<string, any>;
-    onSubmit: (data: Record<string, any>) => void;
-    onCancel: () => void;
+    userid?: string | null;
+    methods?: Record<string, Function>
+    onCancel?: () => void;
 
 }
 
@@ -41,9 +47,11 @@ export interface BaseFormViewProps {
     data?: Record<string, any>;
     onSubmit: (data: Record<string, any>) => void;
     onCancel: () => void;
+    methods?: Record<string, Function>
 }
 
 export interface FieldRendererProps {
-  field: FormField;
-  formik: FormikProps<Record<string, any>>;
+    field: FormField;
+    formik: FormikProps<Record<string, any>>;
+    methods?: Record<string, Function>
 }

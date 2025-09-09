@@ -9,12 +9,12 @@ export default function NormalFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { console.log(values) },
-  onCancel = () => { }
+  onSubmit = (values) => { },
+  onCancel = () => { },
+  methods = {}
 }: BaseFormViewProps) {
   const fields = Object.values(groupedFields).flat();
-  console.log("groupedFields", groupedFields);
-  console.log("fields", fields)
+
 
   const initialValues: Record<string, any> = {};
   const validationSchema = {};
@@ -31,8 +31,6 @@ export default function NormalFormView({
     });
   }
 
-  console.log("initialValues", initialValues)
-
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -45,13 +43,14 @@ export default function NormalFormView({
     }
   })
 
-  console.log("formik", formik.values);
-  console.log("formik", formik.errors)
+
   return (
-    <div className="relative z-10 p-6 max-w-6xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
-      <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-in fade-in duration-300">
-        <form onSubmit={formik.handleSubmit} className="p-8 max-w-6xl mx-auto">
+    <div className="relative z-10 max-w-full  m-4">
+
+      <div className="bg-white animate-in fade-in duration-300">
+        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <p className=' px-5 text-sm text-gray-700'>All fields marked (*) are required</p>
+        <form onSubmit={formik.handleSubmit} className="p-5  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
 
 
@@ -61,17 +60,17 @@ export default function NormalFormView({
                 className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
                   }`}
               >
-                <FieldRenderer key={field.name} field={field} formik={formik} />
+                <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} />
               </div>
             ))}
 
           </div>
 
-          <div className="mt-4 flex justify-end space-x-3">
-            <button onClick={onCancel} className="px-5 py-3 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-purple-300 hover:text-purple-600 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <div className="mt-8 flex justify-end space-x-3">
+            <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
               Cancel
             </button>
-            <button type="submit" className="px-5 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-purple-300">
+            <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
               Save
             </button>
 

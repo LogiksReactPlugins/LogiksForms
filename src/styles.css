@@ -1,23 +1,6 @@
 @import "tailwindcss";
 
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
-}
-
-input[type="file"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
-}
-
 input[type="file"]::-webkit-file-upload-button {
   filter: invert(0.5);
 }
 
-.error-message {
-  color: #dc2626;
-  font-size: 0.75rem;
-  line-height: 1.66;
-  margin-top: 3px;
-  display: block;
-  font-weight: 400;
-}

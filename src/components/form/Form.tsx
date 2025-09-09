@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 import { determineViewMode, groupFields } from "./utils.js";
 
@@ -6,42 +7,146 @@ import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
+import CardFormView from "./components/CardFormView.js";
 
-export default function LogiskForm({ formJson = {title:"", fields: {}, source: {} }, data, onSubmit, onCancel }: FormProps) {
+export default function LogiksForm({
+  formJson = { title: "", fields: {}, source: {} },
+  methods = {},
+  userid = null,
+  onCancel = () => { }
+}: FormProps) {
+
   const viewMode = determineViewMode(formJson);
-  const groupedFields = groupFields(formJson.fields ?? {});
-  const safeData = data ?? {};
+  const groupedFields = groupFields(formJson?.fields ?? {});
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>({});
+
+
+  // ---------- Fetch Initial Data ----------
+  React.useEffect(() => {
+    let isMounted = true;
+    const fetchData = async () => {
+      const source = formJson?.source ?? {};
+      if (!source?.type) {
+        if (isMounted) setResolvedData({});
+        return;
+      }
+
+      if (source.type === "method") {
+        const methodName = source.method as keyof typeof methods | undefined;
+        const methodFn = methodName ? methods[methodName] : undefined;
+        if (methodFn) {
+          try {
+            const result = await Promise.resolve(methodFn());
+            if (isMounted) setResolvedData(result ?? {});
+          } catch (err) {
+            console.error("Method execution failed:", err);
+            if (isMounted) setResolvedData({});
+          }
+        } else {
+          if (isMounted) setResolvedData({});
+        }
+      }
+
+      if (source.type === "api") {
+        try {
+          const response = await axios({
+            method: source.method || "GET",
+            url: source.url,
+            data: source.body ?? {},
+            params: source.params ?? {},
+            headers: source.headers ?? {},
+          });
+          if (isMounted) setResolvedData(response.data ?? {});
+        } catch (err) {
+          console.error("API fetch failed:", err);
+          if (isMounted) setResolvedData({});
+        }
+      }
+    };
+
+    fetchData();
+    return () => { isMounted = false; };
+  }, [
+    userid,
+    formJson?.source?.type || "",
+    formJson?.source?.method || "",
+    formJson?.source?.url || "",
+    JSON.stringify(formJson?.source?.params ?? {}),
+    JSON.stringify(formJson?.source?.body ?? {}),
+    JSON.stringify(formJson?.source?.headers ?? {})
+  ]);
+
+
+  // ---------- Handle Form Submission ----------
+  const handleSubmit = async (values: Record<string, any>) => {
+    const source = formJson?.source ?? {};
+
+    if (source.type === "method") {
+      const methodName = source.method as keyof typeof methods | undefined;
+      const methodFn = methodName ? methods[methodName] : undefined;
+      if (methodFn) {
+        try {
+          await Promise.resolve(methodFn(values));
+        } catch (err) {
+          console.error("Method execution failed:", err);
+        }
+      }
+    }
+
+    if (source.type === "api") {
+      try {
+        await axios({
+          method: source.method || "POST",
+          url: source.url,
+          data: values ?? {},
+          params: source.params ?? {},
+          headers: source.headers ?? {},
+        });
+      } catch (err) {
+        console.error("API fetch failed:", err);
+      }
+    }
+  };
+
+
   const formView = {
     "accordion": <AccordionFormView
-      title={formJson.title}
+      title={formJson?.title ?? ""}
       groupedFields={groupedFields}
-      data={safeData}
-      onSubmit={onSubmit}
+      data={resolvedData}
+      onSubmit={handleSubmit}
       onCancel={onCancel}
+      methods={methods}
+    />,
+    "cards": <CardFormView
+      title={formJson?.title ?? ""}
+      groupedFields={groupedFields}
+      data={resolvedData}
+      onSubmit={handleSubmit}
+      onCancel={onCancel}
+      methods={methods}
     />,
     "tab": <TabFormView
-      title={formJson.title}
+      title={formJson?.title ?? ""}
       groupedFields={groupedFields}
-      data={safeData}
-      onSubmit={onSubmit}
+      data={resolvedData}
+      onSubmit={handleSubmit}
       onCancel={onCancel}
+      methods={methods}
     />,
-    "normal": <NormalFormView
-      title={formJson.title}
+    "simple": <NormalFormView
+      title={formJson?.title ?? ""}
       groupedFields={groupedFields}
-      data={safeData}
-      onSubmit={onSubmit}
+      data={resolvedData}
+      onSubmit={handleSubmit}
       onCancel={onCancel}
+      methods={methods}
     />
-  }
+  };
 
-  return <div className="h-full  relative overflow-hidden">
-    {
-      formView[viewMode] ?? formView.normal
-    }
-  </div>
-};
-
-// bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100
-
-
+  return (
+    <div className="h-full relative">
+      {formView[viewMode] ?? formView.simple}
+    </div>
+  );
+}

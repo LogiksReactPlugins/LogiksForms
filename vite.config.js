@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
         fileName: (format) => `index.${format}.js`
       },
       rollupOptions: {
-        external: ['react', 'react-dom'],
+        external: ['react', 'react-dom', 'formik', 'yup', 'axios'],
         output: {
           globals: {
             react: 'React',
