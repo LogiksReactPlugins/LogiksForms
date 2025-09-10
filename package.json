@@ -1,6 +1,6 @@
 {
   "name": "logiks-forms",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Reusable Form React component with Formik and Yup validation",
   "type": "module",
   "main": "dist/index.umd.js",
