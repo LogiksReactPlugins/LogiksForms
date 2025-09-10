@@ -1,6 +1,7 @@
 
 import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
+import type { ReactNode } from "react";
 export interface FormField {
     name: string;
     label?: string;
@@ -37,6 +38,7 @@ export interface FormProps {
     userid?: string | null;
     methods?: Record<string, Function>
     onCancel?: () => void;
+    components?:Record<string, ReactNode>
 
 }
 
@@ -47,11 +49,13 @@ export interface BaseFormViewProps {
     data?: Record<string, any>;
     onSubmit: (data: Record<string, any>) => void;
     onCancel: () => void;
-    methods?: Record<string, Function>
+    methods?: Record<string, Function>;
+    components?:Record<string, ReactNode>
 }
 
 export interface FieldRendererProps {
     field: FormField;
     formik: FormikProps<Record<string, any>>;
-    methods?: Record<string, Function>
+    methods?: Record<string, Function>;
+    components?:Record<string, ReactNode>
 }

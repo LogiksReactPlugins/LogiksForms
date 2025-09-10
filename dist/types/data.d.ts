@@ -2,7 +2,6 @@ export declare const example1: {
     preload: {
         helpers: string[];
     };
-    postsubmit: {};
     source: {
         type: string;
         method: string;
@@ -38,6 +37,9 @@ export declare const example1: {
             label: string;
             type: string;
         };
+        demo: {
+            type: string;
+        };
         mobile: {
             label: string;
             required: boolean;
@@ -64,21 +66,17 @@ export declare const example1: {
         };
         address: {
             label: string;
-            group: string;
         };
         type: {
             label: string;
-            group: string;
             type: string;
             groupid: string;
         };
         region: {
             label: string;
-            group: string;
         };
         zipcode: {
             label: string;
-            group: string;
         };
         gender: {
             label: string;

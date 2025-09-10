@@ -13,7 +13,8 @@ export default function LogiksForm({
   formJson = { title: "", fields: {}, source: {} },
   methods = {},
   userid = null,
-  onCancel = () => { }
+  onCancel = () => { },
+  components = {}
 }: FormProps) {
 
   const viewMode = determineViewMode(formJson);
@@ -117,6 +118,7 @@ export default function LogiksForm({
       onSubmit={handleSubmit}
       onCancel={onCancel}
       methods={methods}
+      components={components}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -125,6 +127,7 @@ export default function LogiksForm({
       onSubmit={handleSubmit}
       onCancel={onCancel}
       methods={methods}
+      components={components}
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -133,6 +136,7 @@ export default function LogiksForm({
       onSubmit={handleSubmit}
       onCancel={onCancel}
       methods={methods}
+      components={components}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -141,6 +145,7 @@ export default function LogiksForm({
       onSubmit={handleSubmit}
       onCancel={onCancel}
       methods={methods}
+        components={components}
     />
   };
 

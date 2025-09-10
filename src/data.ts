@@ -3,17 +3,12 @@ export const example1 = {
 	"preload": {
 		"helpers": ["countries"]
 	},
-
-
-	"postsubmit": {
-
-	},
+  
 	"source": {
 		"type": "method",
 		"method": "postData",
 		"where": ["userid"]
 	},
-
 
 	"fields": {
 		"email": {
@@ -45,6 +40,11 @@ export const example1 = {
 			"label": "Date of Birth",
 			"type": "date"
 		},
+
+		"demo": {
+			"type": "component",
+			
+		},
 		"mobile": {
 			"label": "Mobile",
 			"required": true,
@@ -71,21 +71,21 @@ export const example1 = {
 		},
 		"address": {
 			"label": "Address",
-			"group": "address",
+			
 		},
 		"type": {
 			"label": "Address Type",
-			"group": "address",
+			
 			"type": "dataSelector",
 			"groupid": "address_type"
 		},
 		"region": {
 			"label": "Region/State",
-			"group": "address",
+			
 		},
 		"zipcode": {
 			"label": "Zipcode/PIN Code",
-			"group": "address",
+			
 		},
 		"gender": {
 			"label": "Gender",

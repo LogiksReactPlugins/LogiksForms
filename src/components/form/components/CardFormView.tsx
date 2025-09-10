@@ -13,7 +13,8 @@ export default function CardFormView({
   data,
   onSubmit = (values) => { console.log(values) },
   onCancel = () => { },
-  methods={}
+  methods={},
+  components={}
 }: BaseFormViewProps) {
 
 
@@ -64,7 +65,7 @@ export default function CardFormView({
                       className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
                         }`}
                     >
-                      <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} />
+                      <FieldRenderer components={components} key={field.name} field={field} formik={formik} methods={methods} />
                     </div>
                   ))}
                 </div>

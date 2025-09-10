@@ -12,7 +12,8 @@ export default function TabFormView({
   data,
   onSubmit = (values) => { },
   onCancel = () => { },
-   methods = {}
+  methods = {},
+  components = {}
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
@@ -59,8 +60,7 @@ export default function TabFormView({
     }
   })
 
-  console.log("formik",formik.values)
-
+  console.log("formik", formik.values)
 
   const handlePrevious = () => {
     setActiveTabIndex(pre => {
@@ -101,64 +101,64 @@ export default function TabFormView({
       </div>
 
       {/* Content Area with Animation */}
-     
-        <div
-          key={groupNames[activeTabIndex]}
-          className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
-        >
-          {/* Content Header */}
 
-          <form onSubmit={formik.handleSubmit} className="w-full mx-auto">
-            {/* Fields Container */}
-            <div className='grid grid-cols-12 gap-4'>
-              {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
+      <div
+        key={groupNames[activeTabIndex]}
+        className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
+      >
+        {/* Content Header */}
+
+        <form onSubmit={formik.handleSubmit} className="w-full mx-auto">
+          {/* Fields Container */}
+          <div className='grid grid-cols-12 gap-4'>
+            {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
+              <div
+                key={field?.name ?? `field-${index}`}
+                className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
+                  }`}
+              >
+                <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} components={components} />
+              </div>
+            ))}
+          </div>
+          <div className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}>
+            {activeTabIndex > 0 && <button onClick={handlePrevious} type="button" className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+              Previous
+            </button>}
+
+            <div className='space-x-3'>
+              <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+                Cancel
+              </button>
+              <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+                Save
+              </button>
+            </div>
+          </div>
+        </form>
+        {/* Progress Indicator */}
+        <div className="mt-2 pt-3  border-t border-gray-100">
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center">
+              <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
+              <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
+            </div>
+
+            <div className="flex gap-1">
+              {groupNames.map((_, index) => (
                 <div
-                  key={field?.name ?? `field-${index}`}
-                  className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
+                    ? 'bg-action w-6'
+                    : 'bg-gray-300'
                     }`}
-                >
-                  <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} />
-                </div>
+                ></div>
               ))}
-            </div>
-            <div className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}>
-              {activeTabIndex > 0 && <button onClick={handlePrevious} type="button" className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                Previous
-              </button>}
-
-              <div className='space-x-3'>
-                <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                  Cancel
-                </button>
-                <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                  Save
-                </button>
-              </div>
-            </div>
-          </form>
-          {/* Progress Indicator */}
-          <div className="mt-2 pt-3  border-t border-gray-100">
-            <div className="flex items-center justify-between text-sm text-gray-500">
-              <div className="flex items-center">
-                <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
-                <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
-              </div>
-
-              <div className="flex gap-1">
-                {groupNames.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
-                      ? 'bg-action w-6'
-                      : 'bg-gray-300'
-                      }`}
-                  ></div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
-      
+      </div>
+
     </div>
   );
 };

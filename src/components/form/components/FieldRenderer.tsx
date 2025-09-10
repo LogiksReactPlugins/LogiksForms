@@ -4,7 +4,7 @@ import axios from 'axios';
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 
 
-export default function FieldRenderer({ field, formik, methods = {} }: FieldRendererProps) {
+export default function FieldRenderer({ field, formik, methods = {}, components }: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [options, setOptions] = useState<Record<string, string>>(field.options || {});
   const [search, setSearch] = useState("");
@@ -308,6 +308,10 @@ export default function FieldRenderer({ field, formik, methods = {} }: FieldRend
           )}
         </div>
       )
+
+      case "component":
+
+      return components?.[key]
 
     case "checkbox": {
       const optionCount = Object.keys(options || {}).length;
