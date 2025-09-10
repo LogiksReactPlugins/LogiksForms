@@ -145,7 +145,7 @@ export default function LogiksForm({
   };
 
   return (
-    <div className="h-full relative">
+    <div className="relative">
       {formView[viewMode] ?? formView.simple}
     </div>
   );
