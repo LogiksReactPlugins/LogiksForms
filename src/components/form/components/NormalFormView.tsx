@@ -58,7 +58,7 @@ export default function NormalFormView({
             {fields.map((field, index) => (
               <div
                 key={field?.name ?? `field-${index}`}
-                className={`col-span-12 sm:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-2"
+                className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}
               >
                 <FieldRenderer components={components} key={field.name} field={field} formik={formik} methods={methods} />

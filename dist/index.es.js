@@ -865,7 +865,7 @@ function be({
       /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(pe, { title: m, isFirst: b === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
         "div",
         {
-          className: `col-span-12 sm:col-span-6 ${Y[V(Number(g.width))] || "lg:col-span-2"}`,
+          className: `col-span-12 md:col-span-6 ${Y[V(Number(g.width))] || "lg:col-span-4"}`,
           children: /* @__PURE__ */ e.jsx(W, { components: u, field: g, formik: f, methods: j }, g.name)
         },
         g?.name ?? `field-${b}`
@@ -927,7 +927,7 @@ function ge({
             /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: b && r[b]?.map((c, x) => /* @__PURE__ */ e.jsx(
               "div",
               {
-                className: `col-span-12 sm:col-span-6 ${Y[V(Number(c.width))] || "lg:col-span-2"}`,
+                className: `col-span-12 md:col-span-6 ${Y[V(Number(c.width))] || "lg:col-span-4"}`,
                 children: /* @__PURE__ */ e.jsx(W, { field: c, formik: N, methods: j, components: u }, c.name)
               },
               c?.name ?? `field-${x}`
@@ -996,7 +996,7 @@ function je({
       /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: o.map((t, b) => /* @__PURE__ */ e.jsx(
         "div",
         {
-          className: `col-span-12 sm:col-span-6 ${Y[V(Number(t.width))] || "lg:col-span-2"}`,
+          className: `col-span-12 md:col-span-6 ${Y[V(Number(t.width))] || "lg:col-span-4"}`,
           children: /* @__PURE__ */ e.jsx(W, { components: u, field: t, formik: m, methods: j }, t.name)
         },
         t?.name ?? `field-${b}`
@@ -1062,7 +1062,7 @@ function ye({
       /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(ve, { title: m, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
         "div",
         {
-          className: `col-span-12 sm:col-span-6 ${Y[V(Number(g.width))] || "lg:col-span-2"}`,
+          className: `col-span-12 md:col-span-6 ${Y[V(Number(g.width))] || "lg:col-span-4"}`,
           children: /* @__PURE__ */ e.jsx(W, { components: u, field: g, formik: f, methods: j }, g.name)
         },
         g?.name ?? `field-${b}`
