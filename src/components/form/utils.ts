@@ -41,6 +41,11 @@ export const intializeForm = (
       } else {
         initialValues[fieldName] = false; // single checkbox → boolean
       }
+    }else if (field?.type === "tags") {
+
+      
+        initialValues[fieldName] = []; // multiple checkbox group → array
+     
     } else if (fieldName === "blocked" || fieldName === "blacklist") {
       initialValues[fieldName] = "false"; // boolean checkboxes
     } else {
@@ -82,6 +87,8 @@ export const intializeForm = (
         validationSchema[fieldName] = field?.multiple === true
           ? Yup.array().of(Yup.string())
           : Yup.boolean();
+      }else if(field?.type === "tags"){
+ validationSchema[fieldName] = Yup.array().of(Yup.string());
       } else {
         validationSchema[fieldName] = Yup.string();
       }
