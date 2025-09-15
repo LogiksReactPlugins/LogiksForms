@@ -12,7 +12,7 @@ export default function NormalFormView({
   onSubmit = (values) => { },
   onCancel = () => { },
   methods = {},
-  components={}
+  components = {}
 }: BaseFormViewProps) {
   const fields = Object.values(groupedFields).flat();
 
@@ -44,16 +44,16 @@ export default function NormalFormView({
     }
   })
 
-  console.log("formik",formik.values)
+  console.log("formik", formik.values)
 
 
   return (
     <div className="relative z-10 max-w-full  m-4">
 
-      <div className="bg-white animate-in fade-in duration-300">
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
-        <p className=' px-5 text-sm text-gray-700'>All fields marked (*) are required</p>
-        <form onSubmit={formik.handleSubmit} className="p-5  mx-auto">
+      <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
+        <h2 className="text-xl font-bold pl-4 pt-4 mb-4">{title}</h2>
+
+        <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
 
 
@@ -69,13 +69,18 @@ export default function NormalFormView({
 
           </div>
 
-          <div className="mt-8 flex justify-end space-x-3">
-            <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-              Cancel
-            </button>
-            <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-              Save
-            </button>
+          <div className="mt-8 flex justify-between space-x-3">
+            <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
+            <div className='space-x-3'>
+              <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                Cancel
+              </button>
+              <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                Save
+              </button>
+            </div>
+
+
 
           </div>
         </form>

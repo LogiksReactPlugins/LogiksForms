@@ -859,23 +859,23 @@ function be({
       n(m);
     }
   });
-  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsxs("div", { className: "bg-white animate-in fade-in duration-300", children: [
-    /* @__PURE__ */ e.jsx("p", { className: "px-4 pt-4 text-sm text-secondary", children: "All fields marked (*) are required" }),
-    /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
-      /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(pe, { title: m, isFirst: b === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
-        "div",
-        {
-          className: `col-span-12 md:col-span-6 ${Y[W(Number(g.width))] || "lg:col-span-4"}`,
-          children: /* @__PURE__ */ e.jsx(V, { components: u, field: g, formik: f, methods: j }, g.name)
-        },
-        g?.name ?? `field-${b}`
-      )) }) }, m)) }),
-      /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-end space-x-3", children: [
+  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(pe, { title: m, isFirst: b === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
+      "div",
+      {
+        className: `col-span-12 md:col-span-6 ${Y[W(Number(g.width))] || "lg:col-span-4"}`,
+        children: /* @__PURE__ */ e.jsx(V, { components: u, field: g, formik: f, methods: j }, g.name)
+      },
+      g?.name ?? `field-${b}`
+    )) }) }, m)) }),
+    /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
+      /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
+      /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
         /* @__PURE__ */ e.jsx("button", { type: "button", onClick: l, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
         /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Save" })
       ] })
     ] })
-  ] }) });
+  ] }) }) });
 }
 function ge({
   title: s,
@@ -989,10 +989,9 @@ function je({
       n(t);
     }
   });
-  return console.log("formik", m.values), /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsxs("div", { className: "bg-white animate-in fade-in duration-300", children: [
-    /* @__PURE__ */ e.jsx("h2", { className: "text-xl font-bold mb-4", children: s }),
-    /* @__PURE__ */ e.jsx("p", { className: " px-5 text-sm text-gray-700", children: "All fields marked (*) are required" }),
-    /* @__PURE__ */ e.jsxs("form", { onSubmit: m.handleSubmit, className: "p-5  mx-auto", children: [
+  return console.log("formik", m.values), /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsxs("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: [
+    /* @__PURE__ */ e.jsx("h2", { className: "text-xl font-bold pl-4 pt-4 mb-4", children: s }),
+    /* @__PURE__ */ e.jsxs("form", { onSubmit: m.handleSubmit, className: "p-4  mx-auto", children: [
       /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: o.map((t, b) => /* @__PURE__ */ e.jsx(
         "div",
         {
@@ -1001,9 +1000,12 @@ function je({
         },
         t?.name ?? `field-${b}`
       )) }),
-      /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-end space-x-3", children: [
-        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: l, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Cancel" }),
-        /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Save" })
+      /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
+        /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
+        /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
+          /* @__PURE__ */ e.jsx("button", { type: "button", onClick: l, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Cancel" }),
+          /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Save" })
+        ] })
       ] })
     ] })
   ] }) });
@@ -1056,23 +1058,23 @@ function ye({
       n(m);
     }
   });
-  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsxs("div", { className: "bg-white animate-in fade-in duration-300", children: [
-    /* @__PURE__ */ e.jsx("p", { className: "px-4 pt-4 text-sm text-secondary", children: "All fields marked (*) are required" }),
-    /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
-      /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(ve, { title: m, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
-        "div",
-        {
-          className: `col-span-12 md:col-span-6 ${Y[W(Number(g.width))] || "lg:col-span-4"}`,
-          children: /* @__PURE__ */ e.jsx(V, { components: u, field: g, formik: f, methods: j }, g.name)
-        },
-        g?.name ?? `field-${b}`
-      )) }) }, m)) }),
-      /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-end space-x-3", children: [
+  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([m, t], b) => /* @__PURE__ */ e.jsx(ve, { title: m, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: t.map((g) => /* @__PURE__ */ e.jsx(
+      "div",
+      {
+        className: `col-span-12 md:col-span-6 ${Y[W(Number(g.width))] || "lg:col-span-4"}`,
+        children: /* @__PURE__ */ e.jsx(V, { components: u, field: g, formik: f, methods: j }, g.name)
+      },
+      g?.name ?? `field-${b}`
+    )) }) }, m)) }),
+    /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
+      /* @__PURE__ */ e.jsx("p", { className: "px-4 pt-4 text-sm text-secondary", children: "All fields marked (*) are required" }),
+      /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
         /* @__PURE__ */ e.jsx("button", { type: "button", onClick: l, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
         /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Save" })
       ] })
     ] })
-  ] }) });
+  ] }) }) });
 }
 function Ee({
   formJson: s = { title: "", fields: {}, source: {} },

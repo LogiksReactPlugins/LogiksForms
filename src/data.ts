@@ -1,102 +1,310 @@
 
-export const example1 = {
-	"preload": {
-		"helpers": ["countries"]
+export const example1 ={
+	"schema":"1.0",
+	"title":"Test Form",
+	"category":"Test",
+	"privilege":"*",
+	"blocked":false,
+	template:"accordion",
+	"hooks": {
+		"preload": {
+			"helpers": ["countries"]
+		}
 	},
-  
 	"source": {
-		"type": "method",
-		"method": "postData",
-		"where": ["userid"]
+		"type": "sql",
+		"table": "uitest_tbl",
+		"where": ["md5(id)"]
 	},
-
+	"forcefill": {
+		"guid": "#SESS_GUID#",
+		"autogen_no":"#AUTOGEN:MT,100000000000,999999999999#",
+		"rowhash": "#ROWHASH:#field_textfield##field_dataSelectorFromTable#"
+	},
+	"gotolink": "infoview/uitest/{hashid}?",
 	"fields": {
-		"email": {
-			"label": "E-mail",
-			"type": "email",
+		"field_textfield": {
+			"label": "Simple Text Field",
+			"required": true
+		},
+		"field_dataSelectorFromTable": {
+			"label": "DB Dropdown",
+			"group": "Dropdown",
 			"required": true,
-			"validate": {
-				"email": true
+			"dbkey": "core",
+			"type": "dataSelectorFromTable",
+			"table": "lgks_users",
+			"columns": "name as title, id as value",
+			"where": {
+				"blocked": "false"
 			},
-			"icon": "fa-regular fa-envelope"
+			"no-option": "Select User Name"
 		},
-		"userid": {
-			"label": "Login ID",
-			"disabled": true,
-			"concat": {
-				"position": "after",
-				"field": "email"
+		"field_dataSelectorFromTable_multiple": {
+			"label": "DB Dropdown - Multi",
+			"group": "Dropdown",
+			"multiple": true,
+			"dbkey": "core",
+			"type": "dataSelectorFromTable",
+			"table": "lgks_users",
+			"columns": "name as title, id as value",
+			"where": {
+				"blocked": "false"
+			},
+			"no-option": "Select User Name"
+		},
+		"field_dataSelectorFromTable_search": {
+			"label": "Search Dropdown",
+			"group": "Dropdown",
+			"search": true,
+			"dbkey": "core",
+			"type": "dataSelectorFromTable",
+			"table": "lgks_users",
+			"columns": "name as title, id as value",
+			"where": {
+				"blocked": "false"
+			},
+			"no-option": "Select User Name"
+		},
+		"field_selectAJAX": {
+			"label": "AJAX Dropdown",
+			"group": "Dropdown",
+			"dbkey": "core",
+			"type": "selectAJAX",
+			"table": "lgks_users",
+			"columns": "name as title, id as value",
+			"where": {
+				"blocked": "false"
+			},
+			"no-option": "Select User Name"
+		},
+		"field_autosuggest": {
+			"label": "Autosuggest Dropdown",
+			"group": "Info",
+			"type": "autosuggest",
+			"source": {
+				"table": "profiletbl",
+				"where": {
+					"blocked": "false"
+				}
+			},
+			"no-option": "Select User Name"
+		},
+		"field_select": {
+			"label": "select",
+			"group": "Info",
+			"type": "select",
+			"options": {
+				"A": "A1",
+				"B": "B1",
+				"C": "C1",
+				"D": "D1",
+				"E": "E1"
 			}
 		},
-		"name": {
-			"label": "Full Name",
-			"type": "file",
-			"validate": {
-				"length-min": 5,
-				"length-max": 10
+		"field_radiolist": {
+			"label": "radiolist",
+			"group": "Info",
+			"type": "radiolist",
+			"options": {
+				"A": "A1",
+				"B": "B1",
+				"C": "C1",
+				"D": "D1",
+				"E": "E1"
 			}
 		},
-		"dob": {
-			"label": "Date of Birth",
+		"field_textarea": {
+			"label": "textarea",
+			"group": "Info",
+			"type": "textarea"
+		},
+		"field_richtextarea": {
+			"label": "richtextarea",
+			"group": "Info",
+			"type": "richtextarea"
+		},
+		"field_markup": {
+			"label": "markup",
+			"group": "Info",
+			"type": "markup"
+		},
+		"field_color": {
+			"label": "color",
+			"group": "Info",
+			"type": "color"
+		},
+		"field_checkbox": {
+			"label": "checkbox",
+			"group": "Info",
+			"type": "checkbox"
+		},
+		"field_date": {
+			"label": "date",
+			"group": "Info",
 			"type": "date"
 		},
-
-		"demo": {
-			"type": "component",
-			
+		"field_datetime": {
+			"label": "datetime",
+			"group": "Info",
+			"type": "datetime"
 		},
-		"mobile": {
-			"label": "Mobile",
-			"required": true,
-			"icon": "fa-solid fa-mobile-screen"
+		"field_month": {
+			"label": "month",
+			"group": "Info",
+			"type": "month"
 		},
-		"subjects": {
-			"label": "Subjects Opted",
-			"type": "checkbox",
-			"multiple": true,
-			"required": true,
-			"source": {
-				"type": "method",
-				"method": "getOptions",
-				"where": ["userid"]
-			},
+		"field_year": {
+			"label": "year",
+			"group": "Info",
+			"type": "year"
 		},
-		"remarks": {
-			"label": "Description\/Notes",
-			"type": "tags",
-			"width": "12",
-			"validate": {
-				"length-min": 15
-			}
+		"field_time": {
+			"label": "time",
+			"group": "Info",
+			"type": "time"
 		},
-		"address": {
-			"label": "Address",
-			
+		"field_currency": {
+			"label": "currency",
+			"group": "Info",
+			"type": "currency"
 		},
-		"type": {
-			"label": "Address Type",
-			
-			"type": "dataSelector",
-			"groupid": "address_type"
+		"field_creditcard": {
+			"label": "creditcard",
+			"group": "Info",
+			"type": "creditcard"
 		},
-		"region": {
-			"label": "Region/State",
-			
+		"field_debitcard": {
+			"label": "debitcard",
+			"group": "Info",
+			"type": "debitcard"
 		},
-		"zipcode": {
-			"label": "Zipcode/PIN Code",
-			
+		"field_moneycard": {
+			"label": "moneycard",
+			"group": "Info",
+			"type": "moneycard"
 		},
-		"gender": {
-			"label": "Gender",
-
-			"type": "radio",
-
-			"options": {
-
-				"male": "Male",
-				"female": "Female"
-			}
+		"field_email": {
+			"label": "email",
+			"group": "Info",
+			"type": "email"
+		},
+		"field_tel": {
+			"label": "tel",
+			"group": "Info",
+			"type": "tel"
+		},
+		"field_phone": {
+			"label": "phone",
+			"group": "Info",
+			"type": "phone"
+		},
+		"field_mobile": {
+			"label": "mobile",
+			"group": "Info",
+			"type": "mobile"
+		},
+		"field_url": {
+			"label": "url",
+			"group": "Info",
+			"type": "url"
+		},
+		"field_number": {
+			"label": "number",
+			"group": "Info",
+			"type": "number"
+		},
+		"field_barcode": {
+			"label": "barcode",
+			"group": "Info",
+			"type": "barcode"
+		},
+		"field_qrcode": {
+			"label": "qrcode",
+			"group": "Info",
+			"type": "qrcode"
+		},
+		"field_search": {
+			"label": "search",
+			"group": "Info",
+			"type": "search"
+		},
+		"field_password": {
+			"label": "password",
+			"group": "Info",
+			"type": "password"
+		},
+		"field_tags": {
+			"label": "tags",
+			"group": "Info",
+			"type": "tags"
+		},
+		"field_social@facebook": {
+			"label": "social@facebook",
+			"group": "Info",
+			"type": "social@facebook"
+		},
+		"field_static": {
+			"label": "static",
+			"group": "Info",
+			"type": "static",
+			"placeholder": "Hello World"
+		},
+		"field_static2": {
+			"label": "static",
+			"group": "Info",
+			"type": "static",
+			"placeholder": "Hello World 2"
+		},
+		"field_header": {
+	        "label": "This is full length header",
+	        "hide_label": true,
+			"group": "Info",
+			"type": "header",
+			"width": 12
+	    },
+		"field_jsonfield": {
+			"label": "jsonfield",
+			"group": "Info",
+			"type": "jsonfield"
+		},
+		"field_photo": {
+			"label": "photo",
+			"group": "Info",
+			"type": "photo"
+		},
+		"field_photo-multiple": {
+			"label": "photo-multiple",
+			"group": "Info",
+			"type": "photo",
+			"multiple": true
+		},
+		"field_gallery": {
+			"label": "gallery",
+			"group": "Info",
+			"type": "gallery"
+		},
+		"field_gallery-multiple": {
+			"label": "gallery-multiple",
+			"group": "Info",
+			"type": "gallery",
+			"multiple": true
+		},
+		"field_avatar": {
+			"label": "avatar",
+			"group": "Info",
+			"type": "avatar"
+		},
+		"field_file": {
+			"label": "file",
+			"group": "Info",
+			"type": "file"
+		},
+		"field_file-multiple": {
+			"label": "file-multiple",
+			"group": "Info",
+			"type": "file",
+			"multiple": true
 		}
 	}
 }

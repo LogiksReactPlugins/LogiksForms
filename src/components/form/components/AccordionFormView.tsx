@@ -11,10 +11,10 @@ export default function AccordionFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => {  },
+  onSubmit = (values) => { },
   onCancel = () => { },
-  methods={},
-  components={}
+  methods = {},
+  components = {}
 }: BaseFormViewProps) {
 
 
@@ -51,8 +51,8 @@ export default function AccordionFormView({
 
     <div className="relative z-10 max-w-full  m-4">
 
-      <div className="bg-white animate-in fade-in duration-300">
-        <p className='px-4 pt-4 text-sm text-secondary'>All fields marked (*) are required</p>
+      <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
+
         <form onSubmit={formik.handleSubmit} className="p-4 mx-auto">
           <div className="space-y-2">
             {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
@@ -64,7 +64,7 @@ export default function AccordionFormView({
                       className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                         }`}
                     >
-                      <FieldRenderer components={components} key={field.name} field={field} formik={formik} methods={methods}/>
+                      <FieldRenderer components={components} key={field.name} field={field} formik={formik} methods={methods} />
                     </div>
                   ))}
                 </div>
@@ -73,14 +73,16 @@ export default function AccordionFormView({
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-8 flex justify-end space-x-3">
-            <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-              Cancel
-            </button>
-            <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-              Save
-            </button>
-
+          <div className="mt-8 flex justify-between space-x-3">
+            <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
+            <div className='space-x-3'>
+              <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+                Cancel
+              </button>
+              <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+                Save
+              </button>
+            </div>
           </div>
         </form>
       </div>
