@@ -20,6 +20,7 @@ export interface FormField {
     source?: Record<string, any>;
     multiple?: boolean;
     icon?: string;
+    validate?: Record<string, string>;
 }
 export interface FormJson {
     title?: string | undefined;

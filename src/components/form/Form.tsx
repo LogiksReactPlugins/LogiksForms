@@ -145,7 +145,7 @@ export default function LogiksForm({
       onSubmit={handleSubmit}
       onCancel={onCancel}
       methods={methods}
-        components={components}
+      components={components}
     />
   };
 

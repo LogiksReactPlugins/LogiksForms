@@ -20,7 +20,8 @@ export interface FormField {
     labelKey?: string,
     source?: Record<string, any>,
     multiple?:boolean,
-    icon?:string
+    icon?:string,
+    validate?:Record<string, string>
 }
 
 

@@ -31,71 +31,175 @@ export const intializeForm = (
 ) => {
   formFields.forEach((field) => {
     const fieldName = field?.name;
+    if (!fieldName) return;
 
-    // Set default initial value depending on type
-    
+    // ---------- Initial Values (only defaults) ----------
     if (field?.type === "checkbox") {
-
-      if (field?.multiple === true) {
-        initialValues[fieldName] = []; // multiple checkbox group → array
-      } else {
-        initialValues[fieldName] = false; // single checkbox → boolean
-      }
-    }else if (field?.type === "tags") {
-
-      
-        initialValues[fieldName] = []; // multiple checkbox group → array
-     
+      initialValues[fieldName] = field?.multiple === true ? [] : false;
+    } else if (field?.type === "tags") {
+      initialValues[fieldName] = [];
     } else if (fieldName === "blocked" || fieldName === "blacklist") {
-      initialValues[fieldName] = "false"; // boolean checkboxes
+      initialValues[fieldName] = "false"; // special-case string boolean
     } else {
       initialValues[fieldName] = "";
     }
 
-    // Build validation schema
-    if (field?.required) {
-      const regex = field?.regex ? new RegExp(field.regex) : null;
-
-      if (field?.type === "checkbox") {
-        // Validation for checkbox groups
-        if (field?.multiple === true) {
-          validationSchema[fieldName] = Yup.array()
-            .of(Yup.string())
-            .min(1, field?.placeholder || "Please select at least one option")
-            .required(field?.placeholder || "This field is required");
-        } else {
-          validationSchema[fieldName] = Yup.boolean()
-            .oneOf([true], field?.placeholder || "Please select")
-            .required(field?.placeholder || "This field is required");
-        }
-      } else {
-        // Default: string validation
-        let validation = Yup.string();
-        if (regex) {
-          validation = validation.matches(
-            regex,
-            field?.error_message || "Invalid input"
-          );
-        }
-        validationSchema[fieldName] = validation.required(
-          field?.placeholder || field?.field_error || "This field is required"
-        );
-      }
+    // ---------- Base Validator ----------
+    let validator: Yup.AnySchema;
+    if (field?.type === "checkbox") {
+      validator = field?.multiple === true ? Yup.array().of(Yup.string()) : Yup.boolean();
+    } else if (field?.type === "tags") {
+      validator = Yup.array().of(Yup.string());
+    } else if (field?.type === "email") {
+      validator = Yup.string().email("Invalid email format");
+    } else if (field?.type === "number") {
+      validator = Yup.number().typeError("Must be a number");
+    } else if (field?.type === "date") {
+      validator = Yup.date().typeError("Invalid date format");
     } else {
-      // Not required
-      if (field?.type === "checkbox") {
-        validationSchema[fieldName] = field?.multiple === true
-          ? Yup.array().of(Yup.string())
-          : Yup.boolean();
-      }else if(field?.type === "tags"){
- validationSchema[fieldName] = Yup.array().of(Yup.string());
-      } else {
-        validationSchema[fieldName] = Yup.string();
-      }
+      validator = Yup.string();
     }
+
+    // ---------- Required ----------
+    if (field?.required) {
+      validator = validator.required(
+        field?.placeholder || field?.error_message || `${field?.label || fieldName} is required`
+      );
+    }
+
+    // ---------- Direct Regex ----------
+    if (field?.validate?.regex) {
+      validator = (validator as Yup.StringSchema).matches(
+        new RegExp(field?.validate?.regex),
+        field?.error_message || "Invalid input format"
+      );
+    }
+
+
+    if (field?.validate) {
+      Object.entries(field.validate).forEach(([rule, val]) => {
+        switch (rule) {
+          case "email":
+            if (val) validator = (validator as Yup.StringSchema).email("Invalid email format");
+            break;
+
+          case "mobile":
+            validator = (validator as Yup.StringSchema).matches(
+              /^[1-9][0-9]*$/,
+              "Invalid mobile number format"
+            );
+            break;
+
+          case "regex":
+            validator = (validator as Yup.StringSchema).matches(
+              new RegExp(val as string),
+              `Must match pattern: ${val}`
+            );
+            break;
+
+          case "date":
+            validator = Yup.date()
+              .typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)")
+              .transform((value, originalValue) => {
+                if (typeof originalValue === "string") {
+                  const normalized = originalValue.replace(/-/g, "/");
+                  const [d, m, y] = normalized.split("/");
+                  if (d && m && y) {
+                    return new Date(`${y}-${m}-${d}`);
+                  }
+                }
+                return value;
+              });
+            break;
+
+          case "time":
+            validator = (validator as Yup.StringSchema).matches(
+              /^([0-1][0-9]|2[0-3])[:\-]([0-5][0-9])$/,
+              "Invalid time format (HH:MM)"
+            );
+            break;
+
+          case "timesec":
+            validator = (validator as Yup.StringSchema).matches(
+              /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/,
+              "Invalid time format (HH:MM:SS)"
+            );
+            break;
+
+          case "number":
+          case "numeric":
+            validator = Yup.number().typeError("Must be numeric");
+            break;
+
+          case "float":
+          case "decimal":
+            validator = Yup.number()
+              .typeError("Must be a decimal")
+              .transform((val, original) => {
+                if (original === undefined || original === null || original === "") return undefined;
+                const num = Number(original);
+                if (isNaN(num)) return val;
+                if (typeof val === "number" && !isNaN(val)) {
+                  // format to given decimal places if val is numeric
+                  const decimals = Number(val);
+                  return Number.isInteger(decimals) ? Number(num.toFixed(decimals)) : num;
+                }
+                return num;
+              });
+            break;
+
+          case "alphanumeric":
+            validator = (validator as Yup.StringSchema).matches(
+              /^[a-z0-9]+$/i,
+              "Must be alphanumeric"
+            );
+            break;
+
+          case "alpha":
+            validator = (validator as Yup.StringSchema).matches(
+              /^[a-zA-Z]+$/,
+              "Must contain only letters"
+            );
+            break;
+
+          case "upper":
+            validator = (validator as Yup.StringSchema).transform((val) =>
+              val ? val.toUpperCase() : val
+            );
+            break;
+
+          case "lower":
+            validator = (validator as Yup.StringSchema).transform((val) =>
+              val ? val.toLowerCase() : val
+            );
+            break;
+
+          case "length-min": {
+            const min = Number(val);
+            if (!isNaN(min)) {
+              validator = (validator as Yup.StringSchema).min(min, `Minimum length is ${min}`);
+            }
+            break;
+          }
+
+          case "length-max": {
+            const max = Number(val);
+            if (!isNaN(max)) {
+              validator = (validator as Yup.StringSchema).max(max, `Maximum length is ${max}`);
+            }
+            break;
+          }
+
+          default:
+            break;
+        }
+      });
+    }
+
+    // ---------- Assign schema ----------
+    validationSchema[fieldName] = validator;
   });
 };
-
 
 
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
