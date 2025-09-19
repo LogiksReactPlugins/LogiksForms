@@ -13,18 +13,30 @@ export default function TabFormView({
   onSubmit = (values) => { },
   onCancel = () => { },
   methods = {},
-  components = {}
+  components = {},
+  widget
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
   const stepperForm: Record<string, Record<string, Yup.AnySchema>> = {};
   const initialValues: Record<string, any> = {};
-  Object.entries(groupedFields).forEach(([step, fields]) => {
-    const validationSchema = {};
-    intializeForm(fields, initialValues, validationSchema);
-    stepperForm[step] = validationSchema;
-  });
+ 
+  const validationSchema = {};
+  if (widget) {
+    Object.entries(groupedFields).forEach(([step, fields]) => {
+      const schema = {};
+      intializeForm(fields, initialValues, schema);
+      stepperForm[step] = schema;
+    });
+  } else {
+    Object.entries(groupedFields).forEach(([step, fields]) => {
+
+      intializeForm(fields, initialValues, validationSchema);
+
+    });
+  }
+
 
 
   if (data && Object.keys(data).length > 0) {
@@ -42,25 +54,52 @@ export default function TabFormView({
       ? stepperForm[currentStepKey]
       : {};
 
+ 
+
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-    validationSchema: Yup.object().shape(currentStepSchema),
+    validationSchema: Yup.object().shape(widget ? currentStepSchema : validationSchema),
     onSubmit: (values) => {
 
-      if (activeTabIndex < groupNames.length - 1) {
-        setActiveTabIndex(pre => pre + 1)
+      if (widget) {
+        if (activeTabIndex < groupNames.length - 1) {
+          setActiveTabIndex(pre => pre + 1)
+        }
+
+        if (activeTabIndex === groupNames.length - 1) {
+
+          onSubmit(values)
+        }
+      } else {
+
+        onSubmit(values);
       }
 
-      if (activeTabIndex === groupNames.length - 1) {
 
-        onSubmit(values)
-      }
 
     }
   })
 
-  console.log("formik", formik.values)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!widget) {
+      const errors = await formik.validateForm();
+
+      if (Object.keys(errors).length > 0) {
+        alert("Please fill all required fields before submitting.");
+        formik.setTouched(
+          Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+        );
+        return;
+      }
+    }
+
+
+    formik.handleSubmit(e);
+  };
+
 
   const handlePrevious = () => {
     setActiveTabIndex(pre => {
@@ -108,7 +147,7 @@ export default function TabFormView({
       >
         {/* Content Header */}
 
-        <form onSubmit={formik.handleSubmit} className="w-full mx-auto">
+        <form onSubmit={handleSubmit} className="w-full mx-auto">
           {/* Fields Container */}
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
@@ -131,7 +170,7 @@ export default function TabFormView({
                 Cancel
               </button>
               <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                Save
+                {widget ? "Next" : "Save"}
               </button>
             </div>
           </div>

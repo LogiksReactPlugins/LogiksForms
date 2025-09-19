@@ -20,13 +20,14 @@ export interface FormField {
     source?: Record<string, any>;
     multiple?: boolean;
     icon?: string;
-    validate?: Record<string, string>;
+    validate?: Record<string, string | number>;
 }
 export interface FormJson {
     title?: string | undefined;
     template?: string;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
+    widget?: boolean;
 }
 export interface FormProps {
     formJson: FormJson;
@@ -43,6 +44,7 @@ export interface BaseFormViewProps {
     onCancel: () => void;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
+    widget?: boolean | undefined;
 }
 export interface FieldRendererProps {
     field: FormField;

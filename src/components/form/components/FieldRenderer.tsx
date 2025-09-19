@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import type { FieldRendererProps, FormField } from '../Form.types.js';
@@ -8,12 +8,32 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
   const [isFocused, setIsFocused] = useState(false);
   const [options, setOptions] = useState<Record<string, string>>(field.options || {});
   const [search, setSearch] = useState("");
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDetailsElement>(null);
   const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
     const detailsEl = e.currentTarget; // ✅ currentTarget is strongly typed
     if (!detailsEl.open) {
       setSearch("");
     }
   };
+
+
+
+  // Close on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
+        detailsRef.current.open = false;
+        setSearch(""); // reset search if needed
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const key = field.name;
 
@@ -113,11 +133,54 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
     return null;
   };
 
+  const optionCount = Object.keys(options || {}).length;
 
+  const filteredOptions = Object.entries(options || {}).filter(
+    ([, label]) =>
+      label.toLowerCase().includes(search.toLowerCase())
+  );
+
+
+
+  // ✅ Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!detailsRef.current?.open) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev + 1 < filteredOptions.length ? prev + 1 : 0
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev - 1 >= 0 ? prev - 1 : filteredOptions.length - 1
+      );
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const [val] = filteredOptions[highlightedIndex] || [];
+      if (val) {
+        formik.setFieldValue(field.name, val);
+        detailsRef.current!.open = false;
+      }
+    } else if (e.key === "Escape") {
+      detailsRef.current!.open = false;
+      setSearch("");
+    }
+  };
+
+  // ✅ Auto-scroll highlighted option into view
+  useEffect(() => {
+    const activeEl = listRef.current?.querySelector<HTMLElement>(
+      `[data-index="${highlightedIndex}"]`
+    );
+    activeEl?.scrollIntoView({ block: "nearest" });
+  }, [highlightedIndex]);
 
   switch (field.type) {
     case "textarea":
       return (
+        <>
         <div className="relative">
           <label className={labelClasses}>
             {field.label}
@@ -140,23 +203,22 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
             <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
               }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
           </div>
-          {formik.touched[key] && formik.errors[key] &&
+        
 
-            <span className="text-xs text-red-50">{String(formik.errors[key])}</span>
+           {formik.touched[key] && formik.errors[key] &&
+
+            <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
           }
         </div>
+        </>
       );
 
     case "select":
-    case "dataSelector": {
-      const optionCount = Object.keys(options || {}).length;
+    case "dataSelector":
+    case "dataMethod": {
 
-      const filteredOptions =
-        optionCount > 10
-          ? Object.entries(options || {}).filter(([_, label]) =>
-            label.toLowerCase().includes(search.toLowerCase())
-          )
-          : Object.entries(options || {});
+
+
 
       if (optionCount > 10) {
 
@@ -166,7 +228,11 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <details className="relative w-full" onToggle={handleToggle}>
+            <details className="relative w-full"
+              onToggle={handleToggle}
+              ref={detailsRef}
+              onKeyDown={handleKeyDown}
+            >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
                   {formik.values[key]
@@ -189,13 +255,17 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
               </summary>
 
               {/* Dropdown body */}
-              <div className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+              <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
                 {/* 🔍 Search input */}
                 <div className="sticky top-0 bg-white p-1">
                   <input
                     type="text"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setHighlightedIndex(0);
+                    }}
+                    onKeyDown={handleKeyDown}
                     placeholder="Search..."
                     className="px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
                   bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
@@ -205,11 +275,18 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
                 {/* Filtered options */}
                 {filteredOptions.length > 0 ? (
-                  filteredOptions.map(([val, label]) => (
+                  filteredOptions.map(([val, label],idx) => (
                     <div
+                     
                       key={val}
+                      data-index={idx}
                       onClick={() => formik.setFieldValue(key, val)}
-                      className={`px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm ${formik.values[key] === val ? "bg-indigo-50 text-indigo-600 font-medium" : ""
+                      className={`px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
+                        ${formik.values[key] === val
+                          ? "bg-indigo-50 text-indigo-600 font-medium"
+                          : highlightedIndex === idx // ✅ highlight state
+                            ? "bg-gray-100"
+                            : "hover:bg-gray-50"
                         }`}
                     >
                       {label}
@@ -274,7 +351,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
     }
     case "radioList":
     case "radio":
-      const optionCount = Object.keys(options || {}).length;
+
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -309,12 +386,12 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
         </div>
       )
 
-      case "component":
+    case "component":
 
       return components?.[key]
 
     case "checkbox": {
-      const optionCount = Object.keys(options || {}).length;
+
 
       if (optionCount === 1) {
         // Single boolean checkbox
@@ -382,10 +459,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
       if (optionCount > 5) {
 
 
-        const filteredOptions = Object.entries(options || {}).filter(
-          ([, label]) =>
-            label.toLowerCase().includes(search.toLowerCase())
-        );
+
 
 
 
@@ -395,7 +469,11 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <details className="relative w-full" onToggle={handleToggle}>
+            <details className="relative w-full"
+              onToggle={handleToggle}
+              ref={detailsRef}
+              onKeyDown={handleKeyDown}
+            >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
                   {formik.values[key]?.length > 0
@@ -418,13 +496,13 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
               </summary>
 
               {/* Dropdown body */}
-              <div className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+              <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
                 {/* 🔍 Search input */}
                 <div className="sticky top-0 bg-white p-1">
                   <input
                     type="text"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => { setSearch(e.target.value); setHighlightedIndex(0); }}
                     placeholder="Search..."
                     className="px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
     bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400

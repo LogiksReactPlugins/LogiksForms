@@ -44,7 +44,7 @@ export default function NormalFormView({
     }
   })
 
-  console.log("formik", formik.values)
+
 
 
   return (

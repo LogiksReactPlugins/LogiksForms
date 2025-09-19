@@ -3,17 +3,18 @@ export const example1 = {
 	"preload": {
 		"helpers": ["countries"]
 	},
+	"widget":false,
 	"source": {
-		"type": "sql",
-		"table": "lgks_users",
+		"type": "method",
+		"method": "postData",
 		"where": ["userid"]
 	},
 	"fields": {
 		"email": {
-			
-			"type": "component",
-			
-		
+			"label": "Email",
+			"type": "email",
+
+
 		},
 		"userid": {
 			"label": "Login ID",
@@ -25,7 +26,7 @@ export const example1 = {
 				"length-min": 5,
 				"length-max": 10
 			},
-			
+
 		},
 		"mobile": {
 			"label": "Mobile",
@@ -50,10 +51,27 @@ export const example1 = {
 		"country": {
 			"label": "Country",
 			"group": "address",
-			"type": "dataMethod",
+			"type": "select",
+			"multiple":true,
 			"method": {
 				"name": "getCountrySelector",
 				"valuefield": "default"
+			},
+			"placeholder":"Select your country",
+			"options": {
+
+				"india": "India",
+				"pakistan": "Pakistan",
+				"japan":"Japan",
+				"iran":"Iran",
+				"israel":"Israel",
+				"france":"France",
+				"germany":"Germany",
+				"england":"England",
+				"italy":"Italy",
+				"pourtgal":"Pourtgal",
+				"argentina":"Argentina"
+
 			}
 		},
 		"region": {
@@ -64,15 +82,22 @@ export const example1 = {
 			"label": "Zipcode/PIN Code",
 			"group": "address"
 		},
+		
+		"highest_qualification": {
+			label: "Highest Qualification",
+			"group": "academic"
+		},
 		"gender": {
 			"label": "Gender",
 			"group": "address",
 			"type": "select",
 			required: true,
+			"placeholder": "Select gender",
 			"options": {
-				"": false,
+
 				"male": "Male",
-				"female": "Female"
+				"female": "Female",
+
 			}
 		}
 	}

@@ -11,7 +11,7 @@ export default function CardFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { console.log(values) },
+  onSubmit = (values) => { },
   onCancel = () => { },
   methods={},
   components={}

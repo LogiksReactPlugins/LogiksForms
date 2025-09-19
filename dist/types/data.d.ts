@@ -2,13 +2,15 @@ export declare const example1: {
     preload: {
         helpers: string[];
     };
+    widget: boolean;
     source: {
         type: string;
-        table: string;
+        method: string;
         where: string[];
     };
     fields: {
         email: {
+            label: string;
             type: string;
         };
         userid: {
@@ -46,9 +48,24 @@ export declare const example1: {
             label: string;
             group: string;
             type: string;
+            multiple: boolean;
             method: {
                 name: string;
                 valuefield: string;
+            };
+            placeholder: string;
+            options: {
+                india: string;
+                pakistan: string;
+                japan: string;
+                iran: string;
+                israel: string;
+                france: string;
+                germany: string;
+                england: string;
+                italy: string;
+                pourtgal: string;
+                argentina: string;
             };
         };
         region: {
@@ -59,13 +76,17 @@ export declare const example1: {
             label: string;
             group: string;
         };
+        highest_qualification: {
+            label: string;
+            group: string;
+        };
         gender: {
             label: string;
             group: string;
             type: string;
             required: boolean;
+            placeholder: string;
             options: {
-                "": boolean;
                 male: string;
                 female: string;
             };

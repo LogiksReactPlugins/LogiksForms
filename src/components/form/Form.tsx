@@ -137,6 +137,7 @@ export default function LogiksForm({
       onCancel={onCancel}
       methods={methods}
       components={components}
+      widget={formJson?.widget}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
