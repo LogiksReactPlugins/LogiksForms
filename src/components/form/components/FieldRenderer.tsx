@@ -687,6 +687,47 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
         </div>
       );
 
+
+      case "json": {
+  const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    formik.setFieldValue(key, e.target.value);
+  };
+
+  return (
+    <div className="relative">
+      <label className={labelClasses}>
+        {field.label}
+        {field.required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+
+      <div className="relative">
+        <textarea
+          id={`${key}-json`}
+          name={key}
+          value={formik.values[key]}
+          onChange={handleJsonChange}
+          onBlur={formik.handleBlur}
+          placeholder={field.placeholder || "Enter valid JSON"}
+          disabled={field.disabled}
+          className={`${baseInputClasses} ${focusClasses} min-h-[200px] font-mono text-sm resize-y`}
+        />
+        {/* Subtle glow effect on focus */}
+        <div
+          className={`absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 transition-opacity duration-300 pointer-events-none ${
+            isFocused ? "opacity-20" : ""
+          }`}
+          style={{ zIndex: -1, filter: "blur(8px)" }}
+        ></div>
+      </div>
+
+      {formik.touched[key] && formik.errors[key] && (
+        <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
+      )}
+    </div>
+  );
+}
+
+
     default:
 
       return (
