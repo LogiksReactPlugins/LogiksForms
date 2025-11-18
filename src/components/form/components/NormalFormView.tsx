@@ -51,7 +51,7 @@ export default function NormalFormView({
     <div className="relative z-10 max-w-full  m-4">
 
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
-        <h2 className="text-xl font-bold pl-4 pt-4 mb-4">{title}</h2>
+      
 
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
