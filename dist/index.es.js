@@ -542,7 +542,7 @@ function ee({ field: r, formik: t, methods: g = {}, components: i }) {
           "input",
           {
             className: `${I} ${f}`,
-            value: o,
+            value: t.values[s],
             placeholder: r.placeholder || "Type to search...",
             onChange: n,
             onFocus: () => R(!0),

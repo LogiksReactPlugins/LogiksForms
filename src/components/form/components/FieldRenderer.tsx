@@ -246,7 +246,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
           <input
             className={`${baseInputClasses} ${focusClasses}`}
-            value={search}
+            value={formik.values[key]}
             placeholder={field.placeholder || "Type to search..."}
             onChange={handleChange}
             onFocus={() => setOpen(true)}
