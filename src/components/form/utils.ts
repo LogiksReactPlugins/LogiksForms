@@ -56,21 +56,21 @@ export const intializeForm = (
       validator = Yup.number().typeError("Must be a number");
     } else if (field?.type === "date") {
       validator = Yup.date().typeError("Invalid date format");
-     } else if (field?.type === "json") {
-  initialValues[fieldName] = "";
+    } else if (field?.type === "json") {
+      initialValues[fieldName] = "";
 
-  validator = Yup.string()
-    .test("is-json", "Invalid JSON format", (value) => {
-      if (!value) return true;
-      try {
-        JSON.parse(value);
-        return true;
-      } catch {
-        return false;
-      }
-    });
-}
-else {
+      validator = Yup.string()
+        .test("is-json", "Invalid JSON format", (value) => {
+          if (!value) return true;
+          try {
+            JSON.parse(value);
+            return true;
+          } catch {
+            return false;
+          }
+        });
+    }
+    else {
       validator = Yup.string();
     }
 
@@ -82,7 +82,7 @@ else {
     }
 
     // ---------- Direct Regex ----------
-    if (field?.validate?.regex &&  typeof field.validate.regex === "string") {
+    if (field?.validate?.regex && typeof field.validate.regex === "string") {
       validator = (validator as Yup.StringSchema).matches(
         new RegExp(field?.validate?.regex),
         field?.error_message || "Invalid input format"

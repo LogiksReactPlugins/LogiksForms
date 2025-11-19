@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
 import type { FieldRendererProps, FormField } from '../Form.types.js';
@@ -11,6 +11,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDetailsElement>(null);
+  const [open, setOpen] = useState(false);
   const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
     const detailsEl = e.currentTarget; // ✅ currentTarget is strongly typed
     if (!detailsEl.open) {
@@ -135,11 +136,50 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
   const optionCount = Object.keys(options || {}).length;
 
-  const filteredOptions = Object.entries(options || {}).filter(
-    ([, label]) =>
-      label.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredOptions = useMemo(() => {
+    return Object.entries(options || {}).filter(([, label]) => {
+      if (!search) {
+        return true;
+      }
+      return label.toLowerCase().includes(search.toLowerCase())
+    }
 
+    );
+  }, [search, options])
+
+  const handleAutocompleteKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open) return; // dropdown closed => no keyboard nav
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev + 1 < filteredOptions.length ? prev + 1 : 0
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev - 1 >= 0 ? prev - 1 : filteredOptions.length - 1
+      );
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      console.log("filteredOptions[highlightedIndex]", filteredOptions[highlightedIndex]);
+
+      const [value, label] = filteredOptions[highlightedIndex] || [];
+      if (value) {
+        setSearch(label ?? "");
+        formik.setFieldValue(key, value);
+      }
+      setOpen(false);
+    }
+
+    if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
 
 
   // ✅ Handle keyboard navigation
@@ -160,7 +200,8 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
       e.preventDefault();
       const [val] = filteredOptions[highlightedIndex] || [];
       if (val) {
-        formik.setFieldValue(field.name, val);
+        let is_single = field.type === "select" || field.type === "dataSelector" || field.type === "dataMethod"
+        formik.setFieldValue(field.name, is_single ? val : [...formik.values[field.name], val]);
         detailsRef.current!.open = false;
       }
     } else if (e.key === "Escape") {
@@ -178,47 +219,109 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
   }, [highlightedIndex]);
 
   switch (field.type) {
-    case "textarea":
+
+    case "autocomplete": {
+
+      // On typing → form stores the same raw value
+      const handleChange = (e: any) => {
+        const val = e.target.value;
+        setSearch(val);
+        formik.setFieldValue(key, val); // raw text
+        setOpen(true);
+      };
+
+      // On select an option
+      const handleSelect = (value: string, label: string) => {
+        setSearch(label);
+        formik.setFieldValue(key, value); // store actual option value
+        setOpen(false);
+      };
+
       return (
-        <>
         <div className="relative">
           <label className={labelClasses}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
-
           </label>
-          <div className="relative">
-            <textarea
 
-              className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
-              onFocus={() => setIsFocused(true)}
-              name={key}
-              value={formik.values[key]}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              placeholder={field.placeholder}
-              disabled={field.disabled}
-            />
-            {/* Animated border glow */}
-            <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
-              }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
-          </div>
-        
+          <input
+            className={`${baseInputClasses} ${focusClasses}`}
+            value={search}
+            placeholder={field.placeholder || "Type to search..."}
+            onChange={handleChange}
+            onFocus={() => setOpen(true)}
+            onBlur={() => setTimeout(() => setOpen(false), 150)}
+            onKeyDown={handleAutocompleteKeyDown}
+          />
 
-           {formik.touched[key] && formik.errors[key] &&
+          {open && (
+            <div ref={listRef} className="absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map(([val, label], idx) => (
+                  <div
+                    key={idx}
+                    data-index={idx}
+                    className={`px-3 py-2 cursor-pointer text-sm 
+    ${highlightedIndex === idx ? "bg-gray-100" : "hover:bg-gray-100"}
+  `}
+                    onMouseDown={() => handleSelect(val, label)}
+                  >
+                    {label}
+                  </div>
+                ))
+              ) : (
+                <div className="px-3 py-2 text-sm text-gray-400 cursor-pointer">
+                  No matches — select to keep "{search}"
+                </div>
+              )}
+            </div>
+          )}
 
+          {formik.touched[key] && formik.errors[key] && (
             <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
-          }
+          )}
         </div>
+      );
+    }
+
+    case "textarea":
+      return (
+        <>
+          <div className="relative">
+            <label className={labelClasses}>
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+
+            </label>
+            <div className="relative">
+              <textarea
+
+                className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
+                onFocus={() => setIsFocused(true)}
+                name={key}
+                value={formik.values[key]}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder={field.placeholder}
+                disabled={field.disabled}
+              />
+              {/* Animated border glow */}
+              <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
+                }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
+            </div>
+
+
+            {formik.touched[key] && formik.errors[key] &&
+
+              <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
+            }
+          </div>
         </>
       );
 
     case "select":
     case "dataSelector":
     case "dataMethod": {
-
-
-
 
       if (optionCount > 10) {
 
@@ -275,9 +378,9 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
                 {/* Filtered options */}
                 {filteredOptions.length > 0 ? (
-                  filteredOptions.map(([val, label],idx) => (
+                  filteredOptions.map(([val, label], idx) => (
                     <div
-                     
+
                       key={val}
                       data-index={idx}
                       onClick={() => formik.setFieldValue(key, val)}
@@ -460,9 +563,6 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
 
 
-
-
-
         return (
           <div className="relative">
             <label className={labelClasses}>
@@ -512,11 +612,19 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
                 {/* Filtered options */}
                 {filteredOptions.length > 0 ? (
-                  filteredOptions.map(([val, label]) => (
+                  filteredOptions.map(([val, label], idx) => (
                     <label
                       key={val}
                       htmlFor={`${key}-${val}`}
-                      className="flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm"
+
+
+                      className={`flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm
+                        ${formik.values[key] === val
+                          ? "bg-indigo-50 text-indigo-600 font-medium"
+                          : highlightedIndex === idx // ✅ highlight state
+                            ? "bg-gray-100"
+                            : "hover:bg-gray-50"
+                        }`}
                     >
                       <input
                         id={`${key}-${val}`}
@@ -688,44 +796,43 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
       );
 
 
-      case "json": {
-  const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    formik.setFieldValue(key, e.target.value);
-  };
+    case "json": {
+      const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        formik.setFieldValue(key, e.target.value);
+      };
 
-  return (
-    <div className="relative">
-      <label className={labelClasses}>
-        {field.label}
-        {field.required && <span className="text-red-500 ml-1">*</span>}
-      </label>
+      return (
+        <div className="relative">
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </label>
 
-      <div className="relative">
-        <textarea
-          id={`${key}-json`}
-          name={key}
-          value={formik.values[key]}
-          onChange={handleJsonChange}
-          onBlur={formik.handleBlur}
-          placeholder={field.placeholder || "Enter valid JSON"}
-          disabled={field.disabled}
-          className={`${baseInputClasses} ${focusClasses} min-h-[200px] font-mono text-sm resize-y`}
-        />
-        {/* Subtle glow effect on focus */}
-        <div
-          className={`absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 transition-opacity duration-300 pointer-events-none ${
-            isFocused ? "opacity-20" : ""
-          }`}
-          style={{ zIndex: -1, filter: "blur(8px)" }}
-        ></div>
-      </div>
+          <div className="relative">
+            <textarea
+              id={`${key}-json`}
+              name={key}
+              value={formik.values[key]}
+              onChange={handleJsonChange}
+              onBlur={formik.handleBlur}
+              placeholder={field.placeholder || "Enter valid JSON"}
+              disabled={field.disabled}
+              className={`${baseInputClasses} ${focusClasses} min-h-[200px] font-mono text-sm resize-y`}
+            />
+            {/* Subtle glow effect on focus */}
+            <div
+              className={`absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? "opacity-20" : ""
+                }`}
+              style={{ zIndex: -1, filter: "blur(8px)" }}
+            ></div>
+          </div>
 
-      {formik.touched[key] && formik.errors[key] && (
-        <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
-      )}
-    </div>
-  );
-}
+          {formik.touched[key] && formik.errors[key] && (
+            <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
+          )}
+        </div>
+      );
+    }
 
 
     default:
