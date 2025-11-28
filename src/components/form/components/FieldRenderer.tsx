@@ -797,6 +797,13 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
 
     case "json": {
+    const rawValue = formik.values[key];
+
+  const displayValue =
+    typeof rawValue === "object" && rawValue !== null
+      ? JSON.stringify(rawValue, null, 2)
+      : rawValue || "";
+
       const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         formik.setFieldValue(key, e.target.value);
       };
@@ -812,7 +819,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
             <textarea
               id={`${key}-json`}
               name={key}
-              value={formik.values[key]}
+          value={displayValue}
               onChange={handleJsonChange}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder || "Enter valid JSON"}
