@@ -59,21 +59,8 @@ export default function TabFormView({
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-  validationSchema: () => {
-  const transformed: Record<string, any> = {};
-
-    Object.keys(initialValues).forEach((key) => {
-      const val = initialValues[key];
-      transformed[key] =
-        typeof val === "object" && val !== null
-          ? JSON.stringify(val)
-          : val;
-    });
-
-    return Yup.object().shape(
-      widget ? currentStepSchema : validationSchema
-    );
-  },    onSubmit: (values) => {
+    validationSchema: Yup.object().shape(widget ? currentStepSchema : validationSchema),
+    onSubmit: (values) => {
 
       if (widget) {
         if (activeTabIndex < groupNames.length - 1) {
