@@ -812,6 +812,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
         formik.setFieldValue(key, e.target.value);
       };
 
+
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -823,6 +824,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
             <textarea
               id={`${key}-json`}
               name={key}
+          value={displayValue}
           value={displayValue}
               onChange={handleJsonChange}
               onBlur={formik.handleBlur}
