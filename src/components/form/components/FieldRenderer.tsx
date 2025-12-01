@@ -797,12 +797,16 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
 
 
     case "json": {
-    const rawValue = formik.values[key];
+      let rawValue = formik.values[key];
 
-  const displayValue =
-    typeof rawValue === "object" && rawValue !== null
-      ? JSON.stringify(rawValue, null, 2)
-      : rawValue || "";
+      if (typeof rawValue === "object" && rawValue !== null) {
+        const stringified = JSON.stringify(rawValue, null, 2);
+        formik.setFieldValue(key, stringified, false);
+        rawValue = stringified;
+      }
+
+      const displayValue = rawValue || "";
+
 
       const handleJsonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         formik.setFieldValue(key, e.target.value);
