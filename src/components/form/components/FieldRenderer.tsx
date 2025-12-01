@@ -825,7 +825,6 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
               id={`${key}-json`}
               name={key}
           value={displayValue}
-          value={displayValue}
               onChange={handleJsonChange}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder || "Enter valid JSON"}
