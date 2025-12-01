@@ -61,7 +61,12 @@ export default function TabFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(widget ? currentStepSchema : validationSchema),
     onSubmit: (values) => {
-
+        Object.keys(values).forEach((key) => {
+          const val = values[key];
+          if (typeof val === "object" && val !== null) {
+            values[key] = JSON.stringify(val, null, 2);
+          }
+        });
       if (widget) {
         if (activeTabIndex < groupNames.length - 1) {
           setActiveTabIndex(pre => pre + 1)
