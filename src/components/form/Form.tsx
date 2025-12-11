@@ -89,7 +89,7 @@ export default function LogiksForm({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
             data: {
-              "operation": sqlOpsUrls.operation,
+              "operation": "fetch",
               "source": source,
               "fields": transformedObject(formJson.fields),
               "datahash": resHashId.data.refhash
@@ -189,7 +189,7 @@ export default function LogiksForm({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
-            "operation": sqlOpsUrls.operation,
+            "operation": source.refid ? "update" :"create",
             "source": source,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
