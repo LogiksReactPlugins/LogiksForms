@@ -2,9 +2,18 @@ export declare const example1: {
     preload: {
         helpers: string[];
     };
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsRunQuery: string;
+        dbopsFetch: string;
+        operation: string;
+    };
     source: {
         type: string;
-        method: string;
+        table: string;
         where: string[];
     };
     fields: {

@@ -63,6 +63,56 @@ export default function LogiksForm({
           if (isMounted) setResolvedData({});
         }
       }
+
+      if (source.type === "sql") {
+
+        const dbOpsUrls = formJson.endPoints;
+        if (!dbOpsUrls) {
+          console.error("SQL source requires formJson.endPoints but it is missing");
+          return;
+        }
+
+        try {
+          const resHashId = await axios({
+            method: "GET",
+            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetHash,
+            headers: {
+              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            },
+          });
+
+          const resQueryId = await axios({
+            method: "POST",
+            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetRefId,
+            data: {
+              "operation": dbOpsUrls.operation,
+              "source": source,
+              "fields": formJson.fields,
+              "datahash": resHashId.data.refhash
+            },
+            headers: {
+              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            },
+          });
+
+          const res = await axios({
+            method: "POST",
+            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsFetch,
+            data: {
+              "refid": resQueryId.data.refid,
+              "datahash": resHashId.data.refhash
+            },
+
+            headers: {
+              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            },
+          });
+
+          if (isMounted) setResolvedData(res.data?.data ?? {});
+        } catch (err) {
+          console.error("API fetch failed:", err);
+        }
+      }
     };
 
     fetchData();
@@ -102,6 +152,62 @@ export default function LogiksForm({
           data: values ?? {},
           params: source.params ?? {},
           headers: source.headers ?? {},
+        });
+      } catch (err) {
+        console.error("API fetch failed:", err);
+      }
+    }
+
+    if (source.type === "sql") {
+
+      const dbOpsUrls = formJson.endPoints;
+
+      console.log("dbOpsUrls", dbOpsUrls);
+
+      if (!dbOpsUrls) {
+        console.error("SQL source requires formJson.endPoints but it is missing");
+        return;
+      }
+
+      try {
+
+        const resHashId = await axios({
+          method: "GET",
+          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetHash,
+          headers: {
+            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+          },
+        });
+
+      
+
+        const resQueryId = await axios({
+          method: "POST",
+          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetRefId,
+          data: {
+            "operation": dbOpsUrls.operation,
+            "source": source,
+            "fields": formJson.fields,
+            "datahash": resHashId.data.refhash
+          },
+
+          headers: {
+            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+          },
+        });
+      
+
+        await axios({
+          method: "POST",
+          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsRunQuery,
+          data: {
+            "refid": resQueryId.data.refid,
+            "fields": values,
+            "datahash": resHashId.data.refhash
+          },
+          headers: {
+            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+          },
         });
       } catch (err) {
         console.error("API fetch failed:", err);

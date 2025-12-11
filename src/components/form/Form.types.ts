@@ -30,6 +30,7 @@ export interface FormField {
 export interface FormJson {
     title?: string | undefined;
     template?: string;
+    endPoints?:Record<string, any>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
      widget?:boolean

@@ -6,9 +6,18 @@ export const example1 = {
     "preload": {
         "helpers": ["countries"]
     },
+    "endPoints":{
+    "baseURL":"http://192.168.0.20:9999",
+    "accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTQ1MTQ3MywiZXhwIjoxNzY1NDU1MDczLCJqdGkiOiJhY2M6MTAxOjE3NjU0NTE0NzM4MjA6d2ViIn0.JJob7AbJvBR3GinON-AsjaoQ1p8a0GgBY5hLgLpxfpI",
+    "dbopsGetHash":"/api/dbops",
+    "dbopsGetRefId":"/api/dbops/save",
+    "dbopsRunQuery":"/api/dbops/create",
+    "dbopsFetch":"/api/dbops/fetch",
+    "operation":"create"
+},
     "source": {
-        "type": "method",
-        "method": "getFormData",
+        "type": "sql",
+        "table": "leads_po",
         "where": ["userid"]
     },
     "fields": {
