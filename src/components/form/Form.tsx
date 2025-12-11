@@ -112,7 +112,7 @@ export default function LogiksForm({
             },
           });
 
-          if (isMounted) setResolvedData(res.data?.data ?? {});
+          if (isMounted) setResolvedData(res.data?.data ?? res.data ?? {});
         } catch (err) {
           console.error("API fetch failed:", err);
         }

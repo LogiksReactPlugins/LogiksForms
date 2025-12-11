@@ -47,12 +47,12 @@ var H = {};
 var ce;
 function pe() {
   return ce || (ce = 1, process.env.NODE_ENV !== "production" && function() {
-    function r(a) {
-      if (a == null) return null;
-      if (typeof a == "function")
-        return a.$$typeof === G ? null : a.displayName || a.name || null;
-      if (typeof a == "string") return a;
-      switch (a) {
+    function r(s) {
+      if (s == null) return null;
+      if (typeof s == "function")
+        return s.$$typeof === G ? null : s.displayName || s.name || null;
+      if (typeof s == "string") return s;
+      switch (s) {
         case g:
           return "Fragment";
         case k:
@@ -66,126 +66,126 @@ function pe() {
         case re:
           return "Activity";
       }
-      if (typeof a == "object")
-        switch (typeof a.tag == "number" && console.error(
+      if (typeof s == "object")
+        switch (typeof s.tag == "number" && console.error(
           "Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."
-        ), a.$$typeof) {
+        ), s.$$typeof) {
           case c:
             return "Portal";
           case F:
-            return (a.displayName || "Context") + ".Provider";
-          case s:
-            return (a._context.displayName || "Context") + ".Consumer";
+            return (s.displayName || "Context") + ".Provider";
+          case a:
+            return (s._context.displayName || "Context") + ".Consumer";
           case j:
-            var f = a.render;
-            return a = a.displayName, a || (a = f.displayName || f.name || "", a = a !== "" ? "ForwardRef(" + a + ")" : "ForwardRef"), a;
+            var f = s.render;
+            return s = s.displayName, s || (s = f.displayName || f.name || "", s = s !== "" ? "ForwardRef(" + s + ")" : "ForwardRef"), s;
           case D:
-            return f = a.displayName || null, f !== null ? f : r(a.type) || "Memo";
+            return f = s.displayName || null, f !== null ? f : r(s.type) || "Memo";
           case C:
-            f = a._payload, a = a._init;
+            f = s._payload, s = s._init;
             try {
-              return r(a(f));
+              return r(s(f));
             } catch {
             }
         }
       return null;
     }
-    function t(a) {
-      return "" + a;
+    function t(s) {
+      return "" + s;
     }
-    function b(a) {
+    function b(s) {
       try {
-        t(a);
+        t(s);
         var f = !1;
       } catch {
         f = !0;
       }
       if (f) {
         f = console;
-        var R = f.error, A = typeof Symbol == "function" && Symbol.toStringTag && a[Symbol.toStringTag] || a.constructor.name || "Object";
+        var R = f.error, A = typeof Symbol == "function" && Symbol.toStringTag && s[Symbol.toStringTag] || s.constructor.name || "Object";
         return R.call(
           f,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
           A
-        ), t(a);
+        ), t(s);
       }
     }
-    function i(a) {
-      if (a === g) return "<>";
-      if (typeof a == "object" && a !== null && a.$$typeof === C)
+    function i(s) {
+      if (s === g) return "<>";
+      if (typeof s == "object" && s !== null && s.$$typeof === C)
         return "<...>";
       try {
-        var f = r(a);
+        var f = r(s);
         return f ? "<" + f + ">" : "<...>";
       } catch {
         return "<...>";
       }
     }
     function x() {
-      var a = n.A;
-      return a === null ? null : a.getOwner();
+      var s = n.A;
+      return s === null ? null : s.getOwner();
     }
     function l() {
       return Error("react-stack-top-frame");
     }
-    function E(a) {
-      if (p.call(a, "key")) {
-        var f = Object.getOwnPropertyDescriptor(a, "key").get;
+    function E(s) {
+      if (p.call(s, "key")) {
+        var f = Object.getOwnPropertyDescriptor(s, "key").get;
         if (f && f.isReactWarning) return !1;
       }
-      return a.key !== void 0;
+      return s.key !== void 0;
     }
-    function v(a, f) {
+    function v(s, f) {
       function R() {
         I || (I = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
           f
         ));
       }
-      R.isReactWarning = !0, Object.defineProperty(a, "key", {
+      R.isReactWarning = !0, Object.defineProperty(s, "key", {
         get: R,
         configurable: !0
       });
     }
     function o() {
-      var a = r(this.type);
-      return M[a] || (M[a] = !0, console.error(
+      var s = r(this.type);
+      return M[s] || (M[s] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
-      )), a = this.props.ref, a !== void 0 ? a : null;
+      )), s = this.props.ref, s !== void 0 ? s : null;
     }
-    function h(a, f, R, A, B, z, ae, se) {
-      return R = z.ref, a = {
+    function h(s, f, R, A, B, z, ae, se) {
+      return R = z.ref, s = {
         $$typeof: y,
-        type: a,
+        type: s,
         key: f,
         props: z,
         _owner: B
-      }, (R !== void 0 ? R : null) !== null ? Object.defineProperty(a, "ref", {
+      }, (R !== void 0 ? R : null) !== null ? Object.defineProperty(s, "ref", {
         enumerable: !1,
         get: o
-      }) : Object.defineProperty(a, "ref", { enumerable: !1, value: null }), a._store = {}, Object.defineProperty(a._store, "validated", {
+      }) : Object.defineProperty(s, "ref", { enumerable: !1, value: null }), s._store = {}, Object.defineProperty(s._store, "validated", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: 0
-      }), Object.defineProperty(a, "_debugInfo", {
+      }), Object.defineProperty(s, "_debugInfo", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: null
-      }), Object.defineProperty(a, "_debugStack", {
+      }), Object.defineProperty(s, "_debugStack", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: ae
-      }), Object.defineProperty(a, "_debugTask", {
+      }), Object.defineProperty(s, "_debugTask", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: se
-      }), Object.freeze && (Object.freeze(a.props), Object.freeze(a)), a;
+      }), Object.freeze && (Object.freeze(s.props), Object.freeze(s)), s;
     }
-    function m(a, f, R, A, B, z, ae, se) {
+    function m(s, f, R, A, B, z, ae, se) {
       var _ = f.children;
       if (_ !== void 0)
         if (A)
@@ -199,7 +199,7 @@ function pe() {
             );
         else u(_);
       if (p.call(f, "key")) {
-        _ = r(a);
+        _ = r(s);
         var V = Object.keys(f).filter(function(ue) {
           return ue !== "key";
         });
@@ -223,9 +223,9 @@ React keys must be passed directly to JSX without using spread:
       } else R = f;
       return _ && v(
         R,
-        typeof a == "function" ? a.displayName || a.name || "Unknown" : a
+        typeof s == "function" ? s.displayName || s.name || "Unknown" : s
       ), h(
-        a,
+        s,
         _,
         z,
         B,
@@ -235,44 +235,44 @@ React keys must be passed directly to JSX without using spread:
         se
       );
     }
-    function u(a) {
-      typeof a == "object" && a !== null && a.$$typeof === y && a._store && (a._store.validated = 1);
+    function u(s) {
+      typeof s == "object" && s !== null && s.$$typeof === y && s._store && (s._store.validated = 1);
     }
-    var d = K, y = Symbol.for("react.transitional.element"), c = Symbol.for("react.portal"), g = Symbol.for("react.fragment"), T = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), s = Symbol.for("react.consumer"), F = Symbol.for("react.context"), j = Symbol.for("react.forward_ref"), N = Symbol.for("react.suspense"), L = Symbol.for("react.suspense_list"), D = Symbol.for("react.memo"), C = Symbol.for("react.lazy"), re = Symbol.for("react.activity"), G = Symbol.for("react.client.reference"), n = d.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, p = Object.prototype.hasOwnProperty, w = Array.isArray, O = console.createTask ? console.createTask : function() {
+    var d = K, y = Symbol.for("react.transitional.element"), c = Symbol.for("react.portal"), g = Symbol.for("react.fragment"), T = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), a = Symbol.for("react.consumer"), F = Symbol.for("react.context"), j = Symbol.for("react.forward_ref"), N = Symbol.for("react.suspense"), L = Symbol.for("react.suspense_list"), D = Symbol.for("react.memo"), C = Symbol.for("react.lazy"), re = Symbol.for("react.activity"), G = Symbol.for("react.client.reference"), n = d.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, p = Object.prototype.hasOwnProperty, w = Array.isArray, O = console.createTask ? console.createTask : function() {
       return null;
     };
     d = {
-      "react-stack-bottom-frame": function(a) {
-        return a();
+      "react-stack-bottom-frame": function(s) {
+        return s();
       }
     };
     var I, M = {}, U = d["react-stack-bottom-frame"].bind(
       d,
       l
     )(), S = O(i(l)), P = {};
-    H.Fragment = g, H.jsx = function(a, f, R, A, B) {
+    H.Fragment = g, H.jsx = function(s, f, R, A, B) {
       var z = 1e4 > n.recentlyCreatedOwnerStacks++;
       return m(
-        a,
+        s,
         f,
         R,
         !1,
         A,
         B,
         z ? Error("react-stack-top-frame") : U,
-        z ? O(i(a)) : S
+        z ? O(i(s)) : S
       );
-    }, H.jsxs = function(a, f, R, A, B) {
+    }, H.jsxs = function(s, f, R, A, B) {
       var z = 1e4 > n.recentlyCreatedOwnerStacks++;
       return m(
-        a,
+        s,
         f,
         R,
         !0,
         A,
         B,
         z ? Error("react-stack-top-frame") : U,
-        z ? O(i(a)) : S
+        z ? O(i(s)) : S
       );
     };
   }()), H;
@@ -439,7 +439,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
       document.removeEventListener("mousedown", n);
     };
   }, []);
-  const s = r.name;
+  const a = r.name;
   K.useEffect(() => {
     let n = !0;
     return (async () => {
@@ -507,7 +507,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
       )), n.key === "Enter") {
         n.preventDefault(), console.log("filteredOptions[highlightedIndex]", C[u]);
         const [p, w] = C[u] || [];
-        p && (m(w ?? ""), t.setFieldValue(s, p)), T(!1);
+        p && (m(w ?? ""), t.setFieldValue(a, p)), T(!1);
       }
       n.key === "Escape" && T(!1);
     }
@@ -538,9 +538,9 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
     case "autocomplete": {
       const n = (w) => {
         const O = w.target.value;
-        m(O), t.setFieldValue(s, O), T(!0);
+        m(O), t.setFieldValue(a, O), T(!0);
       }, p = (w, O) => {
-        m(O), t.setFieldValue(s, w), T(!1);
+        m(O), t.setFieldValue(a, w), T(!1);
       };
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ e.jsxs("label", { className: N, children: [
@@ -551,7 +551,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           "input",
           {
             className: `${F} ${j}`,
-            value: t.values[s],
+            value: t.values[a],
             placeholder: r.placeholder || "Type to search...",
             onChange: n,
             onFocus: () => T(!0),
@@ -575,7 +575,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           h,
           '"'
         ] }) }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
     }
     case "textarea":
@@ -590,8 +590,8 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             {
               className: `${F} ${j} min-h-[120px] resize-none`,
               onFocus: () => E(!0),
-              name: s,
-              value: t.values[s],
+              name: a,
+              value: t.values[a],
               onBlur: t.handleBlur,
               onChange: t.handleChange,
               placeholder: r.placeholder,
@@ -600,7 +600,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           ),
           /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${l ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] }) });
     case "select":
     case "dataSelector":
@@ -619,7 +619,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             onKeyDown: G,
             children: [
               /* @__PURE__ */ e.jsxs("summary", { className: "cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center", children: [
-                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[s] ? v[t.values[s]] || "Select option" : `Select ${r.label}` }),
+                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[a] ? v[t.values[a]] || "Select option" : `Select ${r.label}` }),
                 /* @__PURE__ */ e.jsx(
                   "svg",
                   {
@@ -659,9 +659,9 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
                   "div",
                   {
                     "data-index": w,
-                    onClick: () => t.setFieldValue(s, n),
+                    onClick: () => t.setFieldValue(a, n),
                     className: `px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
-                        ${t.values[s] === n ? "bg-indigo-50 text-indigo-600 font-medium" : u === w ? "bg-gray-100" : "hover:bg-gray-50"}`,
+                        ${t.values[a] === n ? "bg-indigo-50 text-indigo-600 font-medium" : u === w ? "bg-gray-100" : "hover:bg-gray-50"}`,
                     children: p
                   },
                   n
@@ -670,7 +670,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             ]
           }
         ),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
       ] }) : /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ e.jsxs("label", { className: N, children: [
           r.label,
@@ -682,8 +682,8 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             {
               className: `${F} ${j} appearance-none cursor-pointer pr-12`,
               onFocus: () => E(!0),
-              name: s,
-              value: t.values[s],
+              name: a,
+              value: t.values[a],
               onBlur: t.handleBlur,
               onChange: t.handleChange,
               disabled: r.disabled,
@@ -704,7 +704,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             }
           ) })
         ] }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
     case "radioList":
     case "radio":
@@ -716,16 +716,16 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
         /* @__PURE__ */ e.jsx("div", { className: `flex ${D > 3 ? "flex-col" : ""} gap-2 ml-1`, children: Object.entries(v || {}).map(([n, p]) => /* @__PURE__ */ e.jsxs(
           "label",
           {
-            htmlFor: `${s}-${n}`,
+            htmlFor: `${a}-${n}`,
             className: "flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer",
             children: [
               /* @__PURE__ */ e.jsx(
                 "input",
                 {
-                  id: `${s}-${n}`,
+                  id: `${a}-${n}`,
                   type: "radio",
-                  name: s,
-                  checked: t.values[s] === n,
+                  name: a,
+                  checked: t.values[a] === n,
                   value: n,
                   onChange: t.handleChange,
                   onBlur: t.handleBlur,
@@ -738,31 +738,31 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           },
           n
         )) }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
       ] });
     case "component":
-      return i?.[s];
+      return i?.[a];
     case "checkbox": {
       if (D === 1) {
-        const [n, p] = Object.entries(v || {})[0] || [s, r.label];
+        const [n, p] = Object.entries(v || {})[0] || [a, r.label];
         return /* @__PURE__ */ e.jsxs(e.Fragment, { children: [
           /* @__PURE__ */ e.jsxs("div", { className: "flex  space-x-2", children: [
             /* @__PURE__ */ e.jsx(
               "input",
               {
-                id: s,
+                id: a,
                 type: "checkbox",
-                name: s,
-                checked: t.values[s] || !1,
+                name: a,
+                checked: t.values[a] || !1,
                 onChange: t.handleChange,
                 onBlur: t.handleBlur,
                 disabled: r.disabled,
                 className: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               }
             ),
-            /* @__PURE__ */ e.jsx("label", { htmlFor: s, className: "text-sm font-medium text-gray-700 cursor-pointer", children: p })
+            /* @__PURE__ */ e.jsx("label", { htmlFor: a, className: "text-sm font-medium text-gray-700 cursor-pointer", children: p })
           ] }),
-          t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[s]) })
+          t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
         ] });
       }
       return D > 1 && D <= 5 ? /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
@@ -779,9 +779,9 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
                 "input",
                 {
                   type: "checkbox",
-                  name: s,
+                  name: a,
                   value: n,
-                  checked: Array.isArray(t.values[s]) ? t.values[s]?.includes(n) : !1,
+                  checked: Array.isArray(t.values[a]) ? t.values[a]?.includes(n) : !1,
                   onChange: t.handleChange,
                   onBlur: t.handleBlur,
                   disabled: r.disabled,
@@ -793,7 +793,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           },
           n
         )) }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
       ] }) : D > 5 ? /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ e.jsxs("label", { className: N, children: [
           r.label,
@@ -808,7 +808,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             onKeyDown: G,
             children: [
               /* @__PURE__ */ e.jsxs("summary", { className: "cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center", children: [
-                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[s]?.length > 0 ? t.values[s].join(", ") : `Select ${r.label}` }),
+                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[a]?.length > 0 ? t.values[a].join(", ") : `Select ${r.label}` }),
                 /* @__PURE__ */ e.jsx(
                   "svg",
                   {
@@ -846,18 +846,18 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
                 C.length > 0 ? C.map(([n, p], w) => /* @__PURE__ */ e.jsxs(
                   "label",
                   {
-                    htmlFor: `${s}-${n}`,
+                    htmlFor: `${a}-${n}`,
                     className: `flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm
-                        ${t.values[s] === n ? "bg-indigo-50 text-indigo-600 font-medium" : u === w ? "bg-gray-100" : "hover:bg-gray-50"}`,
+                        ${t.values[a] === n ? "bg-indigo-50 text-indigo-600 font-medium" : u === w ? "bg-gray-100" : "hover:bg-gray-50"}`,
                     children: [
                       /* @__PURE__ */ e.jsx(
                         "input",
                         {
-                          id: `${s}-${n}`,
+                          id: `${a}-${n}`,
                           type: "checkbox",
-                          name: s,
+                          name: a,
                           value: n,
-                          checked: Array.isArray(t.values[s]) ? t.values[s]?.includes(n) : !1,
+                          checked: Array.isArray(t.values[a]) ? t.values[a]?.includes(n) : !1,
                           onChange: t.handleChange,
                           onBlur: t.handleBlur,
                           disabled: r.disabled,
@@ -873,17 +873,17 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             ]
           }
         ),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
       ] }) : null;
     }
     case "tags": {
-      const n = Array.isArray(t.values[s]) ? t.values[s] : [], p = Array.isArray(v) ? v : Object.entries(v || {}).map(([S, P]) => ({ value: S, label: P })), w = (S) => {
-        S && !n.includes(S) && t.setFieldValue(s, [...n, S]);
+      const n = Array.isArray(t.values[a]) ? t.values[a] : [], p = Array.isArray(v) ? v : Object.entries(v || {}).map(([S, P]) => ({ value: S, label: P })), w = (S) => {
+        S && !n.includes(S) && t.setFieldValue(a, [...n, S]);
       }, O = (S) => {
         (S.key === "Enter" || S.key === ",") && (S.preventDefault(), w(h), m(""));
       }, I = (S) => {
         t.setFieldValue(
-          s,
+          a,
           n.filter((P) => P !== S)
         );
       }, M = (S) => p.find((P) => P.value === S)?.label || S, U = () => /* @__PURE__ */ e.jsxs("svg", { className: "w-4 h-4 inline-block mr-1", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", children: [
@@ -899,7 +899,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           "div",
           {
             className: `${F} flex flex-wrap gap-2 min-h-[42px] max-h-[120px] overflow-y-auto items-center`,
-            onClick: () => !r.disabled && document.getElementById(`${s}-input`)?.focus(),
+            onClick: () => !r.disabled && document.getElementById(`${a}-input`)?.focus(),
             children: [
               n.map((S) => /* @__PURE__ */ e.jsxs(
                 "span",
@@ -928,7 +928,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
               /* @__PURE__ */ e.jsx(
                 "input",
                 {
-                  id: `${s}-input`,
+                  id: `${a}-input`,
                   type: "text",
                   value: h,
                   onChange: (S) => m(S.target.value),
@@ -941,7 +941,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             ]
           }
         ),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
     }
     case "file":
@@ -958,7 +958,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
               type: r.type || "text",
               className: `${F} ${j} ${r.icon ? "pl-9" : ""} `,
               onFocus: () => E(!0),
-              name: s,
+              name: a,
               onBlur: t.handleBlur,
               onChange: t.handleChange,
               placeholder: r.placeholder,
@@ -967,16 +967,16 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           ),
           /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${l ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
     case "json": {
-      let n = t.values[s];
+      let n = t.values[a];
       if (typeof n == "object" && n !== null) {
         const O = JSON.stringify(n, null, 2);
-        t.setFieldValue(s, O, !1), n = O;
+        t.setFieldValue(a, O, !1), n = O;
       }
       const p = n || "", w = (O) => {
-        t.setFieldValue(s, O.target.value);
+        t.setFieldValue(a, O.target.value);
       };
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ e.jsxs("label", { className: N, children: [
@@ -987,8 +987,8 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           /* @__PURE__ */ e.jsx(
             "textarea",
             {
-              id: `${s}-json`,
-              name: s,
+              id: `${a}-json`,
+              name: a,
               value: p,
               onChange: w,
               onBlur: t.handleBlur,
@@ -1005,7 +1005,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
             }
           )
         ] }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
     }
     default:
@@ -1022,8 +1022,8 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
               type: r.type || "text",
               className: `${F} ${j} ${r.icon ? "pl-9" : ""} `,
               onFocus: () => E(!0),
-              name: s,
-              value: t.values[s],
+              name: a,
+              value: t.values[a],
               onBlur: t.handleBlur,
               onChange: t.handleChange,
               placeholder: r.placeholder,
@@ -1032,7 +1032,7 @@ function te({ field: r, formik: t, methods: b = {}, components: i, sqlOpsUrls: x
           ),
           /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${l ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[s] && t.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[s]) })
+        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
       ] });
   }
 }
@@ -1147,7 +1147,7 @@ function je({
     onSubmit: (j) => {
       o ? (m < h.length - 1 && u((N) => N + 1), m === h.length - 1 && i(j)) : i(j);
     }
-  }), s = async (j) => {
+  }), a = async (j) => {
     if (j.preventDefault(), !o) {
       const N = await k.validateForm();
       if (Object.keys(N).length > 0) {
@@ -1177,7 +1177,7 @@ function je({
       {
         className: "bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300",
         children: [
-          /* @__PURE__ */ e.jsxs("form", { onSubmit: s, className: "w-full mx-auto", children: [
+          /* @__PURE__ */ e.jsxs("form", { onSubmit: a, className: "w-full mx-auto", children: [
             /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: g && t[g]?.map((j, N) => /* @__PURE__ */ e.jsx(
               "div",
               {
@@ -1395,7 +1395,7 @@ function Te({
             headers: {
               Authorization: `Bearer ${g?.accessToken}`
             }
-          }), s = await q({
+          }), a = await q({
             method: "POST",
             url: g.baseURL + g.dbopsFetch,
             data: {
@@ -1406,7 +1406,7 @@ function Te({
               Authorization: `Bearer ${g?.accessToken}`
             }
           });
-          d && h(s.data?.data ?? {});
+          d && h(a.data?.data ?? a.data ?? {});
         } catch (T) {
           console.error("API fetch failed:", T);
         }
