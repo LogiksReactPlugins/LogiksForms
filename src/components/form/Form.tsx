@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import { determineViewMode, groupFields } from "./utils.js";
+import { determineViewMode, groupFields, transformedObject } from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
@@ -18,8 +18,12 @@ export default function LogiksForm({
 }: FormProps) {
 
   const viewMode = determineViewMode(formJson);
+  const sqlOpsUrls = formJson.endPoints ?? {};
   const groupedFields = groupFields(formJson?.fields ?? {});
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>({});
+
+
+
 
 
   // ---------- Fetch Initial Data ----------
@@ -66,8 +70,8 @@ export default function LogiksForm({
 
       if (source.type === "sql") {
 
-        const dbOpsUrls = formJson.endPoints;
-        if (!dbOpsUrls) {
+        const sqlOpsUrls = formJson.endPoints;
+        if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
@@ -75,36 +79,36 @@ export default function LogiksForm({
         try {
           const resHashId = await axios({
             method: "GET",
-            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetHash,
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetHash,
             headers: {
-              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
           const resQueryId = await axios({
             method: "POST",
-            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetRefId,
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
             data: {
-              "operation": dbOpsUrls.operation,
+              "operation": sqlOpsUrls.operation,
               "source": source,
-              "fields": formJson.fields,
+              "fields": transformedObject(formJson.fields),
               "datahash": resHashId.data.refhash
             },
             headers: {
-              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
           const res = await axios({
             method: "POST",
-            url: dbOpsUrls.baseURL + dbOpsUrls.dbopsFetch,
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsFetch,
             data: {
               "refid": resQueryId.data.refid,
               "datahash": resHashId.data.refhash
             },
 
             headers: {
-              "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
@@ -160,11 +164,11 @@ export default function LogiksForm({
 
     if (source.type === "sql") {
 
-      const dbOpsUrls = formJson.endPoints;
+      const sqlOpsUrls = formJson.endPoints;
 
-      console.log("dbOpsUrls", dbOpsUrls);
+      console.log("sqlOpsUrls", sqlOpsUrls);
 
-      if (!dbOpsUrls) {
+      if (!sqlOpsUrls) {
         console.error("SQL source requires formJson.endPoints but it is missing");
         return;
       }
@@ -173,40 +177,40 @@ export default function LogiksForm({
 
         const resHashId = await axios({
           method: "GET",
-          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetHash,
+          url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetHash,
           headers: {
-            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
 
-      
+
 
         const resQueryId = await axios({
           method: "POST",
-          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsGetRefId,
+          url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
-            "operation": dbOpsUrls.operation,
+            "operation": sqlOpsUrls.operation,
             "source": source,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
           },
 
           headers: {
-            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
-      
+
 
         await axios({
           method: "POST",
-          url: dbOpsUrls.baseURL + dbOpsUrls.dbopsRunQuery,
+          url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsRunQuery,
           data: {
             "refid": resQueryId.data.refid,
             "fields": values,
             "datahash": resHashId.data.refhash
           },
           headers: {
-            "Authorization": `Bearer ${dbOpsUrls?.accessToken}`
+            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
       } catch (err) {
@@ -225,6 +229,7 @@ export default function LogiksForm({
       onCancel={onCancel}
       methods={methods}
       components={components}
+      sqlOpsUrls={sqlOpsUrls}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -234,6 +239,7 @@ export default function LogiksForm({
       onCancel={onCancel}
       methods={methods}
       components={components}
+      sqlOpsUrls={sqlOpsUrls}
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -244,6 +250,7 @@ export default function LogiksForm({
       methods={methods}
       components={components}
       widget={formJson?.widget}
+      sqlOpsUrls={sqlOpsUrls}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -253,6 +260,7 @@ export default function LogiksForm({
       onCancel={onCancel}
       methods={methods}
       components={components}
+      sqlOpsUrls={sqlOpsUrls}
     />
   };
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 
 
-export default function FieldRenderer({ field, formik, methods = {}, components }: FieldRendererProps) {
+export default function FieldRenderer({ field, formik, methods = {}, components, sqlOpsUrls }: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [options, setOptions] = useState<Record<string, string>>(field.options || {});
   const [search, setSearch] = useState("");
@@ -824,7 +824,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components 
             <textarea
               id={`${key}-json`}
               name={key}
-          value={displayValue}
+              value={displayValue}
               onChange={handleJsonChange}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder || "Enter valid JSON"}

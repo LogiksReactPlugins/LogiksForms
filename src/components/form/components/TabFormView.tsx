@@ -14,6 +14,7 @@ export default function TabFormView({
   onCancel = () => { },
   methods = {},
   components = {},
+  sqlOpsUrls={},
   widget
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
@@ -156,7 +157,7 @@ export default function TabFormView({
                 className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}
               >
-                <FieldRenderer key={field.name} field={field} formik={formik} methods={methods} components={components} />
+                <FieldRenderer sqlOpsUrls={sqlOpsUrls} key={field.name} field={field} formik={formik} methods={methods} components={components} />
               </div>
             ))}
           </div>

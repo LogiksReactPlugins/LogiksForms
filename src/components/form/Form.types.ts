@@ -19,10 +19,10 @@ export interface FormField {
     valueKey?: string,
     labelKey?: string,
     source?: Record<string, any>,
-    multiple?:boolean,
-    icon?:string,
-    validate?:Record<string, string | number>
-   
+    multiple?: boolean,
+    icon?: string,
+    validate?: Record<string, string | number>
+
 }
 
 
@@ -30,10 +30,10 @@ export interface FormField {
 export interface FormJson {
     title?: string | undefined;
     template?: string;
-    endPoints?:Record<string, any>;
+    endPoints?: Record<string, any>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
-     widget?:boolean
+    widget?: boolean
 }
 
 export interface FormProps {
@@ -42,7 +42,7 @@ export interface FormProps {
     userid?: string | null;
     methods?: Record<string, Function>
     onCancel?: () => void;
-    components?:Record<string, ReactNode>
+    components?: Record<string, ReactNode>
 
 }
 
@@ -54,13 +54,15 @@ export interface BaseFormViewProps {
     onSubmit: (data: Record<string, any>) => void;
     onCancel: () => void;
     methods?: Record<string, Function>;
-    components?:Record<string, ReactNode>;
-    widget?:boolean | undefined;
+    components?: Record<string, ReactNode>;
+    widget?: boolean | undefined;
+    sqlOpsUrls?: Record<string, any>;
 }
 
 export interface FieldRendererProps {
     field: FormField;
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
-    components?:Record<string, ReactNode>
+    components?: Record<string, ReactNode>
+    sqlOpsUrls?: Record<string, any>;
 }

@@ -24,6 +24,19 @@ export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
   return grouped;
 }
 
+ export function transformedObject(originalObject: Record<string, any>) {
+
+    const fields: Record<string, { label: string; required: boolean }> = {}
+
+    Object.keys(originalObject).forEach((key) => {
+      fields[key] = {
+        label: key,
+        required: originalObject[key].required ?? false
+      }
+    })
+    return fields
+  }
+
 export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,

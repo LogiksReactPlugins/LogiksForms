@@ -46,11 +46,13 @@ export interface BaseFormViewProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
+    sqlOpsUrls?: Record<string, any>;
 }
 export interface FieldRendererProps {
     field: FormField;
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
+    sqlOpsUrls?: Record<string, any>;
 }
 //# sourceMappingURL=Form.types.d.ts.map

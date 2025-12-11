@@ -14,7 +14,8 @@ export default function CardFormView({
   onSubmit = (values) => { },
   onCancel = () => { },
   methods={},
-  components={}
+  components={},
+  sqlOpsUrls={}
 }: BaseFormViewProps) {
 
 
@@ -65,7 +66,7 @@ export default function CardFormView({
                       className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                         }`}
                     >
-                      <FieldRenderer components={components} key={field.name} field={field} formik={formik} methods={methods} />
+                      <FieldRenderer sqlOpsUrls={sqlOpsUrls} components={components} key={field.name} field={field} formik={formik} methods={methods} />
                     </div>
                   ))}
                 </div>
