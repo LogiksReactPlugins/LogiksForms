@@ -14,7 +14,7 @@ export default function TabFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls={},
+  sqlOpsUrls = {},
   widget
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
@@ -22,7 +22,7 @@ export default function TabFormView({
 
   const stepperForm: Record<string, Record<string, Yup.AnySchema>> = {};
   const initialValues: Record<string, any> = {};
- 
+
   const validationSchema = {};
   if (widget) {
     Object.entries(groupedFields).forEach(([step, fields]) => {
@@ -32,7 +32,7 @@ export default function TabFormView({
     });
   } else {
     Object.entries(groupedFields).forEach(([step, fields]) => {
-
+     
       intializeForm(fields, initialValues, validationSchema);
 
     });
@@ -44,7 +44,14 @@ export default function TabFormView({
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {
-        initialValues[key] = data[key];
+
+        if (key === "tags" && typeof data[key] === "string") {
+          initialValues[key] = data[key].split(",")
+        } else {
+          initialValues[key] = data[key] ? data[key] : ""
+        }
+
+
       }
     });
   }
@@ -55,7 +62,7 @@ export default function TabFormView({
       ? stepperForm[currentStepKey]
       : {};
 
- 
+
 
   const formik = useFormik({
     initialValues: initialValues,

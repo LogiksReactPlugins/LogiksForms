@@ -70,8 +70,7 @@ export const intializeForm = (
     } else if (field?.type === "date") {
       validator = Yup.date().typeError("Invalid date format");
     } else if (field?.type === "json") {
-      initialValues[fieldName] = "";
-
+    
       validator = Yup.string()
         .test("is-json", "Invalid JSON format", (value) => {
           if (!value) return true;

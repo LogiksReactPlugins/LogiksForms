@@ -14,7 +14,8 @@ export default function LogiksForm({
   methods = {},
   userid = null,
   onCancel = () => { },
-  components = {}
+  components = {},
+  callback = () => { }
 }: FormProps) {
 
   const viewMode = determineViewMode(formJson);
@@ -68,8 +69,8 @@ export default function LogiksForm({
         }
       }
 
-      if (source.type === "sql") {
-
+      if (source.type === "sql" && Number.isInteger(Number(source.refid)) &&
+        Number(source.refid) > 0) {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -141,8 +142,10 @@ export default function LogiksForm({
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          await Promise.resolve(methodFn(values));
+          const res = await Promise.resolve(methodFn(values));
+          callback?.(res)
         } catch (err) {
+          callback?.(err)
           console.error("Method execution failed:", err);
         }
       }
@@ -150,14 +153,16 @@ export default function LogiksForm({
 
     if (source.type === "api") {
       try {
-        await axios({
+        const res = await axios({
           method: source.method || "POST",
           url: source.url,
           data: values ?? {},
           params: source.params ?? {},
           headers: source.headers ?? {},
         });
+        callback?.(res)
       } catch (err) {
+        callback?.(err)
         console.error("API fetch failed:", err);
       }
     }
@@ -165,7 +170,7 @@ export default function LogiksForm({
     if (source.type === "sql") {
 
       const sqlOpsUrls = formJson.endPoints;
-      
+
 
       console.log("sqlOpsUrls", sqlOpsUrls);
 
@@ -184,8 +189,6 @@ export default function LogiksForm({
           },
         });
 
-
-
         const resQueryId = await axios({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
@@ -201,8 +204,8 @@ export default function LogiksForm({
           },
         });
 
-    
-        const res  = await axios({
+
+        const res = await axios({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls[source.refid ? "dbopsUpdate" : "dbopsCreate"],
           data: {
@@ -214,7 +217,9 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
+        callback?.(res)
       } catch (err) {
+        callback?.(err)
         console.error("API fetch failed:", err);
       }
     }

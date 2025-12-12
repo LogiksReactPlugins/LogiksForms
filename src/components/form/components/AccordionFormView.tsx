@@ -31,7 +31,11 @@ export default function AccordionFormView({
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {
-        initialValues[key] = data[key];
+           if (key === "tags" && typeof data[key] === "string") {
+          initialValues[key] = data[key].split(",")
+        } else {
+          initialValues[key] = data[key] ? data[key] : ""
+        }
       }
     });
   }

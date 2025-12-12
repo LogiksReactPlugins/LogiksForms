@@ -13,7 +13,7 @@ export default function NormalFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls={}
+  sqlOpsUrls = {}
 }: BaseFormViewProps) {
   const fields = Object.values(groupedFields).flat();
 
@@ -28,7 +28,11 @@ export default function NormalFormView({
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {
-        initialValues[key] = data[key];
+        if (key === "tags" && typeof data[key] === "string") {
+          initialValues[key] = data[key].split(",")
+        } else {
+          initialValues[key] = data[key] ? data[key] : ""
+        }
       }
     });
   }
@@ -52,7 +56,7 @@ export default function NormalFormView({
     <div className="relative z-10 max-w-full  m-4">
 
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
-      
+
 
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>

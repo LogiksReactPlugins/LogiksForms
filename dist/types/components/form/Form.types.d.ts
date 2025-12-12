@@ -35,6 +35,7 @@ export interface FormProps {
     userid?: string | null;
     methods?: Record<string, Function>;
     onCancel?: () => void;
+    callback?: (res: any) => void;
     components?: Record<string, ReactNode>;
 }
 export interface BaseFormViewProps {
