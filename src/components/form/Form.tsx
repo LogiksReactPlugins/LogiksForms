@@ -70,7 +70,7 @@ export default function LogiksForm({
 
       if (source.type === "sql") {
 
-        const sqlOpsUrls = formJson.endPoints;
+
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
@@ -165,6 +165,7 @@ export default function LogiksForm({
     if (source.type === "sql") {
 
       const sqlOpsUrls = formJson.endPoints;
+      
 
       console.log("sqlOpsUrls", sqlOpsUrls);
 
@@ -189,7 +190,7 @@ export default function LogiksForm({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
-            "operation": source.refid ? "update" :"create",
+            "operation": source.refid ? "update" : "create",
             "source": source,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
@@ -200,10 +201,10 @@ export default function LogiksForm({
           },
         });
 
-
-        await axios({
+    
+        const res  = await axios({
           method: "POST",
-          url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsRunQuery,
+          url: sqlOpsUrls.baseURL + sqlOpsUrls[source.refid ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             "refid": resQueryId.data.refid,
             "fields": values,
