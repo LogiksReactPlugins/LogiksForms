@@ -104,6 +104,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
+
         try {
 
           const query =
@@ -121,7 +122,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
                 where: field.where,
               };
 
-         
+
           const resQueryId = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
@@ -135,7 +136,8 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-      
+
+
           const res = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
@@ -150,7 +152,8 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-         
+
+
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
 

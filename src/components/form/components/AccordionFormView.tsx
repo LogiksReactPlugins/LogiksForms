@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
+import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
 import type { BaseFormViewProps } from "../Form.types.js";
 
@@ -15,7 +15,7 @@ export default function AccordionFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls ={}
+  sqlOpsUrls = {}
 }: BaseFormViewProps) {
 
 
@@ -31,7 +31,7 @@ export default function AccordionFormView({
     // Update initialValues based on records
     Object.keys(data).forEach(key => {
       if (key in initialValues) {
-           if (key === "tags" && typeof data[key] === "string") {
+        if (key === "tags" && typeof data[key] === "string") {
           initialValues[key] = data[key].split(",")
         } else {
           initialValues[key] = data[key] ? data[key] : ""
@@ -63,8 +63,8 @@ export default function AccordionFormView({
             {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
               <Accordion key={group} title={group} isFirst={index === 0}>
                 <div className='grid grid-cols-12 gap-4'>
-                  {fields.map((field) => (
-                    <div
+                  {fields.map((field,index) => (
+                   isHidden(field.hidden) ? null : <div
                       key={field?.name ?? `field-${index}`}
                       className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                         }`}

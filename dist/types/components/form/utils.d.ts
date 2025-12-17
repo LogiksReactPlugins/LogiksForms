@@ -12,5 +12,6 @@ export declare const tailwindGrid: Record<ColWidth, string>;
 export declare const tailwindCols: Record<ColWidth, string>;
 export declare function toColWidth(width: number | undefined): ColWidth;
 export declare function toGrid(width: number | undefined): ColWidth;
+export declare const isHidden: (hidden?: boolean | string) => boolean;
 export {};
 //# sourceMappingURL=utils.d.ts.map

@@ -8,7 +8,7 @@ import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
-import {  sqlClient } from "./service.js";
+import { sqlClient } from "./service.js";
 
 export default function LogiksForm({
   formJson = { title: "", fields: {}, source: {} },

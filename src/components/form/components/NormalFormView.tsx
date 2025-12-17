@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
+import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { BaseFormViewProps } from "../Form.types.js";
 
 export default function NormalFormView({
@@ -63,7 +63,7 @@ export default function NormalFormView({
 
 
             {fields.map((field, index) => (
-              <div
+              isHidden(field.hidden) ? null : <div
                 key={field?.name ?? `field-${index}`}
                 className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}

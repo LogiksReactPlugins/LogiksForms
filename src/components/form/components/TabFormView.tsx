@@ -2,7 +2,7 @@ import React from 'react'
 import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { intializeForm, tailwindCols, toColWidth } from '../utils.js';
+import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { BaseFormViewProps } from "../Form.types.js";
 
 
@@ -32,7 +32,7 @@ export default function TabFormView({
     });
   } else {
     Object.entries(groupedFields).forEach(([step, fields]) => {
-     
+
       intializeForm(fields, initialValues, validationSchema);
 
     });
@@ -159,7 +159,7 @@ export default function TabFormView({
           {/* Fields Container */}
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
-              <div
+               isHidden(field.hidden) ? null : <div
                 key={field?.name ?? `field-${index}`}
                 className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}

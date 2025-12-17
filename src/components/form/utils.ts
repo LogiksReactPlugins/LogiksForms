@@ -271,3 +271,6 @@ export function toGrid(width: number | undefined): ColWidth {
   const allowed: ColWidth[] = [1, 2, 3, 4, 6, 12];
   return allowed.includes(width as ColWidth) ? (width as ColWidth) : 6;
 }
+
+export const isHidden = (hidden?: boolean | string): boolean =>
+  hidden === true || hidden === "true";

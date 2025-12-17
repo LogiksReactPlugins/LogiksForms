@@ -1,10 +1,11 @@
+  
 
 
 
 export const example2 = {
-    "endPoints": {
+     "endPoints": {
         "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTk3MDY4MSwiZXhwIjoxNzY1OTc0MjgxLCJqdGkiOiJhY2M6MTAxOjE3NjU5NzA2ODEwMTI6d2ViIn0.y0-VWuj4WdRsOKxweNx7N3yrIyrhPo-Mj-BSD8tCHBA",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTk3NTQ3OSwiZXhwIjoxNzY1OTc5MDc5LCJqdGkiOiJhY2M6MTAxOjE3NjU5NzU0NzkwMjA6d2ViIn0.0QTGHt0sKW05vfoMRMGgmZuXW6wiyGiAJ287HSy-PoA",
         "dbopsGetHash": "/api/dbops",
         "dbopsGetRefId": "/api/dbops/save",
         "dbopsCreate": "/api/dbops/create",
@@ -13,411 +14,234 @@ export const example2 = {
         "registerQuery": "/api/query/save",
         "runQuery": "/api/query/run"
     },
-
     "source": {
         "type": "sql",
-        "table": "leads_tbl",
-        "refid": "1"
+        "table": "profiletbl"
     },
     "forcefill": {
-        "groupuid": "#SESS_GROUP_NAME#",
-        "guid": "#SESS_GUID#",
-        "company_id": "#COMP_ID#"
+        "groupuid":"#SESS_GROUP_NAME#",
+        "guid":"#SESS_GUID#",
+        "type":"customer",
+        "company_id":"#COMP_ID#"
     },
-    "actions11": {
-        "newContact": {
-            "icon": "",
-            "label": "Add Client/Company",
-            "class": "btn btn-warning pull-left"
-        }
-    },
-    "simpleform": false,
-    "buttons": {
-        "markAsDeal": {
-            "label": "Mark As Deal",
-            "icon": "fa fa-check",
-            "class": "btnGreen",
-            "float": "left",
-            "policy": "leadbook.update.access"
-        },
-        "markAsLost": {
-            "label": "Mark As Lost",
-            "icon": "fa fa-times",
-            "class": "btn btn-primary",
-            "policy": "leadbook.update.access"
-        },
-        "markAsJunk": {
-            "label": "Mark As Junk",
-            "icon": "fa fa-times",
-            "class": "btn btn-danger pull-left",
-            "policy": "leadbook.update.access"
-        },
-        "markAsNext": {
-            "label": "Next",
-            "icon": "fa fa-angle-double-right",
-            "class": "btn btn-warning",
-            "policy": "leadbook.update.access"
-        }
-    },
-    "gotolink": "infoview/lead.main_view/{hashid}?",
-    "script": "lead",
+    "gotolink":"infoview/profile.customer/{hashid}?",
+    "script":"profile",
     "fields": {
-        "title": {
-            "label": "Lead Title / For",
-            "group": "Lead Details",
-            "required": true
+        "full_name": {
+            "label": "Name",
+            "group": "Info",
+            "required": true,
+            "minlength":3,
+            "maxlength":50
         },
-        "broker_name": {
-            "label": "Reference From Partner",
+        "organization": {
+            "label": "Partner",
+            "group": "Info",
             "type": "dataSelectorFromTable",
             "table": "profiletbl_organisation",
-            "columns": "organization as title,org_code as value",
-            "search": true,
-            "group": "Lead Details",
-            "no-option": "Select Reference From Partner",
-            "autocomplete": {
-                "target": "broker_email,broker_mobile,broker_address",
-                "src": {
-                    "table": "profiletbl_organisation",
-                    "columns": "org_mail as broker_email,org_landline as broker_mobile,org_address1 as broker_address",
-                    "where": {
-                        "org_code": "#refid#"
-                    }
-                }
-            },
-            "required": true
-        },
-        "broker_email": {
-            "label": "Reference Email",
-            "type": "email",
-            "group": "Lead Details",
-            "hidden": true
-        },
-        "broker_mobile": {
-            "label": "Reference Mobile",
-            "type": "phone",
-            "group": "Lead Details",
-            "hidden": true
-        },
-        "broker_address": {
-            "label": "Reference Address",
-            "type": "textarea",
-            "group": "Lead Details",
-            "width": 12,
-            "hidden": true
-        },
-        "customer_id": {
-            "label": "Client/Company",
-            "group": "Customer",
-            "type": "dataSelectorFromTable",
-            "table": "profiletbl",
-            "columns": "full_name as title, id as value",
-            "search": true,
+            "columns": "organization as title,id as value",
+            "search":true,
             "where": {
-                "(type like '%customer%' OR type like '%other%')": "RAW",
-                "length(full_name)>0": "RAW"
+                "blocked": "false"
             },
-            "autocomplete": {
-                "target": "contact_name,contact_email,contact_mobile,contact_address,contact_street,contact_city,contact_state,contact_country,contact_zipcode",
-                "src": {
-                    "table": "profiletbl,profiletbl_address",
-                    "columns": "profiletbl.full_name as contact_name,profiletbl.email1 as contact_email,profiletbl.mobile as contact_mobile,profiletbl_address.street as contact_street,profiletbl_address.address as contact_address,profiletbl_address.city as contact_city,profiletbl_address.state as contact_state,profiletbl_address.country as contact_country,profiletbl_address.zipcode as contact_zipcode,profiletbl.full_name as contact_company",
-                    "where": {
-                        "profiletbl.id": "#refid#",
-                        "profiletbl_address.profile_id": "#refid#",
-                        "profiletbl_address.address_type": "primary",
-                        "profiletbl_address.blocked": "false"
-                    }
-                }
-            },
-            "class": "contact_field contact_client",
-            "no-option": "Select Client/Company"
-        },
-        "customer_type": {
-            "label": "Client/Company Type",
-            "group": "Customer",
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "groupid": "profile_customer_type",
-            "default": "old",
-            "no-option": "Select Client/Company Type",
+            "orderby":"organization asc",
+            "no-option":"Select Partner",
             "required": true
         },
-        "contact_name": {
-            "label": "Contact Name",
-            "type": "text",
-            "group": "Customer",
-            "required": true,
-            "class": "contact_field contact_field_mandetory",
-            "hidden": false,
-            "width": 4
-        },
-        "contact_email": {
-            "label": "Email",
-            "type": "email",
-            "group": "Customer",
-            "required": true,
-            "class": "contact_field contact_field_mandetory",
-            "hidden": false,
-            "width": 4
-        },
-        "contact_mobile": {
-            "label": "Mobile",
-            "type": "phone",
-            "group": "Customer",
-            "required": true,
-            "minlength": 10,
-            "maxlength": 10,
-            "class": "contact_field contact_field_mandetory",
-            "hidden": false,
-            "width": 4
-        },
-        "contact_address": {
-            "label": "Address",
-            "type": "textarea",
-            "group": "Customer",
-            "class": "contact_field",
-            "width": 12,
-            "hidden": false
-        },
-        "contact_street": {
-            "label": "Street",
-            "type": "text",
-            "group": "Customer",
-            "class": "contact_field",
-            "hidden": false,
-            "width": 4
-        },
-        "contact_city": {
-            "label": "City",
-            "group": "Customer",
-            "class": "contact_field",
-            "hidden": false,
-            "type": "suggest",
-            "width": 4
-        },
-        "contact_state": {
-            "label": "State",
-            "type": "suggest",
-            "group": "Customer",
-            "class": "contact_field",
-            "hidden": false,
-            "width": 4
-        },
-        "contact_zipcode": {
-            "label": "Zipcode",
-            "type": "text",
-            "group": "Customer",
-            "class": "contact_field",
-            "hidden": false,
-            "width": 6
-        },
-        "contact_country": {
-            "label": "Country",
-            "type": "suggest",
-            "groupid": "country",
-            "group": "Customer",
-            "class": "contact_field",
-            "hidden": false,
-            "width": 6
-        },
-        "lead_date": {
-            "label": "Lead Date",
-            "group": "Lead Details",
-            "type": "date",
-            "required": true,
-            "default": "#SESS_CURRENT_DATE#",
-            "width": 6
-        },
-        "lead_year": {
-            "label": "Lead Year",
-            "group": "Lead Details",
-            "required": true,
-            "hidden": true,
-            "width": 4
-        },
-        "net_amount": {
-            "label": "Net Amount",
-            "group": "Lead Details",
-            "type": "text",
-            "vmode": "edit",
-            "required": true
-        },
-        "lead_value": {
-            "label": "Lead Value",
-            "group": "Lead Details",
-            "type": "text",
-            "required": false
-        },
-        "lead_priority": {
-            "label": "Lead Priority",
-            "group": "Lead Details",
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "groupid": "lead_priority",
-            "required": true
-        },
-     
-        "lead_source": {
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "label": "Lead Source",
-            "group": "Lead Details",
-            "groupid": "leads_source",
-            "required": true
-        },
-        "lead_status": {
-            "label": "Lead Status",
-            "group": "Lead Details",
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "groupid": "lead_status",
-            "no-option": "Select Lead Status",
-            "required": true,
-            "width": 6
-        },
-        "lead_type": {
-            "label": "Lead Type",
-            "group": "Lead Details",
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "groupid": "lead_type",
-            "suggest": true,
-            "required": true,
-            "width": 6
-        },
-        "enquiry_type": {
-            "label": "Enquiry Type",
-            "group": "Lead Details",
-            "type": "dataSelector",
-         
-            "groupid": "lead_enquiry_type",
-            "required": true,
-            "width": 6
-        },
-        "marketting_source": {
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
-            "label": "Marketing Source",
-            "group": "Lead Details",
-            "groupid": "lead_marketing_source",
-            "no-option": "Select Marketing Source",
-            "required": true
-        },
-        "marketting_campaign": {
-            "label": "Marketing Campaign",
-            "group": "Lead Details",
-            "required": true
-        },
-        "enquiry_product_descs": {
-            "label": "Enquiry Details",
-            "group": "More",
-            "type": "textarea",
-            "maxlength": 255,
-            "required": true,
-            "width": 12
-        },
-
-        "blocked": {
-            "label": "Blocked",
-            "group": "Lead Details",
-            "type": "select",
-            "vmode": "view",
-            "required": true,
-            "options": {
-                "": false,
-                "true": "True",
-                "false": "False"
-            }
-        },
-
-        "enquiry_due": {
-            "label": "Delivery Due On",
-            "group": "More",
-            "type": "date",
-            "width": 12
-        },
-        "open_by": {
-            "label": "Open By",
-            "group": "More",
+        
+        "category":{
+            "label": "Category",
+            "group": "Info",
             "type": "dataSelectorFromTable",
-            "table": "staff_tbl",
-            "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+            "table": "do_lists",
+            "columns": "title as title,value as value",
             "where": {
                 "blocked": "false",
-                "status in ('active','under_notice','probationary')": "RAW",
-                "loginid <> ''": "RAW",
-                "length(full_name)>0": "RAW"
+                "groupid":"profile_category"
             },
-            "default": "#SESS_USER_ID#",
-            "width": 4
+            "required": true
+        },
+        "email1": {
+            "label": "Email",
+            "group": "Info",
+            "type": "email",
+            "required":true
+        },
+        "email2": {
+            "label": "Alternate Email",
+            "group": "Info",
+            "type": "email"
+        },
+        "mobile": {
+            "label": "Mobile",
+            "group": "Info",
+            "type": "phone",
+            "required":true,
+            "maxlength":10
+        },
+        "mobile_others": {
+            "label": "Phone",
+            "group": "Info",
+            "type": "phone",
+            "minlength":10,
+            "maxlength":10
+        },
+        "pan": {
+            "label": "PAN No.",
+            "required":true,
+            "group": "Info",
+            "autocomplete":"off",
+            "width": 6
+        },
+        "cin": {
+            "label": "CIN",
+            "required":false,
+            "group": "Info",
+            "autocomplete":"off",
+            "width": 6
+        },
+        "msme": {
+            "label": "MSME",
+            "required":false,
+            "group": "Info",
+            "autocomplete":"off",
+            "width": 6
+        },
+        "gst": {
+            "label": "GST No.",
+            "required": true,
+            "group": "Info",
+            "autocomplete":"off",
+            "width": 6
         },
         "assigned_to": {
-            "label": "Assigned To",
-            "group": "More",
+            "label": "Account Manager",
+            "group": "Info",
             "type": "dataSelectorFromTable",
+            "multiple":false,
             "table": "staff_tbl",
-            "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
-            "where": {
-                "blocked": "false",
-                "status in ('active','under_notice','probationary')": "RAW",
-                "loginid <> ''": "RAW",
-                "length(full_name)>0": "RAW"
+            "columns": "full_name as title,loginid as value",
+            "search":true,
+            "where":{
+                   "blocked": "false",
+                   "loginid !=''":"RAW"
             },
-            "default": "#SESS_USER_ID#",
-            "width": 4
+            "orderby":"full_name asc",
+            "required": true,
+            "width":6
         },
-        "manager": {
-            "label": "Manager",
-            "group": "More",
+        "account_co_ordinator": {
+            "label": "Account CO-Ordinator",
+            "group": "Info",
             "type": "dataSelectorFromTable",
-            "table": "staff_tbl",
-            "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
-            "where": {
-                "blocked": "false",
-                "status in ('active','under_notice','probationary')": "RAW",
-                "length(full_name)>0": "RAW"
+            "multiple":false,
+             "dbkey": "core",
+            "table": "lgks_users",
+            "columns": "name as title,userid as value",
+            "search":false,
+            "where":{
+                   "blocked": "false",
+                 
             },
-            "default": "#SESS_REPORTING_TO#",
-            "width": 4
+            "orderby":"name asc",
+            "required": false,
+            "width":6
+        },
+        "demography": {
+            "label": "Demography",
+            "group": "Info",
+            "type": "dataSelector",
+            "groupid":"country",
+            "width": 6
+        },
+        "website": {
+            "label": "Website",
+            "group": "Info",
+            "type": "url",
+            "width": 6
+        },
+        "profile_code": {
+            "label": "Client CRN",
+            "group": "Info",
+            "type": "text",
+            "required":true,
+            "width": 6
+        },
+        "owner": {
+            "label": "Owner",
+            "group": "Info",
+            "width": 6,
+            "minlength":3,
+            "maxlength":50
+        },
+        "dob": {
+            "label": "DOB",
+            "group": "Info",
+            "type":"date",
+            "width": 6
+        },
+        "blood_group": {
+            "label": "Blood Group",
+            "group": "Info",
+            "type":"dataSelector",
+            "groupid":"profile_bloodgroup"
+        },
+        "fax": {
+            "label": "Fax",
+            "group": "Info",
+            "width": 6
         },
         "tags": {
             "label": "Tags",
-            "group": "More",
+            "group": "Info",
             "type": "tags",
-            "width": 12
+            "width": 6,
+            "minlength":10,
+            "maxlength":100,
+            hidden:true
+
+        },
+        "region": {
+            "label": "Territory",
+            "group": "Info",
+            "type": "text"
+        },
+        "sales_route": {
+            "label": "Sales Route",
+            "group": "Info",
+            "type": "text"
+        },
+        "discount": {
+            "label": "Discount %",
+            "type": "number",
+            "group": "Info"
+        },
+        "delivery_days": {
+            "label": "Delivery Days",
+            "group": "Info",
+            "type": "number"
         },
         "remarks": {
             "label": "Remarks",
-            "group": "Lead Details",
-            "width": "12",
-            "maxlength": 255,
-            "type": "textarea"
-        },
-        "prelead_id": {
-            "label": "Prelead ID",
-            "group": "More",
-            "type": "text",
-            "hidden": true,
+            "group": "Info",
+            "type": "textarea",
             "width": 12
+        },
+        "blocked": {
+            "label": "Blocked",
+            "group": "Info",
+            "type": "dataSelector",
+            "groupid":"boolean",
+            "vmode":"edit",
+            "required": true
+        },
+        "blacklist": {
+            "label": "Blacklisted",
+            "group": "Info",
+            "type": "dataSelector",
+            "groupid":"boolean",
+            "vmode":"edit",
+            "required": true
         }
     }
 }

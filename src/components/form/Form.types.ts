@@ -24,9 +24,10 @@ export interface FormField {
     table?: string;
     columns?: string;
     where?: Record<string, string>;
-    autocomplete?: Record<string, any>;
+    autocomplete?: Record<string, any> | string;
     validate?: Record<string, string | number>;
     groupid?:string;
+    hidden?:boolean;
 
 }
 

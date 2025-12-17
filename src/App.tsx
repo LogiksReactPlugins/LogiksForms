@@ -14,7 +14,7 @@ function App() {
             return
         }
         return {
-            
+
         }
     }
 
@@ -33,7 +33,7 @@ function App() {
         console.log("res", res);
 
     }
-    
+
     return <LogiksForm
         formJson={example2}
         onCancel={() => { }}
