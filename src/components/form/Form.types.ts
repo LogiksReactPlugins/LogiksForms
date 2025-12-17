@@ -26,6 +26,7 @@ export interface FormField {
     where?: Record<string, string>;
     autocomplete?: Record<string, any>;
     validate?: Record<string, string | number>;
+    groupid?:string;
 
 }
 

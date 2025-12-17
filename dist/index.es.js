@@ -21,8 +21,8 @@ function be() {
     var O = null;
     if (o !== void 0 && (O = "" + o), u.key !== void 0 && (O = "" + u.key), "key" in u) {
       o = {};
-      for (var y in u)
-        y !== "key" && (o[y] = u[y]);
+      for (var v in u)
+        v !== "key" && (o[v] = u[v]);
     } else o = u;
     return u = o.ref, {
       $$typeof: t,
@@ -76,15 +76,15 @@ function ge() {
             return (s.displayName || "Context") + ".Provider";
           case a:
             return (s._context.displayName || "Context") + ".Consumer";
-          case f:
-            var v = s.render;
-            return s = s.displayName, s || (s = v.displayName || v.name || "", s = s !== "" ? "ForwardRef(" + s + ")" : "ForwardRef"), s;
+          case y:
+            var g = s.render;
+            return s = s.displayName, s || (s = g.displayName || g.name || "", s = s !== "" ? "ForwardRef(" + s + ")" : "ForwardRef"), s;
           case z:
-            return v = s.displayName || null, v !== null ? v : t(s.type) || "Memo";
-          case F:
-            v = s._payload, s = s._init;
+            return g = s.displayName || null, g !== null ? g : t(s.type) || "Memo";
+          case I:
+            g = s._payload, s = s._init;
             try {
-              return t(s(v));
+              return t(s(g));
             } catch {
             }
         }
@@ -96,27 +96,27 @@ function ge() {
     function l(s) {
       try {
         r(s);
-        var v = !1;
+        var g = !1;
       } catch {
-        v = !0;
+        g = !0;
       }
-      if (v) {
-        v = console;
-        var T = v.error, P = typeof Symbol == "function" && Symbol.toStringTag && s[Symbol.toStringTag] || s.constructor.name || "Object";
+      if (g) {
+        g = console;
+        var T = g.error, _ = typeof Symbol == "function" && Symbol.toStringTag && s[Symbol.toStringTag] || s.constructor.name || "Object";
         return T.call(
-          v,
+          g,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
-          P
+          _
         ), r(s);
       }
     }
     function c(s) {
       if (s === m) return "<>";
-      if (typeof s == "object" && s !== null && s.$$typeof === F)
+      if (typeof s == "object" && s !== null && s.$$typeof === I)
         return "<...>";
       try {
-        var v = t(s);
-        return v ? "<" + v + ">" : "<...>";
+        var g = t(s);
+        return g ? "<" + g + ">" : "<...>";
       } catch {
         return "<...>";
       }
@@ -130,16 +130,16 @@ function ge() {
     }
     function O(s) {
       if (b.call(s, "key")) {
-        var v = Object.getOwnPropertyDescriptor(s, "key").get;
-        if (v && v.isReactWarning) return !1;
+        var g = Object.getOwnPropertyDescriptor(s, "key").get;
+        if (g && g.isReactWarning) return !1;
       }
       return s.key !== void 0;
     }
-    function y(s, v) {
+    function v(s, g) {
       function T() {
-        _ || (_ = !0, console.error(
+        F || (F = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
-          v
+          g
         ));
       }
       T.isReactWarning = !0, Object.defineProperty(s, "key", {
@@ -153,11 +153,11 @@ function ge() {
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
       )), s = this.props.ref, s !== void 0 ? s : null;
     }
-    function x(s, v, T, P, V, k, se, ne) {
+    function x(s, g, T, _, V, k, se, ne) {
       return T = k.ref, s = {
-        $$typeof: g,
+        $$typeof: f,
         type: s,
-        key: v,
+        key: g,
         props: k,
         _owner: V
       }, (T !== void 0 ? T : null) !== null ? Object.defineProperty(s, "ref", {
@@ -185,48 +185,48 @@ function ge() {
         value: ne
       }), Object.freeze && (Object.freeze(s.props), Object.freeze(s)), s;
     }
-    function h(s, v, T, P, V, k, se, ne) {
-      var I = v.children;
-      if (I !== void 0)
-        if (P)
-          if (S(I)) {
-            for (P = 0; P < I.length; P++)
-              d(I[P]);
-            Object.freeze && Object.freeze(I);
+    function h(s, g, T, _, V, k, se, ne) {
+      var P = g.children;
+      if (P !== void 0)
+        if (_)
+          if (S(P)) {
+            for (_ = 0; _ < P.length; _++)
+              d(P[_]);
+            Object.freeze && Object.freeze(P);
           } else
             console.error(
               "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
             );
-        else d(I);
-      if (b.call(v, "key")) {
-        I = t(s);
-        var U = Object.keys(v).filter(function(pe) {
+        else d(P);
+      if (b.call(g, "key")) {
+        P = t(s);
+        var U = Object.keys(g).filter(function(pe) {
           return pe !== "key";
         });
-        P = 0 < U.length ? "{key: someKey, " + U.join(": ..., ") + ": ...}" : "{key: someKey}", C[I + P] || (U = 0 < U.length ? "{" + U.join(": ..., ") + ": ...}" : "{}", console.error(
+        _ = 0 < U.length ? "{key: someKey, " + U.join(": ..., ") + ": ...}" : "{key: someKey}", C[P + _] || (U = 0 < U.length ? "{" + U.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
+          _,
           P,
-          I,
           U,
-          I
-        ), C[I + P] = !0);
+          P
+        ), C[P + _] = !0);
       }
-      if (I = null, T !== void 0 && (l(T), I = "" + T), O(v) && (l(v.key), I = "" + v.key), "key" in v) {
+      if (P = null, T !== void 0 && (l(T), P = "" + T), O(g) && (l(g.key), P = "" + g.key), "key" in g) {
         T = {};
-        for (var oe in v)
-          oe !== "key" && (T[oe] = v[oe]);
-      } else T = v;
-      return I && y(
+        for (var oe in g)
+          oe !== "key" && (T[oe] = g[oe]);
+      } else T = g;
+      return P && v(
         T,
         typeof s == "function" ? s.displayName || s.name || "Unknown" : s
       ), x(
         s,
-        I,
+        P,
         k,
         V,
         u(),
@@ -236,9 +236,9 @@ React keys must be passed directly to JSX without using spread:
       );
     }
     function d(s) {
-      typeof s == "object" && s !== null && s.$$typeof === g && s._store && (s._store.validated = 1);
+      typeof s == "object" && s !== null && s.$$typeof === f && s._store && (s._store.validated = 1);
     }
-    var p = Q, g = Symbol.for("react.transitional.element"), j = Symbol.for("react.portal"), m = Symbol.for("react.fragment"), N = Symbol.for("react.strict_mode"), $ = Symbol.for("react.profiler"), a = Symbol.for("react.consumer"), D = Symbol.for("react.context"), f = Symbol.for("react.forward_ref"), w = Symbol.for("react.suspense"), q = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), F = Symbol.for("react.lazy"), ae = Symbol.for("react.activity"), G = Symbol.for("react.client.reference"), n = p.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, b = Object.prototype.hasOwnProperty, S = Array.isArray, E = console.createTask ? console.createTask : function() {
+    var p = Q, f = Symbol.for("react.transitional.element"), j = Symbol.for("react.portal"), m = Symbol.for("react.fragment"), N = Symbol.for("react.strict_mode"), $ = Symbol.for("react.profiler"), a = Symbol.for("react.consumer"), D = Symbol.for("react.context"), y = Symbol.for("react.forward_ref"), w = Symbol.for("react.suspense"), q = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), I = Symbol.for("react.lazy"), ae = Symbol.for("react.activity"), G = Symbol.for("react.client.reference"), n = p.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, b = Object.prototype.hasOwnProperty, S = Array.isArray, E = console.createTask ? console.createTask : function() {
       return null;
     };
     p = {
@@ -246,30 +246,30 @@ React keys must be passed directly to JSX without using spread:
         return s();
       }
     };
-    var _, L = {}, B = p["react-stack-bottom-frame"].bind(
+    var F, L = {}, B = p["react-stack-bottom-frame"].bind(
       p,
       o
     )(), R = E(c(o)), C = {};
-    K.Fragment = m, K.jsx = function(s, v, T, P, V) {
+    K.Fragment = m, K.jsx = function(s, g, T, _, V) {
       var k = 1e4 > n.recentlyCreatedOwnerStacks++;
       return h(
         s,
-        v,
+        g,
         T,
         !1,
-        P,
+        _,
         V,
         k ? Error("react-stack-top-frame") : B,
         k ? E(c(s)) : R
       );
-    }, K.jsxs = function(s, v, T, P, V) {
+    }, K.jsxs = function(s, g, T, _, V) {
       var k = 1e4 > n.recentlyCreatedOwnerStacks++;
       return h(
         s,
-        v,
+        g,
         T,
         !0,
-        P,
+        _,
         V,
         k ? Error("react-stack-top-frame") : B,
         k ? E(c(s)) : R
@@ -319,10 +319,10 @@ const X = (t, r, l) => {
     )), c?.validate?.regex && typeof c.validate.regex == "string" && (o = o.matches(
       new RegExp(c?.validate?.regex),
       c?.error_message || "Invalid input format"
-    )), c?.validate && Object.entries(c.validate).forEach(([O, y]) => {
+    )), c?.validate && Object.entries(c.validate).forEach(([O, v]) => {
       switch (O) {
         case "email":
-          y && (o = o.email("Invalid email format"));
+          v && (o = o.email("Invalid email format"));
           break;
         case "mobile":
           o = o.matches(
@@ -332,16 +332,16 @@ const X = (t, r, l) => {
           break;
         case "regex":
           o = o.matches(
-            new RegExp(y),
-            `Must match pattern: ${y}`
+            new RegExp(v),
+            `Must match pattern: ${v}`
           );
           break;
         case "date":
           o = A.date().typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)").transform((i, x) => {
             if (typeof x == "string") {
-              const h = x.replace(/-/g, "/"), [d, p, g] = h.split("/");
-              if (d && p && g)
-                return /* @__PURE__ */ new Date(`${g}-${p}-${d}`);
+              const h = x.replace(/-/g, "/"), [d, p, f] = h.split("/");
+              if (d && p && f)
+                return /* @__PURE__ */ new Date(`${f}-${p}-${d}`);
             }
             return i;
           });
@@ -398,12 +398,12 @@ const X = (t, r, l) => {
           );
           break;
         case "length-min": {
-          const i = Number(y);
+          const i = Number(v);
           isNaN(i) || (o = o.min(i, `Minimum length is ${i}`));
           break;
         }
         case "length-max": {
-          const i = Number(y);
+          const i = Number(v);
           isNaN(i) || (o = o.max(i, `Maximum length is ${i}`));
           break;
         }
@@ -428,7 +428,7 @@ function te(t) {
   return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(t) ? t : 6;
 }
 function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u }) {
-  const [o, O] = Y(!1), [y, i] = Y(t.options || {}), [x, h] = Y(""), [d, p] = Y(0), g = ce(null), j = ce(null), [m, N] = Y(!1), $ = (n) => {
+  const [o, O] = Y(!1), [v, i] = Y(t.options || {}), [x, h] = Y(""), [d, p] = Y(0), f = ce(null), j = ce(null), [m, N] = Y(!1), $ = (n) => {
     n.currentTarget.open || h("");
   };
   de(() => {
@@ -449,10 +449,10 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
       }
       const S = t?.source ?? {};
       if (S.type === "method") {
-        const E = S.method, _ = E ? l[E] : void 0;
-        if (_)
+        const E = S.method, F = E ? l[E] : void 0;
+        if (F)
           try {
-            const L = await Promise.resolve(_());
+            const L = await Promise.resolve(F());
             n && i(L ?? {});
           } catch (L) {
             console.error("Method execution failed:", L), n && i({});
@@ -468,46 +468,52 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
             data: S.body ?? {},
             params: S.params ?? {},
             headers: S.headers ?? {}
-          }), _ = t.valueKey || "value", L = t.labelKey || "label", B = Array.isArray(E.data?.data) ? E.data.data : [], R = {};
+          }), F = t.valueKey || "value", L = t.labelKey || "label", B = Array.isArray(E.data?.data) ? E.data.data : [], R = {};
           B.forEach((C) => {
-            R[C[_]] = C[L];
+            R[C[F]] = C[L];
           }), n && i(R);
         } catch (E) {
           console.error("API execution failed:", E), n && i({});
         }
-      if (t.table) {
+      if (t.table || t.type === "dataSelector") {
         if (!u) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
         try {
-          const E = await M({
+          const E = t.type === "dataSelector" ? {
+            table: "do_lists",
+            cols: "title,value",
+            where: {
+              groupid: t.groupid ?? ""
+            }
+          } : {
+            table: t.table,
+            cols: t.columns,
+            where: t.where
+          }, F = await M({
             method: "POST",
             url: u.baseURL + u.registerQuery,
             data: {
-              query: {
-                table: t.table,
-                cols: t.columns,
-                where: t.where
-              }
+              query: E
             },
             headers: {
               Authorization: `Bearer ${u?.accessToken}`
             }
-          }), _ = await M({
+          }), L = await M({
             method: "POST",
             url: u.baseURL + u.runQuery,
             data: {
-              queryid: E.data.queryid,
+              queryid: F.data.queryid,
               filter: {}
             },
             headers: {
               Authorization: `Bearer ${u?.accessToken}`
             }
-          }), L = t.valueKey || "value", B = t.labelKey || "title", R = Array.isArray(_.data?.data) ? _.data.data : [], C = {};
-          R.forEach((s) => {
-            C[s[L]] = s[B];
-          }), n && i(C);
+          }), B = t.valueKey || "value", R = t.labelKey || "title", C = Array.isArray(L.data?.data) ? L.data.data : [], s = {};
+          C.forEach((g) => {
+            s[g[B]] = g[R];
+          }), n && i(s);
         } catch (E) {
           console.error("API fetch failed:", E);
         }
@@ -528,22 +534,22 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
     w-full px-4 py-2 rounded-lg border border-gray-200 transition-all duration-300 
     bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
     focus:outline-none focus:ring-0
-  `, f = `
+  `, y = `
     border-gradient-to-r 
     focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
   `, w = `
     block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700
-  `, q = (n) => n.icon ? /* @__PURE__ */ e.jsx("i", { className: n.icon }) : null, z = Object.keys(y || {}).length, F = xe(() => Object.entries(y || {}).filter(
+  `, q = (n) => n.icon ? /* @__PURE__ */ e.jsx("i", { className: n.icon }) : null, z = Object.keys(v || {}).length, I = xe(() => Object.entries(v || {}).filter(
     ([, n]) => x ? n.toLowerCase().includes(x.toLowerCase()) : !0
-  ), [x, y]), ae = (n) => {
+  ), [x, v]), ae = (n) => {
     if (m) {
       if (n.key === "ArrowDown" && (n.preventDefault(), p(
-        (b) => b + 1 < F.length ? b + 1 : 0
+        (b) => b + 1 < I.length ? b + 1 : 0
       )), n.key === "ArrowUp" && (n.preventDefault(), p(
-        (b) => b - 1 >= 0 ? b - 1 : F.length - 1
+        (b) => b - 1 >= 0 ? b - 1 : I.length - 1
       )), n.key === "Enter") {
         n.preventDefault();
-        const [b, S] = F[d] || [];
+        const [b, S] = I[d] || [];
         b && (h(S ?? ""), r.setFieldValue(a, b)), N(!1);
       }
       n.key === "Escape" && N(!1);
@@ -552,15 +558,15 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
     if (j.current?.open)
       if (n.key === "ArrowDown")
         n.preventDefault(), p(
-          (b) => b + 1 < F.length ? b + 1 : 0
+          (b) => b + 1 < I.length ? b + 1 : 0
         );
       else if (n.key === "ArrowUp")
         n.preventDefault(), p(
-          (b) => b - 1 >= 0 ? b - 1 : F.length - 1
+          (b) => b - 1 >= 0 ? b - 1 : I.length - 1
         );
       else if (n.key === "Enter") {
         n.preventDefault();
-        const [b] = F[d] || [];
+        const [b] = I[d] || [];
         if (b) {
           let S = t.type === "select" || t.type === "dataSelector" || t.type === "dataMethod" || t.type === "dataSelectorFromTable" || t.type === "dataSelectorFromUniques";
           r.setFieldValue(t.name, S ? b : [...r.values[t.name], b]), j.current.open = !1;
@@ -568,7 +574,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
       } else n.key === "Escape" && (j.current.open = !1, h(""));
   };
   switch (de(() => {
-    g.current?.querySelector(
+    f.current?.querySelector(
       `[data-index="${d}"]`
     )?.scrollIntoView({ block: "nearest" });
   }, [d]), t.type) {
@@ -587,7 +593,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
         /* @__PURE__ */ e.jsx(
           "input",
           {
-            className: `${D} ${f}`,
+            className: `${D} ${y}`,
             value: r.values[a],
             placeholder: t.placeholder || "Type to search...",
             onChange: n,
@@ -596,17 +602,17 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
             onKeyDown: ae
           }
         ),
-        m && /* @__PURE__ */ e.jsx("div", { ref: g, className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1", children: F.length > 0 ? F.map(([S, E], _) => /* @__PURE__ */ e.jsx(
+        m && /* @__PURE__ */ e.jsx("div", { ref: f, className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1", children: I.length > 0 ? I.map(([S, E], F) => /* @__PURE__ */ e.jsx(
           "div",
           {
-            "data-index": _,
+            "data-index": F,
             className: `px-3 py-2 cursor-pointer text-sm 
-    ${d === _ ? "bg-gray-100" : "hover:bg-gray-100"}
+    ${d === F ? "bg-gray-100" : "hover:bg-gray-100"}
   `,
             onMouseDown: () => b(S, E),
             children: E
           },
-          _
+          F
         )) : /* @__PURE__ */ e.jsxs("div", { className: "px-3 py-2 text-sm text-gray-400 cursor-pointer", children: [
           'No matches — select to keep "',
           x,
@@ -625,7 +631,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
           /* @__PURE__ */ e.jsx(
             "textarea",
             {
-              className: `${D} ${f} min-h-[120px] resize-none`,
+              className: `${D} ${y} min-h-[120px] resize-none`,
               onFocus: () => O(!0),
               name: a,
               value: r.values[a],
@@ -658,7 +664,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
             onKeyDown: G,
             children: [
               /* @__PURE__ */ e.jsxs("summary", { className: "cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center", children: [
-                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: r.values[a] ? y[r.values[a]] || "Select option" : `Select ${t.label}` }),
+                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: r.values[a] ? v[r.values[a]] || "Select option" : `Select ${t.label}` }),
                 /* @__PURE__ */ e.jsx(
                   "svg",
                   {
@@ -678,7 +684,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
                   }
                 )
               ] }),
-              /* @__PURE__ */ e.jsxs("div", { ref: g, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
+              /* @__PURE__ */ e.jsxs("div", { ref: f, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
                 /* @__PURE__ */ e.jsx("div", { className: "sticky top-0 bg-white p-1", children: /* @__PURE__ */ e.jsx(
                   "input",
                   {
@@ -694,7 +700,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
                   focus:outline-none focus:ring-0`
                   }
                 ) }),
-                F.length > 0 ? F.map(([n, b], S) => /* @__PURE__ */ e.jsx(
+                I.length > 0 ? I.map(([n, b], S) => /* @__PURE__ */ e.jsx(
                   "div",
                   {
                     "data-index": S,
@@ -719,7 +725,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
           /* @__PURE__ */ e.jsxs(
             "select",
             {
-              className: `${D} ${f} appearance-none cursor-pointer pr-12`,
+              className: `${D} ${y} appearance-none cursor-pointer pr-12`,
               onFocus: () => O(!0),
               name: a,
               value: r.values[a],
@@ -728,7 +734,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
               disabled: t.disabled,
               children: [
                 /* @__PURE__ */ e.jsx("option", { value: "", disabled: !0, children: t.placeholder }),
-                Object.entries(y || {}).map(([n, b]) => /* @__PURE__ */ e.jsx("option", { value: n, className: "py-2", children: b }, n))
+                Object.entries(v || {}).map(([n, b]) => /* @__PURE__ */ e.jsx("option", { value: n, className: "py-2", children: b }, n))
               ]
             }
           ),
@@ -752,7 +758,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
           t.label,
           t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
-        /* @__PURE__ */ e.jsx("div", { className: `flex ${z > 3 ? "flex-col" : ""} gap-2 ml-1`, children: Object.entries(y || {}).map(([n, b]) => /* @__PURE__ */ e.jsxs(
+        /* @__PURE__ */ e.jsx("div", { className: `flex ${z > 3 ? "flex-col" : ""} gap-2 ml-1`, children: Object.entries(v || {}).map(([n, b]) => /* @__PURE__ */ e.jsxs(
           "label",
           {
             htmlFor: `${a}-${n}`,
@@ -783,7 +789,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
       return c?.[a];
     case "checkbox": {
       if (z === 1) {
-        const [n, b] = Object.entries(y || {})[0] || [a, t.label];
+        const [n, b] = Object.entries(v || {})[0] || [a, t.label];
         return /* @__PURE__ */ e.jsxs(e.Fragment, { children: [
           /* @__PURE__ */ e.jsxs("div", { className: "flex  space-x-2", children: [
             /* @__PURE__ */ e.jsx(
@@ -809,7 +815,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
           t.label,
           t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
-        /* @__PURE__ */ e.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(y || {}).map(([n, b]) => /* @__PURE__ */ e.jsxs(
+        /* @__PURE__ */ e.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(v || {}).map(([n, b]) => /* @__PURE__ */ e.jsxs(
           "label",
           {
             className: "flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer",
@@ -867,7 +873,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
                   }
                 )
               ] }),
-              /* @__PURE__ */ e.jsxs("div", { ref: g, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
+              /* @__PURE__ */ e.jsxs("div", { ref: f, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
                 /* @__PURE__ */ e.jsx("div", { className: "sticky top-0 bg-white p-1", children: /* @__PURE__ */ e.jsx(
                   "input",
                   {
@@ -882,7 +888,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
     focus:outline-none focus:ring-0`
                   }
                 ) }),
-                F.length > 0 ? F.map(([n, b], S) => /* @__PURE__ */ e.jsxs(
+                I.length > 0 ? I.map(([n, b], S) => /* @__PURE__ */ e.jsxs(
                   "label",
                   {
                     htmlFor: `${a}-${n}`,
@@ -916,11 +922,11 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
       ] }) : null;
     }
     case "tags": {
-      const n = Array.isArray(r.values[a]) ? r.values[a] : [], b = Array.isArray(y) ? y : Object.entries(y || {}).map(([R, C]) => ({ value: R, label: C })), S = (R) => {
+      const n = Array.isArray(r.values[a]) ? r.values[a] : [], b = Array.isArray(v) ? v : Object.entries(v || {}).map(([R, C]) => ({ value: R, label: C })), S = (R) => {
         R && !n.includes(R) && r.setFieldValue(a, [...n, R]);
       }, E = (R) => {
         (R.key === "Enter" || R.key === ",") && (R.preventDefault(), S(x), h(""));
-      }, _ = (R) => {
+      }, F = (R) => {
         r.setFieldValue(
           a,
           n.filter((C) => C !== R)
@@ -953,7 +959,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
                         type: "button",
                         "aria-label": `Remove ${L(R)}`,
                         onClick: (C) => {
-                          C.stopPropagation(), t.disabled || _(R);
+                          C.stopPropagation(), t.disabled || F(R);
                         },
                         onMouseDown: (C) => C.preventDefault(),
                         className: "ml-1 text-indigo-500 hover:text-red-500 focus:outline-none",
@@ -995,7 +1001,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
             "input",
             {
               type: t.type || "text",
-              className: `${D} ${f} ${t.icon ? "pl-9" : ""} `,
+              className: `${D} ${y} ${t.icon ? "pl-9" : ""} `,
               onFocus: () => O(!0),
               name: a,
               onBlur: r.handleBlur,
@@ -1033,7 +1039,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
               onBlur: r.handleBlur,
               placeholder: t.placeholder || "Enter valid JSON",
               disabled: t.disabled,
-              className: `${D} ${f} min-h-[200px] font-mono text-sm resize-y`
+              className: `${D} ${y} min-h-[200px] font-mono text-sm resize-y`
             }
           ),
           /* @__PURE__ */ e.jsx(
@@ -1059,7 +1065,7 @@ function re({ field: t, formik: r, methods: l = {}, components: c, sqlOpsUrls: u
             "input",
             {
               type: t.type || "text",
-              className: `${D} ${f} ${t.icon ? "pl-9" : ""} `,
+              className: `${D} ${y} ${t.icon ? "pl-9" : ""} `,
               onFocus: () => O(!0),
               name: a,
               value: r.values[a],
@@ -1123,7 +1129,7 @@ function we({
   },
   methods: o = {},
   components: O = {},
-  sqlOpsUrls: y = {}
+  sqlOpsUrls: v = {}
 }) {
   const i = {}, x = {};
   Object.entries(r).forEach(([d, p]) => {
@@ -1140,13 +1146,13 @@ function we({
     }
   });
   return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: h.handleSubmit, className: "p-4 mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([d, p], g) => /* @__PURE__ */ e.jsx(Ne, { title: d, isFirst: g === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: p.map((j) => /* @__PURE__ */ e.jsx(
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([d, p], f) => /* @__PURE__ */ e.jsx(Ne, { title: d, isFirst: f === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: p.map((j) => /* @__PURE__ */ e.jsx(
       "div",
       {
         className: `col-span-12 md:col-span-6 ${ee[te(Number(j.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: y, components: O, field: j, formik: h, methods: o }, j.name)
+        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: v, components: O, field: j, formik: h, methods: o }, j.name)
       },
-      j?.name ?? `field-${g}`
+      j?.name ?? `field-${f}`
     )) }) }, d)) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
@@ -1167,27 +1173,27 @@ function Se({
   },
   methods: o = {},
   components: O = {},
-  sqlOpsUrls: y = {},
+  sqlOpsUrls: v = {},
   widget: i
 }) {
-  const x = Object.keys(r), [h, d] = Q.useState(0), p = {}, g = {}, j = {};
-  i ? Object.entries(r).forEach(([f, w]) => {
+  const x = Object.keys(r), [h, d] = Q.useState(0), p = {}, f = {}, j = {};
+  i ? Object.entries(r).forEach(([y, w]) => {
     const q = {};
-    X(w, g, q), p[f] = q;
-  }) : Object.entries(r).forEach(([f, w]) => {
-    X(w, g, j);
-  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((f) => {
-    f in g && (f === "tags" && typeof l[f] == "string" ? g[f] = l[f].split(",") : g[f] = l[f] ? l[f] : "");
+    X(w, f, q), p[y] = q;
+  }) : Object.entries(r).forEach(([y, w]) => {
+    X(w, f, j);
+  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((y) => {
+    y in f && (y === "tags" && typeof l[y] == "string" ? f[y] = l[y].split(",") : f[y] = l[y] ? l[y] : "");
   });
   const m = x[h] ?? null, N = m && p[m] ? p[m] : {}, $ = Z({
-    initialValues: g,
+    initialValues: f,
     enableReinitialize: !0,
     validationSchema: A.object().shape(i ? N : j),
-    onSubmit: (f) => {
-      i ? (h < x.length - 1 && d((w) => w + 1), h === x.length - 1 && c(f)) : c(f);
+    onSubmit: (y) => {
+      i ? (h < x.length - 1 && d((w) => w + 1), h === x.length - 1 && c(y)) : c(y);
     }
-  }), a = async (f) => {
-    if (f.preventDefault(), !i) {
+  }), a = async (y) => {
+    if (y.preventDefault(), !i) {
       const w = await $.validateForm();
       if (Object.keys(w).length > 0) {
         alert("Please fill all required fields before submitting."), $.setTouched(
@@ -1196,20 +1202,20 @@ function Se({
         return;
       }
     }
-    $.handleSubmit(f);
+    $.handleSubmit(y);
   }, D = () => {
-    d((f) => f > 0 ? f - 1 : f);
+    d((y) => y > 0 ? y - 1 : y);
   };
   return /* @__PURE__ */ e.jsxs("div", { className: " max-w-full  m-4", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "relative", children: /* @__PURE__ */ e.jsx("div", { className: "relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner", children: /* @__PURE__ */ e.jsx("nav", { className: "relative flex", children: x.map((f, w) => /* @__PURE__ */ e.jsx(
+    /* @__PURE__ */ e.jsx("div", { className: "relative", children: /* @__PURE__ */ e.jsx("div", { className: "relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner", children: /* @__PURE__ */ e.jsx("nav", { className: "relative flex", children: x.map((y, w) => /* @__PURE__ */ e.jsx(
       "button",
       {
         type: "button",
         onClick: () => d(w),
         className: `relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${h === w ? "text-action bg-white" : "text-gray-600 hover:text-gray-800 hover:bg-white/50"}`,
-        children: /* @__PURE__ */ e.jsx("span", { className: "relative z-10 flex items-center justify-center gap-2 capitalize", children: f })
+        children: /* @__PURE__ */ e.jsx("span", { className: "relative z-10 flex items-center justify-center gap-2 capitalize", children: y })
       },
-      f
+      y
     )) }) }) }),
     /* @__PURE__ */ e.jsxs(
       "div",
@@ -1217,13 +1223,13 @@ function Se({
         className: "bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300",
         children: [
           /* @__PURE__ */ e.jsxs("form", { onSubmit: a, className: "w-full mx-auto", children: [
-            /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: m && r[m]?.map((f, w) => /* @__PURE__ */ e.jsx(
+            /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: m && r[m]?.map((y, w) => /* @__PURE__ */ e.jsx(
               "div",
               {
-                className: `col-span-12  ${ee[te(Number(f.width))] || "lg:col-span-4"}`,
-                children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: y, field: f, formik: $, methods: o, components: O }, f.name)
+                className: `col-span-12  ${ee[te(Number(y.width))] || "lg:col-span-4"}`,
+                children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: v, field: y, formik: $, methods: o, components: O }, y.name)
               },
-              f?.name ?? `field-${w}`
+              y?.name ?? `field-${w}`
             )) }),
             /* @__PURE__ */ e.jsxs("div", { className: `mt-8 flex ${h > 0 ? "justify-between" : "justify-end"} space-x-3`, children: [
               h > 0 && /* @__PURE__ */ e.jsx("button", { onClick: D, type: "button", className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Previous" }),
@@ -1243,7 +1249,7 @@ function Se({
               ] }),
               /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700 ml-3", children: "All fields marked (*) are required" })
             ] }),
-            /* @__PURE__ */ e.jsx("div", { className: "flex gap-1", children: x.map((f, w) => /* @__PURE__ */ e.jsx(
+            /* @__PURE__ */ e.jsx("div", { className: "flex gap-1", children: x.map((y, w) => /* @__PURE__ */ e.jsx(
               "div",
               {
                 className: `w-2 h-2 rounded-full transition-all duration-300 ${w === h ? "bg-action w-6" : "bg-gray-300"}`
@@ -1267,11 +1273,11 @@ function Ee({
   },
   methods: o = {},
   components: O = {},
-  sqlOpsUrls: y = {}
+  sqlOpsUrls: v = {}
 }) {
   const i = Object.values(r).flat(), x = {}, h = {};
-  Object.entries(r).forEach(([p, g]) => {
-    X(g, x, h);
+  Object.entries(r).forEach(([p, f]) => {
+    X(f, x, h);
   }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((p) => {
     p in x && (p === "tags" && typeof l[p] == "string" ? x[p] = l[p].split(",") : x[p] = l[p] ? l[p] : "");
   });
@@ -1284,13 +1290,13 @@ function Ee({
     }
   });
   return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: d.handleSubmit, className: "p-4  mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: i.map((p, g) => /* @__PURE__ */ e.jsx(
+    /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: i.map((p, f) => /* @__PURE__ */ e.jsx(
       "div",
       {
         className: `col-span-12 md:col-span-6 ${ee[te(Number(p.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: y, components: O, field: p, formik: d, methods: o }, p.name)
+        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: v, components: O, field: p, formik: d, methods: o }, p.name)
       },
-      p?.name ?? `field-${g}`
+      p?.name ?? `field-${f}`
     )) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
@@ -1333,7 +1339,7 @@ function Oe({
   },
   methods: o = {},
   components: O = {},
-  sqlOpsUrls: y = {}
+  sqlOpsUrls: v = {}
 }) {
   const i = {}, x = {};
   Object.entries(r).forEach(([d, p]) => {
@@ -1350,13 +1356,13 @@ function Oe({
     }
   });
   return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: h.handleSubmit, className: "p-4 mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([d, p], g) => /* @__PURE__ */ e.jsx(Re, { title: d, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: p.map((j) => /* @__PURE__ */ e.jsx(
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([d, p], f) => /* @__PURE__ */ e.jsx(Re, { title: d, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: p.map((j) => /* @__PURE__ */ e.jsx(
       "div",
       {
         className: `col-span-12 md:col-span-6 ${ee[te(Number(j.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: y, components: O, field: j, formik: h, methods: o }, j.name)
+        children: /* @__PURE__ */ e.jsx(re, { sqlOpsUrls: v, components: O, field: j, formik: h, methods: o }, j.name)
       },
-      j?.name ?? `field-${g}`
+      j?.name ?? `field-${f}`
     )) }) }, d)) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "px-4 pt-4 text-sm text-secondary", children: "All fields marked (*) are required" }),
@@ -1427,13 +1433,13 @@ function _e({
   callback: o = () => {
   }
 }) {
-  const O = ye(t), y = t.endPoints, i = ve(t?.fields ?? {}), [x, h] = Q.useState({});
+  const O = ye(t), v = t.endPoints, i = ve(t?.fields ?? {}), [x, h] = Q.useState({});
   Q.useEffect(() => {
-    let g = !0;
+    let f = !0;
     return (async () => {
       const m = t?.source ?? {};
       if (!m?.type) {
-        g && h({});
+        f && h({});
         return;
       }
       if (m.type === "method") {
@@ -1441,12 +1447,12 @@ function _e({
         if ($)
           try {
             const a = await Promise.resolve($());
-            g && h(a ?? {});
+            f && h(a ?? {});
           } catch (a) {
-            console.error("Method execution failed:", a), g && h({});
+            console.error("Method execution failed:", a), f && h({});
           }
         else
-          g && h({});
+          f && h({});
       }
       if (m.type === "api")
         try {
@@ -1457,17 +1463,17 @@ function _e({
             params: m.params ?? {},
             headers: m.headers ?? {}
           });
-          g && h(N.data ?? {});
+          f && h(N.data ?? {});
         } catch (N) {
-          console.error("API fetch failed:", N), g && h({});
+          console.error("API fetch failed:", N), f && h({});
         }
       if (m.type === "sql" && m.refid && m.refid != "0") {
-        if (!y) {
+        if (!v) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
         try {
-          const N = await Te.fetch(y, {
+          const N = await Te.fetch(v, {
             source: {
               table: m.table,
               columns: m.columns,
@@ -1475,13 +1481,13 @@ function _e({
             },
             fields: je(t.fields)
           });
-          g && h(N);
+          f && h(N);
         } catch (N) {
           console.error("API fetch failed:", N);
         }
       }
     })(), () => {
-      g = !1;
+      f = !1;
     };
   }, [
     l,
@@ -1492,13 +1498,13 @@ function _e({
     JSON.stringify(t?.source?.body ?? {}),
     JSON.stringify(t?.source?.headers ?? {})
   ]);
-  const d = async (g) => {
+  const d = async (f) => {
     const j = t?.source ?? {};
     if (j.type === "method") {
       const m = j.method, N = m ? r[m] : void 0;
       if (N)
         try {
-          const $ = await Promise.resolve(N(g));
+          const $ = await Promise.resolve(N(f));
           o?.($);
         } catch ($) {
           o?.($), console.error("Method execution failed:", $);
@@ -1509,7 +1515,7 @@ function _e({
         const m = await M({
           method: j.method || "POST",
           url: j.url,
-          data: g ?? {},
+          data: f ?? {},
           params: j.params ?? {},
           headers: j.headers ?? {}
         });
@@ -1547,7 +1553,7 @@ function _e({
           url: m.baseURL + m[j.refid ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             refid: $.data.refid,
-            fields: g,
+            fields: f,
             datahash: N.data.refhash
           },
           headers: {
@@ -1570,7 +1576,7 @@ function _e({
         onCancel: c,
         methods: r,
         components: u,
-        sqlOpsUrls: y
+        sqlOpsUrls: v
       }
     ),
     cards: /* @__PURE__ */ e.jsx(
@@ -1583,7 +1589,7 @@ function _e({
         onCancel: c,
         methods: r,
         components: u,
-        sqlOpsUrls: y
+        sqlOpsUrls: v
       }
     ),
     tab: /* @__PURE__ */ e.jsx(
@@ -1597,7 +1603,7 @@ function _e({
         methods: r,
         components: u,
         widget: t?.widget,
-        sqlOpsUrls: y
+        sqlOpsUrls: v
       }
     ),
     simple: /* @__PURE__ */ e.jsx(
@@ -1610,7 +1616,7 @@ function _e({
         onCancel: c,
         methods: r,
         components: u,
-        sqlOpsUrls: y
+        sqlOpsUrls: v
       }
     )
   };

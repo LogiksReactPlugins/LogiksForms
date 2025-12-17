@@ -300,10 +300,6 @@ export declare const example2: {
             label: string;
             group: string;
             type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
             groupid: string;
             required: boolean;
             width: number;

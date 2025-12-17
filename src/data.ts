@@ -4,7 +4,7 @@
 export const example2 = {
     "endPoints": {
         "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTk2NjYxMiwiZXhwIjoxNzY1OTcwMjEyLCJqdGkiOiJhY2M6MTAxOjE3NjU5NjY2MTI4ODU6d2ViIn0.3d0SjC0BCsIu4jVs5ctSULVk_IfISgGOgo8Ih11IxHU",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTk3MDY4MSwiZXhwIjoxNzY1OTc0MjgxLCJqdGkiOiJhY2M6MTAxOjE3NjU5NzA2ODEwMTI6d2ViIn0.y0-VWuj4WdRsOKxweNx7N3yrIyrhPo-Mj-BSD8tCHBA",
         "dbopsGetHash": "/api/dbops",
         "dbopsGetRefId": "/api/dbops/save",
         "dbopsCreate": "/api/dbops/create",
@@ -263,6 +263,7 @@ export const example2 = {
             "groupid": "lead_priority",
             "required": true
         },
+     
         "lead_source": {
             "type": "select",
             "options": {
@@ -303,11 +304,8 @@ export const example2 = {
         "enquiry_type": {
             "label": "Enquiry Type",
             "group": "Lead Details",
-            "type": "select",
-            "options": {
-                "chat": "chat",
-                "direct": "direct"
-            },
+            "type": "dataSelector",
+         
             "groupid": "lead_enquiry_type",
             "required": true,
             "width": 6

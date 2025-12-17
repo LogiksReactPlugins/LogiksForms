@@ -98,7 +98,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
       // Case 3: Sql source
 
-      if (field.table) {
+      if (field.table || field.type === "dataSelector") {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -106,17 +106,28 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
         }
         try {
 
+          const query =
+            field.type === "dataSelector"
+              ? {
+                table: "do_lists",
+                cols: "title,value",
+                where: {
+                  groupid: field.groupid ?? "",
+                },
+              }
+              : {
+                table: field.table,
+                cols: field.columns,
+                where: field.where,
+              };
 
+         
           const resQueryId = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
             data: {
 
-              "query": {
-                "table": field.table,
-                "cols": field.columns,
-                "where": field.where
-              }
+              "query": query
 
 
             },
@@ -124,7 +135,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-
+      
           const res = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
@@ -139,8 +150,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-
-       
+         
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
 
