@@ -8,6 +8,7 @@ import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
+import {  sqlClient } from "./service.js";
 
 export default function LogiksForm({
   formJson = { title: "", fields: {}, source: {} },
@@ -19,11 +20,9 @@ export default function LogiksForm({
 }: FormProps) {
 
   const viewMode = determineViewMode(formJson);
-  const sqlOpsUrls = formJson.endPoints ?? {};
+  const sqlOpsUrls = formJson.endPoints;
   const groupedFields = groupFields(formJson?.fields ?? {});
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>({});
-
-
 
 
 
@@ -69,8 +68,8 @@ export default function LogiksForm({
         }
       }
 
-      if (source.type === "sql" && Number.isInteger(Number(source.refid)) &&
-        Number(source.refid) > 0) {
+      if (source.type === "sql" && source.refid &&
+        source.refid != "0") {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -78,42 +77,18 @@ export default function LogiksForm({
         }
 
         try {
-          const resHashId = await axios({
-            method: "GET",
-            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetHash,
-            headers: {
-              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+
+
+          const data = await sqlClient.fetch(sqlOpsUrls, {
+            source: {
+              table: source.table,
+              columns: source.columns,
+              ...source
             },
+            fields: transformedObject(formJson.fields),
           });
 
-          const resQueryId = await axios({
-            method: "POST",
-            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
-            data: {
-              "operation": "fetch",
-              "source": source,
-              "fields": transformedObject(formJson.fields),
-              "datahash": resHashId.data.refhash
-            },
-            headers: {
-              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-            },
-          });
-
-          const res = await axios({
-            method: "POST",
-            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsFetch,
-            data: {
-              "refid": resQueryId.data.refid,
-              "datahash": resHashId.data.refhash
-            },
-
-            headers: {
-              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-            },
-          });
-
-          if (isMounted) setResolvedData(res.data?.data ?? res.data ?? {});
+          if (isMounted) setResolvedData(data);
         } catch (err) {
           console.error("API fetch failed:", err);
         }
@@ -170,9 +145,6 @@ export default function LogiksForm({
     if (source.type === "sql") {
 
       const sqlOpsUrls = formJson.endPoints;
-
-
-      console.log("sqlOpsUrls", sqlOpsUrls);
 
       if (!sqlOpsUrls) {
         console.error("SQL source requires formJson.endPoints but it is missing");

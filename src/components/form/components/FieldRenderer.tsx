@@ -21,6 +21,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
 
 
+
   // Close on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -92,6 +93,68 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
         } catch (err) {
           console.error("API execution failed:", err);
           if (isMounted) setOptions({});
+        }
+      }
+
+      // Case 3: Sql source
+
+      if (field.table) {
+
+        if (!sqlOpsUrls) {
+          console.error("SQL source requires formJson.endPoints but it is missing");
+          return;
+        }
+        try {
+
+
+          const resQueryId = await axios({
+            method: "POST",
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
+            data: {
+
+              "query": {
+                "table": field.table,
+                "cols": field.columns,
+                "where": field.where
+              }
+
+
+            },
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+
+          const res = await axios({
+            method: "POST",
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
+            data: {
+              "queryid": resQueryId.data.queryid,
+              "filter": {
+
+              }
+            },
+
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+
+       
+          const valueKey = field.valueKey || "value";
+          const labelKey = field.labelKey || "title";
+
+          const items = Array.isArray(res.data?.data) ? res.data.data : [];
+          const mapped: Record<string, string> = {};
+
+          items.forEach((item: Record<string, any>) => {
+            mapped[item[valueKey]] = item[labelKey];
+          });
+
+
+          if (isMounted) setOptions(mapped);
+        } catch (err) {
+          console.error("API fetch failed:", err);
         }
       }
     };
@@ -166,8 +229,6 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log("filteredOptions[highlightedIndex]", filteredOptions[highlightedIndex]);
-
       const [value, label] = filteredOptions[highlightedIndex] || [];
       if (value) {
         setSearch(label ?? "");
@@ -182,7 +243,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
   };
 
 
-  // ✅ Handle keyboard navigation
+  //  Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!detailsRef.current?.open) return;
 
@@ -200,7 +261,9 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
       e.preventDefault();
       const [val] = filteredOptions[highlightedIndex] || [];
       if (val) {
-        let is_single = field.type === "select" || field.type === "dataSelector" || field.type === "dataMethod"
+        let is_single = field.type === "select" ||
+          field.type === "dataSelector" || field.type === "dataMethod" ||
+          field.type === "dataSelectorFromTable" || field.type === "dataSelectorFromUniques";
         formik.setFieldValue(field.name, is_single ? val : [...formik.values[field.name], val]);
         detailsRef.current!.open = false;
       }
@@ -210,7 +273,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
     }
   };
 
-  // ✅ Auto-scroll highlighted option into view
+  //  Auto-scroll highlighted option into view
   useEffect(() => {
     const activeEl = listRef.current?.querySelector<HTMLElement>(
       `[data-index="${highlightedIndex}"]`
@@ -321,6 +384,8 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
     case "select":
     case "dataSelector":
+    case "dataSelectorFromTable":
+    case "dataSelectorFromUniques":
     case "dataMethod": {
 
       if (optionCount > 10) {
@@ -359,7 +424,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
               {/* Dropdown body */}
               <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
-                {/* 🔍 Search input */}
+                {/*  Search input */}
                 <div className="sticky top-0 bg-white p-1">
                   <input
                     type="text"
@@ -387,7 +452,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
                       className={`px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
                         ${formik.values[key] === val
                           ? "bg-indigo-50 text-indigo-600 font-medium"
-                          : highlightedIndex === idx // ✅ highlight state
+                          : highlightedIndex === idx //  highlight state
                             ? "bg-gray-100"
                             : "hover:bg-gray-50"
                         }`}

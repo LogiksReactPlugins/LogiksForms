@@ -20,12 +20,24 @@ export interface FormField {
     source?: Record<string, any>;
     multiple?: boolean;
     icon?: string;
+    table?: string;
+    columns?: string;
+    where?: Record<string, string>;
+    autocomplete?: Record<string, any>;
     validate?: Record<string, string | number>;
 }
 export interface FormJson {
     title?: string | undefined;
     template?: string;
-    endPoints?: Record<string, any>;
+    endPoints?: {
+        baseURL: string;
+        dbopsGetRefId: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsFetch?: string;
+        dbopsUpdate?: string;
+        dbopsCreate?: string;
+    };
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
     widget?: boolean;
@@ -47,13 +59,13 @@ export interface BaseFormViewProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
-    sqlOpsUrls?: Record<string, any>;
+    sqlOpsUrls?: Record<string, any> | undefined;
 }
 export interface FieldRendererProps {
     field: FormField;
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
-    sqlOpsUrls?: Record<string, any>;
+    sqlOpsUrls?: Record<string, any> | undefined;
 }
 //# sourceMappingURL=Form.types.d.ts.map

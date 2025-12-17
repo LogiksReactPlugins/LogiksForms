@@ -15,7 +15,7 @@ export default function AccordionFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls = {}
+  sqlOpsUrls ={}
 }: BaseFormViewProps) {
 
 
