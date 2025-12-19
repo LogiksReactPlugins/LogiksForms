@@ -226,6 +226,7 @@ export default function LogiksForm({
       methods={methods}
       components={components}
       sqlOpsUrls={sqlOpsUrls}
+      refid={refid}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -236,6 +237,7 @@ export default function LogiksForm({
       methods={methods}
       components={components}
       sqlOpsUrls={sqlOpsUrls}
+      refid={refid}
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -247,6 +249,7 @@ export default function LogiksForm({
       components={components}
       widget={formJson?.widget}
       sqlOpsUrls={sqlOpsUrls}
+      refid={refid}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -257,6 +260,7 @@ export default function LogiksForm({
       methods={methods}
       components={components}
       sqlOpsUrls={sqlOpsUrls}
+      refid={refid}
     />
   };
 

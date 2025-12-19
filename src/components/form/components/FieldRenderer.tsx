@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
-import type { FieldRendererProps, FormField } from '../Form.types.js';
+import type { FieldRendererProps, FormField, sqlQueryProps } from '../Form.types.js';
+import { replacePlaceholders } from '../utils.js';
 
 
-export default function FieldRenderer({ field, formik, methods = {}, components, sqlOpsUrls }: FieldRendererProps) {
+
+export default function FieldRenderer({ field, formik, methods = {}, components, sqlOpsUrls, refid }: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [options, setOptions] = useState<Record<string, string>>(field.options || {});
   const [search, setSearch] = useState("");
@@ -13,7 +15,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const [open, setOpen] = useState(false);
   const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
-    const detailsEl = e.currentTarget; // ✅ currentTarget is strongly typed
+    const detailsEl = e.currentTarget; //  currentTarget is strongly typed
     if (!detailsEl.open) {
       setSearch("");
     }
@@ -107,21 +109,35 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
         try {
 
-          const query =
-            field.type === "dataSelector"
-              ? {
-                table: "do_lists",
-                cols: "title,value",
-                where: {
-                  groupid: field.groupid ?? "",
-                },
-              }
-              : {
-                table: field.table,
-                cols: field.columns,
-                where: field.where,
-              };
+          let query: sqlQueryProps;
 
+          if (field.type === "dataSelector") {
+            query = {
+              table: "do_lists",
+              cols: "title,value",
+              where: {
+                groupid: field.groupid ?? "",
+              },
+            };
+          } else {
+
+            if (!field.table || !field.columns) {
+              console.error("Invalid SQL field config", field);
+              return;
+            }
+
+            query = {
+              table: field.table,
+              cols: field.columns,
+            };
+          }
+
+          //  Optional where — added only if present
+          if (field.where && field.type !== "dataSelector") {
+            query.where = refid
+              ? replacePlaceholders(field.where, { refid })
+              : field.where;
+          }
 
           const resQueryId = await axios({
             method: "POST",
@@ -294,6 +310,91 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
     activeEl?.scrollIntoView({ block: "nearest" });
   }, [highlightedIndex]);
 
+  useEffect(() => {
+    const ac = field.autocomplete;
+    if (!ac || ac === "off") return;
+
+    const value = formik.values[field.name];
+    if (!value) return;
+
+    const targets = ac.target
+      .split(",")
+      .map((t: string) => t.trim());
+
+    const fetchAutocompleteData = async () => {
+      try {
+        const src = ac.src;
+
+        const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+          refid: value,
+        });
+
+        // --- SQL source ---
+        if (src.table && sqlOpsUrls) {
+          const resQueryId = await axios({
+            method: "POST",
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
+            data: {
+
+              "query": {
+                table: src.table,
+                cols: src.columns,
+                where: resolvedWhere
+              }
+
+
+            },
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+
+
+          const res = await axios({
+            method: "POST",
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
+            data: {
+              "queryid": resQueryId.data.queryid,
+              "filter": {
+
+              }
+            },
+
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+
+          const row = Array.isArray(res.data?.data)
+            ? res.data.data[0]
+            : res.data?.data;
+
+          console.log("row", row);
+
+
+          if (!row) return;
+
+          console.log("targets", targets);
+
+
+          targets.forEach((t: string) => {
+
+
+            if (row[t] !== undefined) {
+              console.log("row[t]", row[t]);
+              formik.setFieldValue(t, row[t]);
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Autocomplete fetch failed", err);
+      }
+    };
+
+    fetchAutocompleteData();
+  }, [formik.values[field.name]]);
+
+
   switch (field.type) {
 
     case "autocomplete": {
@@ -461,7 +562,12 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
                       key={val}
                       data-index={idx}
-                      onClick={() => formik.setFieldValue(key, val)}
+                      onClick={() => {
+                        formik.setFieldValue(key, val);
+                        detailsRef.current?.removeAttribute("open");
+                        setSearch("");
+                        setHighlightedIndex(0);
+                      }}
                       className={`px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
                         ${formik.values[key] === val
                           ? "bg-indigo-50 text-indigo-600 font-medium"

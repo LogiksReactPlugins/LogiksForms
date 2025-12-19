@@ -15,7 +15,8 @@ export default function AccordionFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls = {}
+  sqlOpsUrls = {},
+  refid
 }: BaseFormViewProps) {
 
 
@@ -69,7 +70,7 @@ export default function AccordionFormView({
                       className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                         }`}
                     >
-                      <FieldRenderer sqlOpsUrls={sqlOpsUrls} components={components} key={field.name} field={field} formik={formik} methods={methods} />
+                      <FieldRenderer refid={refid} sqlOpsUrls={sqlOpsUrls} components={components} key={field.name} field={field} formik={formik} methods={methods} />
                     </div>
                   ))}
                 </div>

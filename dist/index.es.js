@@ -1,8 +1,8 @@
-import X, { useState as Y, useRef as ue, useEffect as he, useMemo as ge } from "react";
-import D from "axios";
-import * as _ from "yup";
+import X, { useState as G, useRef as he, useEffect as ce, useMemo as ge } from "react";
+import M from "axios";
+import * as P from "yup";
 import { useFormik as ee } from "formik";
-var Z = { exports: {} }, W = {};
+var Z = { exports: {} }, K = {};
 /**
  * @license React
  * react-jsx-runtime.production.js
@@ -14,27 +14,27 @@ var Z = { exports: {} }, W = {};
  */
 var me;
 function fe() {
-  if (me) return W;
+  if (me) return K;
   me = 1;
-  var r = Symbol.for("react.transitional.element"), t = Symbol.for("react.fragment");
-  function l(i, h, o) {
-    var w = null;
-    if (o !== void 0 && (w = "" + o), h.key !== void 0 && (w = "" + h.key), "key" in h) {
-      o = {};
-      for (var y in h)
-        y !== "key" && (o[y] = h[y]);
-    } else o = h;
-    return h = o.ref, {
-      $$typeof: r,
+  var t = Symbol.for("react.transitional.element"), r = Symbol.for("react.fragment");
+  function o(i, d, l) {
+    var E = null;
+    if (l !== void 0 && (E = "" + l), d.key !== void 0 && (E = "" + d.key), "key" in d) {
+      l = {};
+      for (var R in d)
+        R !== "key" && (l[R] = d[R]);
+    } else l = d;
+    return d = l.ref, {
+      $$typeof: t,
       type: i,
-      key: w,
-      ref: h !== void 0 ? h : null,
-      props: o
+      key: E,
+      ref: d !== void 0 ? d : null,
+      props: l
     };
   }
-  return W.Fragment = t, W.jsx = l, W.jsxs = l, W;
+  return K.Fragment = r, K.jsx = o, K.jsxs = o, K;
 }
-var K = {};
+var H = {};
 /**
  * @license React
  * react-jsx-runtime.development.js
@@ -47,372 +47,372 @@ var K = {};
 var pe;
 function ye() {
   return pe || (pe = 1, process.env.NODE_ENV !== "production" && function() {
-    function r(s) {
-      if (s == null) return null;
-      if (typeof s == "function")
-        return s.$$typeof === G ? null : s.displayName || s.name || null;
-      if (typeof s == "string") return s;
-      switch (s) {
-        case E:
+    function t(a) {
+      if (a == null) return null;
+      if (typeof a == "function")
+        return a.$$typeof === ne ? null : a.displayName || a.name || null;
+      if (typeof a == "string") return a;
+      switch (a) {
+        case v:
           return "Fragment";
         case m:
           return "Profiler";
-        case T:
+        case A:
           return "StrictMode";
-        case v:
+        case y:
           return "Suspense";
-        case k:
+        case S:
           return "SuspenseList";
-        case ne:
+        case D:
           return "Activity";
       }
-      if (typeof s == "object")
-        switch (typeof s.tag == "number" && console.error(
+      if (typeof a == "object")
+        switch (typeof a.tag == "number" && console.error(
           "Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."
-        ), s.$$typeof) {
-          case O:
+        ), a.$$typeof) {
+          case C:
             return "Portal";
-          case A:
-            return (s.displayName || "Context") + ".Provider";
-          case a:
-            return (s._context.displayName || "Context") + ".Consumer";
-          case p:
-            var f = s.render;
-            return s = s.displayName, s || (s = f.displayName || f.name || "", s = s !== "" ? "ForwardRef(" + s + ")" : "ForwardRef"), s;
+          case s:
+            return (a.displayName || "Context") + ".Provider";
+          case T:
+            return (a._context.displayName || "Context") + ".Consumer";
+          case _:
+            var p = a.render;
+            return a = a.displayName, a || (a = p.displayName || p.name || "", a = a !== "" ? "ForwardRef(" + a + ")" : "ForwardRef"), a;
+          case q:
+            return p = a.displayName || null, p !== null ? p : t(a.type) || "Memo";
           case z:
-            return f = s.displayName || null, f !== null ? f : r(s.type) || "Memo";
-          case F:
-            f = s._payload, s = s._init;
+            p = a._payload, a = a._init;
             try {
-              return r(s(f));
+              return t(a(p));
             } catch {
             }
         }
       return null;
     }
-    function t(s) {
-      return "" + s;
+    function r(a) {
+      return "" + a;
     }
-    function l(s) {
+    function o(a) {
       try {
-        t(s);
-        var f = !1;
+        r(a);
+        var p = !1;
       } catch {
-        f = !0;
+        p = !0;
       }
-      if (f) {
-        f = console;
-        var $ = f.error, P = typeof Symbol == "function" && Symbol.toStringTag && s[Symbol.toStringTag] || s.constructor.name || "Object";
-        return $.call(
-          f,
+      if (p) {
+        p = console;
+        var O = p.error, F = typeof Symbol == "function" && Symbol.toStringTag && a[Symbol.toStringTag] || a.constructor.name || "Object";
+        return O.call(
+          p,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
-          P
-        ), t(s);
+          F
+        ), r(a);
       }
     }
-    function i(s) {
-      if (s === E) return "<>";
-      if (typeof s == "object" && s !== null && s.$$typeof === F)
+    function i(a) {
+      if (a === v) return "<>";
+      if (typeof a == "object" && a !== null && a.$$typeof === z)
         return "<...>";
       try {
-        var f = r(s);
-        return f ? "<" + f + ">" : "<...>";
+        var p = t(a);
+        return p ? "<" + p + ">" : "<...>";
       } catch {
         return "<...>";
       }
     }
-    function h() {
-      var s = n.A;
-      return s === null ? null : s.getOwner();
+    function d() {
+      var a = Y.A;
+      return a === null ? null : a.getOwner();
     }
-    function o() {
+    function l() {
       return Error("react-stack-top-frame");
     }
-    function w(s) {
-      if (g.call(s, "key")) {
-        var f = Object.getOwnPropertyDescriptor(s, "key").get;
-        if (f && f.isReactWarning) return !1;
+    function E(a) {
+      if (n.call(a, "key")) {
+        var p = Object.getOwnPropertyDescriptor(a, "key").get;
+        if (p && p.isReactWarning) return !1;
       }
-      return s.key !== void 0;
+      return a.key !== void 0;
     }
-    function y(s, f) {
-      function $() {
-        L || (L = !0, console.error(
+    function R(a, p) {
+      function O() {
+        N || (N = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
-          f
+          p
         ));
       }
-      $.isReactWarning = !0, Object.defineProperty(s, "key", {
-        get: $,
+      O.isReactWarning = !0, Object.defineProperty(a, "key", {
+        get: O,
         configurable: !0
       });
     }
-    function c() {
-      var s = r(this.type);
-      return M[s] || (M[s] = !0, console.error(
+    function u() {
+      var a = t(this.type);
+      return $[a] || ($[a] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
-      )), s = this.props.ref, s !== void 0 ? s : null;
+      )), a = this.props.ref, a !== void 0 ? a : null;
     }
-    function b(s, f, $, P, V, q, oe, le) {
-      return $ = q.ref, s = {
-        $$typeof: S,
-        type: s,
-        key: f,
-        props: q,
+    function b(a, p, O, F, V, B, oe, le) {
+      return O = B.ref, a = {
+        $$typeof: h,
+        type: a,
+        key: p,
+        props: B,
         _owner: V
-      }, ($ !== void 0 ? $ : null) !== null ? Object.defineProperty(s, "ref", {
+      }, (O !== void 0 ? O : null) !== null ? Object.defineProperty(a, "ref", {
         enumerable: !1,
-        get: c
-      }) : Object.defineProperty(s, "ref", { enumerable: !1, value: null }), s._store = {}, Object.defineProperty(s._store, "validated", {
+        get: u
+      }) : Object.defineProperty(a, "ref", { enumerable: !1, value: null }), a._store = {}, Object.defineProperty(a._store, "validated", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: 0
-      }), Object.defineProperty(s, "_debugInfo", {
+      }), Object.defineProperty(a, "_debugInfo", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: null
-      }), Object.defineProperty(s, "_debugStack", {
+      }), Object.defineProperty(a, "_debugStack", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: oe
-      }), Object.defineProperty(s, "_debugTask", {
+      }), Object.defineProperty(a, "_debugTask", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: le
-      }), Object.freeze && (Object.freeze(s.props), Object.freeze(s)), s;
+      }), Object.freeze && (Object.freeze(a.props), Object.freeze(a)), a;
     }
-    function x(s, f, $, P, V, q, oe, le) {
-      var I = f.children;
-      if (I !== void 0)
-        if (P)
-          if (j(I)) {
-            for (P = 0; P < I.length; P++)
-              d(I[P]);
-            Object.freeze && Object.freeze(I);
+    function g(a, p, O, F, V, B, oe, le) {
+      var L = p.children;
+      if (L !== void 0)
+        if (F)
+          if (x(L)) {
+            for (F = 0; F < L.length; F++)
+              f(L[F]);
+            Object.freeze && Object.freeze(L);
           } else
             console.error(
               "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
             );
-        else d(I);
-      if (g.call(f, "key")) {
-        I = r(s);
-        var U = Object.keys(f).filter(function(be) {
+        else f(L);
+      if (n.call(p, "key")) {
+        L = t(a);
+        var W = Object.keys(p).filter(function(be) {
           return be !== "key";
         });
-        P = 0 < U.length ? "{key: someKey, " + U.join(": ..., ") + ": ...}" : "{key: someKey}", C[I + P] || (U = 0 < U.length ? "{" + U.join(": ..., ") + ": ...}" : "{}", console.error(
+        F = 0 < W.length ? "{key: someKey, " + W.join(": ..., ") + ": ...}" : "{key: someKey}", w[L + F] || (W = 0 < W.length ? "{" + W.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
-          P,
-          I,
-          U,
-          I
-        ), C[I + P] = !0);
+          F,
+          L,
+          W,
+          L
+        ), w[L + F] = !0);
       }
-      if (I = null, $ !== void 0 && (l($), I = "" + $), w(f) && (l(f.key), I = "" + f.key), "key" in f) {
-        $ = {};
-        for (var ie in f)
-          ie !== "key" && ($[ie] = f[ie]);
-      } else $ = f;
-      return I && y(
-        $,
-        typeof s == "function" ? s.displayName || s.name || "Unknown" : s
+      if (L = null, O !== void 0 && (o(O), L = "" + O), E(p) && (o(p.key), L = "" + p.key), "key" in p) {
+        O = {};
+        for (var ie in p)
+          ie !== "key" && (O[ie] = p[ie]);
+      } else O = p;
+      return L && R(
+        O,
+        typeof a == "function" ? a.displayName || a.name || "Unknown" : a
       ), b(
-        s,
-        I,
-        q,
+        a,
+        L,
+        B,
         V,
-        h(),
-        $,
+        d(),
+        O,
         oe,
         le
       );
     }
-    function d(s) {
-      typeof s == "object" && s !== null && s.$$typeof === S && s._store && (s._store.validated = 1);
+    function f(a) {
+      typeof a == "object" && a !== null && a.$$typeof === h && a._store && (a._store.validated = 1);
     }
-    var u = X, S = Symbol.for("react.transitional.element"), O = Symbol.for("react.portal"), E = Symbol.for("react.fragment"), T = Symbol.for("react.strict_mode"), m = Symbol.for("react.profiler"), a = Symbol.for("react.consumer"), A = Symbol.for("react.context"), p = Symbol.for("react.forward_ref"), v = Symbol.for("react.suspense"), k = Symbol.for("react.suspense_list"), z = Symbol.for("react.memo"), F = Symbol.for("react.lazy"), ne = Symbol.for("react.activity"), G = Symbol.for("react.client.reference"), n = u.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, g = Object.prototype.hasOwnProperty, j = Array.isArray, N = console.createTask ? console.createTask : function() {
+    var c = X, h = Symbol.for("react.transitional.element"), C = Symbol.for("react.portal"), v = Symbol.for("react.fragment"), A = Symbol.for("react.strict_mode"), m = Symbol.for("react.profiler"), T = Symbol.for("react.consumer"), s = Symbol.for("react.context"), _ = Symbol.for("react.forward_ref"), y = Symbol.for("react.suspense"), S = Symbol.for("react.suspense_list"), q = Symbol.for("react.memo"), z = Symbol.for("react.lazy"), D = Symbol.for("react.activity"), ne = Symbol.for("react.client.reference"), Y = c.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, n = Object.prototype.hasOwnProperty, x = Array.isArray, j = console.createTask ? console.createTask : function() {
       return null;
     };
-    u = {
-      "react-stack-bottom-frame": function(s) {
-        return s();
+    c = {
+      "react-stack-bottom-frame": function(a) {
+        return a();
       }
     };
-    var L, M = {}, B = u["react-stack-bottom-frame"].bind(
-      u,
-      o
-    )(), R = N(i(o)), C = {};
-    K.Fragment = E, K.jsx = function(s, f, $, P, V) {
-      var q = 1e4 > n.recentlyCreatedOwnerStacks++;
-      return x(
-        s,
-        f,
-        $,
+    var N, $ = {}, I = c["react-stack-bottom-frame"].bind(
+      c,
+      l
+    )(), k = j(i(l)), w = {};
+    H.Fragment = v, H.jsx = function(a, p, O, F, V) {
+      var B = 1e4 > Y.recentlyCreatedOwnerStacks++;
+      return g(
+        a,
+        p,
+        O,
         !1,
-        P,
+        F,
         V,
-        q ? Error("react-stack-top-frame") : B,
-        q ? N(i(s)) : R
+        B ? Error("react-stack-top-frame") : I,
+        B ? j(i(a)) : k
       );
-    }, K.jsxs = function(s, f, $, P, V) {
-      var q = 1e4 > n.recentlyCreatedOwnerStacks++;
-      return x(
-        s,
-        f,
-        $,
+    }, H.jsxs = function(a, p, O, F, V) {
+      var B = 1e4 > Y.recentlyCreatedOwnerStacks++;
+      return g(
+        a,
+        p,
+        O,
         !0,
-        P,
+        F,
         V,
-        q ? Error("react-stack-top-frame") : B,
-        q ? N(i(s)) : R
+        B ? Error("react-stack-top-frame") : I,
+        B ? j(i(a)) : k
       );
     };
-  }()), K;
+  }()), H;
 }
 var xe;
 function ve() {
   return xe || (xe = 1, process.env.NODE_ENV === "production" ? Z.exports = fe() : Z.exports = ye()), Z.exports;
 }
 var e = ve();
-function je(r) {
-  return r.template === "accordion" ? "accordion" : r.template === "simple" ? "simple" : r.template === "cards" ? "cards" : Object.values(r.fields || {}).some((i) => i.group) ? "tab" : "simple";
+function je(t) {
+  return t.template === "accordion" ? "accordion" : t.template === "simple" ? "simple" : t.template === "cards" ? "cards" : Object.values(t.fields || {}).some((i) => i.group) ? "tab" : "simple";
 }
-function Ne(r, t) {
-  const l = {}, i = "General";
-  return Object.entries(r).forEach(([h, o]) => {
-    const w = o.group || i;
-    l[w] || (l[w] = []);
-    let y = { ...o, name: h };
-    o?.value && o?.value === "#refid#" && (y.value = t), l[w].push(y);
-  }), l;
+function Ne(t, r) {
+  const o = {}, i = "General";
+  return Object.entries(t).forEach(([d, l]) => {
+    const E = l.group || i;
+    o[E] || (o[E] = []);
+    let R = { ...l, name: d };
+    l?.value && l?.value === "#refid#" && (R.value = r), o[E].push(R);
+  }), o;
 }
-function we(r) {
-  const t = {};
-  return Object.keys(r).forEach((l) => {
-    t[l] = {
-      label: l,
-      required: r[l].required ?? !1
+function we(t) {
+  const r = {};
+  return Object.keys(t).forEach((o) => {
+    r[o] = {
+      label: o,
+      required: t[o].required ?? !1
     };
-  }), t;
+  }), r;
 }
-const J = (r, t, l) => {
-  r.forEach((i) => {
-    const h = i?.name;
-    if (!h) return;
-    i?.type === "checkbox" ? t[h] = i?.multiple === !0 ? [] : !1 : i?.type === "tags" ? t[h] = [] : h === "blocked" || h === "blacklist" ? t[h] = "false" : t[h] = i?.value ? i.value : "";
-    let o;
-    i?.type === "checkbox" ? o = i?.multiple === !0 ? _.array().of(_.string()) : _.boolean() : i?.type === "tags" ? o = _.array().of(_.string()) : i?.type === "email" ? o = _.string().email("Invalid email format") : i?.type === "number" ? o = _.number().typeError("Must be a number") : i?.type === "date" ? o = _.date().typeError("Invalid date format") : i?.type === "json" ? o = _.string().test("is-json", "Invalid JSON format", (w) => {
-      if (!w) return !0;
+const J = (t, r, o) => {
+  t.forEach((i) => {
+    const d = i?.name;
+    if (!d) return;
+    i?.type === "checkbox" ? r[d] = i?.multiple === !0 ? [] : !1 : i?.type === "tags" ? r[d] = [] : d === "blocked" || d === "blacklist" ? r[d] = "false" : r[d] = i?.value ? i.value : "";
+    let l;
+    i?.type === "checkbox" ? l = i?.multiple === !0 ? P.array().of(P.string()) : P.boolean() : i?.type === "tags" ? l = P.array().of(P.string()) : i?.type === "email" ? l = P.string().email("Invalid email format") : i?.type === "number" ? l = P.number().typeError("Must be a number") : i?.type === "date" ? l = P.date().typeError("Invalid date format") : i?.type === "json" ? l = P.string().test("is-json", "Invalid JSON format", (E) => {
+      if (!E) return !0;
       try {
-        return JSON.parse(w), !0;
+        return JSON.parse(E), !0;
       } catch {
         return !1;
       }
-    }) : o = _.string(), i?.required && (o = o.required(
-      i?.placeholder || i?.error_message || `${i?.label || h} is required`
-    )), i?.validate?.regex && typeof i.validate.regex == "string" && (o = o.matches(
+    }) : l = P.string(), i?.required && (l = l.required(
+      i?.placeholder || i?.error_message || `${i?.label || d} is required`
+    )), i?.validate?.regex && typeof i.validate.regex == "string" && (l = l.matches(
       new RegExp(i?.validate?.regex),
       i?.error_message || "Invalid input format"
-    )), i?.validate && Object.entries(i.validate).forEach(([w, y]) => {
-      switch (w) {
+    )), i?.validate && Object.entries(i.validate).forEach(([E, R]) => {
+      switch (E) {
         case "email":
-          y && (o = o.email("Invalid email format"));
+          R && (l = l.email("Invalid email format"));
           break;
         case "mobile":
-          o = o.matches(
+          l = l.matches(
             /^[1-9][0-9]*$/,
             "Invalid mobile number format"
           );
           break;
         case "regex":
-          o = o.matches(
-            new RegExp(y),
-            `Must match pattern: ${y}`
+          l = l.matches(
+            new RegExp(R),
+            `Must match pattern: ${R}`
           );
           break;
         case "date":
-          o = _.date().typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)").transform((c, b) => {
+          l = P.date().typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)").transform((u, b) => {
             if (typeof b == "string") {
-              const x = b.replace(/-/g, "/"), [d, u, S] = x.split("/");
-              if (d && u && S)
-                return /* @__PURE__ */ new Date(`${S}-${u}-${d}`);
+              const g = b.replace(/-/g, "/"), [f, c, h] = g.split("/");
+              if (f && c && h)
+                return /* @__PURE__ */ new Date(`${h}-${c}-${f}`);
             }
-            return c;
+            return u;
           });
           break;
         case "time":
-          o = o.matches(
+          l = l.matches(
             /^([0-1][0-9]|2[0-3])[:\-]([0-5][0-9])$/,
             "Invalid time format (HH:MM)"
           );
           break;
         case "timesec":
-          o = o.matches(
+          l = l.matches(
             /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/,
             "Invalid time format (HH:MM:SS)"
           );
           break;
         case "number":
         case "numeric":
-          o = _.number().typeError("Must be numeric");
+          l = P.number().typeError("Must be numeric");
           break;
         case "float":
         case "decimal":
-          o = _.number().typeError("Must be a decimal").transform((c, b) => {
+          l = P.number().typeError("Must be a decimal").transform((u, b) => {
             if (b == null || b === "") return;
-            const x = Number(b);
-            if (isNaN(x)) return c;
-            if (typeof c == "number" && !isNaN(c)) {
-              const d = Number(c);
-              return Number.isInteger(d) ? Number(x.toFixed(d)) : x;
+            const g = Number(b);
+            if (isNaN(g)) return u;
+            if (typeof u == "number" && !isNaN(u)) {
+              const f = Number(u);
+              return Number.isInteger(f) ? Number(g.toFixed(f)) : g;
             }
-            return x;
+            return g;
           });
           break;
         case "alphanumeric":
-          o = o.matches(
+          l = l.matches(
             /^[a-z0-9]+$/i,
             "Must be alphanumeric"
           );
           break;
         case "alpha":
-          o = o.matches(
+          l = l.matches(
             /^[a-zA-Z]+$/,
             "Must contain only letters"
           );
           break;
         case "upper":
-          o = o.transform(
-            (c) => c && c.toUpperCase()
+          l = l.transform(
+            (u) => u && u.toUpperCase()
           );
           break;
         case "lower":
-          o = o.transform(
-            (c) => c && c.toLowerCase()
+          l = l.transform(
+            (u) => u && u.toLowerCase()
           );
           break;
         case "length-min": {
-          const c = Number(y);
-          isNaN(c) || (o = o.min(c, `Minimum length is ${c}`));
+          const u = Number(R);
+          isNaN(u) || (l = l.min(u, `Minimum length is ${u}`));
           break;
         }
         case "length-max": {
-          const c = Number(y);
-          isNaN(c) || (o = o.max(c, `Maximum length is ${c}`));
+          const u = Number(R);
+          isNaN(u) || (l = l.max(u, `Maximum length is ${u}`));
           break;
         }
       }
-    }), l[h] = o;
+    }), o[d] = l;
   });
-}, re = {
+}, te = {
   12: "lg:col-span-12",
   11: "lg:col-span-11",
   10: "lg:col-span-10",
@@ -426,105 +426,115 @@ const J = (r, t, l) => {
   2: "lg:col-span-2",
   1: "lg:col-span-1"
 };
-function te(r) {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(r) ? r : 6;
+function re(t) {
+  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(t) ? t : 6;
 }
-const ae = (r) => r === !0 || r === "true", H = (r, t) => (console.log("input", r, t), typeof r == "string" ? r.replace(
+const ae = (t) => t === !0 || t === "true", U = (t, r) => (console.log("input", t, r), typeof t == "string" ? t.replace(
   /#(\w+)#/g,
-  (l, i) => t[i] !== void 0 ? String(t[i]) : l
-) : Array.isArray(r) ? r.map((l) => H(l, t)) : r && typeof r == "object" ? Object.fromEntries(
-  Object.entries(r).map(([l, i]) => [
-    H(l, t),
-    H(i, t)
+  (o, i) => r[i] !== void 0 ? String(r[i]) : o
+) : Array.isArray(t) ? t.map((o) => U(o, r)) : t && typeof t == "object" ? Object.fromEntries(
+  Object.entries(t).map(([o, i]) => [
+    U(o, r),
+    U(i, r)
   ])
-) : r);
-function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h }) {
-  const [o, w] = Y(!1), [y, c] = Y(r.options || {}), [b, x] = Y(""), [d, u] = Y(0), S = ue(null), O = ue(null), [E, T] = Y(!1), m = (n) => {
-    n.currentTarget.open || x("");
+) : t);
+function se({ field: t, formik: r, methods: o = {}, components: i, sqlOpsUrls: d, refid: l }) {
+  const [E, R] = G(!1), [u, b] = G(t.options || {}), [g, f] = G(""), [c, h] = G(0), C = he(null), v = he(null), [A, m] = G(!1), T = (n) => {
+    n.currentTarget.open || f("");
   };
-  he(() => {
-    const n = (g) => {
-      O.current && !O.current.contains(g.target) && (O.current.open = !1, x(""));
+  ce(() => {
+    const n = (x) => {
+      v.current && !v.current.contains(x.target) && (v.current.open = !1, f(""));
     };
     return document.addEventListener("mousedown", n), () => {
       document.removeEventListener("mousedown", n);
     };
   }, []);
-  const a = r.name;
+  const s = t.name;
   X.useEffect(() => {
     let n = !0;
     return (async () => {
-      if (r?.options) {
-        c(r.options);
+      if (t?.options) {
+        b(t.options);
         return;
       }
-      const j = r?.source ?? {};
+      const j = t?.source ?? {};
       if (j.type === "method") {
-        const N = j.method, L = N ? l[N] : void 0;
-        if (L)
+        const N = j.method, $ = N ? o[N] : void 0;
+        if ($)
           try {
-            const M = await Promise.resolve(L());
-            n && c(M ?? {});
-          } catch (M) {
-            console.error("Method execution failed:", M), n && c({});
+            const I = await Promise.resolve($());
+            n && b(I ?? {});
+          } catch (I) {
+            console.error("Method execution failed:", I), n && b({});
           }
         else
-          n && c({});
+          n && b({});
       }
       if (j.type === "api" && j.url)
         try {
-          const N = await D({
+          const N = await M({
             method: j.method || "GET",
             url: j.url,
             data: j.body ?? {},
             params: j.params ?? {},
             headers: j.headers ?? {}
-          }), L = r.valueKey || "value", M = r.labelKey || "label", B = Array.isArray(N.data?.data) ? N.data.data : [], R = {};
-          B.forEach((C) => {
-            R[C[L]] = C[M];
-          }), n && c(R);
+          }), $ = t.valueKey || "value", I = t.labelKey || "label", k = Array.isArray(N.data?.data) ? N.data.data : [], w = {};
+          k.forEach((a) => {
+            w[a[$]] = a[I];
+          }), n && b(w);
         } catch (N) {
-          console.error("API execution failed:", N), n && c({});
+          console.error("API execution failed:", N), n && b({});
         }
-      if (r.table || r.type === "dataSelector") {
-        if (!h) {
+      if (t.table || t.type === "dataSelector") {
+        if (!d) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
         try {
-          const N = r.type === "dataSelector" ? {
-            table: "do_lists",
-            cols: "title,value",
-            where: {
-              groupid: r.groupid ?? ""
+          let N;
+          if (t.type === "dataSelector")
+            N = {
+              table: "do_lists",
+              cols: "title,value",
+              where: {
+                groupid: t.groupid ?? ""
+              }
+            };
+          else {
+            if (!t.table || !t.columns) {
+              console.error("Invalid SQL field config", t);
+              return;
             }
-          } : {
-            table: r.table,
-            cols: r.columns,
-            where: r.where
-          }, L = await D({
+            N = {
+              table: t.table,
+              cols: t.columns
+            };
+          }
+          t.where && t.type !== "dataSelector" && (N.where = l ? U(t.where, { refid: l }) : t.where);
+          const $ = await M({
             method: "POST",
-            url: h.baseURL + h.registerQuery,
+            url: d.baseURL + d.registerQuery,
             data: {
               query: N
             },
             headers: {
-              Authorization: `Bearer ${h?.accessToken}`
+              Authorization: `Bearer ${d?.accessToken}`
             }
-          }), M = await D({
+          }), I = await M({
             method: "POST",
-            url: h.baseURL + h.runQuery,
+            url: d.baseURL + d.runQuery,
             data: {
-              queryid: L.data.queryid,
+              queryid: $.data.queryid,
               filter: {}
             },
             headers: {
-              Authorization: `Bearer ${h?.accessToken}`
+              Authorization: `Bearer ${d?.accessToken}`
             }
-          }), B = r.valueKey || "value", R = r.labelKey || "title", C = Array.isArray(M.data?.data) ? M.data.data : [], s = {};
-          C.forEach((f) => {
-            s[f[B]] = f[R];
-          }), n && c(s);
+          }), k = t.valueKey || "value", w = t.labelKey || "title", a = Array.isArray(I.data?.data) ? I.data.data : [], p = {};
+          a.forEach((O) => {
+            p[O[k]] = O[w];
+          }), n && b(p);
         } catch (N) {
           console.error("API fetch failed:", N);
         }
@@ -533,128 +543,173 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
       n = !1;
     };
   }, [
-    r.options,
-    r?.source?.type || "",
-    r?.source?.method || "",
-    r?.source?.url || "",
-    JSON.stringify(r?.source?.params ?? {}),
-    JSON.stringify(r?.source?.body ?? {}),
-    JSON.stringify(r?.source?.headers ?? {})
+    t.options,
+    t?.source?.type || "",
+    t?.source?.method || "",
+    t?.source?.url || "",
+    JSON.stringify(t?.source?.params ?? {}),
+    JSON.stringify(t?.source?.body ?? {}),
+    JSON.stringify(t?.source?.headers ?? {})
   ]);
-  const A = `
+  const _ = `
     w-full px-4 py-2 rounded-lg border border-gray-200 transition-all duration-300 
     bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
     focus:outline-none focus:ring-0
-  `, p = `
+  `, y = `
     border-gradient-to-r 
     focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
-  `, v = `
+  `, S = `
     block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700
-  `, k = (n) => n.icon ? /* @__PURE__ */ e.jsx("i", { className: n.icon }) : null, z = Object.keys(y || {}).length, F = ge(() => Object.entries(y || {}).filter(
-    ([, n]) => b ? n.toLowerCase().includes(b.toLowerCase()) : !0
-  ), [b, y]), ne = (n) => {
-    if (E) {
-      if (n.key === "ArrowDown" && (n.preventDefault(), u(
-        (g) => g + 1 < F.length ? g + 1 : 0
-      )), n.key === "ArrowUp" && (n.preventDefault(), u(
-        (g) => g - 1 >= 0 ? g - 1 : F.length - 1
+  `, q = (n) => n.icon ? /* @__PURE__ */ e.jsx("i", { className: n.icon }) : null, z = Object.keys(u || {}).length, D = ge(() => Object.entries(u || {}).filter(
+    ([, n]) => g ? n.toLowerCase().includes(g.toLowerCase()) : !0
+  ), [g, u]), ne = (n) => {
+    if (A) {
+      if (n.key === "ArrowDown" && (n.preventDefault(), h(
+        (x) => x + 1 < D.length ? x + 1 : 0
+      )), n.key === "ArrowUp" && (n.preventDefault(), h(
+        (x) => x - 1 >= 0 ? x - 1 : D.length - 1
       )), n.key === "Enter") {
         n.preventDefault();
-        const [g, j] = F[d] || [];
-        g && (x(j ?? ""), t.setFieldValue(a, g)), T(!1);
+        const [x, j] = D[c] || [];
+        x && (f(j ?? ""), r.setFieldValue(s, x)), m(!1);
       }
-      n.key === "Escape" && T(!1);
+      n.key === "Escape" && m(!1);
     }
-  }, G = (n) => {
-    if (O.current?.open)
+  }, Y = (n) => {
+    if (v.current?.open)
       if (n.key === "ArrowDown")
-        n.preventDefault(), u(
-          (g) => g + 1 < F.length ? g + 1 : 0
+        n.preventDefault(), h(
+          (x) => x + 1 < D.length ? x + 1 : 0
         );
       else if (n.key === "ArrowUp")
-        n.preventDefault(), u(
-          (g) => g - 1 >= 0 ? g - 1 : F.length - 1
+        n.preventDefault(), h(
+          (x) => x - 1 >= 0 ? x - 1 : D.length - 1
         );
       else if (n.key === "Enter") {
         n.preventDefault();
-        const [g] = F[d] || [];
-        if (g) {
-          let j = r.type === "select" || r.type === "dataSelector" || r.type === "dataMethod" || r.type === "dataSelectorFromTable" || r.type === "dataSelectorFromUniques";
-          t.setFieldValue(r.name, j ? g : [...t.values[r.name], g]), O.current.open = !1;
+        const [x] = D[c] || [];
+        if (x) {
+          let j = t.type === "select" || t.type === "dataSelector" || t.type === "dataMethod" || t.type === "dataSelectorFromTable" || t.type === "dataSelectorFromUniques";
+          r.setFieldValue(t.name, j ? x : [...r.values[t.name], x]), v.current.open = !1;
         }
-      } else n.key === "Escape" && (O.current.open = !1, x(""));
+      } else n.key === "Escape" && (v.current.open = !1, f(""));
   };
-  switch (he(() => {
-    S.current?.querySelector(
-      `[data-index="${d}"]`
+  switch (ce(() => {
+    C.current?.querySelector(
+      `[data-index="${c}"]`
     )?.scrollIntoView({ block: "nearest" });
-  }, [d]), r.type) {
+  }, [c]), ce(() => {
+    const n = t.autocomplete;
+    if (!n || n === "off") return;
+    const x = r.values[t.name];
+    if (!x) return;
+    const j = n.target.split(",").map(($) => $.trim());
+    (async () => {
+      try {
+        const $ = n.src, I = U($.where ?? {}, {
+          refid: x
+        });
+        if ($.table && d) {
+          const k = await M({
+            method: "POST",
+            url: d.baseURL + d.registerQuery,
+            data: {
+              query: {
+                table: $.table,
+                cols: $.columns,
+                where: I
+              }
+            },
+            headers: {
+              Authorization: `Bearer ${d?.accessToken}`
+            }
+          }), w = await M({
+            method: "POST",
+            url: d.baseURL + d.runQuery,
+            data: {
+              queryid: k.data.queryid,
+              filter: {}
+            },
+            headers: {
+              Authorization: `Bearer ${d?.accessToken}`
+            }
+          }), a = Array.isArray(w.data?.data) ? w.data.data[0] : w.data?.data;
+          if (console.log("row", a), !a) return;
+          console.log("targets", j), j.forEach((p) => {
+            a[p] !== void 0 && (console.log("row[t]", a[p]), r.setFieldValue(p, a[p]));
+          });
+        }
+      } catch ($) {
+        console.error("Autocomplete fetch failed", $);
+      }
+    })();
+  }, [r.values[t.name]]), t.type) {
     case "autocomplete": {
       const n = (j) => {
         const N = j.target.value;
-        x(N), t.setFieldValue(a, N), T(!0);
-      }, g = (j, N) => {
-        x(N), t.setFieldValue(a, j), T(!1);
+        f(N), r.setFieldValue(s, N), m(!0);
+      }, x = (j, N) => {
+        f(N), r.setFieldValue(s, j), m(!1);
       };
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsx(
           "input",
           {
-            className: `${A} ${p}`,
-            value: t.values[a],
-            placeholder: r.placeholder || "Type to search...",
+            className: `${_} ${y}`,
+            value: r.values[s],
+            placeholder: t.placeholder || "Type to search...",
             onChange: n,
-            onFocus: () => T(!0),
-            onBlur: () => setTimeout(() => T(!1), 150),
+            onFocus: () => m(!0),
+            onBlur: () => setTimeout(() => m(!1), 150),
             onKeyDown: ne
           }
         ),
-        E && /* @__PURE__ */ e.jsx("div", { ref: S, className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1", children: F.length > 0 ? F.map(([j, N], L) => /* @__PURE__ */ e.jsx(
+        A && /* @__PURE__ */ e.jsx("div", { ref: C, className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1", children: D.length > 0 ? D.map(([j, N], $) => /* @__PURE__ */ e.jsx(
           "div",
           {
-            "data-index": L,
+            "data-index": $,
             className: `px-3 py-2 cursor-pointer text-sm 
-    ${d === L ? "bg-gray-100" : "hover:bg-gray-100"}
+    ${c === $ ? "bg-gray-100" : "hover:bg-gray-100"}
   `,
-            onMouseDown: () => g(j, N),
+            onMouseDown: () => x(j, N),
             children: N
           },
-          L
+          $
         )) : /* @__PURE__ */ e.jsxs("div", { className: "px-3 py-2 text-sm text-gray-400 cursor-pointer", children: [
           'No matches — select to keep "',
-          b,
+          g,
           '"'
         ] }) }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
     }
     case "textarea":
       return /* @__PURE__ */ e.jsx(e.Fragment, { children: /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
           /* @__PURE__ */ e.jsx(
             "textarea",
             {
-              className: `${A} ${p} min-h-[120px] resize-none`,
-              onFocus: () => w(!0),
-              name: a,
-              value: t.values[a],
-              onBlur: t.handleBlur,
-              onChange: t.handleChange,
-              placeholder: r.placeholder,
-              disabled: r.disabled
+              className: `${_} ${y} min-h-[120px] resize-none`,
+              onFocus: () => R(!0),
+              name: s,
+              value: r.values[s],
+              onBlur: r.handleBlur,
+              onChange: r.handleChange,
+              placeholder: t.placeholder,
+              disabled: t.disabled
             }
           ),
-          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${o ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
+          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${E ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] }) });
     case "select":
     case "dataSelector":
@@ -662,20 +717,20 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
     case "dataSelectorFromUniques":
     case "dataMethod":
       return z > 10 ? /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs(
           "details",
           {
             className: "relative w-full",
-            onToggle: m,
-            ref: O,
-            onKeyDown: G,
+            onToggle: T,
+            ref: v,
+            onKeyDown: Y,
             children: [
               /* @__PURE__ */ e.jsxs("summary", { className: "cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center", children: [
-                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[a] ? y[t.values[a]] || "Select option" : `Select ${r.label}` }),
+                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: r.values[s] ? u[r.values[s]] || "Select option" : `Select ${t.label}` }),
                 /* @__PURE__ */ e.jsx(
                   "svg",
                   {
@@ -695,30 +750,32 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
                   }
                 )
               ] }),
-              /* @__PURE__ */ e.jsxs("div", { ref: S, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
+              /* @__PURE__ */ e.jsxs("div", { ref: C, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
                 /* @__PURE__ */ e.jsx("div", { className: "sticky top-0 bg-white p-1", children: /* @__PURE__ */ e.jsx(
                   "input",
                   {
                     type: "text",
-                    value: b,
+                    value: g,
                     onChange: (n) => {
-                      x(n.target.value), u(0);
+                      f(n.target.value), h(0);
                     },
-                    onKeyDown: G,
+                    onKeyDown: Y,
                     placeholder: "Search...",
                     className: `px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
                   bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
                   focus:outline-none focus:ring-0`
                   }
                 ) }),
-                F.length > 0 ? F.map(([n, g], j) => /* @__PURE__ */ e.jsx(
+                D.length > 0 ? D.map(([n, x], j) => /* @__PURE__ */ e.jsx(
                   "div",
                   {
                     "data-index": j,
-                    onClick: () => t.setFieldValue(a, n),
+                    onClick: () => {
+                      r.setFieldValue(s, n), v.current?.removeAttribute("open"), f(""), h(0);
+                    },
                     className: `px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
-                        ${t.values[a] === n ? "bg-indigo-50 text-indigo-600 font-medium" : d === j ? "bg-gray-100" : "hover:bg-gray-50"}`,
-                    children: g
+                        ${r.values[s] === n ? "bg-indigo-50 text-indigo-600 font-medium" : c === j ? "bg-gray-100" : "hover:bg-gray-50"}`,
+                    children: x
                   },
                   n
                 )) : /* @__PURE__ */ e.jsx("div", { className: "px-2 py-1 text-gray-400 text-sm", children: "No results" })
@@ -726,26 +783,26 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
             ]
           }
         ),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(r.errors[s]) })
       ] }) : /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
           /* @__PURE__ */ e.jsxs(
             "select",
             {
-              className: `${A} ${p} appearance-none cursor-pointer pr-12`,
-              onFocus: () => w(!0),
-              name: a,
-              value: t.values[a],
-              onBlur: t.handleBlur,
-              onChange: t.handleChange,
-              disabled: r.disabled,
+              className: `${_} ${y} appearance-none cursor-pointer pr-12`,
+              onFocus: () => R(!0),
+              name: s,
+              value: r.values[s],
+              onBlur: r.handleBlur,
+              onChange: r.handleChange,
+              disabled: t.disabled,
               children: [
-                /* @__PURE__ */ e.jsx("option", { value: "", disabled: !0, children: r.placeholder }),
-                Object.entries(y || {}).map(([n, g]) => /* @__PURE__ */ e.jsx("option", { value: n, className: "py-2", children: g }, n))
+                /* @__PURE__ */ e.jsx("option", { value: "", disabled: !0, children: t.placeholder }),
+                Object.entries(u || {}).map(([n, x]) => /* @__PURE__ */ e.jsx("option", { value: n, className: "py-2", children: x }, n))
               ]
             }
           ),
@@ -760,73 +817,73 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
             }
           ) })
         ] }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
     case "radioList":
     case "radio":
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
-        /* @__PURE__ */ e.jsx("div", { className: `flex ${z > 3 ? "flex-col" : ""} gap-2 ml-1`, children: Object.entries(y || {}).map(([n, g]) => /* @__PURE__ */ e.jsxs(
+        /* @__PURE__ */ e.jsx("div", { className: `flex ${z > 3 ? "flex-col" : ""} gap-2 ml-1`, children: Object.entries(u || {}).map(([n, x]) => /* @__PURE__ */ e.jsxs(
           "label",
           {
-            htmlFor: `${a}-${n}`,
+            htmlFor: `${s}-${n}`,
             className: "flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer",
             children: [
               /* @__PURE__ */ e.jsx(
                 "input",
                 {
-                  id: `${a}-${n}`,
+                  id: `${s}-${n}`,
                   type: "radio",
-                  name: a,
-                  checked: t.values[a] === n,
+                  name: s,
+                  checked: r.values[s] === n,
                   value: n,
-                  onChange: t.handleChange,
-                  onBlur: t.handleBlur,
-                  disabled: r.disabled,
+                  onChange: r.handleChange,
+                  onBlur: r.handleBlur,
+                  disabled: t.disabled,
                   className: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 }
               ),
-              g
+              x
             ]
           },
           n
         )) }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(r.errors[s]) })
       ] });
     case "component":
-      return i?.[a];
+      return i?.[s];
     case "checkbox": {
       if (z === 1) {
-        const [n, g] = Object.entries(y || {})[0] || [a, r.label];
+        const [n, x] = Object.entries(u || {})[0] || [s, t.label];
         return /* @__PURE__ */ e.jsxs(e.Fragment, { children: [
           /* @__PURE__ */ e.jsxs("div", { className: "flex  space-x-2", children: [
             /* @__PURE__ */ e.jsx(
               "input",
               {
-                id: a,
+                id: s,
                 type: "checkbox",
-                name: a,
-                checked: t.values[a] || !1,
-                onChange: t.handleChange,
-                onBlur: t.handleBlur,
-                disabled: r.disabled,
+                name: s,
+                checked: r.values[s] || !1,
+                onChange: r.handleChange,
+                onBlur: r.handleBlur,
+                disabled: t.disabled,
                 className: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               }
             ),
-            /* @__PURE__ */ e.jsx("label", { htmlFor: a, className: "text-sm font-medium text-gray-700 cursor-pointer", children: g })
+            /* @__PURE__ */ e.jsx("label", { htmlFor: s, className: "text-sm font-medium text-gray-700 cursor-pointer", children: x })
           ] }),
-          t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
+          r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(r.errors[s]) })
         ] });
       }
       return z > 1 && z <= 5 ? /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
-        /* @__PURE__ */ e.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(y || {}).map(([n, g]) => /* @__PURE__ */ e.jsxs(
+        /* @__PURE__ */ e.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(u || {}).map(([n, x]) => /* @__PURE__ */ e.jsxs(
           "label",
           {
             className: "flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer",
@@ -835,36 +892,36 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
                 "input",
                 {
                   type: "checkbox",
-                  name: a,
+                  name: s,
                   value: n,
-                  checked: Array.isArray(t.values[a]) ? t.values[a]?.includes(n) : !1,
-                  onChange: t.handleChange,
-                  onBlur: t.handleBlur,
-                  disabled: r.disabled,
+                  checked: Array.isArray(r.values[s]) ? r.values[s]?.includes(n) : !1,
+                  onChange: r.handleChange,
+                  onBlur: r.handleBlur,
+                  disabled: t.disabled,
                   className: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 }
               ),
-              g
+              x
             ]
           },
           n
         )) }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(r.errors[s]) })
       ] }) : z > 5 ? /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs(
           "details",
           {
             className: "relative w-full",
-            onToggle: m,
-            ref: O,
-            onKeyDown: G,
+            onToggle: T,
+            ref: v,
+            onKeyDown: Y,
             children: [
               /* @__PURE__ */ e.jsxs("summary", { className: "cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center", children: [
-                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: t.values[a]?.length > 0 ? t.values[a].join(", ") : `Select ${r.label}` }),
+                /* @__PURE__ */ e.jsx("span", { className: "text-sm text-gray-700", children: r.values[s]?.length > 0 ? r.values[s].join(", ") : `Select ${t.label}` }),
                 /* @__PURE__ */ e.jsx(
                   "svg",
                   {
@@ -884,14 +941,14 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
                   }
                 )
               ] }),
-              /* @__PURE__ */ e.jsxs("div", { ref: S, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
+              /* @__PURE__ */ e.jsxs("div", { ref: C, className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2", children: [
                 /* @__PURE__ */ e.jsx("div", { className: "sticky top-0 bg-white p-1", children: /* @__PURE__ */ e.jsx(
                   "input",
                   {
                     type: "text",
-                    value: b,
+                    value: g,
                     onChange: (n) => {
-                      x(n.target.value), u(0);
+                      f(n.target.value), h(0);
                     },
                     placeholder: "Search...",
                     className: `px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
@@ -899,28 +956,28 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
     focus:outline-none focus:ring-0`
                   }
                 ) }),
-                F.length > 0 ? F.map(([n, g], j) => /* @__PURE__ */ e.jsxs(
+                D.length > 0 ? D.map(([n, x], j) => /* @__PURE__ */ e.jsxs(
                   "label",
                   {
-                    htmlFor: `${a}-${n}`,
+                    htmlFor: `${s}-${n}`,
                     className: `flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm
-                        ${t.values[a] === n ? "bg-indigo-50 text-indigo-600 font-medium" : d === j ? "bg-gray-100" : "hover:bg-gray-50"}`,
+                        ${r.values[s] === n ? "bg-indigo-50 text-indigo-600 font-medium" : c === j ? "bg-gray-100" : "hover:bg-gray-50"}`,
                     children: [
                       /* @__PURE__ */ e.jsx(
                         "input",
                         {
-                          id: `${a}-${n}`,
+                          id: `${s}-${n}`,
                           type: "checkbox",
-                          name: a,
+                          name: s,
                           value: n,
-                          checked: Array.isArray(t.values[a]) ? t.values[a]?.includes(n) : !1,
-                          onChange: t.handleChange,
-                          onBlur: t.handleBlur,
-                          disabled: r.disabled,
+                          checked: Array.isArray(r.values[s]) ? r.values[s]?.includes(n) : !1,
+                          onChange: r.handleChange,
+                          onBlur: r.handleBlur,
+                          disabled: t.disabled,
                           className: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                         }
                       ),
-                      g
+                      x
                     ]
                   },
                   n
@@ -929,181 +986,181 @@ function se({ field: r, formik: t, methods: l = {}, components: i, sqlOpsUrls: h
             ]
           }
         ),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500 ml-2", children: String(r.errors[s]) })
       ] }) : null;
     }
     case "tags": {
-      const n = Array.isArray(t.values[a]) ? t.values[a] : [], g = Array.isArray(y) ? y : Object.entries(y || {}).map(([R, C]) => ({ value: R, label: C })), j = (R) => {
-        R && !n.includes(R) && t.setFieldValue(a, [...n, R]);
-      }, N = (R) => {
-        (R.key === "Enter" || R.key === ",") && (R.preventDefault(), j(b), x(""));
-      }, L = (R) => {
-        t.setFieldValue(
-          a,
-          n.filter((C) => C !== R)
+      const n = Array.isArray(r.values[s]) ? r.values[s] : [], x = Array.isArray(u) ? u : Object.entries(u || {}).map(([w, a]) => ({ value: w, label: a })), j = (w) => {
+        w && !n.includes(w) && r.setFieldValue(s, [...n, w]);
+      }, N = (w) => {
+        (w.key === "Enter" || w.key === ",") && (w.preventDefault(), j(g), f(""));
+      }, $ = (w) => {
+        r.setFieldValue(
+          s,
+          n.filter((a) => a !== w)
         );
-      }, M = (R) => g.find((C) => C.value === R)?.label || R, B = () => /* @__PURE__ */ e.jsxs("svg", { className: "w-4 h-4 inline-block mr-1", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", children: [
+      }, I = (w) => x.find((a) => a.value === w)?.label || w, k = () => /* @__PURE__ */ e.jsxs("svg", { className: "w-4 h-4 inline-block mr-1", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", children: [
         /* @__PURE__ */ e.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M20.59 13.41L11 3.83a2 2 0 00-2.83 0L2.41 9.59a2 2 0 000 2.82l9.59 9.59a2 2 0 002.83 0l6.75-6.75a2 2 0 000-2.83z" }),
         /* @__PURE__ */ e.jsx("circle", { cx: "7.5", cy: "7.5", r: "1.5" })
       ] });
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs(
           "div",
           {
-            className: `${A} flex flex-wrap gap-2 min-h-[42px] max-h-[120px] overflow-y-auto items-center`,
-            onClick: () => !r.disabled && document.getElementById(`${a}-input`)?.focus(),
+            className: `${_} flex flex-wrap gap-2 min-h-[42px] max-h-[120px] overflow-y-auto items-center`,
+            onClick: () => !t.disabled && document.getElementById(`${s}-input`)?.focus(),
             children: [
-              n.map((R) => /* @__PURE__ */ e.jsxs(
+              n.map((w) => /* @__PURE__ */ e.jsxs(
                 "span",
                 {
                   className: "flex items-center gap-2 px-2 py-1 rounded-full text-sm bg-indigo-50 border border-indigo-100",
                   children: [
-                    /* @__PURE__ */ e.jsx("span", { className: "flex items-center justify-center", children: /* @__PURE__ */ e.jsx(B, {}) }),
-                    /* @__PURE__ */ e.jsx("span", { className: "text-indigo-700", children: M(R) }),
+                    /* @__PURE__ */ e.jsx("span", { className: "flex items-center justify-center", children: /* @__PURE__ */ e.jsx(k, {}) }),
+                    /* @__PURE__ */ e.jsx("span", { className: "text-indigo-700", children: I(w) }),
                     /* @__PURE__ */ e.jsx(
                       "button",
                       {
                         type: "button",
-                        "aria-label": `Remove ${M(R)}`,
-                        onClick: (C) => {
-                          C.stopPropagation(), r.disabled || L(R);
+                        "aria-label": `Remove ${I(w)}`,
+                        onClick: (a) => {
+                          a.stopPropagation(), t.disabled || $(w);
                         },
-                        onMouseDown: (C) => C.preventDefault(),
+                        onMouseDown: (a) => a.preventDefault(),
                         className: "ml-1 text-indigo-500 hover:text-red-500 focus:outline-none",
                         children: "×"
                       }
                     )
                   ]
                 },
-                R
+                w
               )),
               /* @__PURE__ */ e.jsx(
                 "input",
                 {
-                  id: `${a}-input`,
+                  id: `${s}-input`,
                   type: "text",
-                  value: b,
-                  onChange: (R) => x(R.target.value),
+                  value: g,
+                  onChange: (w) => f(w.target.value),
                   onKeyDown: N,
-                  placeholder: n.length === 0 ? r.placeholder || "Type and press Enter" : "",
+                  placeholder: n.length === 0 ? t.placeholder || "Type and press Enter" : "",
                   className: "flex-1 min-w-[120px] border-none outline-none text-sm bg-transparent p-1",
-                  disabled: r.disabled
+                  disabled: t.disabled
                 }
               )
             ]
           }
         ),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
     }
     case "file":
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-          r.icon && /* @__PURE__ */ e.jsx("div", { className: "absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none", children: k(r) }),
+          t.icon && /* @__PURE__ */ e.jsx("div", { className: "absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none", children: q(t) }),
           /* @__PURE__ */ e.jsx(
             "input",
             {
-              type: r.type || "text",
-              className: `${A} ${p} ${r.icon ? "pl-9" : ""} `,
-              onFocus: () => w(!0),
-              name: a,
-              onBlur: t.handleBlur,
-              onChange: t.handleChange,
-              placeholder: r.placeholder,
-              disabled: r.disabled
+              type: t.type || "text",
+              className: `${_} ${y} ${t.icon ? "pl-9" : ""} `,
+              onFocus: () => R(!0),
+              name: s,
+              onBlur: r.handleBlur,
+              onChange: r.handleChange,
+              placeholder: t.placeholder,
+              disabled: t.disabled
             }
           ),
-          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${o ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
+          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${E ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
     case "json": {
-      let n = t.values[a];
+      let n = r.values[s];
       if (typeof n == "object" && n !== null) {
         const N = JSON.stringify(n, null, 2);
-        t.setFieldValue(a, N, !1), n = N;
+        r.setFieldValue(s, N, !1), n = N;
       }
-      const g = n || "", j = (N) => {
-        t.setFieldValue(a, N.target.value);
+      const x = n || "", j = (N) => {
+        r.setFieldValue(s, N.target.value);
       };
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
           /* @__PURE__ */ e.jsx(
             "textarea",
             {
-              id: `${a}-json`,
-              name: a,
-              value: g,
+              id: `${s}-json`,
+              name: s,
+              value: x,
               onChange: j,
-              onBlur: t.handleBlur,
-              placeholder: r.placeholder || "Enter valid JSON",
-              disabled: r.disabled,
-              className: `${A} ${p} min-h-[200px] font-mono text-sm resize-y`
+              onBlur: r.handleBlur,
+              placeholder: t.placeholder || "Enter valid JSON",
+              disabled: t.disabled,
+              className: `${_} ${y} min-h-[200px] font-mono text-sm resize-y`
             }
           ),
           /* @__PURE__ */ e.jsx(
             "div",
             {
-              className: `absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 transition-opacity duration-300 pointer-events-none ${o ? "opacity-20" : ""}`,
+              className: `absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 transition-opacity duration-300 pointer-events-none ${E ? "opacity-20" : ""}`,
               style: { zIndex: -1, filter: "blur(8px)" }
             }
           )
         ] }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
     }
     default:
       return /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ e.jsxs("label", { className: v, children: [
-          r.label,
-          r.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
+        /* @__PURE__ */ e.jsxs("label", { className: S, children: [
+          t.label,
+          t.required && /* @__PURE__ */ e.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ e.jsxs("div", { className: "relative", children: [
-          r.icon && /* @__PURE__ */ e.jsx("div", { className: "absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none", children: k(r) }),
+          t.icon && /* @__PURE__ */ e.jsx("div", { className: "absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none", children: q(t) }),
           /* @__PURE__ */ e.jsx(
             "input",
             {
-              type: r.type || "text",
-              className: `${A} ${p} ${r.icon ? "pl-9" : ""} `,
-              onFocus: () => w(!0),
-              name: a,
-              value: t.values[a],
-              onBlur: t.handleBlur,
-              onChange: t.handleChange,
-              placeholder: r.placeholder,
-              disabled: r.disabled
+              type: t.type || "text",
+              className: `${_} ${y} ${t.icon ? "pl-9" : ""} `,
+              onFocus: () => R(!0),
+              name: s,
+              value: r.values[s],
+              onBlur: r.handleBlur,
+              onChange: r.handleChange,
+              placeholder: t.placeholder,
+              disabled: t.disabled
             }
           ),
-          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${o ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
+          /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${E ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        t.touched[a] && t.errors[a] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(t.errors[a]) })
+        r.touched[s] && r.errors[s] && /* @__PURE__ */ e.jsx("span", { className: "text-xs text-red-500", children: String(r.errors[s]) })
       ] });
   }
 }
-function Se({ title: r, children: t, isFirst: l }) {
-  const [i, h] = Y(l);
+function Se({ title: t, children: r, isFirst: o }) {
+  const [i, d] = G(o);
   return /* @__PURE__ */ e.jsx("div", { className: "group relative mt-1", children: /* @__PURE__ */ e.jsxs("div", { className: "relative bg-white rounded-lg border border-gray-100 shadow-xs hover:shadow-sm transition-all duration-300 overflow-hidden ", children: [
     /* @__PURE__ */ e.jsxs(
       "button",
       {
-        onClick: () => h(!i),
+        onClick: () => d(!i),
         className: "w-full bg-gray-50 flex justify-between items-center px-6 py-3 b text-left transition-all duration-300 ",
         children: [
           /* @__PURE__ */ e.jsxs("div", { className: "flex items-center space-x-3", children: [
             /* @__PURE__ */ e.jsx("div", { className: `w-3 h-3 rounded-full transition-all duration-300 ${i ? "bg-action" : "bg-gray-300"}` }),
-            /* @__PURE__ */ e.jsx("h3", { className: "text-md font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent", children: r })
+            /* @__PURE__ */ e.jsx("h3", { className: "text-md font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent", children: t })
           ] }),
           /* @__PURE__ */ e.jsxs("div", { className: `relative transition-all duration-300 ${i ? "rotate-180" : ""}`, children: [
             /* @__PURE__ */ e.jsx("div", { className: `absolute inset-0 rounded-full blur-md transition-opacity duration-300 ${i ? "bg-action opacity-30" : "bg-transparent opacity-0"}` }),
@@ -1125,128 +1182,130 @@ function Se({ title: r, children: t, isFirst: l }) {
       "div",
       {
         className: `transition-all duration-500 ease-in-out overflow-hidden ${i ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`,
-        children: /* @__PURE__ */ e.jsx("div", { className: "px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white", children: /* @__PURE__ */ e.jsx("div", { className: "space-y-5 pt-4", children: t }) })
+        children: /* @__PURE__ */ e.jsx("div", { className: "px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white", children: /* @__PURE__ */ e.jsx("div", { className: "space-y-5 pt-4", children: r }) })
       }
     )
   ] }) });
 }
 function Ee({
-  title: r,
-  groupedFields: t,
-  data: l,
-  onSubmit: i = (c) => {
+  title: t,
+  groupedFields: r,
+  data: o,
+  onSubmit: i = (b) => {
   },
-  onCancel: h = () => {
+  onCancel: d = () => {
   },
-  methods: o = {},
-  components: w = {},
-  sqlOpsUrls: y = {}
+  methods: l = {},
+  components: E = {},
+  sqlOpsUrls: R = {},
+  refid: u
 }) {
-  const c = {}, b = {};
-  Object.entries(t).forEach(([d, u]) => {
-    J(u, c, b);
-  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((d) => {
-    d in c && (d === "tags" && typeof l[d] == "string" ? c[d] = l[d].split(",") : c[d] = l[d] ? l[d] : "");
+  const b = {}, g = {};
+  Object.entries(r).forEach(([c, h]) => {
+    J(h, b, g);
+  }), o && Object.keys(o).length > 0 && Object.keys(o).forEach((c) => {
+    c in b && (c === "tags" && typeof o[c] == "string" ? b[c] = o[c].split(",") : b[c] = o[c] ? o[c] : "");
   });
-  const x = ee({
-    initialValues: c,
+  const f = ee({
+    initialValues: b,
     enableReinitialize: !0,
-    validationSchema: _.object().shape(b),
-    onSubmit: (d) => {
-      i(d);
+    validationSchema: P.object().shape(g),
+    onSubmit: (c) => {
+      i(c);
     }
   });
-  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: x.handleSubmit, className: "p-4 mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: t && Object.entries(t).map(([d, u], S) => /* @__PURE__ */ e.jsx(Se, { title: d, isFirst: S === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: u.map((O, E) => ae(O.hidden) ? null : /* @__PURE__ */ e.jsx(
+  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([c, h], C) => /* @__PURE__ */ e.jsx(Se, { title: c, isFirst: C === 0, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: h.map((v, A) => ae(v.hidden) ? null : /* @__PURE__ */ e.jsx(
       "div",
       {
-        className: `col-span-12 md:col-span-6 ${re[te(Number(O.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(se, { sqlOpsUrls: y, components: w, field: O, formik: x, methods: o }, O.name)
+        className: `col-span-12 md:col-span-6 ${te[re(Number(v.width))] || "lg:col-span-4"}`,
+        children: /* @__PURE__ */ e.jsx(se, { refid: u, sqlOpsUrls: R, components: E, field: v, formik: f, methods: l }, v.name)
       },
-      O?.name ?? `field-${E}`
-    )) }) }, d)) }),
+      v?.name ?? `field-${A}`
+    )) }) }, c)) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
       /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
-        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: h, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
+        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: d, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
         /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Save" })
       ] })
     ] })
   ] }) }) });
 }
 function Re({
-  title: r,
-  groupedFields: t,
-  data: l,
-  onSubmit: i = (b) => {
+  title: t,
+  groupedFields: r,
+  data: o,
+  onSubmit: i = (g) => {
   },
-  onCancel: h = () => {
+  onCancel: d = () => {
   },
-  methods: o = {},
-  components: w = {},
-  sqlOpsUrls: y = {},
-  widget: c
+  methods: l = {},
+  components: E = {},
+  sqlOpsUrls: R = {},
+  widget: u,
+  refid: b
 }) {
-  const b = Object.keys(t), [x, d] = X.useState(0), u = {}, S = {}, O = {};
-  c ? Object.entries(t).forEach(([p, v]) => {
-    const k = {};
-    J(v, S, k), u[p] = k;
-  }) : Object.entries(t).forEach(([p, v]) => {
-    J(v, S, O);
-  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((p) => {
-    p in S && (p === "tags" && typeof l[p] == "string" ? S[p] = l[p].split(",") : S[p] = l[p] ? l[p] : "");
+  const g = Object.keys(r), [f, c] = X.useState(0), h = {}, C = {}, v = {};
+  u ? Object.entries(r).forEach(([y, S]) => {
+    const q = {};
+    J(S, C, q), h[y] = q;
+  }) : Object.entries(r).forEach(([y, S]) => {
+    J(S, C, v);
+  }), o && Object.keys(o).length > 0 && Object.keys(o).forEach((y) => {
+    y in C && (y === "tags" && typeof o[y] == "string" ? C[y] = o[y].split(",") : C[y] = o[y] ? o[y] : "");
   });
-  const E = b[x] ?? null, T = E && u[E] ? u[E] : {}, m = ee({
-    initialValues: S,
+  const A = g[f] ?? null, m = A && h[A] ? h[A] : {}, T = ee({
+    initialValues: C,
     enableReinitialize: !0,
-    validationSchema: _.object().shape(c ? T : O),
-    onSubmit: (p) => {
-      c ? (x < b.length - 1 && d((v) => v + 1), x === b.length - 1 && i(p)) : i(p);
+    validationSchema: P.object().shape(u ? m : v),
+    onSubmit: (y) => {
+      u ? (f < g.length - 1 && c((S) => S + 1), f === g.length - 1 && i(y)) : i(y);
     }
-  }), a = async (p) => {
-    if (p.preventDefault(), !c) {
-      const v = await m.validateForm();
-      if (Object.keys(v).length > 0) {
-        alert("Please fill all required fields before submitting."), m.setTouched(
-          Object.keys(v).reduce((k, z) => ({ ...k, [z]: !0 }), {})
+  }), s = async (y) => {
+    if (y.preventDefault(), !u) {
+      const S = await T.validateForm();
+      if (Object.keys(S).length > 0) {
+        alert("Please fill all required fields before submitting."), T.setTouched(
+          Object.keys(S).reduce((q, z) => ({ ...q, [z]: !0 }), {})
         );
         return;
       }
     }
-    m.handleSubmit(p);
-  }, A = () => {
-    d((p) => p > 0 ? p - 1 : p);
+    T.handleSubmit(y);
+  }, _ = () => {
+    c((y) => y > 0 ? y - 1 : y);
   };
   return /* @__PURE__ */ e.jsxs("div", { className: " max-w-full  m-4", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "relative", children: /* @__PURE__ */ e.jsx("div", { className: "relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner", children: /* @__PURE__ */ e.jsx("nav", { className: "relative flex", children: b.map((p, v) => /* @__PURE__ */ e.jsx(
+    /* @__PURE__ */ e.jsx("div", { className: "relative", children: /* @__PURE__ */ e.jsx("div", { className: "relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner", children: /* @__PURE__ */ e.jsx("nav", { className: "relative flex", children: g.map((y, S) => /* @__PURE__ */ e.jsx(
       "button",
       {
         type: "button",
-        onClick: () => d(v),
-        className: `relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${x === v ? "text-action bg-white" : "text-gray-600 hover:text-gray-800 hover:bg-white/50"}`,
-        children: /* @__PURE__ */ e.jsx("span", { className: "relative z-10 flex items-center justify-center gap-2 capitalize", children: p })
+        onClick: () => c(S),
+        className: `relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${f === S ? "text-action bg-white" : "text-gray-600 hover:text-gray-800 hover:bg-white/50"}`,
+        children: /* @__PURE__ */ e.jsx("span", { className: "relative z-10 flex items-center justify-center gap-2 capitalize", children: y })
       },
-      p
+      y
     )) }) }) }),
     /* @__PURE__ */ e.jsxs(
       "div",
       {
         className: "bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300",
         children: [
-          /* @__PURE__ */ e.jsxs("form", { onSubmit: a, className: "w-full mx-auto", children: [
-            /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: E && t[E]?.map((p, v) => ae(p.hidden) ? null : /* @__PURE__ */ e.jsx(
+          /* @__PURE__ */ e.jsxs("form", { onSubmit: s, className: "w-full mx-auto", children: [
+            /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: A && r[A]?.map((y, S) => ae(y.hidden) ? null : /* @__PURE__ */ e.jsx(
               "div",
               {
-                className: `col-span-12  ${re[te(Number(p.width))] || "lg:col-span-4"}`,
-                children: /* @__PURE__ */ e.jsx(se, { sqlOpsUrls: y, field: p, formik: m, methods: o, components: w }, p.name)
+                className: `col-span-12  ${te[re(Number(y.width))] || "lg:col-span-4"}`,
+                children: /* @__PURE__ */ e.jsx(se, { refid: b, sqlOpsUrls: R, field: y, formik: T, methods: l, components: E }, y.name)
               },
-              p?.name ?? `field-${v}`
+              y?.name ?? `field-${S}`
             )) }),
-            /* @__PURE__ */ e.jsxs("div", { className: `mt-8 flex ${x > 0 ? "justify-between" : "justify-end"} space-x-3`, children: [
-              x > 0 && /* @__PURE__ */ e.jsx("button", { onClick: A, type: "button", className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Previous" }),
+            /* @__PURE__ */ e.jsxs("div", { className: `mt-8 flex ${f > 0 ? "justify-between" : "justify-end"} space-x-3`, children: [
+              f > 0 && /* @__PURE__ */ e.jsx("button", { onClick: _, type: "button", className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Previous" }),
               /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
-                /* @__PURE__ */ e.jsx("button", { onClick: h, type: "button", className: "px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
-                /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: c ? "Next" : "Save" })
+                /* @__PURE__ */ e.jsx("button", { onClick: d, type: "button", className: "px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
+                /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: u ? "Next" : "Save" })
               ] })
             ] })
           ] }),
@@ -1254,71 +1313,72 @@ function Re({
             /* @__PURE__ */ e.jsxs("div", { className: "flex items-center", children: [
               /* @__PURE__ */ e.jsxs("span", { children: [
                 "Tab ",
-                x + 1,
+                f + 1,
                 " of ",
-                b.length
+                g.length
               ] }),
               /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700 ml-3", children: "All fields marked (*) are required" })
             ] }),
-            /* @__PURE__ */ e.jsx("div", { className: "flex gap-1", children: b.map((p, v) => /* @__PURE__ */ e.jsx(
+            /* @__PURE__ */ e.jsx("div", { className: "flex gap-1", children: g.map((y, S) => /* @__PURE__ */ e.jsx(
               "div",
               {
-                className: `w-2 h-2 rounded-full transition-all duration-300 ${v === x ? "bg-action w-6" : "bg-gray-300"}`
+                className: `w-2 h-2 rounded-full transition-all duration-300 ${S === f ? "bg-action w-6" : "bg-gray-300"}`
               },
-              v
+              S
             )) })
           ] }) })
         ]
       },
-      b[x]
+      g[f]
     )
   ] });
 }
-function Oe({
-  title: r,
-  groupedFields: t,
-  data: l,
-  onSubmit: i = (c) => {
+function Te({
+  title: t,
+  groupedFields: r,
+  data: o,
+  onSubmit: i = (b) => {
   },
-  onCancel: h = () => {
+  onCancel: d = () => {
   },
-  methods: o = {},
-  components: w = {},
-  sqlOpsUrls: y = {}
+  methods: l = {},
+  components: E = {},
+  sqlOpsUrls: R = {},
+  refid: u
 }) {
-  const c = Object.values(t).flat(), b = {}, x = {};
-  Object.entries(t).forEach(([u, S]) => {
-    J(S, b, x);
-  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((u) => {
-    u in b && (u === "tags" && typeof l[u] == "string" ? b[u] = l[u].split(",") : b[u] = l[u] ? l[u] : "");
+  const b = Object.values(r).flat(), g = {}, f = {};
+  Object.entries(r).forEach(([h, C]) => {
+    J(C, g, f);
+  }), o && Object.keys(o).length > 0 && Object.keys(o).forEach((h) => {
+    h in g && (h === "tags" && typeof o[h] == "string" ? g[h] = o[h].split(",") : g[h] = o[h] ? o[h] : "");
   });
-  const d = ee({
-    initialValues: b,
+  const c = ee({
+    initialValues: g,
     enableReinitialize: !0,
-    validationSchema: _.object().shape(x),
-    onSubmit: (u) => {
-      i(u);
+    validationSchema: P.object().shape(f),
+    onSubmit: (h) => {
+      i(h);
     }
   });
-  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: d.handleSubmit, className: "p-4  mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: c.map((u, S) => ae(u.hidden) ? null : /* @__PURE__ */ e.jsx(
+  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: c.handleSubmit, className: "p-4  mx-auto", children: [
+    /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: b.map((h, C) => ae(h.hidden) ? null : /* @__PURE__ */ e.jsx(
       "div",
       {
-        className: `col-span-12 md:col-span-6 ${re[te(Number(u.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(se, { sqlOpsUrls: y, components: w, field: u, formik: d, methods: o }, u.name)
+        className: `col-span-12 md:col-span-6 ${te[re(Number(h.width))] || "lg:col-span-4"}`,
+        children: /* @__PURE__ */ e.jsx(se, { refid: u, sqlOpsUrls: R, components: E, field: h, formik: c, methods: l }, h.name)
       },
-      u?.name ?? `field-${S}`
+      h?.name ?? `field-${C}`
     )) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "text-sm text-gray-700", children: "All fields marked (*) are required" }),
       /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
-        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: h, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Cancel" }),
+        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: d, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Cancel" }),
         /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: "Save" })
       ] })
     ] })
   ] }) }) });
 }
-function Te({ title: r, children: t }) {
+function Ae({ title: t, children: r }) {
   return /* @__PURE__ */ e.jsx("div", { className: "group relative mt-1", children: /* @__PURE__ */ e.jsxs("div", { className: "relative bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden ", children: [
     /* @__PURE__ */ e.jsx(
       "button",
@@ -1326,7 +1386,7 @@ function Te({ title: r, children: t }) {
         className: "w-full bg-gray-50 flex justify-between items-center px-6 py-3 b text-left transition-all duration-300 ",
         children: /* @__PURE__ */ e.jsxs("div", { className: "flex items-center space-x-3", children: [
           /* @__PURE__ */ e.jsx("div", { className: "w-3 h-3 rounded-full transition-all duration-300 bg-action" }),
-          /* @__PURE__ */ e.jsx("h3", { className: "text-md font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent", children: r })
+          /* @__PURE__ */ e.jsx("h3", { className: "text-md font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent", children: t })
         ] })
       }
     ),
@@ -1335,317 +1395,322 @@ function Te({ title: r, children: t }) {
       {
         className: `transition-all duration-500 ease-in-out overflow-hidden max-h-[2000px] opacity-100'
             }`,
-        children: /* @__PURE__ */ e.jsx("div", { className: "px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white", children: /* @__PURE__ */ e.jsx("div", { className: "space-y-5 pt-4", children: t }) })
+        children: /* @__PURE__ */ e.jsx("div", { className: "px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white", children: /* @__PURE__ */ e.jsx("div", { className: "space-y-5 pt-4", children: r }) })
       }
     )
   ] }) });
 }
-function $e({
-  title: r,
-  groupedFields: t,
-  data: l,
-  onSubmit: i = (c) => {
+function Oe({
+  title: t,
+  groupedFields: r,
+  data: o,
+  onSubmit: i = (b) => {
   },
-  onCancel: h = () => {
+  onCancel: d = () => {
   },
-  methods: o = {},
-  components: w = {},
-  sqlOpsUrls: y = {}
+  methods: l = {},
+  components: E = {},
+  sqlOpsUrls: R = {},
+  refid: u
 }) {
-  const c = {}, b = {};
-  Object.entries(t).forEach(([d, u]) => {
-    J(u, c, b);
-  }), l && Object.keys(l).length > 0 && Object.keys(l).forEach((d) => {
-    d in c && (d === "tags" && typeof l[d] == "string" ? c[d] = l[d].split(",") : c[d] = l[d] ? l[d] : "");
+  const b = {}, g = {};
+  Object.entries(r).forEach(([c, h]) => {
+    J(h, b, g);
+  }), o && Object.keys(o).length > 0 && Object.keys(o).forEach((c) => {
+    c in b && (c === "tags" && typeof o[c] == "string" ? b[c] = o[c].split(",") : b[c] = o[c] ? o[c] : "");
   });
-  const x = ee({
-    initialValues: c,
+  const f = ee({
+    initialValues: b,
     enableReinitialize: !0,
-    validationSchema: _.object().shape(b),
-    onSubmit: (d) => {
-      i(d);
+    validationSchema: P.object().shape(g),
+    onSubmit: (c) => {
+      i(c);
     }
   });
-  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: x.handleSubmit, className: "p-4 mx-auto", children: [
-    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: t && Object.entries(t).map(([d, u], S) => /* @__PURE__ */ e.jsx(Te, { title: d, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: u.map((O, E) => ae(O.hidden) ? null : /* @__PURE__ */ e.jsx(
+  return /* @__PURE__ */ e.jsx("div", { className: "relative z-10 max-w-full  m-4", children: /* @__PURE__ */ e.jsx("div", { className: "bg-white animate-in fade-in duration-300", children: /* @__PURE__ */ e.jsxs("form", { onSubmit: f.handleSubmit, className: "p-4 mx-auto", children: [
+    /* @__PURE__ */ e.jsx("div", { className: "space-y-2", children: r && Object.entries(r).map(([c, h], C) => /* @__PURE__ */ e.jsx(Ae, { title: c, children: /* @__PURE__ */ e.jsx("div", { className: "grid grid-cols-12 gap-4", children: h.map((v, A) => ae(v.hidden) ? null : /* @__PURE__ */ e.jsx(
       "div",
       {
-        className: `col-span-12 md:col-span-6 ${re[te(Number(O.width))] || "lg:col-span-4"}`,
-        children: /* @__PURE__ */ e.jsx(se, { sqlOpsUrls: y, components: w, field: O, formik: x, methods: o }, O.name)
+        className: `col-span-12 md:col-span-6 ${te[re(Number(v.width))] || "lg:col-span-4"}`,
+        children: /* @__PURE__ */ e.jsx(se, { refid: u, sqlOpsUrls: R, components: E, field: v, formik: f, methods: l }, v.name)
       },
-      O?.name ?? `field-${E}`
-    )) }) }, d)) }),
+      v?.name ?? `field-${A}`
+    )) }) }, c)) }),
     /* @__PURE__ */ e.jsxs("div", { className: "mt-8 flex justify-between space-x-3", children: [
       /* @__PURE__ */ e.jsx("p", { className: "px-4 pt-4 text-sm text-secondary", children: "All fields marked (*) are required" }),
       /* @__PURE__ */ e.jsxs("div", { className: "space-x-3", children: [
-        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: h, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
+        /* @__PURE__ */ e.jsx("button", { type: "button", onClick: d, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Cancel" }),
         /* @__PURE__ */ e.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: "Save" })
       ] })
     ] })
   ] }) }) });
 }
-const Q = (r) => ({
-  Authorization: `Bearer ${r.accessToken}`
-}), ce = async (r) => (await D.get(
-  r.baseURL + r.dbopsGetHash,
-  { headers: Q(r) }
-)).data.refhash, de = async (r, t) => (await D.post(
-  r.baseURL + r.dbopsGetRefId,
-  t,
-  { headers: Q(r) }
-)).data.refid, Ae = {
-  async fetch(r, t) {
-    const l = await ce(r), i = await de(r, {
+const Q = (t) => ({
+  Authorization: `Bearer ${t.accessToken}`
+}), de = async (t) => (await M.get(
+  t.baseURL + t.dbopsGetHash,
+  { headers: Q(t) }
+)).data.refhash, ue = async (t, r) => (await M.post(
+  t.baseURL + t.dbopsGetRefId,
+  r,
+  { headers: Q(t) }
+)).data.refid, $e = {
+  async fetch(t, r) {
+    const o = await de(t), i = await ue(t, {
       operation: "fetch",
-      source: t.source,
-      fields: t.fields ?? {},
-      datahash: l
-    }), h = await D.post(
-      r.baseURL + r.dbopsFetch,
-      { refid: i, datahash: l },
-      { headers: Q(r) }
+      source: r.source,
+      fields: r.fields ?? {},
+      datahash: o
+    }), d = await M.post(
+      t.baseURL + t.dbopsFetch,
+      { refid: i, datahash: o },
+      { headers: Q(t) }
     );
-    return h.data?.data ?? h.data;
+    return d.data?.data ?? d.data;
   },
-  async create(r, t) {
-    const l = await ce(r), i = await de(r, {
+  async create(t, r) {
+    const o = await de(t), i = await ue(t, {
       operation: "create",
-      source: t.source,
-      fields: t.values,
-      datahash: l
+      source: r.source,
+      fields: r.values,
+      datahash: o
     });
-    return (await D.post(
-      r.baseURL + r.dbopsCreate,
-      { refid: i, fields: t.values, datahash: l },
-      { headers: Q(r) }
+    return (await M.post(
+      t.baseURL + t.dbopsCreate,
+      { refid: i, fields: r.values, datahash: o },
+      { headers: Q(t) }
     )).data;
   },
-  async update(r, t) {
-    const l = await ce(r), i = await de(r, {
+  async update(t, r) {
+    const o = await de(t), i = await ue(t, {
       operation: "update",
-      source: t.source,
-      fields: t.values,
-      datahash: l
+      source: r.source,
+      fields: r.values,
+      datahash: o
     });
-    return (await D.post(
-      r.baseURL + r.dbopsUpdate,
-      { refid: i, fields: t.values, datahash: l },
-      { headers: Q(r) }
+    return (await M.post(
+      t.baseURL + t.dbopsUpdate,
+      { refid: i, fields: r.values, datahash: o },
+      { headers: Q(t) }
     )).data;
   }
 };
 function Ie({
-  formJson: r = { title: "", fields: {}, source: {} },
-  methods: t = {},
-  userid: l = null,
+  formJson: t = { title: "", fields: {}, source: {} },
+  methods: r = {},
+  userid: o = null,
   onCancel: i = () => {
   },
-  components: h = {},
-  callback: o = () => {
+  components: d = {},
+  callback: l = () => {
   },
-  initialvalues: w = {}
+  initialvalues: E = {}
 }) {
-  const y = je(r), c = r.endPoints, b = r?.source?.refid, x = Ne(r?.fields ?? {}, b), [d, u] = X.useState(w);
+  const R = je(t), u = t.endPoints, b = t?.source?.refid, g = Ne(t?.fields ?? {}, b), [f, c] = X.useState(E);
   X.useEffect(() => {
-    let E = !0;
+    let v = !0;
     return (async () => {
-      const m = r?.source ?? {};
+      const m = t?.source ?? {};
       if (!m?.type) {
-        E && u({});
+        v && c({});
         return;
       }
       if (m.type === "method") {
-        const a = m.method, A = a ? t[a] : void 0;
-        if (A)
+        const T = m.method, s = T ? r[T] : void 0;
+        if (s)
           try {
-            const p = await Promise.resolve(A());
-            E && u(p ?? {});
-          } catch (p) {
-            console.error("Method execution failed:", p), E && u({});
+            const _ = await Promise.resolve(s());
+            v && c(_ ?? {});
+          } catch (_) {
+            console.error("Method execution failed:", _), v && c({});
           }
         else
-          E && u({});
+          v && c({});
       }
       if (m.type === "api")
         try {
-          const a = await D({
+          const T = await M({
             method: m.method || "GET",
             url: m.url,
             data: m.body ?? {},
             params: m.params ?? {},
             headers: m.headers ?? {}
           });
-          E && u(a.data ?? {});
-        } catch (a) {
-          console.error("API fetch failed:", a), E && u({});
+          v && c(T.data ?? {});
+        } catch (T) {
+          console.error("API fetch failed:", T), v && c({});
         }
-      if (m.type === "sql" && m.refid && m.refid != "0" && c?.operation !== "create") {
-        if (!c) {
+      if (m.type === "sql" && m.refid && m.refid != "0" && u?.operation !== "create") {
+        if (!u) {
           console.error("SQL source requires formJson.endPoints but it is missing");
           return;
         }
         try {
-          const a = await Ae.fetch(c, {
+          const T = await $e.fetch(u, {
             source: {
               ...m,
               table: m.table,
               columns: m.columns,
-              where: H(m.where, {
+              where: U(m.where, {
                 refid: b
               })
             },
-            fields: we(r.fields)
+            fields: we(t.fields)
           });
-          E && u(a);
-        } catch (a) {
-          console.error("API fetch failed:", a);
+          v && c(T);
+        } catch (T) {
+          console.error("API fetch failed:", T);
         }
       }
     })(), () => {
-      E = !1;
+      v = !1;
     };
   }, [
-    l,
-    r?.source?.type || "",
-    r?.source?.method || "",
-    r?.source?.url || "",
-    JSON.stringify(r?.source?.params ?? {}),
-    JSON.stringify(r?.source?.body ?? {}),
-    JSON.stringify(r?.source?.headers ?? {})
+    o,
+    t?.source?.type || "",
+    t?.source?.method || "",
+    t?.source?.url || "",
+    JSON.stringify(t?.source?.params ?? {}),
+    JSON.stringify(t?.source?.body ?? {}),
+    JSON.stringify(t?.source?.headers ?? {})
   ]);
-  const S = async (E) => {
-    const T = r?.source ?? {};
-    if (T.type === "method") {
-      const m = T.method, a = m ? t[m] : void 0;
-      if (a)
+  const h = async (v) => {
+    const A = t?.source ?? {};
+    if (A.type === "method") {
+      const m = A.method, T = m ? r[m] : void 0;
+      if (T)
         try {
-          const A = await Promise.resolve(a(E));
-          o?.(A);
-        } catch (A) {
-          o?.(A), console.error("Method execution failed:", A);
+          const s = await Promise.resolve(T(v));
+          l?.(s);
+        } catch (s) {
+          l?.(s), console.error("Method execution failed:", s);
         }
     }
-    if (T.type === "api")
+    if (A.type === "api")
       try {
-        const m = await D({
-          method: T.method || "POST",
-          url: T.url,
-          data: E ?? {},
-          params: T.params ?? {},
-          headers: T.headers ?? {}
+        const m = await M({
+          method: A.method || "POST",
+          url: A.url,
+          data: v ?? {},
+          params: A.params ?? {},
+          headers: A.headers ?? {}
         });
-        o?.(m);
+        l?.(m);
       } catch (m) {
-        o?.(m), console.error("API fetch failed:", m);
+        l?.(m), console.error("API fetch failed:", m);
       }
-    if (T.type === "sql") {
-      const m = r.endPoints;
+    if (A.type === "sql") {
+      const m = t.endPoints;
       if (!m) {
         console.error("SQL source requires formJson.endPoints but it is missing");
         return;
       }
       try {
-        const a = await D({
+        const T = await M({
           method: "GET",
           url: m.baseURL + m.dbopsGetHash,
           headers: {
             Authorization: `Bearer ${m?.accessToken}`
           }
         });
-        let A = {
-          ...T
+        let s = {
+          ...A
         };
-        T.where && (A = {
-          ...T,
-          where: H(T.where, {
+        A.where && (s = {
+          ...A,
+          where: U(A.where, {
             refid: b
           })
         });
-        const p = await D({
+        const _ = await M({
           method: "POST",
           url: m.baseURL + m.dbopsGetRefId,
           data: {
             operation: m.operation,
-            source: A,
-            fields: r.fields,
-            datahash: a.data.refhash
+            source: s,
+            fields: t.fields,
+            datahash: T.data.refhash
           },
           headers: {
             Authorization: `Bearer ${m?.accessToken}`
           }
-        }), v = await D({
+        }), y = await M({
           method: "POST",
           url: m.baseURL + m[m.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
-            refid: p.data.refid,
-            fields: E,
-            datahash: a.data.refhash
+            refid: _.data.refid,
+            fields: v,
+            datahash: T.data.refhash
           },
           headers: {
             Authorization: `Bearer ${m?.accessToken}`
           }
         });
-        o?.(v);
-      } catch (a) {
-        o?.(a), console.error("API fetch failed:", a);
+        l?.(y);
+      } catch (T) {
+        l?.(T), console.error("API fetch failed:", T);
       }
     }
-  }, O = {
+  }, C = {
     accordion: /* @__PURE__ */ e.jsx(
       Ee,
       {
-        title: r?.title ?? "",
-        groupedFields: x,
-        data: d,
-        onSubmit: S,
+        title: t?.title ?? "",
+        groupedFields: g,
+        data: f,
+        onSubmit: h,
         onCancel: i,
-        methods: t,
-        components: h,
-        sqlOpsUrls: c
+        methods: r,
+        components: d,
+        sqlOpsUrls: u,
+        refid: b
       }
     ),
     cards: /* @__PURE__ */ e.jsx(
-      $e,
+      Oe,
       {
-        title: r?.title ?? "",
-        groupedFields: x,
-        data: d,
-        onSubmit: S,
+        title: t?.title ?? "",
+        groupedFields: g,
+        data: f,
+        onSubmit: h,
         onCancel: i,
-        methods: t,
-        components: h,
-        sqlOpsUrls: c
+        methods: r,
+        components: d,
+        sqlOpsUrls: u,
+        refid: b
       }
     ),
     tab: /* @__PURE__ */ e.jsx(
       Re,
       {
-        title: r?.title ?? "",
-        groupedFields: x,
-        data: d,
-        onSubmit: S,
+        title: t?.title ?? "",
+        groupedFields: g,
+        data: f,
+        onSubmit: h,
         onCancel: i,
-        methods: t,
-        components: h,
-        widget: r?.widget,
-        sqlOpsUrls: c
+        methods: r,
+        components: d,
+        widget: t?.widget,
+        sqlOpsUrls: u,
+        refid: b
       }
     ),
     simple: /* @__PURE__ */ e.jsx(
-      Oe,
+      Te,
       {
-        title: r?.title ?? "",
-        groupedFields: x,
-        data: d,
-        onSubmit: S,
+        title: t?.title ?? "",
+        groupedFields: g,
+        data: f,
+        onSubmit: h,
         onCancel: i,
-        methods: t,
-        components: h,
-        sqlOpsUrls: c
+        methods: r,
+        components: d,
+        sqlOpsUrls: u,
+        refid: b
       }
     )
   };
-  return /* @__PURE__ */ e.jsx("div", { className: "relative", children: O[y] ?? O.simple });
+  return /* @__PURE__ */ e.jsx("div", { className: "relative", children: C[R] ?? C.simple });
 }
 export {
   Ie as LogiksForm,

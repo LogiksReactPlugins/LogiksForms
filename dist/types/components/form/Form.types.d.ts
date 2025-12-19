@@ -1,6 +1,14 @@
 import { FormikProps } from 'formik';
 import { AxiosRequestConfig } from 'axios';
 import { ReactNode } from 'react';
+export type AutocompleteConfig = {
+    target: string;
+    src: {
+        table: string;
+        columns?: string;
+        where?: Record<string, string>;
+    };
+};
 export interface FormField {
     name: string;
     label?: string;
@@ -23,7 +31,7 @@ export interface FormField {
     table?: string;
     columns?: string;
     where?: Record<string, string>;
-    autocomplete?: Record<string, any> | string;
+    autocomplete?: "off" | AutocompleteConfig;
     validate?: Record<string, string | number>;
     groupid?: string;
     hidden?: boolean;
@@ -65,6 +73,7 @@ export interface BaseFormViewProps {
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
+    refid?: string | undefined;
 }
 export interface FieldRendererProps {
     field: FormField;
@@ -72,5 +81,11 @@ export interface FieldRendererProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
     sqlOpsUrls?: Record<string, any> | undefined;
+    refid?: string | undefined;
+}
+export interface sqlQueryProps {
+    table: string;
+    cols: string;
+    where?: Record<string, string>;
 }
 //# sourceMappingURL=Form.types.d.ts.map

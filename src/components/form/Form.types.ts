@@ -2,6 +2,16 @@
 import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
+
+
+export type AutocompleteConfig = {
+    target: string;
+    src: {
+        table: string;
+        columns?: string;
+        where?: Record<string, string>;
+    };
+};
 export interface FormField {
     name: string;
     label?: string;
@@ -24,11 +34,11 @@ export interface FormField {
     table?: string;
     columns?: string;
     where?: Record<string, string>;
-    autocomplete?: Record<string, any> | string;
+    autocomplete?: "off" | AutocompleteConfig;
     validate?: Record<string, string | number>;
-    groupid?:string;
-    hidden?:boolean;
-    value?:string | undefined;
+    groupid?: string;
+    hidden?: boolean;
+    value?: string | undefined;
 
 }
 
@@ -41,7 +51,7 @@ export interface FormJson {
         baseURL: string;
         dbopsGetRefId: string;
         accessToken: string;
-        operation:string;
+        operation: string;
         dbopsGetHash: string;
         dbopsFetch?: string;
         dbopsUpdate?: string;
@@ -61,7 +71,7 @@ export interface FormProps {
     onCancel?: () => void;
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>
-    initialvalues?:Record<string, any>
+    initialvalues?: Record<string, any>
 
 }
 
@@ -76,6 +86,7 @@ export interface BaseFormViewProps {
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
+    refid?: string | undefined
 }
 
 export interface FieldRendererProps {
@@ -84,4 +95,11 @@ export interface FieldRendererProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>
     sqlOpsUrls?: Record<string, any> | undefined;
+    refid?: string | undefined
 }
+
+export interface sqlQueryProps {
+  table: string;
+  cols: string;
+  where?: Record<string, string>;
+};

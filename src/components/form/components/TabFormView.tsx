@@ -15,7 +15,8 @@ export default function TabFormView({
   methods = {},
   components = {},
   sqlOpsUrls = {},
-  widget
+  widget,
+  refid
 }: BaseFormViewProps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
@@ -164,7 +165,7 @@ export default function TabFormView({
                 className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}
               >
-                <FieldRenderer sqlOpsUrls={sqlOpsUrls} key={field.name} field={field} formik={formik} methods={methods} components={components} />
+                <FieldRenderer refid={refid} sqlOpsUrls={sqlOpsUrls} key={field.name} field={field} formik={formik} methods={methods} components={components} />
               </div>
             ))}
           </div>
