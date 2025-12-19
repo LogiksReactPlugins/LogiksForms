@@ -16,16 +16,17 @@ export default function LogiksForm({
   userid = null,
   onCancel = () => { },
   components = {},
-  callback = () => { }
+  callback = () => { },
+  initialvalues = {}
 }: FormProps) {
 
   const viewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
-  const groupedFields = groupFields(formJson?.fields ?? {},refid);
-  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>({});
+  const groupedFields = groupFields(formJson?.fields ?? {}, refid);
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues);
 
-  
+
 
   // ---------- Fetch Initial Data ----------
   React.useEffect(() => {
@@ -166,15 +167,15 @@ export default function LogiksForm({
         });
 
         let query = {
-         ... source
+          ...source
         }
 
-        if(source.where){
-          query={
-             ... source,
-             "where": replacePlaceholders(source.where, {
-                refid: refid,
-              }),
+        if (source.where) {
+          query = {
+            ...source,
+            "where": replacePlaceholders(source.where, {
+              refid: refid,
+            }),
           }
         }
 
@@ -183,7 +184,7 @@ export default function LogiksForm({
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
             "operation": sqlOpsUrls.operation,
-            "source":   query,
+            "source": query,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
           },

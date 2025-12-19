@@ -61,6 +61,7 @@ export interface FormProps {
     onCancel?: () => void;
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>
+    initialvalues?:Record<string, any>
 
 }
 
