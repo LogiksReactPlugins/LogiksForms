@@ -16,7 +16,7 @@ export function groupFields(fields: Record<string, Omit<FormField, "name">>, ref
 
   const defaultGroup = 'General';
   Object.entries(fields).forEach(([key, config]) => {
-   
+
 
     const group = config.group || defaultGroup;
     if (!grouped[group]) grouped[group] = [];
@@ -61,7 +61,7 @@ export const intializeForm = (
     } else if (fieldName === "blocked" || fieldName === "blacklist") {
       initialValues[fieldName] = "false"; // special-case string boolean
     } else {
-      initialValues[fieldName] = "";
+      initialValues[fieldName] = field?.value ? field.value : "";
     }
 
     // ---------- Base Validator ----------
