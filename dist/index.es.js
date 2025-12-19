@@ -1564,7 +1564,7 @@ function Ie({
           method: "POST",
           url: m.baseURL + m.dbopsGetRefId,
           data: {
-            operation: j.refid ? "update" : "create",
+            operation: m.operation,
             source: a,
             fields: r.fields,
             datahash: R.data.refhash

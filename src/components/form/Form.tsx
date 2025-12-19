@@ -182,7 +182,7 @@ export default function LogiksForm({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
-            "operation": source.refid ? "update" : "create",
+            "operation": sqlOpsUrls.operation,
             "source":   query,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
