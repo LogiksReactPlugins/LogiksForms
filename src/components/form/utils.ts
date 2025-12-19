@@ -11,31 +11,38 @@ export function determineViewMode(json: FormJson) {
   return hasGroup ? 'tab' : 'simple';
 }
 
-export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
+export function groupFields(fields: Record<string, Omit<FormField, "name">>, refid: string) {
   const grouped: Record<string, FormField[]> = {};
 
   const defaultGroup = 'General';
   Object.entries(fields).forEach(([key, config]) => {
+   
+
     const group = config.group || defaultGroup;
     if (!grouped[group]) grouped[group] = [];
-    grouped[group].push({ name: key, ...config });
+    let obj = { ...config, name: key }
+
+    if (config?.value && config?.value === "#refid#") {
+      obj.value = refid;
+    }
+    grouped[group].push(obj);
   });
 
   return grouped;
 }
 
- export function transformedObject(originalObject: Record<string, any>) {
+export function transformedObject(originalObject: Record<string, any>) {
 
-    const fields: Record<string, { label: string; required: boolean }> = {}
+  const fields: Record<string, { label: string; required: boolean }> = {}
 
-    Object.keys(originalObject).forEach((key) => {
-      fields[key] = {
-        label: key,
-        required: originalObject[key].required ?? false
-      }
-    })
-    return fields
-  }
+  Object.keys(originalObject).forEach((key) => {
+    fields[key] = {
+      label: key,
+      required: originalObject[key].required ?? false
+    }
+  })
+  return fields
+}
 
 export const intializeForm = (
   formFields: FormField[],
@@ -70,7 +77,7 @@ export const intializeForm = (
     } else if (field?.type === "date") {
       validator = Yup.date().typeError("Invalid date format");
     } else if (field?.type === "json") {
-    
+
       validator = Yup.string()
         .test("is-json", "Invalid JSON format", (value) => {
           if (!value) return true;
@@ -274,3 +281,32 @@ export function toGrid(width: number | undefined): ColWidth {
 
 export const isHidden = (hidden?: boolean | string): boolean =>
   hidden === true || hidden === "true";
+
+export const replacePlaceholders = (
+  input: any,
+  vars: Record<string, string | number>
+): any => {
+  console.log("input", input, vars);
+
+  if (typeof input === "string") {
+    return input.replace(/#(\w+)#/g, (_, k) =>
+      vars[k] !== undefined ? String(vars[k]) : _
+    );
+  }
+
+  if (Array.isArray(input)) {
+    return input.map(v => replacePlaceholders(v, vars));
+  }
+
+  if (input && typeof input === "object") {
+    return Object.fromEntries(
+      Object.entries(input).map(([k, v]) => [
+        replacePlaceholders(k, vars),
+        replacePlaceholders(v, vars),
+      ])
+    );
+  }
+
+  return input;
+};
+

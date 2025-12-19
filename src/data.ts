@@ -1,11 +1,12 @@
-  
+
 
 
 
 export const example2 = {
-     "endPoints": {
+    "endPoints": {
         "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NTk3NTQ3OSwiZXhwIjoxNzY1OTc5MDc5LCJqdGkiOiJhY2M6MTAxOjE3NjU5NzU0NzkwMjA6d2ViIn0.0QTGHt0sKW05vfoMRMGgmZuXW6wiyGiAJ287HSy-PoA",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxMDEsInVzZXJuYW1lIjoiYWRtaW4iLCJ0ZW5hbnRJZCI6InRlbmFudC0xIiwicm9sZXMiOlsiYWRtaW4iXSwic2NvcGVzIjpbInRlbmFudC0xOm9yZGVyczpyZWFkIiwidGVuYW50LTE6b3JkZXJzOndyaXRlIiwidGVuYW50LTE6ZG9jczpyZWFkIl0sImlwIjoiMTkyLjE2OC4wLjY2IiwiZGV2aWNlVHlwZSI6IndlYiIsImlhdCI6MTc2NjEyMzQxMCwiZXhwIjoxNzY2MTI3MDEwLCJqdGkiOiJhY2M6MTAxOjE3NjYxMjM0MTAyNDQ6d2ViIn0.7nIkb8K-haFve0Lti5PIlwh_V2y1K9nyk9r3DcwsKrw",
+        "operation":"create",
         "dbopsGetHash": "/api/dbops",
         "dbopsGetRefId": "/api/dbops/save",
         "dbopsCreate": "/api/dbops/create",
@@ -16,23 +17,26 @@ export const example2 = {
     },
     "source": {
         "type": "sql",
-        "table": "profiletbl"
+        "table": "profiletbl",
+        "where": { "leads_tbl.id='#refid#'": "RAW" },
+        "refid": "1"
     },
     "forcefill": {
-        "groupuid":"#SESS_GROUP_NAME#",
-        "guid":"#SESS_GUID#",
-        "type":"customer",
-        "company_id":"#COMP_ID#"
+        "groupuid": "#SESS_GROUP_NAME#",
+        "guid": "#SESS_GUID#",
+        "type": "customer",
+        "company_id": "#COMP_ID#"
     },
-    "gotolink":"infoview/profile.customer/{hashid}?",
-    "script":"profile",
+    "gotolink": "infoview/profile.customer/{hashid}?",
+    "script": "profile",
     "fields": {
         "full_name": {
             "label": "Name",
             "group": "Info",
             "required": true,
-            "minlength":3,
-            "maxlength":50
+            "minlength": 3,
+            "maxlength": 50,
+            "value":"#refid#"
         },
         "organization": {
             "label": "Partner",
@@ -40,16 +44,16 @@ export const example2 = {
             "type": "dataSelectorFromTable",
             "table": "profiletbl_organisation",
             "columns": "organization as title,id as value",
-            "search":true,
+            "search": true,
             "where": {
                 "blocked": "false"
             },
-            "orderby":"organization asc",
-            "no-option":"Select Partner",
+            "orderby": "organization asc",
+            "no-option": "Select Partner",
             "required": true
         },
-        
-        "category":{
+
+        "category": {
             "label": "Category",
             "group": "Info",
             "type": "dataSelectorFromTable",
@@ -57,7 +61,7 @@ export const example2 = {
             "columns": "title as title,value as value",
             "where": {
                 "blocked": "false",
-                "groupid":"profile_category"
+                "groupid": "profile_category"
             },
             "required": true
         },
@@ -65,7 +69,7 @@ export const example2 = {
             "label": "Email",
             "group": "Info",
             "type": "email",
-            "required":true
+            "required": true
         },
         "email2": {
             "label": "Alternate Email",
@@ -76,82 +80,82 @@ export const example2 = {
             "label": "Mobile",
             "group": "Info",
             "type": "phone",
-            "required":true,
-            "maxlength":10
+            "required": true,
+            "maxlength": 10
         },
         "mobile_others": {
             "label": "Phone",
             "group": "Info",
             "type": "phone",
-            "minlength":10,
-            "maxlength":10
+            "minlength": 10,
+            "maxlength": 10
         },
         "pan": {
             "label": "PAN No.",
-            "required":true,
+            "required": true,
             "group": "Info",
-            "autocomplete":"off",
+            "autocomplete": "off",
             "width": 6
         },
         "cin": {
             "label": "CIN",
-            "required":false,
+            "required": false,
             "group": "Info",
-            "autocomplete":"off",
+            "autocomplete": "off",
             "width": 6
         },
         "msme": {
             "label": "MSME",
-            "required":false,
+            "required": false,
             "group": "Info",
-            "autocomplete":"off",
+            "autocomplete": "off",
             "width": 6
         },
         "gst": {
             "label": "GST No.",
             "required": true,
             "group": "Info",
-            "autocomplete":"off",
+            "autocomplete": "off",
             "width": 6
         },
         "assigned_to": {
             "label": "Account Manager",
             "group": "Info",
             "type": "dataSelectorFromTable",
-            "multiple":false,
+            "multiple": false,
             "table": "staff_tbl",
             "columns": "full_name as title,loginid as value",
-            "search":true,
-            "where":{
-                   "blocked": "false",
-                   "loginid !=''":"RAW"
+            "search": true,
+            "where": {
+                "blocked": "false",
+                "loginid !=''": "RAW"
             },
-            "orderby":"full_name asc",
+            "orderby": "full_name asc",
             "required": true,
-            "width":6
+            "width": 6
         },
         "account_co_ordinator": {
             "label": "Account CO-Ordinator",
             "group": "Info",
             "type": "dataSelectorFromTable",
-            "multiple":false,
-             "dbkey": "core",
+            "multiple": false,
+            "dbkey": "core",
             "table": "lgks_users",
             "columns": "name as title,userid as value",
-            "search":false,
-            "where":{
-                   "blocked": "false",
-                 
+            "search": false,
+            "where": {
+                "blocked": "false",
+
             },
-            "orderby":"name asc",
+            "orderby": "name asc",
             "required": false,
-            "width":6
+            "width": 6
         },
         "demography": {
             "label": "Demography",
             "group": "Info",
             "type": "dataSelector",
-            "groupid":"country",
+            "groupid": "country",
             "width": 6
         },
         "website": {
@@ -164,27 +168,27 @@ export const example2 = {
             "label": "Client CRN",
             "group": "Info",
             "type": "text",
-            "required":true,
+            "required": true,
             "width": 6
         },
         "owner": {
             "label": "Owner",
             "group": "Info",
             "width": 6,
-            "minlength":3,
-            "maxlength":50
+            "minlength": 3,
+            "maxlength": 50
         },
         "dob": {
             "label": "DOB",
             "group": "Info",
-            "type":"date",
+            "type": "date",
             "width": 6
         },
         "blood_group": {
             "label": "Blood Group",
             "group": "Info",
-            "type":"dataSelector",
-            "groupid":"profile_bloodgroup"
+            "type": "dataSelector",
+            "groupid": "profile_bloodgroup"
         },
         "fax": {
             "label": "Fax",
@@ -196,9 +200,9 @@ export const example2 = {
             "group": "Info",
             "type": "tags",
             "width": 6,
-            "minlength":10,
-            "maxlength":100,
-            hidden:true
+            "minlength": 10,
+            "maxlength": 100,
+            hidden: true
 
         },
         "region": {
@@ -231,16 +235,16 @@ export const example2 = {
             "label": "Blocked",
             "group": "Info",
             "type": "dataSelector",
-            "groupid":"boolean",
-            "vmode":"edit",
+            "groupid": "boolean",
+            "vmode": "edit",
             "required": true
         },
         "blacklist": {
             "label": "Blacklisted",
             "group": "Info",
             "type": "dataSelector",
-            "groupid":"boolean",
-            "vmode":"edit",
+            "groupid": "boolean",
+            "vmode": "edit",
             "required": true
         }
     }

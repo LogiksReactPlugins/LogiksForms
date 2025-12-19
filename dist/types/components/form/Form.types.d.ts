@@ -27,6 +27,7 @@ export interface FormField {
     validate?: Record<string, string | number>;
     groupid?: string;
     hidden?: boolean;
+    value?: string | undefined;
 }
 export interface FormJson {
     title?: string | undefined;
@@ -35,6 +36,7 @@ export interface FormJson {
         baseURL: string;
         dbopsGetRefId: string;
         accessToken: string;
+        operation: string;
         dbopsGetHash: string;
         dbopsFetch?: string;
         dbopsUpdate?: string;

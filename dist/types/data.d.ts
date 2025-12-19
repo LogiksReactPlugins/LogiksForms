@@ -2,6 +2,7 @@ export declare const example2: {
     endPoints: {
         baseURL: string;
         accessToken: string;
+        operation: string;
         dbopsGetHash: string;
         dbopsGetRefId: string;
         dbopsCreate: string;
@@ -13,6 +14,10 @@ export declare const example2: {
     source: {
         type: string;
         table: string;
+        where: {
+            "leads_tbl.id='#refid#'": string;
+        };
+        refid: string;
     };
     forcefill: {
         groupuid: string;
@@ -29,6 +34,7 @@ export declare const example2: {
             required: boolean;
             minlength: number;
             maxlength: number;
+            value: string;
         };
         organization: {
             label: string;

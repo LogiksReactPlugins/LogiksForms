@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import { determineViewMode, groupFields, transformedObject } from "./utils.js";
+import { determineViewMode, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
@@ -21,10 +21,11 @@ export default function LogiksForm({
 
   const viewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
-  const groupedFields = groupFields(formJson?.fields ?? {});
+  const refid = formJson?.source?.refid;
+  const groupedFields = groupFields(formJson?.fields ?? {},refid);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>({});
 
-
+  
 
   // ---------- Fetch Initial Data ----------
   React.useEffect(() => {
@@ -69,7 +70,7 @@ export default function LogiksForm({
       }
 
       if (source.type === "sql" && source.refid &&
-        source.refid != "0") {
+        source.refid != "0" && sqlOpsUrls?.operation !== "create") {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -81,9 +82,12 @@ export default function LogiksForm({
 
           const data = await sqlClient.fetch(sqlOpsUrls, {
             source: {
+              ...source,
               table: source.table,
               columns: source.columns,
-              ...source
+              "where": replacePlaceholders(source.where, {
+                refid: refid,
+              }),
             },
             fields: transformedObject(formJson.fields),
           });
@@ -161,12 +165,25 @@ export default function LogiksForm({
           },
         });
 
+        let query = {
+         ... source
+        }
+
+        if(source.where){
+          query={
+             ... source,
+             "where": replacePlaceholders(source.where, {
+                refid: refid,
+              }),
+          }
+        }
+
         const resQueryId = await axios({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
           data: {
             "operation": source.refid ? "update" : "create",
-            "source": source,
+            "source":   query,
             "fields": formJson.fields,
             "datahash": resHashId.data.refhash
           },
@@ -179,7 +196,7 @@ export default function LogiksForm({
 
         const res = await axios({
           method: "POST",
-          url: sqlOpsUrls.baseURL + sqlOpsUrls[source.refid ? "dbopsUpdate" : "dbopsCreate"],
+          url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             "refid": resQueryId.data.refid,
             "fields": values,
