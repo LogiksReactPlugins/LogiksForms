@@ -310,3 +310,18 @@ export const replacePlaceholders = (
   return input;
 };
 
+
+
+export const formatOptions = (valueKey: string, lableKey: string, res: Record<string, any>): Record<string, string> => {
+
+  const items = Array.isArray(res.data?.data) ? res.data.data : Array.isArray(res.data) ? res.data : [];
+  const mapped: Record<string, string> = {};
+ 
+  
+
+  items.forEach((item: Record<string, any>) => {
+    mapped[item[valueKey]] = item[lableKey];
+  });
+  return mapped
+}
+

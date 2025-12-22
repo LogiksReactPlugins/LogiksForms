@@ -14,5 +14,6 @@ export declare function toColWidth(width: number | undefined): ColWidth;
 export declare function toGrid(width: number | undefined): ColWidth;
 export declare const isHidden: (hidden?: boolean | string) => boolean;
 export declare const replacePlaceholders: (input: any, vars: Record<string, string | number>) => any;
+export declare const formatOptions: (valueKey: string, lableKey: string, res: Record<string, any>) => Record<string, string>;
 export {};
 //# sourceMappingURL=utils.d.ts.map

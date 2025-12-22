@@ -19,6 +19,16 @@ export default function AccordionFormView({
   refid
 }: BaseFormViewProps) {
 
+  const [fieldOptions, setFieldOptions] = React.useState<
+    Record<string, Record<string, string>>
+  >({});
+
+  const setOptionsForField = (name: string, options: Record<string, string>) => {
+    setFieldOptions(prev => ({
+      ...prev,
+      [name]: options,
+    }));
+  };
 
   const initialValues: Record<string, any> = {};
   const validationSchema = {};
@@ -42,7 +52,6 @@ export default function AccordionFormView({
   }
 
 
-
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
@@ -64,13 +73,25 @@ export default function AccordionFormView({
             {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
               <Accordion key={group} title={group} isFirst={index === 0}>
                 <div className='grid grid-cols-12 gap-4'>
-                  {fields.map((field,index) => (
-                   isHidden(field.hidden) ? null : <div
+                  {fields.map((field, index) => (
+                    isHidden(field.hidden) ? null : <div
                       key={field?.name ?? `field-${index}`}
                       className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                         }`}
                     >
-                      <FieldRenderer refid={refid} sqlOpsUrls={sqlOpsUrls} components={components} key={field.name} field={field} formik={formik} methods={methods} />
+                      <FieldRenderer
+                        refid={refid}
+                        sqlOpsUrls={sqlOpsUrls}
+                        components={components}
+                        key={field.name}
+                        field={field}
+                        formik={formik}
+                        methods={methods}
+                        setFieldOptions={setOptionsForField}
+                        {...(fieldOptions[field.name]
+                          ? { optionsOverride: fieldOptions[field.name] }
+                          : {})}
+                      />
                     </div>
                   ))}
                 </div>

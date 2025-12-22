@@ -1,12 +1,4 @@
-type SqlEndpoints = {
-    baseURL: string;
-    accessToken: string;
-    dbopsGetHash: string;
-    dbopsGetRefId: string;
-    dbopsFetch?: string;
-    dbopsCreate?: string;
-    dbopsUpdate?: string;
-};
+import { SqlEndpoints } from './Form.types.js';
 type SqlSource = {
     table: string;
     columns: string;

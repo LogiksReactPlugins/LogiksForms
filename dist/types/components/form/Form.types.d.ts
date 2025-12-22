@@ -32,24 +32,26 @@ export interface FormField {
     columns?: string;
     where?: Record<string, string>;
     autocomplete?: "off" | AutocompleteConfig;
+    ajaxchain?: AutocompleteConfig;
     validate?: Record<string, string | number>;
     groupid?: string;
     hidden?: boolean;
     value?: string | undefined;
 }
+export interface SqlEndpoints {
+    baseURL: string;
+    dbopsGetRefId: string;
+    accessToken: string;
+    operation: string;
+    dbopsGetHash: string;
+    dbopsFetch?: string;
+    dbopsUpdate?: string;
+    dbopsCreate?: string;
+}
 export interface FormJson {
     title?: string | undefined;
     template?: string;
-    endPoints?: {
-        baseURL: string;
-        dbopsGetRefId: string;
-        accessToken: string;
-        operation: string;
-        dbopsGetHash: string;
-        dbopsFetch?: string;
-        dbopsUpdate?: string;
-        dbopsCreate?: string;
-    };
+    endPoints?: SqlEndpoints;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
     widget?: boolean;
@@ -82,6 +84,8 @@ export interface FieldRendererProps {
     components?: Record<string, ReactNode>;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+    optionsOverride?: Record<string, string>;
+    setFieldOptions?: (fieldName: string, options: Record<string, string>) => void;
 }
 export interface sqlQueryProps {
     table: string;

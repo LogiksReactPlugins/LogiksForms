@@ -1,15 +1,8 @@
 // sqlClient.ts
 import axios from "axios";
+import type { SqlEndpoints } from "./Form.types.js";
 
-type SqlEndpoints = {
-    baseURL: string;
-    accessToken: string;
-    dbopsGetHash: string;
-    dbopsGetRefId: string;
-    dbopsFetch?: string;
-    dbopsCreate?: string;
-    dbopsUpdate?: string;
-};
+
 
 type SqlSource = {
     table: string;

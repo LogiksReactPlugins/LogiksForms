@@ -54,11 +54,11 @@ export default function LogiksForm({
         }
       }
 
-      if (source.type === "api") {
+      if (source.type === "api" && sqlOpsUrls?.operation !== "create") {
         try {
           const response = await axios({
             method: source.method || "GET",
-            url: source.url,
+            url: source.url ?? "",
             data: source.body ?? {},
             params: source.params ?? {},
             headers: source.headers ?? {},

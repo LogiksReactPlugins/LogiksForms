@@ -14,6 +14,7 @@ export declare const example2: {
     source: {
         type: string;
         table: string;
+        refid: string;
     };
     forcefill: {
         groupuid: string;
@@ -62,6 +63,7 @@ export declare const example2: {
             label: string;
             group: string;
             required: boolean;
+            hidden: boolean;
         };
         broker_name: {
             label: string;
@@ -87,17 +89,20 @@ export declare const example2: {
             label: string;
             type: string;
             group: string;
+            disabled: boolean;
         };
         broker_mobile: {
             label: string;
             type: string;
             group: string;
+            disabled: boolean;
         };
         broker_address: {
             label: string;
             type: string;
             group: string;
             width: number;
+            disabled: boolean;
         };
         customer_id: {
             label: string;
@@ -130,10 +135,6 @@ export declare const example2: {
             label: string;
             group: string;
             type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
             groupid: string;
             default: string;
             "no-option": string;

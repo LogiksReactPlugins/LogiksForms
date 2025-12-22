@@ -21,6 +21,17 @@ export default function TabFormView({
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
+  const [fieldOptions, setFieldOptions] = React.useState<
+    Record<string, Record<string, string>>
+  >({});
+
+  const setOptionsForField = (name: string, options: Record<string, string>) => {
+    setFieldOptions(prev => ({
+      ...prev,
+      [name]: options,
+    }));
+  };
+
   const stepperForm: Record<string, Record<string, Yup.AnySchema>> = {};
   const initialValues: Record<string, any> = {};
 
@@ -160,12 +171,24 @@ export default function TabFormView({
           {/* Fields Container */}
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => (
-               isHidden(field.hidden) ? null : <div
+              isHidden(field.hidden) ? null : <div
                 key={field?.name ?? `field-${index}`}
                 className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}
               >
-                <FieldRenderer refid={refid} sqlOpsUrls={sqlOpsUrls} key={field.name} field={field} formik={formik} methods={methods} components={components} />
+                <FieldRenderer
+                  refid={refid}
+                  sqlOpsUrls={sqlOpsUrls}
+                  key={field.name}
+                  field={field}
+                  formik={formik}
+                  methods={methods}
+                  components={components}
+                  setFieldOptions={setOptionsForField}
+                  {...(fieldOptions[field.name]
+                    ? { optionsOverride: fieldOptions[field.name] }
+                    : {})}
+                />
               </div>
             ))}
           </div>

@@ -2,13 +2,27 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
 import type { FieldRendererProps, FormField, sqlQueryProps } from '../Form.types.js';
-import { replacePlaceholders } from '../utils.js';
+import { formatOptions, replacePlaceholders } from '../utils.js';
 
 
 
-export default function FieldRenderer({ field, formik, methods = {}, components, sqlOpsUrls, refid }: FieldRendererProps) {
+export default function FieldRenderer({
+  field,
+  formik,
+  methods = {},
+  components,
+  sqlOpsUrls,
+  refid,
+  optionsOverride,
+  setFieldOptions
+}: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [options, setOptions] = useState<Record<string, string>>(field.options || {});
+
+  const [options, setOptions] = useState<Record<string, string>>(
+    optionsOverride ?? field.options ?? {}
+  );
+
+
   const [search, setSearch] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
@@ -21,8 +35,11 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
     }
   };
 
-
-
+  useEffect(() => {
+    if (optionsOverride) {
+      setOptions(optionsOverride);
+    }
+  }, [optionsOverride]);
 
   // Close on outside click
   useEffect(() => {
@@ -82,16 +99,11 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
           });
 
           const valueKey = field.valueKey || "value";
-          const labelKey = field.labelKey || "label";
-
-          const items = Array.isArray(res.data?.data) ? res.data.data : [];
-          const mapped: Record<string, string> = {};
-
-          items.forEach((item: Record<string, any>) => {
-            mapped[item[valueKey]] = item[labelKey];
-          });
+          const labelKey = field.labelKey || "title";
+          const mapped = formatOptions(valueKey, labelKey, res)
 
           if (isMounted) setOptions(mapped);
+
         } catch (err) {
           console.error("API execution failed:", err);
           if (isMounted) setOptions({});
@@ -142,46 +154,29 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
           const resQueryId = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-            data: {
-
-              "query": query
-
-
-            },
+            data: {"query": query},
             headers: {
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-
 
           const res = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
             data: {
               "queryid": resQueryId.data.queryid,
-              "filter": {
-
-              }
+              "filter": {}
             },
-
             headers: {
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
-
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
-
-          const items = Array.isArray(res.data?.data) ? res.data.data : [];
-          const mapped: Record<string, string> = {};
-
-          items.forEach((item: Record<string, any>) => {
-            mapped[item[valueKey]] = item[labelKey];
-          });
-
-
+          const mapped = formatOptions(valueKey, labelKey, res)
           if (isMounted) setOptions(mapped);
+
         } catch (err) {
           console.error("API fetch failed:", err);
         }
@@ -239,42 +234,11 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
     );
   }, [search, options])
 
-  const handleAutocompleteKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!open) return; // dropdown closed => no keyboard nav
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedIndex((prev) =>
-        prev + 1 < filteredOptions.length ? prev + 1 : 0
-      );
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedIndex((prev) =>
-        prev - 1 >= 0 ? prev - 1 : filteredOptions.length - 1
-      );
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const [value, label] = filteredOptions[highlightedIndex] || [];
-      if (value) {
-        setSearch(label ?? "");
-        formik.setFieldValue(key, value);
-      }
-      setOpen(false);
-    }
-
-    if (e.key === "Escape") {
-      setOpen(false);
-    }
-  };
-
 
   //  Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!detailsRef.current?.open) return;
+  const handleKeyDown = (e: React.KeyboardEvent, is_single: boolean) => {
+
+    if (!(detailsRef.current?.open === true || open === true)) return;
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -290,17 +254,19 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
       e.preventDefault();
       const [val] = filteredOptions[highlightedIndex] || [];
       if (val) {
-        let is_single = field.type === "select" ||
-          field.type === "dataSelector" || field.type === "dataMethod" ||
-          field.type === "dataSelectorFromTable" || field.type === "dataSelectorFromUniques";
         formik.setFieldValue(field.name, is_single ? val : [...formik.values[field.name], val]);
+      }
+      if (detailsRef.current) {
         detailsRef.current!.open = false;
       }
+
     } else if (e.key === "Escape") {
       detailsRef.current!.open = false;
       setSearch("");
+      setOpen(false);
     }
   };
+
 
   //  Auto-scroll highlighted option into view
   useEffect(() => {
@@ -312,18 +278,16 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
   useEffect(() => {
     const ac = field.autocomplete;
-    if (!ac || ac === "off") return;
+    const aj = field.ajaxchain;
+    const config = ac || aj;
+    if (!config || config === "off") return;
 
     const value = formik.values[field.name];
     if (!value) return;
 
-    const targets = ac.target
-      .split(",")
-      .map((t: string) => t.trim());
-
     const fetchAutocompleteData = async () => {
       try {
-        const src = ac.src;
+        const src = config.src;
 
         const resolvedWhere = replacePlaceholders(src.where ?? {}, {
           refid: value,
@@ -335,56 +299,55 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
             data: {
-
               "query": {
                 table: src.table,
                 cols: src.columns,
                 where: resolvedWhere
               }
-
-
             },
             headers: {
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
-
-          const res = await axios({
+          const { data: res } = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
             data: {
               "queryid": resQueryId.data.queryid,
-              "filter": {
-
-              }
+              "filter": {}
             },
-
             headers: {
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
 
-          const row = Array.isArray(res.data?.data)
-            ? res.data.data[0]
-            : res.data?.data;
+          if (ac) {
+            const targets = config.target
+              .split(",")
+              .map((t: string) => t.trim());
+            const row = Array.isArray(res?.data)
+              ? res?.data[0]
+              : res?.data;
 
-          console.log("row", row);
+            if (!row) return;
+
+            targets.forEach((t: string) => {
+              if (row[t] !== undefined) {
+                formik.setFieldValue(t, row[t]);
+              }
+            });
+
+          }
+
+          if (aj) {
+            const valueKey = field.valueKey || "value";
+            const labelKey = field.labelKey || "title";
+            const mapped = formatOptions(valueKey, labelKey, res);
+            setFieldOptions?.(aj.target, mapped);
+          }
 
 
-          if (!row) return;
-
-          console.log("targets", targets);
-
-
-          targets.forEach((t: string) => {
-
-
-            if (row[t] !== undefined) {
-              console.log("row[t]", row[t]);
-              formik.setFieldValue(t, row[t]);
-            }
-          });
         }
       } catch (err) {
         console.error("Autocomplete fetch failed", err);
@@ -409,7 +372,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
 
       // On select an option
       const handleSelect = (value: string, label: string) => {
-        setSearch(label);
+
         formik.setFieldValue(key, value); // store actual option value
         setOpen(false);
       };
@@ -428,7 +391,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
             onChange={handleChange}
             onFocus={() => setOpen(true)}
             onBlur={() => setTimeout(() => setOpen(false), 150)}
-            onKeyDown={handleAutocompleteKeyDown}
+            onKeyDown={(e) => handleKeyDown(e, true)}
           />
 
           {open && (
@@ -513,7 +476,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
             <details className="relative w-full"
               onToggle={handleToggle}
               ref={detailsRef}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) => handleKeyDown(e, true)}
             >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
@@ -547,7 +510,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
                       setSearch(e.target.value);
                       setHighlightedIndex(0);
                     }}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={(e) => handleKeyDown(e, true)}
                     placeholder="Search..."
                     className="px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
                   bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
@@ -756,7 +719,7 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
             <details className="relative w-full"
               onToggle={handleToggle}
               ref={detailsRef}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) => handleKeyDown(e, false)}
             >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
@@ -800,12 +763,10 @@ export default function FieldRenderer({ field, formik, methods = {}, components,
                     <label
                       key={val}
                       htmlFor={`${key}-${val}`}
-
-
                       className={`flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm
                         ${formik.values[key] === val
                           ? "bg-indigo-50 text-indigo-600 font-medium"
-                          : highlightedIndex === idx // ✅ highlight state
+                          : highlightedIndex === idx // highlight state
                             ? "bg-gray-100"
                             : "hover:bg-gray-50"
                         }`}
