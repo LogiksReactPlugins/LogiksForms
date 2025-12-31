@@ -1,7 +1,7 @@
 import { FormJson, FormField } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
-export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, refid: string): Record<string, FormField[]>;
+export declare function groupFields(fields: Record<string, Omit<FormField, "name">>): Record<string, FormField[]>;
 export declare function transformedObject(originalObject: Record<string, any>): Record<string, {
     label: string;
     required: boolean;

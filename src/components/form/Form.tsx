@@ -23,9 +23,10 @@ export default function LogiksForm({
   const viewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
-  const groupedFields = groupFields(formJson?.fields ?? {}, refid);
+  const groupedFields = groupFields(formJson?.fields ?? {});
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues);
 
+ 
 
 
   // ---------- Fetch Initial Data ----------
@@ -80,7 +81,6 @@ export default function LogiksForm({
 
         try {
 
-
           const data = await sqlClient.fetch(sqlOpsUrls, {
             source: {
               ...source,
@@ -91,6 +91,7 @@ export default function LogiksForm({
               }),
             },
             fields: transformedObject(formJson.fields),
+
           });
 
           if (isMounted) setResolvedData(data);
@@ -112,6 +113,7 @@ export default function LogiksForm({
     JSON.stringify(formJson?.source?.headers ?? {})
   ]);
 
+  
 
   // ---------- Handle Form Submission ----------
   const handleSubmit = async (values: Record<string, any>) => {
@@ -186,6 +188,7 @@ export default function LogiksForm({
             "operation": sqlOpsUrls.operation,
             "source": query,
             "fields": formJson.fields,
+            "forcefill": formJson.forcefill,
             "datahash": resHashId.data.refhash
           },
 

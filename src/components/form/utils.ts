@@ -11,7 +11,7 @@ export function determineViewMode(json: FormJson) {
   return hasGroup ? 'tab' : 'simple';
 }
 
-export function groupFields(fields: Record<string, Omit<FormField, "name">>, refid: string) {
+export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
   const grouped: Record<string, FormField[]> = {};
 
   const defaultGroup = 'General';
@@ -22,9 +22,6 @@ export function groupFields(fields: Record<string, Omit<FormField, "name">>, ref
     if (!grouped[group]) grouped[group] = [];
     let obj = { ...config, name: key }
 
-    if (config?.value && config?.value === "#refid#") {
-      obj.value = refid;
-    }
     grouped[group].push(obj);
   });
 
@@ -50,18 +47,22 @@ export const intializeForm = (
   validationSchema: Record<string, Yup.AnySchema>
 ) => {
   formFields.forEach((field) => {
+
     const fieldName = field?.name;
     if (!fieldName) return;
 
     // ---------- Initial Values (only defaults) ----------
-    if (field?.type === "checkbox") {
+    if (field?.default !== undefined && field?.default !== null) {
+      initialValues[fieldName] = field.default;
+    }
+    else if (field?.type === "checkbox") {
       initialValues[fieldName] = field?.multiple === true ? [] : false;
     } else if (field?.type === "tags") {
       initialValues[fieldName] = [];
     } else if (fieldName === "blocked" || fieldName === "blacklist") {
       initialValues[fieldName] = "false"; // special-case string boolean
     } else {
-      initialValues[fieldName] = field?.value ? field.value : "";
+      initialValues[fieldName] = field?.default ?? "";
     }
 
     // ---------- Base Validator ----------
@@ -316,8 +317,8 @@ export const formatOptions = (valueKey: string, lableKey: string, res: Record<st
 
   const items = Array.isArray(res.data?.data) ? res.data.data : Array.isArray(res.data) ? res.data : [];
   const mapped: Record<string, string> = {};
- 
-  
+
+
 
   items.forEach((item: Record<string, any>) => {
     mapped[item[valueKey]] = item[lableKey];

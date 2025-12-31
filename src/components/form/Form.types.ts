@@ -40,6 +40,7 @@ export interface FormField {
     groupid?: string;
     hidden?: boolean;
     value?: string | undefined;
+    default?: string | undefined;
 
 }
 
@@ -58,6 +59,7 @@ export interface FormJson {
     title?: string | undefined;
     template?: string;
     endPoints?: SqlEndpoints;
+    forcefill?: Record<string, string>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
     widget?: boolean

@@ -89,7 +89,9 @@ export declare const example2: {
             label: string;
             type: string;
             group: string;
+            default: string;
             disabled: boolean;
+            value: string;
         };
         broker_mobile: {
             label: string;
