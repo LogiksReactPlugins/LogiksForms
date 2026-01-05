@@ -19,5 +19,7 @@ export declare const getOptionLabel: (options: SelectOptions, value: string) => 
 type FlatEntry = [string, string];
 export declare const flattenOptions: (options: SelectOptions) => FlatEntry[];
 export declare const isGroupedOptions: (options: SelectOptions) => options is GroupedOptions;
+export declare function fetchGeolocation(): Promise<string | null>;
+export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export {};
 //# sourceMappingURL=utils.d.ts.map

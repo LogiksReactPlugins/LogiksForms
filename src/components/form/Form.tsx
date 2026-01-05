@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import { determineViewMode, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
+import { determineViewMode, fetchGeolocation, getGeoFieldKeys, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
@@ -26,7 +26,10 @@ export default function LogiksForm({
   const groupedFields = groupFields(formJson?.fields ?? {});
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues);
 
- 
+
+  const geoFieldKeys = React.useMemo(() => {
+    return getGeoFieldKeys(formJson.fields)
+  }, [formJson.fields]);
 
 
   // ---------- Fetch Initial Data ----------
@@ -113,18 +116,40 @@ export default function LogiksForm({
     JSON.stringify(formJson?.source?.headers ?? {})
   ]);
 
-  
+
+
+
 
   // ---------- Handle Form Submission ----------
   const handleSubmit = async (values: Record<string, any>) => {
     const source = formJson?.source ?? {};
+
+    let geo: string | null = null;
+
+    if (geoFieldKeys.length > 0) {
+      try {
+        geo = await fetchGeolocation();
+
+      } catch (err) {
+        console.log("catch fetchGeolocation", err);
+        geo = null;
+      }
+    }
+
+    const finalValues = {
+    ...values,
+    ...Object.fromEntries(
+      geoFieldKeys.map((key) => [key, geo])
+    ),
+  };
+
 
     if (source.type === "method") {
       const methodName = source.method as keyof typeof methods | undefined;
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          const res = await Promise.resolve(methodFn(values));
+          const res = await Promise.resolve(methodFn(finalValues));
           callback?.(res)
         } catch (err) {
           callback?.(err)
@@ -138,7 +163,7 @@ export default function LogiksForm({
         const res = await axios({
           method: source.method || "POST",
           url: source.url,
-          data: values ?? {},
+          data: finalValues ?? {},
           params: source.params ?? {},
           headers: source.headers ?? {},
         });
@@ -203,7 +228,7 @@ export default function LogiksForm({
           url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             "refid": resQueryId.data.refid,
-            "fields": values,
+            "fields": finalValues,
             "datahash": resHashId.data.refhash
           },
           headers: {
@@ -217,6 +242,7 @@ export default function LogiksForm({
       }
     }
   };
+
 
 
   const formView = {

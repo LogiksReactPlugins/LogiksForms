@@ -65,8 +65,12 @@ export default function NormalFormView({
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
-            {fields.map((field, index) => (
-              isHidden(field.hidden) ? null : <div
+            {fields.map((field, index) => {
+              if (isHidden(field.hidden) || field.type === "geolocation") {
+                return null;
+              }
+
+              return <div
                 key={field?.name ?? `field-${index}`}
                 className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
                   }`}
@@ -83,7 +87,7 @@ export default function NormalFormView({
                     : {})}
                 />
               </div>
-            ))}
+            })}
 
           </div>
           <div className="mt-8 flex justify-between space-x-3">

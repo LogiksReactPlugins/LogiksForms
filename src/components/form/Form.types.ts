@@ -104,7 +104,7 @@ export interface FieldRendererProps {
     optionsOverride?: SelectOptions;
     setFieldOptions?: (
         fieldName: string,
-        options:SelectOptions
+        options: SelectOptions
     ) => void;
 }
 

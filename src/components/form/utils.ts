@@ -15,15 +15,15 @@ export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
   const grouped: Record<string, FormField[]> = {};
 
   const defaultGroup = 'General';
-  Object.entries(fields).forEach(([key, config]) => {
+  Object.entries(fields).forEach(([key, field]) => {
 
-
-    const group = config.group || defaultGroup;
+    const group = field.group || defaultGroup;
     if (!grouped[group]) grouped[group] = [];
-    let obj = { ...config, name: key }
+    let obj = { ...field, name: key }
 
     grouped[group].push(obj);
   });
+
 
   return grouped;
 }
@@ -415,6 +415,54 @@ export const isGroupedOptions = (options: SelectOptions): options is GroupedOpti
   const first = Object.values(options)[0];
   return typeof first === "object" && first !== null;
 };
+
+
+export async function fetchGeolocation(): Promise<string | null> {
+  if (!("geolocation" in navigator)) {
+    throw new Error(
+      "Geolocation is not supported by this browser. You cannot access this portal."
+    );
+  }
+
+  try {
+    const position = await new Promise<GeolocationPosition>(
+      (resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: false,
+          timeout: 30000,
+          maximumAge: 120000,
+        });
+      }
+    );
+
+    const { latitude, longitude } = position.coords;
+    return `${latitude},${longitude}`;
+  } catch (error) {
+    if (!(error instanceof GeolocationPositionError)) {
+      throw new Error("Failed to get your location.");
+    }
+
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        throw new Error("Please allow location access in browser settings.");
+      case error.POSITION_UNAVAILABLE:
+        throw new Error(
+          "Unable to detect your location. Try connecting to Wi-Fi."
+        );
+      case error.TIMEOUT:
+        throw new Error("Your device took too long to fetch GPS position.");
+      default:
+        throw new Error("Failed to get your location.");
+    }
+  }
+}
+
+export const getGeoFieldKeys = (fields: Record<string, Omit<FormField, "name">>) => {
+  return Object.entries(fields ?? {})
+    .filter(([, field]: any) => field.type === "geolocation")
+    .map(([key]) => key);
+};
+
 
 
 

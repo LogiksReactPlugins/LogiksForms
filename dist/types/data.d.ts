@@ -36,6 +36,11 @@ export declare const example2: {
             width: number;
             type: string;
         };
+        geolocation: {
+            type: string;
+            group: string;
+            hidden: boolean;
+        };
         title: {
             label: string;
             group: string;
