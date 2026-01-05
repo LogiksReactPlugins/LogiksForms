@@ -33,8 +33,12 @@ export default defineConfig(({ mode }) => {
         output: {
           globals: {
             react: 'React',
-            'react-dom': 'ReactDOM'
-          }
+            'react-dom': 'ReactDOM',
+            axios: "axios",
+            formik: "formik",
+            yup: "Yup",
+          },
+          exports: "named",
         }
       },
       cssCodeSplit: false

@@ -1,4 +1,4 @@
-import { FormJson, FormField } from './Form.types.js';
+import { FormJson, FormField, SelectOptions, GroupedOptions } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>): Record<string, FormField[]>;
@@ -14,6 +14,10 @@ export declare function toColWidth(width: number | undefined): ColWidth;
 export declare function toGrid(width: number | undefined): ColWidth;
 export declare const isHidden: (hidden?: boolean | string) => boolean;
 export declare const replacePlaceholders: (input: any, vars: Record<string, string | number>) => any;
-export declare const formatOptions: (valueKey: string, lableKey: string, res: Record<string, any>) => Record<string, string>;
+export declare const formatOptions: (valueKey: string, labelKey: string, res: any, groupKey?: string) => SelectOptions;
+export declare const getOptionLabel: (options: SelectOptions, value: string) => string | undefined;
+type FlatEntry = [string, string];
+export declare const flattenOptions: (options: SelectOptions) => FlatEntry[];
+export declare const isGroupedOptions: (options: SelectOptions) => options is GroupedOptions;
 export {};
 //# sourceMappingURL=utils.d.ts.map

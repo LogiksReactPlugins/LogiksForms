@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Card from './Card.js'
-import type { BaseFormViewProps } from "../Form.types.js";
+import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
 
 
 export default function CardFormView({
@@ -20,10 +20,10 @@ export default function CardFormView({
 }: BaseFormViewProps) {
 
   const [fieldOptions, setFieldOptions] = React.useState<
-    Record<string, Record<string, string>>
+    Record<string, SelectOptions>
   >({});
 
-  const setOptionsForField = (name: string, options: Record<string, string>) => {
+  const setOptionsForField = (name: string, options: SelectOptions) => {
     setFieldOptions(prev => ({
       ...prev,
       [name]: options,

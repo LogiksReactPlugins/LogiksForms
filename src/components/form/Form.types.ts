@@ -28,6 +28,7 @@ export interface FormField {
     axiosObject?: AxiosRequestConfig,
     valueKey?: string,
     labelKey?: string,
+    groupKey?: string;
     source?: Record<string, any>,
     multiple?: boolean,
     icon?: string,
@@ -76,7 +77,9 @@ export interface FormProps {
     initialvalues?: Record<string, any>
 
 }
-
+export type FlatOptions = Record<string, string>;
+export type GroupedOptions = Record<string, Record<string, string>>;
+export type SelectOptions = FlatOptions | GroupedOptions;
 
 export interface BaseFormViewProps {
     title?: string | undefined;
@@ -98,10 +101,10 @@ export interface FieldRendererProps {
     components?: Record<string, ReactNode>
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
-    optionsOverride?: Record<string, string>;
+    optionsOverride?: SelectOptions;
     setFieldOptions?: (
         fieldName: string,
-        options: Record<string, string>
+        options:SelectOptions
     ) => void;
 }
 
@@ -110,3 +113,4 @@ export interface sqlQueryProps {
     cols: string;
     where?: Record<string, string>;
 };
+

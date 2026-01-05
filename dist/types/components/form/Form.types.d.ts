@@ -25,6 +25,7 @@ export interface FormField {
     axiosObject?: AxiosRequestConfig;
     valueKey?: string;
     labelKey?: string;
+    groupKey?: string;
     source?: Record<string, any>;
     multiple?: boolean;
     icon?: string;
@@ -67,6 +68,9 @@ export interface FormProps {
     components?: Record<string, ReactNode>;
     initialvalues?: Record<string, any>;
 }
+export type FlatOptions = Record<string, string>;
+export type GroupedOptions = Record<string, Record<string, string>>;
+export type SelectOptions = FlatOptions | GroupedOptions;
 export interface BaseFormViewProps {
     title?: string | undefined;
     groupedFields: Record<string, FormField[]>;
@@ -86,8 +90,8 @@ export interface FieldRendererProps {
     components?: Record<string, ReactNode>;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
-    optionsOverride?: Record<string, string>;
-    setFieldOptions?: (fieldName: string, options: Record<string, string>) => void;
+    optionsOverride?: SelectOptions;
+    setFieldOptions?: (fieldName: string, options: SelectOptions) => void;
 }
 export interface sqlQueryProps {
     table: string;

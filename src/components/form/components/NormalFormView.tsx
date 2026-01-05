@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { BaseFormViewProps } from "../Form.types.js";
+import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
 
 export default function NormalFormView({
   title,
@@ -12,17 +12,16 @@ export default function NormalFormView({
   onSubmit = (values) => { },
   onCancel = () => { },
   methods = {},
-  components = {},
   sqlOpsUrls = {},
   refid
 }: BaseFormViewProps) {
   const fields = Object.values(groupedFields).flat();
 
   const [fieldOptions, setFieldOptions] = React.useState<
-    Record<string, Record<string, string>>
+    Record<string, SelectOptions>
   >({});
 
-  const setOptionsForField = (name: string, options: Record<string, string>) => {
+  const setOptionsForField = (name: string, options: SelectOptions) => {
     setFieldOptions(prev => ({
       ...prev,
       [name]: options,
@@ -55,8 +54,6 @@ export default function NormalFormView({
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: (values) => {
       onSubmit(values)
-
-
     }
   })
 
@@ -65,14 +62,9 @@ export default function NormalFormView({
 
   return (
     <div className="relative z-10 max-w-full  m-4">
-
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
-
-
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
-
-
             {fields.map((field, index) => (
               isHidden(field.hidden) ? null : <div
                 key={field?.name ?? `field-${index}`}
@@ -82,8 +74,6 @@ export default function NormalFormView({
                 <FieldRenderer
                   refid={refid}
                   sqlOpsUrls={sqlOpsUrls}
-                  components={components}
-                  key={field.name}
                   field={field}
                   formik={formik}
                   methods={methods}
@@ -96,7 +86,6 @@ export default function NormalFormView({
             ))}
 
           </div>
-
           <div className="mt-8 flex justify-between space-x-3">
             <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
             <div className='space-x-3'>
@@ -107,9 +96,6 @@ export default function NormalFormView({
                 Save
               </button>
             </div>
-
-
-
           </div>
         </form>
       </div>

@@ -3,7 +3,7 @@ import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { BaseFormViewProps } from "../Form.types.js";
+import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
 
 
 export default function TabFormView({
@@ -22,10 +22,10 @@ export default function TabFormView({
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
   const [fieldOptions, setFieldOptions] = React.useState<
-    Record<string, Record<string, string>>
+    Record<string, SelectOptions>
   >({});
 
-  const setOptionsForField = (name: string, options: Record<string, string>) => {
+  const setOptionsForField = (name: string, options: SelectOptions) => {
     setFieldOptions(prev => ({
       ...prev,
       [name]: options,

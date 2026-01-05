@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { FormJson, FormField } from "./Form.types.js";
+import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions } from "./Form.types.js";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
   if (json.template === 'simple') return 'simple';
@@ -287,7 +287,7 @@ export const replacePlaceholders = (
   input: any,
   vars: Record<string, string | number>
 ): any => {
-  console.log("input", input, vars);
+
 
   if (typeof input === "string") {
     return input.replace(/#(\w+)#/g, (_, k) =>
@@ -313,16 +313,108 @@ export const replacePlaceholders = (
 
 
 
-export const formatOptions = (valueKey: string, lableKey: string, res: Record<string, any>): Record<string, string> => {
+export const formatOptions = (
+  valueKey: string,
+  labelKey: string,
+  res: any,
+  groupKey?: string
+): SelectOptions => {
+  const items = Array.isArray(res?.data?.data)
+    ? res.data.data
+    : Array.isArray(res?.data)
+      ? res.data
+      : res;
 
-  const items = Array.isArray(res.data?.data) ? res.data.data : Array.isArray(res.data) ? res.data : [];
-  const mapped: Record<string, string> = {};
+  if (!Array.isArray(items) || items.length === 0) {
+    return {};
+  }
 
+  // auto-detect group key
+  const resolvedGroupKey =
+    groupKey ??
+    (items[0] && typeof items[0] === "object" && "category" in items[0]
+      ? "category"
+      : undefined);
 
+  // ---- flat options ----
+  if (!resolvedGroupKey) {
+    const mapped: FlatOptions = {};
+    items.forEach((item: any) => {
+      if (item[valueKey] != null && item[labelKey] != null) {
+        mapped[item[valueKey]] = item[labelKey];
+      }
+    });
+    return mapped;
+  }
 
-  items.forEach((item: Record<string, any>) => {
-    mapped[item[valueKey]] = item[lableKey];
+  // ---- grouped options ----
+  const grouped: GroupedOptions = {};
+
+  items.forEach((item: any) => {
+    const group = item[resolvedGroupKey] ?? "Others";
+    const value = item[valueKey];
+    const label = item[labelKey];
+
+    if (value == null || label == null) return;
+
+    if (!grouped[group]) grouped[group] = {};
+    grouped[group][value] = label;
   });
-  return mapped
-}
+
+  return grouped;
+};
+
+
+export const getOptionLabel = (
+  options: SelectOptions,
+  value: string
+): string | undefined => {
+  if (!options || value == null) return;
+
+  const first = Object.values(options)[0];
+
+  // flat
+  if (typeof first === "string") {
+    return (options as FlatOptions)[value];
+  }
+
+  // grouped
+  for (const group of Object.values(options as GroupedOptions)) {
+    if (value in group) {
+      return group[value];
+    }
+  }
+
+  return;
+};
+
+
+type FlatEntry = [string, string];
+
+export const flattenOptions = (options: SelectOptions): FlatEntry[] => {
+  if (!options) return [];
+
+  const first = Object.values(options)[0];
+
+  // flat
+  if (typeof first === "string") {
+    return Object.entries(options as Record<string, string>);
+  }
+
+  // grouped
+  return Object.values(options as GroupedOptions).flatMap(group =>
+    Object.entries(group)
+  );
+};
+
+
+
+export const isGroupedOptions = (options: SelectOptions): options is GroupedOptions => {
+  if (!options || typeof options !== "object") return false;
+
+  const first = Object.values(options)[0];
+  return typeof first === "object" && first !== null;
+};
+
+
 

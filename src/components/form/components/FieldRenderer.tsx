@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
-import type { FieldRendererProps, FormField, sqlQueryProps } from '../Form.types.js';
-import { formatOptions, replacePlaceholders } from '../utils.js';
+import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from '../Form.types.js';
+import { flattenOptions, formatOptions, getOptionLabel, isGroupedOptions, replacePlaceholders } from '../utils.js';
 
 
 
@@ -10,7 +10,6 @@ export default function FieldRenderer({
   field,
   formik,
   methods = {},
-  components,
   sqlOpsUrls,
   refid,
   optionsOverride,
@@ -18,7 +17,7 @@ export default function FieldRenderer({
 }: FieldRendererProps) {
   const [isFocused, setIsFocused] = useState(false);
 
-  const [options, setOptions] = useState<Record<string, string>>(
+  const [options, setOptions] = useState<SelectOptions>(
     optionsOverride ?? field.options ?? {}
   );
 
@@ -100,7 +99,7 @@ export default function FieldRenderer({
 
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
-          const mapped = formatOptions(valueKey, labelKey, res)
+          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
 
           if (isMounted) setOptions(mapped);
 
@@ -154,7 +153,7 @@ export default function FieldRenderer({
           const resQueryId = await axios({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-            data: {"query": query},
+            data: { "query": query },
             headers: {
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
@@ -174,7 +173,8 @@ export default function FieldRenderer({
 
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
-          const mapped = formatOptions(valueKey, labelKey, res)
+
+          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
           if (isMounted) setOptions(mapped);
 
         } catch (err) {
@@ -189,12 +189,11 @@ export default function FieldRenderer({
     };
   }, [
     field.options,
-    field?.source?.type || "",
-    field?.source?.method || "",
-    field?.source?.url || "",
-    JSON.stringify(field?.source?.params ?? {}),
-    JSON.stringify(field?.source?.body ?? {}),
-    JSON.stringify(field?.source?.headers ?? {})
+    field.source,
+    field.table,
+    field.columns,
+    field.where,
+    refid
   ]);
 
 
@@ -221,18 +220,20 @@ export default function FieldRenderer({
     return null;
   };
 
-  const optionCount = Object.keys(options || {}).length;
+  const flatOptions = useMemo(
+    () => flattenOptions(options),
+    [options]
+  );
+
+  const optionCount = flatOptions.length;
 
   const filteredOptions = useMemo(() => {
-    return Object.entries(options || {}).filter(([, label]) => {
-      if (!search) {
-        return true;
-      }
-      return label.toLowerCase().includes(search.toLowerCase())
-    }
-
+    if (!search) return flatOptions;
+    return flatOptions.filter(([, label]) =>
+      label.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search, options])
+  }, [search, flatOptions]);
+
 
 
   //  Handle keyboard navigation
@@ -277,6 +278,12 @@ export default function FieldRenderer({
   }, [highlightedIndex]);
 
   useEffect(() => {
+    if (highlightedIndex >= filteredOptions.length) {
+      setHighlightedIndex(0);
+    }
+  }, [filteredOptions, highlightedIndex]);
+
+  useEffect(() => {
     const ac = field.autocomplete;
     const aj = field.ajaxchain;
     const config = ac || aj;
@@ -300,6 +307,7 @@ export default function FieldRenderer({
             url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
             data: {
               "query": {
+                ...src,
                 table: src.table,
                 cols: src.columns,
                 where: resolvedWhere
@@ -340,10 +348,14 @@ export default function FieldRenderer({
 
           }
 
+
           if (aj) {
             const valueKey = field.valueKey || "value";
             const labelKey = field.labelKey || "title";
-            const mapped = formatOptions(valueKey, labelKey, res);
+
+            const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
+
+
             setFieldOptions?.(aj.target, mapped);
           }
 
@@ -371,7 +383,7 @@ export default function FieldRenderer({
       };
 
       // On select an option
-      const handleSelect = (value: string, label: string) => {
+      const handleSelect = (value: string) => {
 
         formik.setFieldValue(key, value); // store actual option value
         setOpen(false);
@@ -404,7 +416,7 @@ export default function FieldRenderer({
                     className={`px-3 py-2 cursor-pointer text-sm 
     ${highlightedIndex === idx ? "bg-gray-100" : "hover:bg-gray-100"}
   `}
-                    onMouseDown={() => handleSelect(val, label)}
+                    onMouseDown={() => handleSelect(val)}
                   >
                     {label}
                   </div>
@@ -481,7 +493,7 @@ export default function FieldRenderer({
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
                   {formik.values[key]
-                    ? options[formik.values[key]] || "Select option"
+                    ? getOptionLabel(options, formik.values[key]) ?? "Select option"
                     : `Select ${field.label}`}
                 </span>
                 <svg
@@ -573,13 +585,28 @@ export default function FieldRenderer({
               disabled={field.disabled}
             >
               <option value="" disabled>
-                {field.placeholder}
+                {field.placeholder || "Please select an option"}
               </option>
-              {Object.entries(options || {}).map(([val, label]) => (
-                <option key={val} value={val} className="py-2">
-                  {label}
-                </option>
-              ))}
+
+
+              {!isGroupedOptions(options) &&
+                Object.entries(options).map(([val, label]) => (
+                  <option key={val} value={val} className="py-2">
+                    {label}
+                  </option>
+                ))}
+
+
+              {isGroupedOptions(options) &&
+                Object.entries(options).map(([group, opts]) => (
+                  <optgroup key={group} label={group}>
+                    {Object.entries(opts).map(([val, label]) => (
+                      <option key={val} value={val}>
+                        {label}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
             </select>
             {/* Custom dropdown arrow */}
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -599,6 +626,7 @@ export default function FieldRenderer({
         </div>
       );
     }
+
     case "radioList":
     case "radio":
 
@@ -636,12 +664,8 @@ export default function FieldRenderer({
         </div>
       )
 
-    case "component":
-
-      return components?.[key]
 
     case "checkbox": {
-
 
       if (optionCount === 1) {
         // Single boolean checkbox
@@ -707,8 +731,6 @@ export default function FieldRenderer({
       }
 
       if (optionCount > 5) {
-
-
 
         return (
           <div className="relative">
@@ -922,7 +944,7 @@ export default function FieldRenderer({
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
               name={key}
-              //value={formik.values[key]}
+
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               placeholder={field.placeholder}
