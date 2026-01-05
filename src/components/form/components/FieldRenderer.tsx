@@ -383,8 +383,9 @@ export default function FieldRenderer({
       };
 
       // On select an option
-      const handleSelect = (value: string) => {
-
+      const handleSelect = (value: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation()
         formik.setFieldValue(key, value); // store actual option value
         setOpen(false);
       };
@@ -416,7 +417,7 @@ export default function FieldRenderer({
                     className={`px-3 py-2 cursor-pointer text-sm 
     ${highlightedIndex === idx ? "bg-gray-100" : "hover:bg-gray-100"}
   `}
-                    onMouseDown={() => handleSelect(val)}
+                    onMouseDown={(e) => handleSelect(val, e)}
                   >
                     {label}
                   </div>
@@ -537,7 +538,9 @@ export default function FieldRenderer({
 
                       key={val}
                       data-index={idx}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         formik.setFieldValue(key, val);
                         detailsRef.current?.removeAttribute("open");
                         setSearch("");
