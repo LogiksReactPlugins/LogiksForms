@@ -2,20 +2,23 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
+import { flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import type { SimpleFormViewProps, SelectOptions } from "../Form.types.js";
+
+
+
 
 export default function NormalFormView({
   title,
-  groupedFields,
+  fields,
   data,
   onSubmit = (values) => { },
   onCancel = () => { },
   methods = {},
   sqlOpsUrls = {},
   refid
-}: BaseFormViewProps) {
-  const fields = Object.values(groupedFields).flat();
+}: SimpleFormViewProps) {
+  const flatfields = flatFields(fields);
 
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
@@ -28,25 +31,22 @@ export default function NormalFormView({
     }));
   };
 
-  const initialValues: Record<string, any> = {};
-  const validationSchema = {};
-  Object.entries(groupedFields).forEach(([step, fields]) => {
-    intializeForm(fields, initialValues, validationSchema);
-  });
 
-  if (data && Object.keys(data).length > 0) {
-    // Update initialValues based on records
-    Object.keys(data).forEach(key => {
-      if (key in initialValues) {
-        if (key === "tags" && typeof data[key] === "string") {
-          initialValues[key] = data[key].split(",")
-        } else {
-          initialValues[key] = data[key] ? data[key] : ""
-        }
-      }
+
+
+
+  const { initialValues, validationSchema } = React.useMemo(() => {
+    const values: Record<string, any> = {};
+    const schema: Record<string, Yup.AnySchema> = {};
+    flatfields.forEach((field) => {
+      intializeForm([field], values, schema, data);
     });
-  }
 
+    return {
+      initialValues: values,
+      validationSchema: schema,
+    };
+  }, [flatfields, data]);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -57,15 +57,17 @@ export default function NormalFormView({
     }
   })
 
-
-
+  React.useEffect(() => {
+    formik.validateForm();
+  }, []);
+ 
 
   return (
     <div className="relative z-10 max-w-full  m-4">
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
-            {fields.map((field, index) => {
+            {flatfields.map((field, index) => {
               if (isHidden(field.hidden) || field.type === "geolocation") {
                 return null;
               }

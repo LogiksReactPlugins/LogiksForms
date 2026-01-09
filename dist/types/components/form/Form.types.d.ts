@@ -39,6 +39,8 @@ export interface FormField {
     hidden?: boolean;
     value?: string | undefined;
     default?: string | undefined;
+    cols?: string;
+    search?: boolean;
 }
 export interface SqlEndpoints {
     baseURL: string;
@@ -73,7 +75,6 @@ export type GroupedOptions = Record<string, Record<string, string>>;
 export type SelectOptions = FlatOptions | GroupedOptions;
 export interface BaseFormViewProps {
     title?: string | undefined;
-    groupedFields: Record<string, FormField[]>;
     data?: Record<string, any>;
     onSubmit: (data: Record<string, any>) => void;
     onCancel: () => void;
@@ -82,6 +83,12 @@ export interface BaseFormViewProps {
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+}
+export interface SimpleFormViewProps extends BaseFormViewProps {
+    fields: Record<string, Omit<FormField, "name">>;
+}
+export interface GroupedFormViewPrps extends BaseFormViewProps {
+    groupedFields: Record<string, FormField[]>;
 }
 export interface FieldRendererProps {
     field: FormField;

@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
-import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
+import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
 
 
 export default function AccordionFormView({
@@ -17,7 +17,7 @@ export default function AccordionFormView({
   components = {},
   sqlOpsUrls = {},
   refid
-}: BaseFormViewProps) {
+}: GroupedFormViewPrps) {
 
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
@@ -30,27 +30,18 @@ export default function AccordionFormView({
     }));
   };
 
-  const initialValues: Record<string, any> = {};
-  const validationSchema = {};
-
-  Object.entries(groupedFields).forEach(([step, fields]) => {
-    intializeForm(fields, initialValues, validationSchema);
-  });
-
-
-  if (data && Object.keys(data).length > 0) {
-    // Update initialValues based on records
-    Object.keys(data).forEach(key => {
-      if (key in initialValues) {
-        if (key === "tags" && typeof data[key] === "string") {
-          initialValues[key] = data[key].split(",")
-        } else {
-          initialValues[key] = data[key] ? data[key] : ""
-        }
-      }
+  const { initialValues, validationSchema } = React.useMemo(() => {
+    const values: Record<string, any> = {};
+    const schema: Record<string, Yup.AnySchema> = {};
+    Object.values(groupedFields).flat().forEach((field) => {
+      intializeForm([field], values, schema, data);
     });
-  }
 
+    return {
+      initialValues: values,
+      validationSchema: schema,
+    };
+  }, [groupedFields, data]);
 
   const formik = useFormik({
     initialValues: initialValues,

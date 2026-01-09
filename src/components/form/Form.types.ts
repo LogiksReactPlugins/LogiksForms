@@ -16,7 +16,7 @@ export interface FormField {
     name: string;
     label?: string;
     width?: number | string;
-    options?: Record<string, any>,
+    options?: Record<string, any>;
     group?: string;
     type?: string;
     regex?: string;
@@ -26,12 +26,12 @@ export interface FormField {
     placeholder?: string;        // input placeholder
     field_error?: string;
     axiosObject?: AxiosRequestConfig,
-    valueKey?: string,
-    labelKey?: string,
+    valueKey?: string;
+    labelKey?: string;
     groupKey?: string;
-    source?: Record<string, any>,
-    multiple?: boolean,
-    icon?: string,
+    source?: Record<string, any>;
+    multiple?: boolean;
+    icon?: string;
     table?: string;
     columns?: string;
     where?: Record<string, string>;
@@ -42,6 +42,8 @@ export interface FormField {
     hidden?: boolean;
     value?: string | undefined;
     default?: string | undefined;
+    cols?: string;
+    search?: boolean;
 
 }
 
@@ -83,7 +85,6 @@ export type SelectOptions = FlatOptions | GroupedOptions;
 
 export interface BaseFormViewProps {
     title?: string | undefined;
-    groupedFields: Record<string, FormField[]>; // grouped array of fields
     data?: Record<string, any>;
     onSubmit: (data: Record<string, any>) => void;
     onCancel: () => void;
@@ -91,7 +92,16 @@ export interface BaseFormViewProps {
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
-    refid?: string | undefined
+    refid?: string | undefined;
+   
+}
+
+export interface SimpleFormViewProps extends BaseFormViewProps {
+fields: Record<string, Omit<FormField, "name">>;
+}
+
+export interface GroupedFormViewPrps extends BaseFormViewProps {
+     groupedFields: Record<string, FormField[]>; // grouped array of fields
 }
 
 export interface FieldRendererProps {

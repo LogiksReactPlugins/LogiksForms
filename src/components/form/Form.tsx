@@ -9,7 +9,7 @@ import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
 import { sqlClient } from "./service.js";
-
+type ViewMode = "accordion" | "cards" | "tab" | "simple";
 export default function LogiksForm({
   formJson = { title: "", fields: {}, source: {} },
   methods = {},
@@ -20,7 +20,7 @@ export default function LogiksForm({
   initialvalues = {}
 }: FormProps) {
 
-  const viewMode = determineViewMode(formJson);
+  let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {});
@@ -137,11 +137,11 @@ export default function LogiksForm({
     }
 
     const finalValues = {
-    ...values,
-    ...Object.fromEntries(
-      geoFieldKeys.map((key) => [key, geo])
-    ),
-  };
+      ...values,
+      ...Object.fromEntries(
+        geoFieldKeys.map((key) => [key, geo])
+      ),
+    };
 
 
     if (source.type === "method") {
@@ -282,7 +282,7 @@ export default function LogiksForm({
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
-      groupedFields={groupedFields}
+      fields={formJson.fields}
       data={resolvedData}
       onSubmit={handleSubmit}
       onCancel={onCancel}

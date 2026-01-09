@@ -3,7 +3,7 @@ import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { BaseFormViewProps, SelectOptions } from "../Form.types.js";
+import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
 
 
 export default function TabFormView({
@@ -17,13 +17,16 @@ export default function TabFormView({
   sqlOpsUrls = {},
   widget,
   refid
-}: BaseFormViewProps) {
+}: GroupedFormViewPrps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
   >({});
+
+  console.log("groupNames",groupNames);
+  
 
   const setOptionsForField = (name: string, options: SelectOptions) => {
     setFieldOptions(prev => ({
@@ -32,54 +35,48 @@ export default function TabFormView({
     }));
   };
 
-  const stepperForm: Record<string, Record<string, Yup.AnySchema>> = {};
-  const initialValues: Record<string, any> = {};
 
-  const validationSchema = {};
-  if (widget) {
-    Object.entries(groupedFields).forEach(([step, fields]) => {
-      const schema = {};
-      intializeForm(fields, initialValues, schema);
-      stepperForm[step] = schema;
-    });
-  } else {
-    Object.entries(groupedFields).forEach(([step, fields]) => {
+  const { initialValues, validationSchema, stepperSchemas } = React.useMemo(() => {
+    const values: Record<string, any> = {};
+    const globalSchema: Record<string, Yup.AnySchema> = {};
+    const stepSchemas: Record<string, Record<string, Yup.AnySchema>> = {};
 
-      intializeForm(fields, initialValues, validationSchema);
+    if (widget) {
+      Object.entries(groupedFields).forEach(([step, fields]) => {
+        const stepSchema: Record<string, Yup.AnySchema> = {};
+        intializeForm(fields, values, stepSchema, data);
+        stepSchemas[step] = stepSchema;
+      });
+    } else {
+      Object.entries(groupedFields).forEach(([_, fields]) => {
+        intializeForm(fields, values, globalSchema, data);
+      });
+    }
 
-    });
-  }
-
-
-
-  if (data && Object.keys(data).length > 0) {
-    // Update initialValues based on records
-    Object.keys(data).forEach(key => {
-      if (key in initialValues) {
-
-        if (key === "tags" && typeof data[key] === "string") {
-          initialValues[key] = data[key].split(",")
-        } else {
-          initialValues[key] = data[key] ? data[key] : ""
-        }
+    return {
+      initialValues: values,
+      validationSchema: globalSchema,
+      stepperSchemas: stepSchemas,
+    };
+  }, [groupedFields, data, widget]);
 
 
-      }
-    });
-  }
+
+
+
   const currentStepKey = groupNames[activeTabIndex] ?? null;
 
-  const currentStepSchema: Record<string, Yup.AnySchema> =
-    (currentStepKey && stepperForm[currentStepKey])
-      ? stepperForm[currentStepKey]
-      : {};
+  const currentStepSchema =
+    widget && currentStepKey
+      ? stepperSchemas[currentStepKey] ?? {}
+      : validationSchema;
 
 
 
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-    validationSchema: Yup.object().shape(widget ? currentStepSchema : validationSchema),
+    validationSchema: Yup.object().shape(currentStepSchema),
     onSubmit: (values) => {
 
       if (widget) {

@@ -1,5 +1,6 @@
 import * as Yup from "yup";
-import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions } from "./Form.types.js";
+import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, sqlQueryProps } from "./Form.types.js";
+import axios, { type AxiosResponse } from "axios";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
   if (json.template === 'simple') return 'simple';
@@ -11,22 +12,51 @@ export function determineViewMode(json: FormJson) {
   return hasGroup ? 'tab' : 'simple';
 }
 
-export function groupFields(fields: Record<string, Omit<FormField, "name">>) {
+export function groupFields(
+  fields: Record<string, Omit<FormField, "name">>,
+  fallbackGroup = "Info"
+): Record<string, FormField[]> {
   const grouped: Record<string, FormField[]> = {};
+  let hasAnyGroup = false;
 
-  const defaultGroup = 'General';
-  Object.entries(fields).forEach(([key, field]) => {
-
-    const group = field.group || defaultGroup;
-    if (!grouped[group]) grouped[group] = [];
-    let obj = { ...field, name: key }
-
-    grouped[group].push(obj);
+  // detect grouping
+  Object.values(fields).forEach((field) => {
+    if (field.group) hasAnyGroup = true;
   });
 
+  if (!hasAnyGroup) return {};
+
+  const infoFields: FormField[] = [];
+
+  Object.entries(fields).forEach(([key, field]) => {
+    const withName: FormField = { ...field, name: key };
+
+    if (field.group) {
+      const groupKey = field.group;
+
+      if (!grouped[groupKey]) {
+        grouped[groupKey] = [];
+      }
+
+      grouped[groupKey].push(withName);
+    } else {
+      infoFields.push(withName);
+    }
+  });
+
+  // ensure Info is FIRST
+  if (infoFields.length > 0) {
+    return {
+      [fallbackGroup]: infoFields,
+      ...grouped,
+    };
+  }
 
   return grouped;
 }
+
+
+
 
 export function transformedObject(originalObject: Record<string, any>) {
 
@@ -44,64 +74,99 @@ export function transformedObject(originalObject: Record<string, any>) {
 export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,
-  validationSchema: Record<string, Yup.AnySchema>
+  validationSchema: Record<string, Yup.AnySchema>,
+  data?: Record<string, any>
 ) => {
   formFields.forEach((field) => {
+    const name = field?.name;
+    if (!name) return;
 
-    const fieldName = field?.name;
-    if (!fieldName) return;
+    let value = data?.[name];
 
-    // ---------- Initial Values (only defaults) ----------
-    if (field?.default !== undefined && field?.default !== null) {
-      initialValues[fieldName] = field.default;
-    }
-    else if (field?.type === "checkbox") {
-      initialValues[fieldName] = field?.multiple === true ? [] : false;
-    } else if (field?.type === "tags") {
-      initialValues[fieldName] = [];
-    } else if (fieldName === "blocked" || fieldName === "blacklist") {
-      initialValues[fieldName] = "false"; // special-case string boolean
-    } else {
-      initialValues[fieldName] = field?.default ?? "";
+    if (value === undefined || value === null) {
+      value = field.default;
     }
 
-    // ---------- Base Validator ----------
+    // ---------- Initial Values (NORMALIZED) ----------
+
+
+    if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+      initialValues[name] =
+        Array.isArray(value)
+          ? value
+          : typeof value === "string"
+            ? value.split(",").map(v => v.trim()).filter(Boolean)
+            : [];
+    }
+
+
+
+    else if (field.type === "json") {
+      initialValues[name] =
+        typeof value === "object" && value !== null
+          ? JSON.stringify(value, null, 2)
+          : value ?? "";
+    }
+
+    else if (field.type === "date") {
+      initialValues[name] =
+        typeof value === "string" ? value.slice(0, 10) : "";
+    }
+
+    else if (name === "blocked" || name === "blacklist") {
+      initialValues[name] = String(value ?? "false");
+    }
+
+    else {
+      initialValues[name] = value ?? "";
+    }
+
+    // ---------- Validation ----------
     let validator: Yup.AnySchema;
-    if (field?.type === "checkbox") {
-      validator = field?.multiple === true ? Yup.array().of(Yup.string()) : Yup.boolean();
-    } else if (field?.type === "tags") {
-      validator = Yup.array().of(Yup.string());
-    } else if (field?.type === "email") {
-      validator = Yup.string().email("Invalid email format");
-    } else if (field?.type === "number") {
-      validator = Yup.number().typeError("Must be a number");
-    } else if (field?.type === "date") {
-      validator = Yup.date().typeError("Invalid date format");
-    } else if (field?.type === "json") {
 
-      validator = Yup.string()
-        .test("is-json", "Invalid JSON format", (value) => {
-          if (!value) return true;
-          try {
-            JSON.parse(value);
-            return true;
-          } catch {
-            return false;
-          }
-        });
+    if (field.type === "file") {
+      validator = field.multiple
+        ? Yup.array().of(Yup.mixed<File>())
+        : Yup.mixed<File>();
+    }
+
+    else if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+      validator = Yup.array().of(Yup.string());
+    }
+    else if (field.type === "email") {
+      validator = Yup.string().email("Invalid email");
+    }
+    else if (field.type === "number") {
+      validator = Yup.number().typeError("Must be a number");
+    }
+    else if (field.type === "date") {
+      validator = Yup.string().matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Invalid date"
+      );
+    }
+    else if (field.type === "json") {
+      validator = Yup.string().test("json", "Invalid JSON", (v) => {
+        if (!v) return true;
+        try {
+          JSON.parse(v);
+          return true;
+        } catch {
+          return false;
+        }
+      });
     }
     else {
       validator = Yup.string();
     }
 
-    // ---------- Required ----------
-    if (field?.required) {
+    if (field.required) {
       validator = validator.required(
-        field?.placeholder || field?.error_message || `${field?.label || fieldName} is required`
+        field.error_message || `${field.label || name} is required`
       );
     }
 
-    // ---------- Direct Regex ----------
+        // ---------- Direct Regex ----------
     if (field?.validate?.regex && typeof field.validate.regex === "string") {
       validator = (validator as Yup.StringSchema).matches(
         new RegExp(field?.validate?.regex),
@@ -230,8 +295,7 @@ export const intializeForm = (
       });
     }
 
-    // ---------- Assign schema ----------
-    validationSchema[fieldName] = validator;
+    validationSchema[name] = validator;
   });
 };
 
@@ -462,6 +526,70 @@ export const getGeoFieldKeys = (fields: Record<string, Omit<FormField, "name">>)
     .filter(([, field]: any) => field.type === "geolocation")
     .map(([key]) => key);
 };
+
+
+export function flatFields(
+  fields: Record<string, Omit<FormField, "name">>
+): FormField[] {
+  return Object.entries(fields).map(([key, field]) => ({
+    ...field,
+    name: key,
+  }));
+}
+
+
+export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>) :Promise<AxiosResponse<any>>{
+  try {
+
+    const resQueryId = await axios({
+      method: "POST",
+      url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
+      data: { "query": query },
+      headers: {
+        "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+      },
+    });
+
+    const res =  await axios({
+      method: "POST",
+      url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
+      data: {
+        "queryid": resQueryId.data.queryid,
+        "filter": {}
+      },
+      headers: {
+        "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+      },
+    });
+
+ return res
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// export function getSearchableColumns(columns: string): string[] {
+//   return columns
+//     .split(",")
+//     .map(c => c.trim())
+//     .map(c => {
+//       const match = c.match(/^(.+?)\s+as\s+(title|value)$/i);
+//       return match ? match[1]?.trim() : null;
+//     })
+//     .filter(Boolean) as string[];
+// }
+
+export function getSearchColumn(columns: string): string | null {
+  return columns
+    .split(",")
+    .map(c => c.trim())
+    .map(c => {
+      const match = c.match(/^(.+?)\s+as\s+title$/i);
+      return match ? match[1]?.trim() : null;
+    })
+    .find(Boolean) ?? null;
+}
 
 
 

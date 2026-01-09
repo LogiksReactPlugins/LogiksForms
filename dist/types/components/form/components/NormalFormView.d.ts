@@ -1,3 +1,3 @@
-import { BaseFormViewProps } from '../Form.types.js';
-export default function NormalFormView({ title, groupedFields, data, onSubmit, onCancel, methods, sqlOpsUrls, refid }: BaseFormViewProps): import("react/jsx-runtime").JSX.Element;
+import { SimpleFormViewProps } from '../Form.types.js';
+export default function NormalFormView({ title, fields, data, onSubmit, onCancel, methods, sqlOpsUrls, refid }: SimpleFormViewProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=NormalFormView.d.ts.map
