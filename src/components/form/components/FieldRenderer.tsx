@@ -158,9 +158,6 @@ export default function FieldRenderer({
 
           const res = await fetchDataByquery(sqlOpsUrls, query);
 
-          console.log('resssssssssssssssssssssssssss', res);
-
-
           const valueKey = field.valueKey || "value";
           const labelKey = field.labelKey || "title";
           const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
@@ -373,6 +370,54 @@ export default function FieldRenderer({
   //     controller.abort();
   //   };
   // }, [search]);
+
+
+
+
+  const handleFileUpload = async (files: FileList) => {
+     
+    if (files.length === 0) {
+      console.error("No file");
+      return;
+    }
+      const uploadUrl =  sqlOpsUrls?.baseURL + sqlOpsUrls?.uploadURL;
+      if(!uploadUrl){
+         console.error("No Upload URL please ");
+      return;
+      }
+    const isMultiple = field.multiple === true;
+  
+    try {
+      const uploads = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
+
+          const res = await axios({
+            method: "POST",
+            url: uploadUrl,
+            data: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+
+
+
+          return res.data; // { id, url, ... }
+        })
+      );
+
+      formik.setFieldValue(
+        key,
+        isMultiple ? uploads.map(file=>file.path) : uploads[0]?.path
+      );
+    } catch (err) {
+      console.error("File upload failed", err);
+      formik.setFieldError(key, "File upload failed");
+    }
+  };
 
 
   switch (field.type) {
@@ -592,9 +637,6 @@ export default function FieldRenderer({
       if (key === "category") {
         console.log("formik.values[key]", formik.values[key]);
       }
-
-
-
 
       return (
         <div className="relative">
@@ -921,7 +963,9 @@ export default function FieldRenderer({
         </div>
       );
     }
-
+    case "attachment":
+    case "photo":
+    case "avatar":
     case "file":
       const isMultiple = field.multiple === true;
       return (
@@ -940,19 +984,14 @@ export default function FieldRenderer({
             )}
 
             <input
-              type={field.type || "text"}
+              type={field.type}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
               name={key}
               multiple={isMultiple}
               onChange={(e) => {
                 const files = e.currentTarget.files;
-                if (!files) return;
-
-                formik.setFieldValue(
-                  key,
-                  isMultiple ? Array.from(files) : files[0]
-                );
+                if (files) handleFileUpload(files);
               }}
               onBlur={formik.handleBlur}
 
@@ -1007,7 +1046,6 @@ export default function FieldRenderer({
         </div>
       );
     }
-
 
     case "date": {
 

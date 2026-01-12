@@ -104,6 +104,7 @@ export declare const example1: {
         dbopsUpdate: string;
         dbopsFetch: string;
         registerQuery: string;
+        uploadURL: string;
         runQuery: string;
     };
     hooks: {
@@ -236,6 +237,7 @@ export declare const example3: {
         dbopsUpdate: string;
         dbopsFetch: string;
         registerQuery: string;
+        uploadURL: string;
         runQuery: string;
     };
     source: {

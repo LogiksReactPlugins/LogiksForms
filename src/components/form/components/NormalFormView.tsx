@@ -57,10 +57,7 @@ export default function NormalFormView({
     }
   })
 
-  React.useEffect(() => {
-    formik.validateForm();
-  }, []);
- 
+
 
   return (
     <div className="relative z-10 max-w-full  m-4">
