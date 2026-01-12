@@ -36,7 +36,7 @@ export interface FormField {
     columns?: string;
     where?: Record<string, string>;
     autocomplete?: "off" | AutocompleteConfig;
-    ajaxchain?: AutocompleteConfig;
+    ajaxchain?: AutocompleteConfig | AutocompleteConfig[];
     validate?: Record<string, string | number>;
     groupid?: string;
     hidden?: boolean;

@@ -266,66 +266,147 @@ export default function FieldRenderer({
     }
   }, [filteredOptions, highlightedIndex]);
 
+  // useEffect(() => {
+  //   const ac = field.autocomplete;
+  //   const aj = field.ajaxchain;
+  //   const config = ac || aj;
+  //   if (!config || config === "off") return;
+
+  //   const value = formik.values[field.name];
+  //   if (!value) return;
+
+  //   const fetchAutocompleteData = async () => {
+  //     try {
+  //       const src = config.src;
+
+  //       const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+  //         refid: value,
+  //       });
+
+  //       // --- SQL source ---
+  //       if (src.table && sqlOpsUrls) {
+
+  //         let query = {
+  //           ...src,
+  //           table: src.table,
+  //           cols: src.columns,
+  //           where: resolvedWhere
+  //         }
+
+  //         const { data: res } = await fetchDataByquery(sqlOpsUrls, query)
+
+  //         if (ac) {
+  //           const targets = config.target
+  //             .split(",")
+  //             .map((t: string) => t.trim());
+  //           const row = Array.isArray(res?.data)
+  //             ? res?.data[0]
+  //             : res?.data;
+
+  //           if (!row) return;
+
+  //           targets.forEach((t: string) => {
+  //             if (row[t] !== undefined) {
+  //               formik.setFieldValue(t, row[t]);
+  //             }
+  //           });
+
+  //         }
+
+  //         if (aj) {
+  //           const valueKey = field.valueKey || "value";
+  //           const labelKey = field.labelKey || "title";
+  //           const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
+  //           setFieldOptions?.(aj.target, mapped);
+  //         }
+  //       }
+  //     } catch (err) {
+  //       console.error("Autocomplete fetch failed", err);
+  //     }
+  //   };
+
+  //   fetchAutocompleteData();
+  // }, [formik.values[field.name]]);
+
+
   useEffect(() => {
-    const ac = field.autocomplete;
-    const aj = field.ajaxchain;
-    const config = ac || aj;
-    if (!config || config === "off") return;
+    const ac = field.autocomplete;          // always single
+    const aj = field.ajaxchain;             // single | array | undefined
+
+    if (!ac && !aj) return;
 
     const value = formik.values[field.name];
     if (!value) return;
 
-    const fetchAutocompleteData = async () => {
+    const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
+
+    const run = async () => {
       try {
-        const src = config.src;
+        // ---------- AUTOCOMPLETE ----------
+        if (ac && ac !== "off") {
+          const src = ac.src;
+          if (!src || !sqlOpsUrls) return;
 
-        const resolvedWhere = replacePlaceholders(src.where ?? {}, {
-          refid: value,
-        });
+          const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+            refid: value,
+          });
 
-        // --- SQL source ---
-        if (src.table && sqlOpsUrls) {
-
-          let query = {
+          const query = {
             ...src,
             table: src.table,
             cols: src.columns,
-            where: resolvedWhere
-          }
+            where: resolvedWhere,
+          };
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query)
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query);
 
-          if (ac) {
-            const targets = config.target
+          const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+
+          if (row) {
+            ac.target
               .split(",")
-              .map((t: string) => t.trim());
-            const row = Array.isArray(res?.data)
-              ? res?.data[0]
-              : res?.data;
-
-            if (!row) return;
-
-            targets.forEach((t: string) => {
-              if (row[t] !== undefined) {
-                formik.setFieldValue(t, row[t]);
-              }
-            });
-
-          }
-
-          if (aj) {
-            const valueKey = field.valueKey || "value";
-            const labelKey = field.labelKey || "title";
-            const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
-            setFieldOptions?.(aj.target, mapped);
+              .map(t => t.trim())
+              .forEach(t => {
+                if (row[t] !== undefined) {
+                  formik.setFieldValue(t, row[t]);
+                }
+              });
           }
         }
+
+        // ---------- AJAX CHAIN (ARRAY SAFE) ----------
+        for (const chain of ajaxChains) {
+          const src = chain.src;
+          if (!src || !sqlOpsUrls) continue;
+
+          const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+            refid: value,
+          });
+
+          const query = {
+            ...src,
+            table: src.table,
+            cols: src.columns,
+            where: resolvedWhere,
+          };
+
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query);
+
+          const mapped = formatOptions(
+            field.valueKey || "value",
+            field.labelKey || "title",
+            res,
+            field.groupKey
+          );
+
+          setFieldOptions?.(chain.target, mapped);
+        }
       } catch (err) {
-        console.error("Autocomplete fetch failed", err);
+        console.error("Autocomplete / AjaxChain fetch failed", err);
       }
     };
 
-    fetchAutocompleteData();
+    run();
   }, [formik.values[field.name]]);
 
 
@@ -375,18 +456,18 @@ export default function FieldRenderer({
 
 
   const handleFileUpload = async (files: FileList) => {
-     
+
     if (files.length === 0) {
       console.error("No file");
       return;
     }
-      const uploadUrl =  sqlOpsUrls?.baseURL + sqlOpsUrls?.uploadURL;
-      if(!uploadUrl){
-         console.error("No Upload URL please ");
+    const uploadUrl = sqlOpsUrls?.baseURL + sqlOpsUrls?.uploadURL;
+    if (!uploadUrl) {
+      console.error("No Upload URL ");
       return;
-      }
+    }
     const isMultiple = field.multiple === true;
-  
+
     try {
       const uploads = await Promise.all(
         Array.from(files).map(async (file) => {
@@ -411,7 +492,7 @@ export default function FieldRenderer({
 
       formik.setFieldValue(
         key,
-        isMultiple ? uploads.map(file=>file.path) : uploads[0]?.path
+        isMultiple ? uploads.map(file => file.path) : uploads[0]?.path
       );
     } catch (err) {
       console.error("File upload failed", err);
@@ -427,16 +508,23 @@ export default function FieldRenderer({
       const value: string = formik.values[key] ?? "";
 
       // What user sees in the input
-      const displayValue = open
-        ? search
-        : getOptionLabel(options, value) ?? "";
+      const displayValue =
+        search !== ""
+          ? search
+          : getOptionLabel(options, value) ?? String(value ?? "");
 
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
-        setOpen(true);
+        const val = e.target.value;
+        setSearch(val);
         setHighlightedIndex(0);
-      };
 
+        if (val.trim()) {
+          setOpen(true);
+        } else {
+          setOpen(false);
+          formik.setFieldValue(key, "");
+        }
+      };
       const handleSelect = (val: string) => {
         formik.setFieldValue(key, val); // store selected value
         setSearch("");
@@ -455,9 +543,32 @@ export default function FieldRenderer({
             value={displayValue}
             placeholder={field.placeholder || "Type to search..."}
             onChange={handleInputChange}
-            onFocus={() => setOpen(true)}
-            onBlur={() => setTimeout(() => setOpen(false), 150)}
-            onKeyDown={(e) => handleKeyDown(e, true)}
+            onFocus={() => {
+              const current = String(formik.values[key] ?? "");
+              setSearch(current);
+            }}
+            onBlur={() => { setTimeout(() => setOpen(false), 150); }}
+            onKeyDown={(e) => {
+
+              if (e.key === "Enter") {
+                e.preventDefault();
+
+                if (filteredOptions[highlightedIndex]) {
+                  const [val] = filteredOptions[highlightedIndex];
+                  formik.setFieldValue(key, val);
+                } else if (search.trim()) {
+                  formik.setFieldValue(key, search.trim());
+                }
+
+                setOpen(false);
+                return;
+              }
+
+              // let existing handler handle arrows / escape etc
+              handleKeyDown(e, true);
+            }}
+
+
             disabled={field.disabled}
           />
 
@@ -483,7 +594,7 @@ export default function FieldRenderer({
                 ))
               ) : (
                 <div className="px-3 py-2 text-sm text-gray-400">
-                  No matches
+                  {`No matches press enter to add "${displayValue}" `}
                 </div>
               )}
             </div>
@@ -537,7 +648,6 @@ export default function FieldRenderer({
     case "dataSelectorFromTable":
     case "dataSelectorFromUniques":
     case "dataMethod": {
-
       if (field.multiple === true) {
         const valueArray: string[] = formik.values[key];
         return (
@@ -634,10 +744,6 @@ export default function FieldRenderer({
 
       }
 
-      if (key === "category") {
-        console.log("formik.values[key]", formik.values[key]);
-      }
-
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -688,6 +794,19 @@ export default function FieldRenderer({
                   focus:outline-none focus:ring-0"
                 />
               </div>}
+
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  formik.setFieldValue(key, "");
+                  detailsRef.current?.removeAttribute("open");
+                  setSearch("");
+                }}
+                className={"px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm hover:bg-gray-50"}
+              >
+                Clear selection
+              </div>
 
               {/* Filtered options */}
               {filteredOptions.length > 0 ? (
