@@ -82,6 +82,8 @@ export const intializeForm = (
     if (!name) return;
 
     let value = data?.[name];
+    console.log("value,", value, field.type);
+
 
     if (value === undefined || value === null) {
       value = field.default;
@@ -111,6 +113,20 @@ export const intializeForm = (
     else if (field.type === "date") {
       initialValues[name] =
         typeof value === "string" ? value.slice(0, 10) : "";
+    }
+
+    else if (field.type === "time") {
+      if (typeof value === "string") {
+        if (value.includes("T")) {
+          // ISO datetime → extract time
+          initialValues[name] = value.slice(11, 16);
+        } else {
+          // HH:mm or HH:mm:ss
+          initialValues[name] = value.slice(0, 5);
+        }
+      } else {
+        initialValues[name] = "";
+      }
     }
 
     else if (name === "blocked" || name === "blacklist") {
@@ -166,7 +182,7 @@ export const intializeForm = (
       );
     }
 
-        // ---------- Direct Regex ----------
+    // ---------- Direct Regex ----------
     if (field?.validate?.regex && typeof field.validate.regex === "string") {
       validator = (validator as Yup.StringSchema).matches(
         new RegExp(field?.validate?.regex),
@@ -538,7 +554,7 @@ export function flatFields(
 }
 
 
-export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>) :Promise<AxiosResponse<any>>{
+export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>): Promise<AxiosResponse<any>> {
   try {
 
     const resQueryId = await axios({
@@ -550,7 +566,7 @@ export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: R
       },
     });
 
-    const res =  await axios({
+    const res = await axios({
       method: "POST",
       url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
       data: {
@@ -562,7 +578,7 @@ export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: R
       },
     });
 
- return res
+    return res
   } catch (error) {
     throw error;
   }

@@ -340,4 +340,189 @@ export declare const example3: {
         };
     };
 };
+export declare const example4: {
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        operation: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        uploadURL: string;
+        runQuery: string;
+    };
+    source: {
+        type: string;
+        table: string;
+        cols: string;
+        where: {
+            id: string;
+        };
+        refid: string;
+    };
+    forcefill: {
+        groupuid: string;
+        guid: string;
+    };
+    fields: {
+        company_code_id: {
+            label: string;
+            type: string;
+            table: string;
+            columns: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    table: string;
+                    columns: string;
+                    where: {
+                        blocked: string;
+                        company_code_id: string;
+                    };
+                };
+            };
+        };
+        spv_id: {
+            label: string;
+            type: string;
+            table: string;
+            columns: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    table: string;
+                    columns: string;
+                    where: {
+                        blocked: string;
+                        company_code_id: string;
+                    };
+                };
+            };
+        };
+        sector_id: {
+            label: string;
+            type: string;
+            table: string;
+            columns: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    table: string;
+                    columns: string;
+                    where: {
+                        blocked: string;
+                        sector_id: string;
+                    };
+                };
+            };
+        };
+        project_function_id: {
+            label: string;
+            type: string;
+            table: string;
+            columns: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    table: string;
+                    columns: string;
+                    where: {
+                        blocked: string;
+                        project_function_id: string;
+                    };
+                };
+            };
+        };
+        location_id: {
+            label: string;
+            type: string;
+            table: string;
+            columns: string;
+            required: boolean;
+            width: number;
+        };
+        date: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        time: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        location: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        type: {
+            label: string;
+            type: string;
+            groupid: string;
+            required: boolean;
+        };
+        reason: {
+            label: string;
+            type: string;
+            groupid: string;
+            width: number;
+        };
+        other_reason: {
+            label: string;
+            type: string;
+            width: number;
+        };
+        reported_by: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        status: {
+            label: string;
+            type: string;
+            groupid: string;
+        };
+        description: {
+            label: string;
+            type: string;
+            width: number;
+        };
+        action_taken: {
+            label: string;
+            type: string;
+            width: number;
+        };
+        root_cause: {
+            label: string;
+            type: string;
+            width: number;
+        };
+        incident_report_attachment: {
+            label: string;
+            type: string;
+            width: number;
+        };
+        compliance_report_attachment: {
+            label: string;
+            type: string;
+            width: number;
+        };
+    };
+};
 //# sourceMappingURL=data.d.ts.map
