@@ -2,6 +2,7 @@
 import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
+import type { string } from "yup";
 
 
 export type AutocompleteConfig = {
@@ -41,9 +42,10 @@ export interface FormField {
     groupid?: string;
     hidden?: boolean;
     value?: string | undefined;
-    default?: string | undefined;
+    default?: string | number | boolean | string[] | number[] | null;
     cols?: string;
     search?: boolean;
+    method?:string;
 
 }
 

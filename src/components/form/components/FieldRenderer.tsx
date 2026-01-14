@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
 import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from '../Form.types.js';
-import { fetchDataByquery, flattenOptions, formatOptions, getOptionLabel, getSearchColumn, isGroupedOptions, replacePlaceholders } from '../utils.js';
+import { fetchDataByquery, flattenOptions, formatOptions, getOptionLabel, getSearchColumns, isAutocompleteConfig, isGroupedOptions, replacePlaceholders } from '../utils.js';
 
 
 
@@ -74,14 +74,16 @@ export default function FieldRenderer({
       const source = field?.source ?? {};
 
       // Case 1: Method source
-      if (source.type === "method") {
-        const methodName = source.method as keyof typeof methods | undefined;
+      if (field.type === "dataMethod") {
+        const methodName = field.method as keyof typeof methods | undefined;
         const methodFn = methodName ? methods[methodName] : undefined;
         if (methodFn) {
           try {
             const result = await Promise.resolve(methodFn());
-
-            if (isMounted) setOptions(result ?? {});
+            const valueKey = field.valueKey || "value";
+            const labelKey = field.labelKey || "title";
+            const mapped = formatOptions(valueKey, labelKey, result, field.groupKey)
+            if (isMounted) setOptions(mapped);
           } catch (err) {
             console.error("Method execution failed:", err);
             if (isMounted) setOptions({});
@@ -211,12 +213,15 @@ export default function FieldRenderer({
   const optionCount = flatOptions.length;
 
   const filteredOptions = useMemo(() => {
+    // API search mode → backend already filtered
+    if (field.search) {
+      return flatOptions;
+    }
     if (!search) return flatOptions;
     return flatOptions.filter(([, label]) =>
       label.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search, flatOptions]);
-
+  }, [field.search, search, flatOptions]);
 
 
   //  Handle keyboard navigation
@@ -266,67 +271,6 @@ export default function FieldRenderer({
     }
   }, [filteredOptions, highlightedIndex]);
 
-  // useEffect(() => {
-  //   const ac = field.autocomplete;
-  //   const aj = field.ajaxchain;
-  //   const config = ac || aj;
-  //   if (!config || config === "off") return;
-
-  //   const value = formik.values[field.name];
-  //   if (!value) return;
-
-  //   const fetchAutocompleteData = async () => {
-  //     try {
-  //       const src = config.src;
-
-  //       const resolvedWhere = replacePlaceholders(src.where ?? {}, {
-  //         refid: value,
-  //       });
-
-  //       // --- SQL source ---
-  //       if (src.table && sqlOpsUrls) {
-
-  //         let query = {
-  //           ...src,
-  //           table: src.table,
-  //           cols: src.columns,
-  //           where: resolvedWhere
-  //         }
-
-  //         const { data: res } = await fetchDataByquery(sqlOpsUrls, query)
-
-  //         if (ac) {
-  //           const targets = config.target
-  //             .split(",")
-  //             .map((t: string) => t.trim());
-  //           const row = Array.isArray(res?.data)
-  //             ? res?.data[0]
-  //             : res?.data;
-
-  //           if (!row) return;
-
-  //           targets.forEach((t: string) => {
-  //             if (row[t] !== undefined) {
-  //               formik.setFieldValue(t, row[t]);
-  //             }
-  //           });
-
-  //         }
-
-  //         if (aj) {
-  //           const valueKey = field.valueKey || "value";
-  //           const labelKey = field.labelKey || "title";
-  //           const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
-  //           setFieldOptions?.(aj.target, mapped);
-  //         }
-  //       }
-  //     } catch (err) {
-  //       console.error("Autocomplete fetch failed", err);
-  //     }
-  //   };
-
-  //   fetchAutocompleteData();
-  // }, [formik.values[field.name]]);
 
 
   useEffect(() => {
@@ -343,7 +287,7 @@ export default function FieldRenderer({
     const run = async () => {
       try {
         // ---------- AUTOCOMPLETE ----------
-        if (ac && ac !== "off") {
+        if (isAutocompleteConfig(ac)) {
           const src = ac.src;
           if (!src || !sqlOpsUrls) return;
 
@@ -377,9 +321,11 @@ export default function FieldRenderer({
         // ---------- AJAX CHAIN (ARRAY SAFE) ----------
         for (const chain of ajaxChains) {
           const src = chain.src;
-          if (!src || !sqlOpsUrls) continue;
+          if (!chain || typeof chain !== "object") continue;
+          if (!src || typeof src !== "object") continue;
+          if (!sqlOpsUrls) continue;
 
-          const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+          const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
             refid: value,
           });
 
@@ -410,49 +356,57 @@ export default function FieldRenderer({
   }, [formik.values[field.name]]);
 
 
-  // React.useEffect(() => {
-  //   if (!field.search) return;
-  //   if (!search.trim()) return;
-  //   if (!field.table || !sqlOpsUrls) return;
-  //   const searchColumns = getSearchColumn(field.columns ?? "");
+  React.useEffect(() => {
+    if (!field.search) return;
+    if (!search.trim()) return;
+    if (!field.table || !sqlOpsUrls) return;
+    const searchColumns = getSearchColumns(field.columns ?? "");
 
-  //   const controller = new AbortController();
-  //   const timer = setTimeout(async () => {
-  //     try {
-  //       const query = {
-  //         ...field,
-  //         table: field.table,
-  //         cols: field.columns,
-  //         where: {
-  //           ...(field.where ?? {}),
-  //           [`${searchColumns} LIKE (${search})`]: "RAW"
-  //         },
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
 
-  //       };
+        const resolvedWhere = refid ? replacePlaceholders(field.where ?? {}, {
+          refid: refid,
+        }) : field.where
 
-  //       const { data } = await fetchDataByquery(sqlOpsUrls, query);
+        const query = {
+          ...field,
+          table: field.table,
+          cols: field.columns || field.cols,
+          where: resolvedWhere
 
-  //       const mapped = formatOptions(
-  //         field.valueKey || "value",
-  //         field.labelKey || "title",
-  //         data,
-  //         field.groupKey
-  //       );
+        };
 
-  //       setOptions(mapped);
-  //     } catch (err) {
-  //       if (axios.isCancel(err)) return;
-  //       console.error("Search fetch failed", err);
-  //     }
-  //   }, 300); // debounce
+        let filter: Record<string, [string, string]> = {};
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //     controller.abort();
-  //   };
-  // }, [search]);
+        if (Array.isArray(searchColumns)) {
+          searchColumns.forEach((column) => {
+            filter[column] = [search, "LIKE"]
+          })
+        }
 
+        const { data } = await fetchDataByquery(sqlOpsUrls, query, filter);
 
+        const mapped = formatOptions(
+          field.valueKey || "value",
+          field.labelKey || "title",
+          data,
+          field.groupKey
+        );
+
+        setOptions(mapped);
+      } catch (err) {
+        if (axios.isCancel(err)) return;
+        console.error("Search fetch failed", err);
+      }
+    }, 500); // debounce
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [search, refid]);
 
 
   const handleFileUpload = async (files: FileList) => {
@@ -483,8 +437,6 @@ export default function FieldRenderer({
               "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
             },
           });
-
-
 
           return res.data; // { id, url, ... }
         })
@@ -609,40 +561,6 @@ export default function FieldRenderer({
       );
     }
 
-    case "textarea":
-      return (
-        <>
-          <div className="relative">
-            <label className={labelClasses}>
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-
-            </label>
-            <div className="relative">
-              <textarea
-
-                className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
-                onFocus={() => setIsFocused(true)}
-                name={key}
-                value={formik.values[key]}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                placeholder={field.placeholder}
-                disabled={field.disabled}
-              />
-              {/* Animated border glow */}
-              <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
-                }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
-            </div>
-
-
-            {formik.touched[key] && formik.errors[key] &&
-
-              <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
-            }
-          </div>
-        </>
-      );
 
     case "dataSelector":
     case "dataSelectorFromTable":
@@ -795,7 +713,7 @@ export default function FieldRenderer({
                 />
               </div>}
 
-              <div
+              {filteredOptions.length > 0 && <div
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -806,7 +724,7 @@ export default function FieldRenderer({
                 className={"px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm hover:bg-gray-50"}
               >
                 Clear selection
-              </div>
+              </div>}
 
               {/* Filtered options */}
               {filteredOptions.length > 0 ? (
@@ -846,6 +764,41 @@ export default function FieldRenderer({
         </div>
       );
     }
+
+    case "textarea":
+      return (
+        <>
+          <div className="relative">
+            <label className={labelClasses}>
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+
+            </label>
+            <div className="relative">
+              <textarea
+
+                className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
+                onFocus={() => setIsFocused(true)}
+                name={key}
+                value={formik.values[key]}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder={field.placeholder}
+                disabled={field.disabled}
+              />
+              {/* Animated border glow */}
+              <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
+                }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
+            </div>
+
+
+            {formik.touched[key] && formik.errors[key] &&
+
+              <span className="text-xs text-red-500">{String(formik.errors[key])}</span>
+            }
+          </div>
+        </>
+      );
 
     case "select":
 
@@ -1005,7 +958,6 @@ export default function FieldRenderer({
         }
       };
 
-
       const removeTag = (val: string) => {
         formik.setFieldValue(
           key,
@@ -1103,7 +1055,7 @@ export default function FieldRenderer({
             )}
 
             <input
-              type={field.type}
+              type="file"
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
               name={key}
@@ -1122,6 +1074,13 @@ export default function FieldRenderer({
             <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
               }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
           </div>
+
+          {formik.values[key]?.split("/").pop() &&
+            <div className='mt-1'>
+              <span className="text-sm ">{String(formik.values[key]?.split("/").pop())}</span>
+            </div>
+          }
+
           {formik.touched[key] && formik.errors[key] &&
 
             <span className="text-xs text-red-500">{String(formik.errors[key])}</span>

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, sqlQueryProps } from "./Form.types.js";
+import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, sqlQueryProps, AutocompleteConfig } from "./Form.types.js";
 import axios, { type AxiosResponse } from "axios";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
@@ -82,7 +82,7 @@ export const intializeForm = (
     if (!name) return;
 
     let value = data?.[name];
-    console.log("value,", value, field.type);
+
 
 
     if (value === undefined || value === null) {
@@ -154,12 +154,6 @@ export const intializeForm = (
     }
     else if (field.type === "number") {
       validator = Yup.number().typeError("Must be a number");
-    }
-    else if (field.type === "date") {
-      validator = Yup.string().matches(
-        /^\d{4}-\d{2}-\d{2}$/,
-        "Invalid date"
-      );
     }
     else if (field.type === "json") {
       validator = Yup.string().test("json", "Invalid JSON", (v) => {
@@ -554,13 +548,17 @@ export function flatFields(
 }
 
 
-export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>): Promise<AxiosResponse<any>> {
+export async function fetchDataByquery(
+  sqlOpsUrls: Record<string, any>,
+  query: Record<string, any>,
+  filter: Record<string, any> = {}
+): Promise<AxiosResponse<any>> {
   try {
 
     const resQueryId = await axios({
       method: "POST",
       url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-      data: { "query": query },
+      data: { "query": query  },
       headers: {
         "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
       },
@@ -571,7 +569,8 @@ export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: R
       url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
       data: {
         "queryid": resQueryId.data.queryid,
-        "filter": {}
+        "filter": filter
+       
       },
       headers: {
         "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
@@ -585,27 +584,30 @@ export async function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: R
 }
 
 
-// export function getSearchableColumns(columns: string): string[] {
-//   return columns
-//     .split(",")
-//     .map(c => c.trim())
-//     .map(c => {
-//       const match = c.match(/^(.+?)\s+as\s+(title|value)$/i);
-//       return match ? match[1]?.trim() : null;
-//     })
-//     .filter(Boolean) as string[];
-// }
+export function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig {
+  return (
+    typeof ac === "object" &&
+    ac !== null &&
+    typeof (ac as any).target === "string" &&
+    typeof (ac as any).src === "object" &&
+    (ac as any).src !== null &&
+    typeof (ac as any).src.table === "string"
+  );
+}
 
-export function getSearchColumn(columns: string): string | null {
+
+
+export function getSearchColumns(columns: string): string[] {
   return columns
     .split(",")
     .map(c => c.trim())
     .map(c => {
-      const match = c.match(/^(.+?)\s+as\s+title$/i);
-      return match ? match[1]?.trim() : null;
+      const match = c.match(/^(.+?)\s+as\s+.+$/i);
+      return match ? match[1]?.trim() : c;
     })
-    .find(Boolean) ?? null;
+    .filter((c): c is string => Boolean(c));
 }
+
 
 
 

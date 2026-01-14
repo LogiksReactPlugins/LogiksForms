@@ -159,16 +159,16 @@ export default function LogiksForm({
     }
 
     if (source.type === "api") {
-         if (!sqlOpsUrls) {
+      if (!sqlOpsUrls) {
         console.error("SQL source requires formJson.endPoints but it is missing");
         return;
       }
       try {
         const res = await axios({
           method: source.method || "POST",
-          url: sqlOpsUrls.baseURL+ source.endpoint,
+          url: sqlOpsUrls.baseURL + source.endpoint,
           data: finalValues ?? {},
-           headers: {
+          headers: {
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });

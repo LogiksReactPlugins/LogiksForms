@@ -25,7 +25,7 @@ export default function TabFormView({
     Record<string, SelectOptions>
   >({});
 
-  console.log("groupNames",groupNames);
+
   
 
   const setOptionsForField = (name: string, options: SelectOptions) => {

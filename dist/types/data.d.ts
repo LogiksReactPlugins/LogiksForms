@@ -361,7 +361,6 @@ export declare const example4: {
         where: {
             id: string;
         };
-        refid: string;
     };
     forcefill: {
         groupuid: string;
@@ -687,6 +686,68 @@ export declare const example5: {
             width: number;
         };
         compliance_report_attachment: {
+            label: string;
+            type: string;
+            width: number;
+        };
+    };
+};
+export declare const example6: {
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        runQuery: string;
+        operation: string;
+        refid: string;
+    };
+    source: {
+        type: string;
+        table: string;
+        cols: string;
+        where: {
+            id: string;
+        };
+        refid: string;
+    };
+    forcefill: {
+        guid: string;
+        created_by: string;
+        hse_induction_id: string;
+    };
+    fields: {
+        gender: {
+            label: string;
+            type: string;
+            required: boolean;
+            groupid: string;
+            width: number;
+        };
+        count: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        company_name: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        company: {
+            label: string;
+            type: string;
+            groupid: string;
+            required: boolean;
+            width: number;
+        };
+        photograph: {
             label: string;
             type: string;
             width: number;

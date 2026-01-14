@@ -38,9 +38,10 @@ export interface FormField {
     groupid?: string;
     hidden?: boolean;
     value?: string | undefined;
-    default?: string | undefined;
+    default?: string | number | boolean | string[] | number[] | null;
     cols?: string;
     search?: boolean;
+    method?: string;
 }
 export interface SqlEndpoints {
     baseURL: string;

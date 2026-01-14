@@ -1,4 +1,4 @@
-import { FormJson, FormField, SelectOptions, GroupedOptions } from './Form.types.js';
+import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig } from './Form.types.js';
 import { AxiosResponse } from 'axios';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
@@ -23,7 +23,8 @@ export declare const isGroupedOptions: (options: SelectOptions) => options is Gr
 export declare function fetchGeolocation(): Promise<string | null>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export declare function flatFields(fields: Record<string, Omit<FormField, "name">>): FormField[];
-export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>): Promise<AxiosResponse<any>>;
-export declare function getSearchColumn(columns: string): string | null;
+export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
+export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
+export declare function getSearchColumns(columns: string): string[];
 export {};
 //# sourceMappingURL=utils.d.ts.map
