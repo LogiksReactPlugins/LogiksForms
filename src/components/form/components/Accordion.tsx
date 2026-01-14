@@ -49,10 +49,10 @@ export default function Accordion({ title, children, isFirst }: AccordionProps) 
 
         {/* Content with smooth slide animation */}
         <div
-          className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          className={`transition-all duration-500 ease-in-out overflow-hidden  ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
             }`}
         >
-          <div className="px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white">
+          <div className="px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white overflow-auto mb-5">
             <div className="space-y-5 pt-4">{children}</div>
           </div>
         </div>

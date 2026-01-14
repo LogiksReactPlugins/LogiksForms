@@ -18,7 +18,7 @@ export default function NormalFormView({
   sqlOpsUrls = {},
   refid
 }: SimpleFormViewProps) {
-  const flatfields = flatFields(fields);
+  const flatfields = flatFields(fields,sqlOpsUrls.operation);
 
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
@@ -58,6 +58,7 @@ export default function NormalFormView({
   })
 
 
+  console.log("formik.values", formik.values);
 
 
   return (
@@ -66,7 +67,7 @@ export default function NormalFormView({
         <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
           <div className='grid grid-cols-12 gap-4'>
             {flatfields.map((field, index) => {
-              if (isHidden(field.hidden) || field.type === "geolocation") {
+              if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {
                 return null;
               }
 

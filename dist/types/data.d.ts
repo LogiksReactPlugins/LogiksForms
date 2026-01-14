@@ -754,4 +754,55 @@ export declare const example6: {
         };
     };
 };
+export declare const example7: {
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        runQuery: string;
+        operation: string;
+    };
+    template: string;
+    source: {
+        type: string;
+        table: string;
+        cols: string;
+        refid: number;
+        where: {
+            id: string;
+        };
+    };
+    forcefill: {
+        groupuid: string;
+        guid: string;
+    };
+    fields: {
+        name: {
+            label: string;
+            group: string;
+            required: boolean;
+            width: number;
+        };
+        description: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        blocked: {
+            label: string;
+            group: string;
+            type: string;
+            groupid: string;
+            vmode: string;
+            required: boolean;
+            width: number;
+        };
+    };
+};
 //# sourceMappingURL=data.d.ts.map

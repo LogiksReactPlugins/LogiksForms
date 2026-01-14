@@ -65,7 +65,7 @@ export default function AccordionFormView({
               <Accordion key={group} title={group} isFirst={index === 0}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
-                    if (isHidden(field.hidden) || field.type === "geolocation") {
+                    if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode==="edit" && sqlOpsUrls.operation === "create")) {
                       return null;
                     }
                     return <div

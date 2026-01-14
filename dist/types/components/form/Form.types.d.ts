@@ -42,6 +42,7 @@ export interface FormField {
     cols?: string;
     search?: boolean;
     method?: string;
+    vmode?: string;
 }
 export interface SqlEndpoints {
     baseURL: string;

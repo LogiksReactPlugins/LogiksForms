@@ -23,7 +23,7 @@ export default function LogiksForm({
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
-  const groupedFields = groupFields(formJson?.fields ?? {});
+  const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues);
 
 
@@ -93,7 +93,7 @@ export default function LogiksForm({
                 refid: refid,
               }),
             },
-            fields: transformedObject(formJson.fields),
+            fields: transformedObject(formJson.fields, sqlOpsUrls.operation),
 
           });
 
@@ -217,7 +217,7 @@ export default function LogiksForm({
           data: {
             "operation": sqlOpsUrls.operation,
             "source": query,
-            "fields": formJson.fields,
+            "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
             "forcefill": formJson.forcefill,
             "datahash": resHashId.data.refhash
           },

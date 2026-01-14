@@ -14,6 +14,7 @@ export function determineViewMode(json: FormJson) {
 
 export function groupFields(
   fields: Record<string, Omit<FormField, "name">>,
+  operation: string = "create",
   fallbackGroup = "Info"
 ): Record<string, FormField[]> {
   const grouped: Record<string, FormField[]> = {};
@@ -29,6 +30,7 @@ export function groupFields(
   const infoFields: FormField[] = [];
 
   Object.entries(fields).forEach(([key, field]) => {
+    if (field.vmode === "edit" && operation === "create") return;
     const withName: FormField = { ...field, name: key };
 
     if (field.group) {
@@ -58,11 +60,14 @@ export function groupFields(
 
 
 
-export function transformedObject(originalObject: Record<string, any>) {
+export function transformedObject(originalObject: Record<string, any>,operation:string = "create") {
 
   const fields: Record<string, { label: string; required: boolean }> = {}
 
   Object.keys(originalObject).forEach((key) => {
+
+    if (originalObject[key].vmode === "edit" && operation==="create") return;
+
     fields[key] = {
       label: key,
       required: originalObject[key].required ?? false
@@ -539,9 +544,10 @@ export const getGeoFieldKeys = (fields: Record<string, Omit<FormField, "name">>)
 
 
 export function flatFields(
-  fields: Record<string, Omit<FormField, "name">>
+  fields: Record<string, Omit<FormField, "name">>,
+  operation: string = "create"
 ): FormField[] {
-  return Object.entries(fields).map(([key, field]) => ({
+  return Object.entries(fields).filter(([, field]) => !(field.vmode === "edit" && operation === "create")).map(([key, field]) => ({
     ...field,
     name: key,
   }));
@@ -558,7 +564,7 @@ export async function fetchDataByquery(
     const resQueryId = await axios({
       method: "POST",
       url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-      data: { "query": query  },
+      data: { "query": query },
       headers: {
         "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
       },
@@ -570,7 +576,7 @@ export async function fetchDataByquery(
       data: {
         "queryid": resQueryId.data.queryid,
         "filter": filter
-       
+
       },
       headers: {
         "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`

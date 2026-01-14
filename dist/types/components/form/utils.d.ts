@@ -2,8 +2,8 @@ import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig 
 import { AxiosResponse } from 'axios';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
-export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, fallbackGroup?: string): Record<string, FormField[]>;
-export declare function transformedObject(originalObject: Record<string, any>): Record<string, {
+export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
+export declare function transformedObject(originalObject: Record<string, any>, operation?: string): Record<string, {
     label: string;
     required: boolean;
 }>;
@@ -22,7 +22,7 @@ export declare const flattenOptions: (options: SelectOptions) => FlatEntry[];
 export declare const isGroupedOptions: (options: SelectOptions) => options is GroupedOptions;
 export declare function fetchGeolocation(): Promise<string | null>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
-export declare function flatFields(fields: Record<string, Omit<FormField, "name">>): FormField[];
+export declare function flatFields(fields: Record<string, Omit<FormField, "name">>, operation?: string): FormField[];
 export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any>, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
 export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
 export declare function getSearchColumns(columns: string): string[];

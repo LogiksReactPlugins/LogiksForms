@@ -169,7 +169,7 @@ export default function TabFormView({
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => {
 
-              if (isHidden(field.hidden) || field.type === "geolocation") {
+              if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode==="edit" && sqlOpsUrls.operation === "create")) {
                 return null;
               }
 

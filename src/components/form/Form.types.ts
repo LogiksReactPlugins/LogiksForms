@@ -46,6 +46,7 @@ export interface FormField {
     cols?: string;
     search?: boolean;
     method?:string;
+    vmode?:string;
 
 }
 
