@@ -16,7 +16,7 @@ export declare const sqlClient: {
     fetch(endpoints: SqlEndpoints, payload: {
         source: SqlSource;
         fields?: any;
-    }): Promise<any>;
+    }, dbopsid: string | undefined): Promise<any>;
     create(endpoints: SqlEndpoints, payload: {
         source: SqlSource;
         values: any;

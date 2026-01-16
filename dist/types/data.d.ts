@@ -361,6 +361,7 @@ export declare const example4: {
         where: {
             id: string;
         };
+        refid: number;
     };
     forcefill: {
         groupuid: string;
@@ -463,17 +464,12 @@ export declare const example4: {
             required: boolean;
             width: number;
         };
-        location: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
         type: {
             label: string;
             type: string;
             groupid: string;
             required: boolean;
+            multiple: boolean;
         };
         reason: {
             label: string;

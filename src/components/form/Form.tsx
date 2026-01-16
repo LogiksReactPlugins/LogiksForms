@@ -95,7 +95,7 @@ export default function LogiksForm({
             },
             fields: transformedObject(formJson.fields, sqlOpsUrls.operation),
 
-          });
+          }, source?.dbopsid);
 
           if (isMounted) setResolvedData(data);
         } catch (err) {
@@ -189,6 +189,13 @@ export default function LogiksForm({
       }
 
       try {
+        let skipquery = false;
+        let dbopsId;
+
+        if (source?.dbopsid) {
+          skipquery = true;
+          dbopsId = source?.dbopsid;
+        }
 
         const resHashId = await axios({
           method: "GET",
@@ -198,43 +205,47 @@ export default function LogiksForm({
           },
         });
 
-        let query = {
-          ...source
-        }
+        if (!skipquery) {
 
-        if (source.where) {
-          query = {
-            ...source,
-            "where": replacePlaceholders(source.where, {
-              refid: refid,
-            }),
+          let query = {
+            ...source
           }
+
+          if (source.where) {
+            query = {
+              ...source,
+              "where": replacePlaceholders(source.where, {
+                refid: refid,
+              }),
+            }
+          }
+
+          const resQueryId = await axios({
+            method: "POST",
+            url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
+            data: {
+              "operation": sqlOpsUrls.operation,
+              "source": query,
+              "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
+              "forcefill": formJson.forcefill,
+              "datahash": resHashId.data.refhash
+            },
+
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+          });
+          dbopsId = resQueryId?.data.refid;
+
         }
-
-        const resQueryId = await axios({
-          method: "POST",
-          url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
-          data: {
-            "operation": sqlOpsUrls.operation,
-            "source": query,
-            "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
-            "forcefill": formJson.forcefill,
-            "datahash": resHashId.data.refhash
-          },
-
-          headers: {
-            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-          },
-        });
-
-
         const res = await axios({
           method: "POST",
           url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
-            "refid": resQueryId.data.refid,
+            "refid": dbopsId,
             "fields": finalValues,
             "datahash": resHashId.data.refhash
+
           },
           headers: {
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`

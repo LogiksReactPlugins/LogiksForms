@@ -43,20 +43,32 @@ export const getRefId = async (
 export const sqlClient = {
     async fetch(
         endpoints: SqlEndpoints,
-        payload: { source: SqlSource; fields?: any }
+        payload: { source: SqlSource; fields?: any },
+        dbopsid: string | undefined
     ) {
         const datahash = await getHash(endpoints);
 
-        const refid = await getRefId(endpoints, {
-            operation: "fetch",
-            source: payload.source,
-            fields: payload.fields ?? {},
-            datahash,
-        });
+        let skipquery = false;
+        let dbopsId;
 
+        if (dbopsid) {
+            skipquery = true;
+            dbopsId = dbopsid;
+        }
+
+        if (!skipquery) {
+
+            const refid = await getRefId(endpoints, {
+                operation: "fetch",
+                source: payload.source,
+                fields: payload.fields ?? {},
+                datahash,
+            });
+            dbopsId = refid;
+        }
         const res = await axios.post(
             endpoints.baseURL + endpoints.dbopsFetch,
-            { refid, datahash },
+            { refid: dbopsId, datahash },
             { headers: authHeaders(endpoints) }
         );
 

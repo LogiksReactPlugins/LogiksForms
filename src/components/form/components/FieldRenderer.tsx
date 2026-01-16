@@ -40,9 +40,10 @@ export default function FieldRenderer({
   };
 
   useEffect(() => {
-    if (optionsOverride) {
-      setOptions(optionsOverride);
-    }
+    if (!optionsOverride) return;
+    if (Object.keys(optionsOverride).length === 0) return;
+
+    setOptions(optionsOverride);
   }, [optionsOverride]);
 
   // Close on outside click
@@ -71,6 +72,15 @@ export default function FieldRenderer({
         return;
       }
 
+      let valueKey = field.valueKey ?
+        field.valueKey :
+        field.type === "dataSelector" ?
+          "do_lists.value" : `${field.table}.value`;
+
+      let labelKey = field.labelKey ? field.labelKey :
+        field.type === "dataSelector" ?
+          "do_lists.title" : `${field.table}.title`;
+
       const source = field?.source ?? {};
 
       // Case 1: Method source
@@ -80,9 +90,8 @@ export default function FieldRenderer({
         if (methodFn) {
           try {
             const result = await Promise.resolve(methodFn());
-            const valueKey = field.valueKey || "value";
-            const labelKey = field.labelKey || "title";
-            const mapped = formatOptions(valueKey, labelKey, result, field.groupKey)
+            const mapped = formatOptions(valueKey, labelKey, result, field.groupKey);
+
             if (isMounted) setOptions(mapped);
           } catch (err) {
             console.error("Method execution failed:", err);
@@ -104,8 +113,7 @@ export default function FieldRenderer({
             headers: source.headers ?? {},
           });
 
-          const valueKey = field.valueKey || "value";
-          const labelKey = field.labelKey || "title";
+
           const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
 
           if (isMounted) setOptions(mapped);
@@ -158,11 +166,9 @@ export default function FieldRenderer({
               : field.where;
           }
 
-          const res = await fetchDataByquery(sqlOpsUrls, query);
+          const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
+          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
 
-          const valueKey = field.valueKey || "value";
-          const labelKey = field.labelKey || "title";
-          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
           if (isMounted) setOptions(mapped);
 
         } catch (err) {
@@ -302,7 +308,7 @@ export default function FieldRenderer({
             where: resolvedWhere,
           };
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query);
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
 
           const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
 
@@ -336,11 +342,20 @@ export default function FieldRenderer({
             where: resolvedWhere,
           };
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query);
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
+
+          let valueKey = field.valueKey ?
+            field.valueKey :
+            field.type === "dataSelector" ?
+              "do_lists.value" : `${field.table}.value`;
+
+          let labelKey = field.labelKey ? field.labelKey :
+            field.type === "dataSelector" ?
+              "do_lists.title" : `${field.table}.title`;
 
           const mapped = formatOptions(
-            field.valueKey || "value",
-            field.labelKey || "title",
+            valueKey,
+            labelKey,
             res,
             field.groupKey
           );
@@ -386,11 +401,19 @@ export default function FieldRenderer({
           })
         }
 
-        const { data } = await fetchDataByquery(sqlOpsUrls, query, filter);
+        const { data } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
+        let valueKey = field.valueKey ?
+          field.valueKey :
+          field.type === "dataSelector" ?
+            "do_lists.value" : `${field.table}.value`;
+
+        let labelKey = field.labelKey ? field.labelKey :
+          field.type === "dataSelector" ?
+            "do_lists.title" : `${field.table}.title`;
 
         const mapped = formatOptions(
-          field.valueKey || "value",
-          field.labelKey || "title",
+          valueKey,
+          labelKey,
           data,
           field.groupKey
         );
@@ -483,6 +506,7 @@ export default function FieldRenderer({
         setOpen(false);
       };
 
+
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -495,10 +519,7 @@ export default function FieldRenderer({
             value={displayValue}
             placeholder={field.placeholder || "Type to search..."}
             onChange={handleInputChange}
-            onFocus={() => {
-              const current = String(formik.values[key] ?? "");
-              setSearch(current);
-            }}
+
             onBlur={() => { setTimeout(() => setOpen(false), 150); }}
             onKeyDown={(e) => {
 
@@ -566,6 +587,7 @@ export default function FieldRenderer({
     case "dataSelectorFromTable":
     case "dataSelectorFromUniques":
     case "dataMethod": {
+
       if (field.multiple === true) {
         const valueArray: string[] = formik.values[key];
         return (
@@ -819,7 +841,7 @@ export default function FieldRenderer({
               disabled={field.disabled}
             >
               <option value="" disabled>
-                {field.placeholder || "Please select an option"}
+                {field?.["no-option"] || "Please select an option"}
               </option>
 
 

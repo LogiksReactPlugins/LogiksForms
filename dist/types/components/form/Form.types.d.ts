@@ -43,6 +43,8 @@ export interface FormField {
     search?: boolean;
     method?: string;
     vmode?: string;
+    "no-option"?: string;
+    queryid?: string;
 }
 export interface SqlEndpoints {
     baseURL: string;

@@ -2,7 +2,7 @@
 import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
-import type { string } from "yup";
+
 
 
 export type AutocompleteConfig = {
@@ -45,8 +45,10 @@ export interface FormField {
     default?: string | number | boolean | string[] | number[] | null;
     cols?: string;
     search?: boolean;
-    method?:string;
-    vmode?:string;
+    method?: string;
+    vmode?: string;
+    "no-option"?: string;
+    queryid?:string;
 
 }
 
@@ -96,15 +98,15 @@ export interface BaseFormViewProps {
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
-   
+
 }
 
 export interface SimpleFormViewProps extends BaseFormViewProps {
-fields: Record<string, Omit<FormField, "name">>;
+    fields: Record<string, Omit<FormField, "name">>;
 }
 
 export interface GroupedFormViewPrps extends BaseFormViewProps {
-     groupedFields: Record<string, FormField[]>; // grouped array of fields
+    groupedFields: Record<string, FormField[]>; // grouped array of fields
 }
 
 export interface FieldRendererProps {
