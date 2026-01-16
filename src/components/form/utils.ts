@@ -395,14 +395,10 @@ export const replacePlaceholders = (
 export const formatOptions = (
   valueKey: string,
   labelKey: string,
-  res: any,
+  items: any,
   groupKey?: string
 ): SelectOptions => {
-  const items = Array.isArray(res?.data?.data)
-    ? res.data.data
-    : Array.isArray(res?.data)
-      ? res.data
-      : res;
+
 
   if (!Array.isArray(items) || items.length === 0) {
     return {};
@@ -488,11 +484,20 @@ export const flattenOptions = (options: SelectOptions): FlatEntry[] => {
 
 
 
-export const isGroupedOptions = (options: SelectOptions): options is GroupedOptions => {
+
+export const isGroupedOptions = (
+  options: SelectOptions
+): options is GroupedOptions => {
   if (!options || typeof options !== "object") return false;
 
   const first = Object.values(options)[0];
-  return typeof first === "object" && first !== null;
+
+  // grouped options = object whose values are option maps
+  return (
+    typeof first === "object" &&
+    first !== null &&
+    !Array.isArray(first)
+  );
 };
 
 

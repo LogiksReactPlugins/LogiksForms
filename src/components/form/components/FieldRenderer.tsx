@@ -75,11 +75,11 @@ export default function FieldRenderer({
       let valueKey = field.valueKey ?
         field.valueKey :
         field.type === "dataSelector" ?
-          "do_lists.value" : `${field.table}.value`;
+          "do_lists.value" : "value";
 
       let labelKey = field.labelKey ? field.labelKey :
         field.type === "dataSelector" ?
-          "do_lists.title" : `${field.table}.title`;
+          "do_lists.title" : "title";
 
       const source = field?.source ?? {};
 
@@ -99,7 +99,7 @@ export default function FieldRenderer({
             const normalizedItems = Array.isArray(rawItems)
               ? rawItems.map(normalizeRowSafe)
               : [];
-            const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey);
+            const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
             if (isMounted) setOptions(mapped);
           } catch (err) {
@@ -131,7 +131,7 @@ export default function FieldRenderer({
             ? rawItems.map(normalizeRowSafe)
             : [];
 
-          const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey)
+          const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
 
           if (isMounted) setOptions(mapped);
 
@@ -192,10 +192,16 @@ export default function FieldRenderer({
               ? res.data
               : res;
 
+          console.log("rawItems", rawItems);
+
+
           const normalizedItems = Array.isArray(rawItems)
             ? rawItems.map(normalizeRowSafe)
             : [];
-          const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey);
+
+          console.log("normalizedItems", normalizedItems);
+          const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
+          console.log("mapped", mapped);
 
           if (isMounted) setOptions(mapped);
 
@@ -375,11 +381,11 @@ export default function FieldRenderer({
           let valueKey = field.valueKey ?
             field.valueKey :
             field.type === "dataSelector" ?
-              "do_lists.value" : `${field.table}.value`;
+              "do_lists.value" : "value";
 
           let labelKey = field.labelKey ? field.labelKey :
             field.type === "dataSelector" ?
-              "do_lists.title" : `${field.table}.title`;
+              "do_lists.title" : "title";
 
           const rawItems = Array.isArray(res?.data?.data)
             ? res.data.data
@@ -394,7 +400,7 @@ export default function FieldRenderer({
           const mapped = formatOptions(
             valueKey,
             labelKey,
-            { data: normalizedItems },
+            normalizedItems,
             field.groupKey
           );
 
@@ -438,16 +444,16 @@ export default function FieldRenderer({
             filter[column] = [search, "LIKE"]
           })
         }
-
-        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
         let valueKey = field.valueKey ?
           field.valueKey :
           field.type === "dataSelector" ?
-            "do_lists.value" : `${field.table}.value`;
+            "do_lists.value" : "value";
 
         let labelKey = field.labelKey ? field.labelKey :
           field.type === "dataSelector" ?
-            "do_lists.title" : `${field.table}.title`;
+            "do_lists.title" : "title";
+        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
+
 
         const rawItems = Array.isArray(res?.data?.data)
           ? res.data.data
@@ -523,6 +529,7 @@ export default function FieldRenderer({
     }
   };
 
+  console.log("options", options);
 
   switch (field.type) {
 
