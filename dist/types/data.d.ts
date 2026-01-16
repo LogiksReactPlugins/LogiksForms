@@ -513,6 +513,7 @@ export declare const example4: {
             label: string;
             type: string;
             width: number;
+            multiple: boolean;
         };
         compliance_report_attachment: {
             label: string;
@@ -800,5 +801,126 @@ export declare const example7: {
             width: number;
         };
     };
+};
+export declare const example8: {
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        runQuery: string;
+        operation: string;
+    };
+    hooks: {
+        preload: {
+            helpers: string[];
+        };
+    };
+    forcefill: {
+        groupuid: string;
+        guid: string;
+        type: string;
+    };
+    source: {
+        type: string;
+        dbopsid: string;
+    };
+    script: string;
+    fields: {
+        company_id: {
+            label: string;
+            type: string;
+            orderBy: string;
+            "no-option": string;
+            group: string;
+            required: boolean;
+            queryid: string;
+        };
+        name: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        branch_code: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        tags: {
+            label: string;
+            type: string;
+            group: string;
+        };
+        mail: {
+            label: string;
+            group: string;
+            type: string;
+            required: boolean;
+        };
+        landline: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        region: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        country: {
+            label: string;
+            group: string;
+            type: string;
+            orderby: string;
+            required: boolean;
+            queryid: string;
+        };
+        address: {
+            label: string;
+            group: string;
+            type: string;
+            required: boolean;
+        };
+        zipcode: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        contact_person1: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        contact_designation1: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        contact_person2: {
+            label: string;
+            group: string;
+        };
+        contact_designation2: {
+            label: string;
+            group: string;
+        };
+        manager: {
+            label: string;
+            group: string;
+        };
+        blocked: {
+            label: string;
+            group: string;
+            type: string;
+            groupid: string;
+            required: boolean;
+        };
+    };
+    module_refid: string;
+    module_type: string;
 };
 //# sourceMappingURL=data.d.ts.map

@@ -126,7 +126,7 @@ export default function FieldRenderer({
 
       // Case 3: Sql source
 
-      if (field.table || field.type === "dataSelector") {
+      if (field.table || field.type === "dataSelector" || field.queryid) {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -135,7 +135,7 @@ export default function FieldRenderer({
 
         try {
 
-          let query: sqlQueryProps;
+          let query: sqlQueryProps | undefined;
 
           if (field.type === "dataSelector") {
             query = {
@@ -145,26 +145,27 @@ export default function FieldRenderer({
                 groupid: field.groupid ?? "",
               },
             };
-          } else {
 
+          } else if (!field.queryid) {
+            // inline SQL
             if (!field.table || !field.columns) {
               console.error("Invalid SQL field config", field);
               return;
             }
 
             query = {
-              ...field,
               table: field.table,
               cols: field.columns,
+              where: field.where
+                ? refid
+                  ? replacePlaceholders(field.where, { refid })
+                  : field.where
+                : undefined,
             };
           }
 
           //  Optional where — added only if present
-          if (field.where && field.type !== "dataSelector") {
-            query.where = refid
-              ? replacePlaceholders(field.where, { refid })
-              : field.where;
-          }
+
 
           const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
           const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
@@ -1061,6 +1062,11 @@ export default function FieldRenderer({
     case "avatar":
     case "file":
       const isMultiple = field.multiple === true;
+      const files = Array.isArray(formik.values[key])
+        ? formik.values[key]
+        : formik.values[key]
+          ? [formik.values[key]]
+          : [];
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -1097,11 +1103,18 @@ export default function FieldRenderer({
               }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
           </div>
 
-          {formik.values[key]?.split("/").pop() &&
-            <div className='mt-1'>
-              <span className="text-sm ">{String(formik.values[key]?.split("/").pop())}</span>
-            </div>
-          }
+
+
+          {files.map((file) => {
+            const name = file?.split("/").pop();
+            if (!name) return null;
+
+            return (
+              <div key={file} className="mt-1">
+                <span className="text-sm">{name}</span>
+              </div>
+            );
+          })}
 
           {formik.touched[key] && formik.errors[key] &&
 

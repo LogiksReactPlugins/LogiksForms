@@ -556,7 +556,7 @@ export function flatFields(
 
 export async function fetchDataByquery(
   sqlOpsUrls: Record<string, any>,
-  query: Record<string, any>,
+  query: Record<string, any> | undefined,
   querid: string | undefined,
   filter: Record<string, any> = {}
 ): Promise<AxiosResponse<any>> {
@@ -568,7 +568,7 @@ export async function fetchDataByquery(
       const resQueryId = await axios({
         method: "POST",
         url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-        data: { "query": query },
+        data: { "query": query ?? {} },
         headers: {
           "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
         },
