@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 
 import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from '../Form.types.js';
-import { fetchDataByquery, flattenOptions, formatOptions, getOptionLabel, getSearchColumns, isAutocompleteConfig, isGroupedOptions, replacePlaceholders } from '../utils.js';
+import { fetchDataByquery, flattenOptions, formatOptions, getOptionLabel, getSearchColumns, isAutocompleteConfig, isGroupedOptions, normalizeRowSafe, replacePlaceholders } from '../utils.js';
 
 
 
@@ -89,8 +89,17 @@ export default function FieldRenderer({
         const methodFn = methodName ? methods[methodName] : undefined;
         if (methodFn) {
           try {
-            const result = await Promise.resolve(methodFn());
-            const mapped = formatOptions(valueKey, labelKey, result, field.groupKey);
+            const res = await Promise.resolve(methodFn());
+            const rawItems = Array.isArray(res?.data?.data)
+              ? res.data.data
+              : Array.isArray(res?.data)
+                ? res.data
+                : res;
+
+            const normalizedItems = Array.isArray(rawItems)
+              ? rawItems.map(normalizeRowSafe)
+              : [];
+            const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey);
 
             if (isMounted) setOptions(mapped);
           } catch (err) {
@@ -112,9 +121,17 @@ export default function FieldRenderer({
             params: source.params ?? {},
             headers: source.headers ?? {},
           });
+          const rawItems = Array.isArray(res?.data?.data)
+            ? res.data.data
+            : Array.isArray(res?.data)
+              ? res.data
+              : res;
 
+          const normalizedItems = Array.isArray(rawItems)
+            ? rawItems.map(normalizeRowSafe)
+            : [];
 
-          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey)
+          const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey)
 
           if (isMounted) setOptions(mapped);
 
@@ -168,7 +185,17 @@ export default function FieldRenderer({
 
 
           const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
-          const mapped = formatOptions(valueKey, labelKey, res, field.groupKey);
+
+          const rawItems = Array.isArray(res?.data?.data)
+            ? res.data.data
+            : Array.isArray(res?.data)
+              ? res.data
+              : res;
+
+          const normalizedItems = Array.isArray(rawItems)
+            ? rawItems.map(normalizeRowSafe)
+            : [];
+          const mapped = formatOptions(valueKey, labelKey, { data: normalizedItems }, field.groupKey);
 
           if (isMounted) setOptions(mapped);
 
@@ -354,10 +381,20 @@ export default function FieldRenderer({
             field.type === "dataSelector" ?
               "do_lists.title" : `${field.table}.title`;
 
+          const rawItems = Array.isArray(res?.data?.data)
+            ? res.data.data
+            : Array.isArray(res?.data)
+              ? res.data
+              : res;
+
+          const normalizedItems = Array.isArray(rawItems)
+            ? rawItems.map(normalizeRowSafe)
+            : [];
+
           const mapped = formatOptions(
             valueKey,
             labelKey,
-            res,
+            { data: normalizedItems },
             field.groupKey
           );
 
@@ -402,7 +439,7 @@ export default function FieldRenderer({
           })
         }
 
-        const { data } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
+        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
         let valueKey = field.valueKey ?
           field.valueKey :
           field.type === "dataSelector" ?
@@ -412,10 +449,20 @@ export default function FieldRenderer({
           field.type === "dataSelector" ?
             "do_lists.title" : `${field.table}.title`;
 
+        const rawItems = Array.isArray(res?.data?.data)
+          ? res.data.data
+          : Array.isArray(res?.data)
+            ? res.data
+            : res;
+
+        const normalizedItems = Array.isArray(rawItems)
+          ? rawItems.map(normalizeRowSafe)
+          : [];
+
         const mapped = formatOptions(
           valueKey,
           labelKey,
-          data,
+          { data: normalizedItems },
           field.groupKey
         );
 

@@ -26,5 +26,7 @@ export declare function flatFields(fields: Record<string, Omit<FormField, "name"
 export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any> | undefined, querid: string | undefined, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
 export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
 export declare function getSearchColumns(columns: string): string[];
+type Row = Record<string, unknown>;
+export declare const normalizeRowSafe: (row: Row) => Row;
 export {};
 //# sourceMappingURL=utils.d.ts.map

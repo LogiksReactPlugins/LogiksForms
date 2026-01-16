@@ -618,6 +618,26 @@ export function getSearchColumns(columns: string): string[] {
     })
     .filter((c): c is string => Boolean(c));
 }
+type Row = Record<string, unknown>;
+
+export const normalizeRowSafe = (row: Row): Row => {
+  const result: Row = {};
+
+  for (const [key, value] of Object.entries(row)) {
+    const normalizedKey = key.includes(".")
+      ? key.split(".").pop()!
+      : key;
+
+    if (normalizedKey in result) {
+      console.warn(`Duplicate key after normalization: ${normalizedKey}`);
+      continue;
+    }
+
+    result[normalizedKey] = value;
+  }
+
+  return result;
+};
 
 
 

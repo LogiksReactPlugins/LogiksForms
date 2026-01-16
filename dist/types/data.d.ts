@@ -770,6 +770,7 @@ export declare const example7: {
         table: string;
         cols: string;
         refid: number;
+        dbopsid: string;
         where: {
             id: string;
         };
@@ -828,6 +829,10 @@ export declare const example8: {
     source: {
         type: string;
         dbopsid: string;
+        refid: string;
+        where: {
+            id: string;
+        };
     };
     script: string;
     fields: {

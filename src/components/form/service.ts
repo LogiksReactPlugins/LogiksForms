@@ -56,6 +56,9 @@ export const sqlClient = {
             dbopsId = dbopsid;
         }
 
+        console.log("skipquery,dbopsid", skipquery, dbopsid);
+
+
         if (!skipquery) {
 
             const refid = await getRefId(endpoints, {
@@ -66,6 +69,8 @@ export const sqlClient = {
             });
             dbopsId = refid;
         }
+        console.log("dbopsId",dbopsId);
+        
         const res = await axios.post(
             endpoints.baseURL + endpoints.dbopsFetch,
             { refid: dbopsId, datahash },
