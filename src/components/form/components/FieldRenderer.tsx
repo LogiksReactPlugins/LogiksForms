@@ -72,14 +72,9 @@ export default function FieldRenderer({
         return;
       }
 
-      let valueKey = field.valueKey ?
-        field.valueKey :
-        field.type === "dataSelector" ?
-          "do_lists.value" : "value";
+      let valueKey = field.valueKey ?? "value";
 
-      let labelKey = field.labelKey ? field.labelKey :
-        field.type === "dataSelector" ?
-          "do_lists.title" : "title";
+      let labelKey = field.labelKey ?? "title";
 
       const source = field?.source ?? {};
 
@@ -183,7 +178,6 @@ export default function FieldRenderer({
 
           //  Optional where — added only if present
 
-
           const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
 
           const rawItems = Array.isArray(res?.data?.data)
@@ -192,17 +186,12 @@ export default function FieldRenderer({
               ? res.data
               : res;
 
-          console.log("rawItems", rawItems);
-
-
           const normalizedItems = Array.isArray(rawItems)
             ? rawItems.map(normalizeRowSafe)
             : [];
 
-          console.log("normalizedItems", normalizedItems);
           const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
-          console.log("mapped", mapped);
-
+    
           if (isMounted) setOptions(mapped);
 
         } catch (err) {
@@ -378,14 +367,8 @@ export default function FieldRenderer({
 
           const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
 
-          let valueKey = field.valueKey ?
-            field.valueKey :
-            field.type === "dataSelector" ?
-              "do_lists.value" : "value";
-
-          let labelKey = field.labelKey ? field.labelKey :
-            field.type === "dataSelector" ?
-              "do_lists.title" : "title";
+          let valueKey = field.valueKey ?? "value";
+          let labelKey = field.labelKey ?? "title";
 
           const rawItems = Array.isArray(res?.data?.data)
             ? res.data.data
@@ -444,14 +427,9 @@ export default function FieldRenderer({
             filter[column] = [search, "LIKE"]
           })
         }
-        let valueKey = field.valueKey ?
-          field.valueKey :
-          field.type === "dataSelector" ?
-            "do_lists.value" : "value";
+        let valueKey = field.valueKey ?? "value";
 
-        let labelKey = field.labelKey ? field.labelKey :
-          field.type === "dataSelector" ?
-            "do_lists.title" : "title";
+        let labelKey = field.labelKey ?? "title";
         const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
 
 
