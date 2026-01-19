@@ -28,6 +28,7 @@ export const example10 = {
             "type": "dataSelectorFromTable",
             "required": true,
             "width": 4,
+            method:"abc",
 
             "ajaxchain": [
                 {

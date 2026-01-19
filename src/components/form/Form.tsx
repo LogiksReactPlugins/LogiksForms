@@ -153,7 +153,10 @@ export default function LogiksForm({
       if (methodFn) {
         try {
           const res = await Promise.resolve(methodFn(finalValues));
-          callback?.(res)
+          callback?.(res);
+          if (methods?.handleActions) {
+            methods.handleActions(formJson?.gotolinks);
+          }
         } catch (err) {
           callback?.(err)
           console.error("Method execution failed:", err);
@@ -175,7 +178,10 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
-        callback?.(res)
+        callback?.(res);
+        if (methods?.handleActions) {
+          methods.handleActions(formJson?.gotolinks);
+        }
       } catch (err) {
         callback?.(err)
         console.error("API fetch failed:", err);
@@ -254,7 +260,10 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
-        callback?.(res)
+        callback?.(res);
+        if (methods?.handleActions) {
+          methods.handleActions(formJson?.gotolinks);
+        }
       } catch (err) {
         callback?.(err)
         console.error("API fetch failed:", err);

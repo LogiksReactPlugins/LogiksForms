@@ -4,24 +4,24 @@ import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
 
 type SqlSrcByTable = {
-  table: string;
-  columns: string;
-  where?: Record<string, string>;
-  queryid?: never;
+    table: string;
+    columns: string;
+    where?: Record<string, string>;
+    queryid?: never;
 };
 
 type SqlSrcByQueryId = {
-  queryid: string;
-  where?: Record<string, string>;
-  table?: never;
-  columns?: never;
+    queryid: string;
+    where?: Record<string, string>;
+    table?: never;
+    columns?: never;
 };
 
 type AutocompleteSrc = SqlSrcByTable | SqlSrcByQueryId;
 
 export type AutocompleteConfig = {
-  target: string;
-  src: AutocompleteSrc;
+    target: string;
+    src: AutocompleteSrc;
 };
 
 
@@ -61,6 +61,14 @@ export interface FormField {
     vmode?: string;
     "no-option"?: string;
     queryid?: string;
+    min?: number | string;
+    max?: number | string;
+    minlength?: number;
+    maxlength?: number;
+    onChange?: string;
+    onBlur?: string;
+    onFocus?: string;
+    onClick?: string;
 
 }
 
@@ -82,7 +90,8 @@ export interface FormJson {
     forcefill?: Record<string, string>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
-    widget?: boolean
+    widget?: boolean;
+    gotolinks?: string;
 }
 
 export interface FormProps {

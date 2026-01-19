@@ -54,6 +54,14 @@ export interface FormField {
     vmode?: string;
     "no-option"?: string;
     queryid?: string;
+    min?: number | string;
+    max?: number | string;
+    minlength?: number;
+    maxlength?: number;
+    onChange?: string;
+    onBlur?: string;
+    onFocus?: string;
+    onClick?: string;
 }
 export interface SqlEndpoints {
     baseURL: string;
@@ -73,6 +81,7 @@ export interface FormJson {
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
     widget?: boolean;
+    gotolinks?: string;
 }
 export interface FormProps {
     formJson: FormJson;

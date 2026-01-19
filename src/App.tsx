@@ -30,10 +30,15 @@ function App() {
 
     }
 
+    function abc (id:string)  {
+           console.log("idddddddddd",id);
+           
+    }
+
     return <LogiksForm
         formJson={example10}
         onCancel={() => { }}
-        methods={{ getFormData, getOptions }}
+        methods={{ getFormData, getOptions , abc}}
         callback={callbackFn}
 
 

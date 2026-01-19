@@ -25,6 +25,7 @@ export declare const example10: {
             type: string;
             required: boolean;
             width: number;
+            method: string;
             ajaxchain: {
                 target: string;
                 src: {
