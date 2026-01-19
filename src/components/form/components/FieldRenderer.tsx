@@ -69,8 +69,8 @@ export default function FieldRenderer({
 
     const fetchData = async () => {
       let valueKey = field.valueKey ?? "value";
-
       let labelKey = field.labelKey ?? "title";
+
       if (field?.options) {
 
         //  CASE 1: flat or grouped object
@@ -103,8 +103,6 @@ export default function FieldRenderer({
         setOptions(mapped);
         return;
       }
-
-
 
       const source = field?.source ?? {};
 

@@ -442,22 +442,24 @@ export const getOptionLabel = (
 ): string | undefined => {
   if (!options || value == null) return;
 
+  const key = String(value);
   const first = Object.values(options)[0];
 
   // flat
   if (typeof first === "string") {
-    return (options as FlatOptions)[value];
+    return (options as FlatOptions)[key];
   }
 
   // grouped
   for (const group of Object.values(options as GroupedOptions)) {
-    if (value in group) {
-      return group[value];
+    if (key in group) {
+      return group[key];
     }
   }
 
   return;
 };
+
 
 
 type FlatEntry = [string, string];
