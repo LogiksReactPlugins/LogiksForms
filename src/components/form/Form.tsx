@@ -74,8 +74,11 @@ export default function LogiksForm({
         }
       }
 
-      if (source.type === "sql" && source.refid &&
-        source.refid != "0" && sqlOpsUrls?.operation !== "create") {
+      if ((source.type === "sql" &&
+        source.refid &&
+        source.refid !== "0" &&
+        sqlOpsUrls?.operation !== "create") ||
+        (sqlOpsUrls?.operation !== "create" && source.dbopsid)) {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");

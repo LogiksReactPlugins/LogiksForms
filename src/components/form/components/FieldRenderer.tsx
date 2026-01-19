@@ -404,7 +404,7 @@ export default function FieldRenderer({
           }
 
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid);
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, { refid: value });
 
           let valueKey = field.valueKey ?? "value";
           let labelKey = field.labelKey ?? "title";
