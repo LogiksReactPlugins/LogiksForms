@@ -1,5 +1,5 @@
 import LogiksForm from "./components/form/index.js";
-import { example11 } from "./data.js"
+import { example10 } from "./data.js"
 
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
     }
 
     return <LogiksForm
-        formJson={example11}
+        formJson={example10}
         onCancel={() => { }}
         methods={{ getFormData, getOptions , abc}}
         callback={callbackFn}

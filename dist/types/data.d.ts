@@ -14,256 +14,407 @@ export declare const example10: {
     };
     source: {
         type: string;
-        dbopsid: string;
+        table: string;
     };
     forcefill: {
         groupuid: string;
         guid: string;
+        company_id: string;
     };
+    actions11: {
+        newContact: {
+            icon: string;
+            label: string;
+            class: string;
+        };
+    };
+    simpleform: boolean;
+    buttons: {
+        markAsDeal: {
+            label: string;
+            icon: string;
+            class: string;
+            float: string;
+            policy: string;
+        };
+        markAsLost: {
+            label: string;
+            icon: string;
+            class: string;
+            policy: string;
+        };
+        markAsJunk: {
+            label: string;
+            icon: string;
+            class: string;
+            policy: string;
+        };
+        markAsNext: {
+            label: string;
+            icon: string;
+            class: string;
+            policy: string;
+        };
+    };
+    gotolink: string;
     fields: {
-        company_code_id: {
+        title: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        broker_name: {
             label: string;
             type: string;
-            required: boolean;
-            width: number;
-            method: string;
-            ajaxchain: {
+            table: string;
+            columns: string;
+            search: boolean;
+            group: string;
+            "no-option": string;
+            autocomplete: {
                 target: string;
                 src: {
-                    type: string;
-                    queryid: string;
+                    table: string;
+                    columns: string;
+                    where: {
+                        org_code: string;
+                    };
                 };
-            }[];
+            };
+            required: boolean;
+        };
+        broker_email: {
+            label: string;
+            type: string;
+            group: string;
+            hidden: boolean;
+        };
+        broker_mobile: {
+            label: string;
+            type: string;
+            group: string;
+            hidden: boolean;
+        };
+        broker_address: {
+            label: string;
+            type: string;
+            group: string;
+            width: number;
+            hidden: boolean;
+        };
+        customer_id: {
+            label: string;
+            group: string;
+            type: string;
+            table: string;
+            columns: string;
+            search: boolean;
+            where: {
+                "(type like '%customer%' OR type like '%other%')": string;
+                "length(full_name)>0": string;
+            };
+            autocomplete123: {
+                target: string;
+                src: {
+                    table: string;
+                    columns: string;
+                    where: {
+                        "profiletbl.id": string;
+                        "profiletbl_address.profile_id": string;
+                        "profiletbl_address.address_type": string;
+                        "profiletbl_address.blocked": string;
+                    };
+                };
+            };
+            class: string;
+            "no-option": string;
+        };
+        customer_type: {
+            label: string;
+            group: string;
+            type: string;
             options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        spv_id: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-            options: never[];
-        };
-        sector_id: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
+                chat: string;
+                direct: string;
             };
-            options: never[];
+            groupid: string;
+            default: string;
+            "no-option": string;
+            required: boolean;
         };
-        project_function_id: {
+        contact_name: {
             label: string;
             type: string;
+            group: string;
             required: boolean;
+            class: string;
+            hidden: boolean;
             width: number;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
-            options: never[];
         };
-        location_id: {
+        contact_email: {
             label: string;
             type: string;
+            group: string;
             required: boolean;
+            class: string;
+            hidden: boolean;
             width: number;
-            options: never[];
         };
-        month: {
+        contact_mobile: {
+            label: string;
+            type: string;
+            group: string;
+            required: boolean;
+            minlength: number;
+            maxlength: number;
+            class: string;
+            hidden: boolean;
+            width: number;
+        };
+        contact_address: {
+            label: string;
+            type: string;
+            group: string;
+            class: string;
+            width: number;
+            hidden: boolean;
+        };
+        contact_street: {
+            label: string;
+            type: string;
+            group: string;
+            class: string;
+            hidden: boolean;
+            width: number;
+        };
+        contact_city: {
+            label: string;
+            group: string;
+            class: string;
+            hidden: boolean;
+            type: string;
+            width: number;
+        };
+        contact_state: {
+            label: string;
+            type: string;
+            group: string;
+            class: string;
+            hidden: boolean;
+            width: number;
+        };
+        contact_zipcode: {
+            label: string;
+            type: string;
+            group: string;
+            class: string;
+            hidden: boolean;
+            width: number;
+        };
+        contact_country: {
             label: string;
             type: string;
             groupid: string;
-            required: boolean;
+            group: string;
+            class: string;
+            hidden: boolean;
             width: number;
-            options: ({
-                title: string;
-                value: string;
-                category: string;
-                privilege: string;
-                class?: never;
-            } | {
-                title: string;
-                value: string;
-                category: string;
-                class: null;
-                privilege: string;
-            })[];
         };
-        subject: {
+        lead_date: {
             label: string;
+            group: string;
             type: string;
             required: boolean;
+            default: string;
             width: number;
         };
-        letter_no: {
+        lead_year: {
             label: string;
+            group: string;
+            required: boolean;
+            hidden: boolean;
+            width: number;
+        };
+        net_amount: {
+            label: string;
+            group: string;
             type: string;
+            vmode: string;
+            required: boolean;
+        };
+        lead_value: {
+            label: string;
+            group: string;
+            type: string;
+            required: boolean;
+        };
+        lead_priority: {
+            label: string;
+            group: string;
+            type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            groupid: string;
+            required: boolean;
+        };
+        lead_source: {
+            type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            label: string;
+            group: string;
+            groupid: string;
+            required: boolean;
+        };
+        lead_status: {
+            label: string;
+            group: string;
+            type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            groupid: string;
+            "no-option": string;
             required: boolean;
             width: number;
         };
-        issued_by: {
+        lead_type: {
             label: string;
+            group: string;
             type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            groupid: string;
+            suggest: boolean;
             required: boolean;
             width: number;
         };
-        observation_issued_count: {
+        enquiry_type: {
             label: string;
+            group: string;
             type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            groupid: string;
             required: boolean;
             width: number;
         };
-        observation_report_file: {
-            label: string;
+        marketting_source: {
             type: string;
+            options: {
+                chat: string;
+                direct: string;
+            };
+            label: string;
+            group: string;
+            groupid: string;
+            "no-option": string;
+            required: boolean;
+        };
+        marketting_campaign: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        enquiry_product_descs: {
+            label: string;
+            group: string;
+            type: string;
+            maxlength: number;
+            required: boolean;
             width: number;
         };
-        compliance_report_file: {
+        blocked: {
             label: string;
+            group: string;
             type: string;
-            width: number;
-        };
-    };
-    infoview: {
-        template: string;
-        groups: {
-            category_details: {
-                label: string;
-                type: string;
-                src: string;
-                vmode: string;
-                config: {
-                    type: string;
-                    uimode: string;
-                    uiswitcher: boolean;
-                    policy_create: string;
-                    policy_view: string;
-                    policy_delete: string;
-                    policy_update: string;
-                    toolbar: {
-                        search: boolean;
-                        print: boolean;
-                        export: boolean;
-                        email: boolean;
-                    };
-                    orderby: string;
-                    colkey: string;
-                    "popup.form": {
-                        source: {
-                            type: string;
-                            dbopsid: string;
-                        };
-                        forcefill: {
-                            guid: string;
-                            created_by: string;
-                            hse_observations_external_id: string;
-                        };
-                        fields: {
-                            type: {
-                                label: string;
-                                type: string;
-                                required: boolean;
-                                groupid: string;
-                                width: number;
-                            };
-                            type_issued: {
-                                label: string;
-                                type: string;
-                                width: number;
-                            };
-                            type_closed: {
-                                label: string;
-                                type: string;
-                                width: number;
-                            };
-                            type_wip: {
-                                label: string;
-                                type: string;
-                                width: number;
-                            };
-                            type_not_applicable: {
-                                label: string;
-                                type: string;
-                                width: number;
-                            };
-                            type_open: {
-                                label: string;
-                                type: string;
-                                width: number;
-                            };
-                        };
-                    };
-                    datagrid: {
-                        id: {
-                            label: string;
-                            searchable: boolean;
-                        };
-                        type: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                            formatter: string;
-                        };
-                        type_issued: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                        };
-                        type_closed: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                        };
-                        type_wip: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                        };
-                        type_not_applicable: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                        };
-                        type_open: {
-                            label: string;
-                            searchable: boolean;
-                            sortable: boolean;
-                        };
-                    };
-                    actions: {
-                        addInfoRecord: {
-                            label: string;
-                        };
-                    };
-                    buttons: {
-                        editRecord: {
-                            label: string;
-                            icon: string;
-                        };
-                        deleteRecord: {
-                            label: string;
-                            icon: string;
-                        };
-                    };
-                    queryid: string;
-                };
-                width: number;
+            vmode: string;
+            required: boolean;
+            options: {
+                "": boolean;
+                true: string;
+                false: string;
             };
         };
+        enquiry_due: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        open_by: {
+            label: string;
+            group: string;
+            type: string;
+            table: string;
+            columns: string;
+            where: {
+                blocked: string;
+                "status in ('active','under_notice','probationary')": string;
+                "loginid <> ''": string;
+                "length(full_name)>0": string;
+            };
+            default: string;
+            width: number;
+        };
+        assigned_to: {
+            label: string;
+            group: string;
+            type: string;
+            table: string;
+            columns: string;
+            where: {
+                blocked: string;
+                "status in ('active','under_notice','probationary')": string;
+                "loginid <> ''": string;
+                "length(full_name)>0": string;
+            };
+            default: string;
+            width: number;
+        };
+        manager: {
+            label: string;
+            group: string;
+            type: string;
+            table: string;
+            columns: string;
+            where: {
+                blocked: string;
+                "status in ('active','under_notice','probationary')": string;
+                "length(full_name)>0": string;
+            };
+            default: string;
+            width: number;
+        };
+        tags: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        remarks: {
+            label: string;
+            group: string;
+            width: string;
+            maxlength: number;
+            type: string;
+        };
+        prelead_id: {
+            label: string;
+            group: string;
+            type: string;
+            hidden: boolean;
+            width: number;
+        };
     };
-    module_refid: string;
-    module_type: string;
 };
 //# sourceMappingURL=data.d.ts.map

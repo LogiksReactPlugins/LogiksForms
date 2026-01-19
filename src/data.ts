@@ -1,9 +1,9 @@
 
 
 export const example10 = {
-    "endPoints": {
+       "endPoints": {
         "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IlZpdjhWT09VNVFycUpOSWN1UTViSWdJK1gvN1BkcWNjeENWS2hxUHl3TTBsNUJDQnJJSVVib0Fyam1kaFhsdHZyYWx3SGJ3NnRnQ2pYV05XcER2RHp4ZDA5MjUweXNUQjRPL0Y1S2J6WFdMNTRicnRjcmdkU1l1QnBwSHI0MGV2QjRZQ0Y2S1Jsdk5EVlhqZTJIVU9PdWFxNzFqWTRWVEJpbTk0U1dHUXVPdG5sRGRsVEtZRFdCYVBRQ3Z4Q29Fb0FyOXl5aEtNUGtjQ3B1MG5SODlaRERzd211bGN0M24zTlhYQ3NKdlowRloxb3VLaktLYmxVYWdaa0h6K1A5aUNRK3NERU5rRlNjWkxINS9STElnZEVPZ0FHbWhVeUZJUThZbVlDV0E9IiwiaWF0IjoxNzY4ODEwMzU0LCJleHAiOjE3Njg4MTM5NTQsImp0aSI6ImFjYzoxOjE3Njg4MTAzNTQ4NzM6d2ViIn0.WssYBWYeZnHheYJkxd4JN3GYV1uWTL3_hQ2O3oXIXh8",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkVLZzNZbWRybWUwbzN2Z1Z1UFg0WlBJN2E2TXRtQ2RtQ0FRY1hUcExMT0RFdERRbldKZjhYZ2YrWU5uQUxVdEhrcmVBTkJsVTdUQVFqSjFoY21YVy9ndnp5VS9Oc2ZybzJEeXBycFM1bzlvMStrbmpBaTFXTGhTQUgrNFNvQXNjSGx5YzRBMnNkTjZLelpUdXV3MkprRTNJZStUU0RvVGhhZlZoektNRnZibTJkMGdtRnZBMGF1ME9VQUFyTTNlTlFSUDN3MGRsWGo1VzdjaUxLNjhMQXBZWnV3SGlobXFNNXpqeDc3M2FGZEYrSHVsdFRRMTRFalZwS1hCRkRGMGF0WUNyMStValhHUnVEUUwzRDZRakVZWTNuMWRUcmpzWFV6dGZNeWM9IiwiaWF0IjoxNzY4ODQwOTA2LCJleHAiOjE3Njg4NDQ1MDYsImp0aSI6ImFjYzoxOjE3Njg4NDA5MDY2NDI6d2ViIn0.4-UCiBPzPdffx_gjb4B5vDtXr0nlucNw3RI6kxSWOXI",
         "dbopsGetHash": "/api/dbops",
         "dbopsGetRefId": "/api/dbops/save",
         "dbopsCreate": "/api/dbops/create",
@@ -11,349 +11,414 @@ export const example10 = {
         "dbopsFetch": "/api/dbops/fetch",
         "registerQuery": "/api/query/save",
         "runQuery": "/api/query/run",
-        "operation": "edit",
-        "refid":"1"
+        "operation": "create",
+        "refid": "1"
 
     },
-    "source": {
-        "type": "sql",
-        "dbopsid": "forms%40hse.external_observations%40"
+  "source": {
+    "type": "sql",
+    "table": "leads_tbl"
+  },
+  "forcefill": {
+    "groupuid": "#SESS_GROUP_NAME#",
+    "guid": "#SESS_GUID#",
+    "company_id": "#COMP_ID#"
+  },
+  "actions11": {
+    "newContact": {
+      "icon": "",
+      "label": "Add Client/Company",
+      "class": "btn btn-warning pull-left"
+    }
+  },
+  "simpleform": false,
+  "buttons": {
+    "markAsDeal": {
+      "label": "Mark As Deal",
+      "icon": "fa fa-check",
+      "class": "btnGreen",
+      "float": "left",
+      "policy": "leadbook.update.access"
     },
-    "forcefill": {
-        "groupuid": "#SESS_GROUP_NAME#",
-        "guid": "#SESS_GUID#"
+    "markAsLost": {
+      "label": "Mark As Lost",
+      "icon": "fa fa-times",
+      "class": "btn btn-primary",
+      "policy": "leadbook.update.access"
     },
-    "fields": {
-        "company_code_id": {
-            "label": "Company",
-            "type": "dataSelectorFromTable",
-            "required": true,
-            "width": 4,
-            method:"abc",
+    "markAsJunk": {
+      "label": "Mark As Junk",
+      "icon": "fa fa-times",
+      "class": "btn btn-danger pull-left",
+      "policy": "leadbook.update.access"
+    },
+    "markAsNext": {
+      "label": "Next",
+      "icon": "fa fa-angle-double-right",
+      "class": "btn btn-warning",
+      "policy": "leadbook.update.access"
+    }
+  },
+  "gotolink": "infoview@lead.main_view/{hashid}",
+  "fields": {
+    "title": {
+      "label": "Lead Title / For",
+      "group": "Lead Details",
+      "required": true
+    },
+    "broker_name": {
+      "label": "Reference From Partner",
+      "type": "dataSelectorFromTable",
+      "table": "profiletbl_organisation",
+      "columns": "organization as title,org_code as value",
+      "search": true,
+      "group": "Lead Details",
+      "no-option": "Select Reference From Partner",
+      "autocomplete": {
+        "target": "broker_email,broker_mobile,broker_address",
+        "src": {
+          "table": "profiletbl_organisation",
+          "columns": "org_mail as broker_email,org_landline as broker_mobile,org_address1 as broker_address",
+          "where": {
+            "org_code": "#refid#"
+          }
+        }
+      },
+      "required": true
+    },
+    "broker_email": {
+      "label": "Reference Email",
+      "type": "email",
+      "group": "Lead Details",
+      "hidden": true
+    },
+    "broker_mobile": {
+      "label": "Reference Mobile",
+      "type": "phone",
+      "group": "Lead Details",
+      "hidden": true
+    },
+    "broker_address": {
+      "label": "Reference Address",
+      "type": "textarea",
+      "group": "Lead Details",
+      "width": 12,
+      "hidden": true
+    },
+    "customer_id": {
+      "label": "Client/Company",
+      "group": "Customer",
+      "type": "dataSelectorFromTable",
+      "table": "profiletbl",
+      "columns": "full_name as title, id as value",
+      "search": true,
+      "where": {
+        "(type like '%customer%' OR type like '%other%')": "RAW",
+        "length(full_name)>0": "RAW"
+      },
+      "autocomplete123": {
+        "target": "contact_name,contact_email,contact_mobile,contact_address,contact_street,contact_city,contact_state,contact_country,contact_zipcode",
+        "src": {
+          "table": "profiletbl,profiletbl_address",
+          "columns": "profiletbl.full_name as contact_name,profiletbl.email1 as contact_email,profiletbl.mobile as contact_mobile,profiletbl_address.street as contact_street,profiletbl_address.address as contact_address,profiletbl_address.city as contact_city,profiletbl_address.state as contact_state,profiletbl_address.country as contact_country,profiletbl_address.zipcode as contact_zipcode,profiletbl.full_name as contact_company",
+          "where": {
+            "profiletbl.id": "#refid#",
+            "profiletbl_address.profile_id": "#refid#",
+            "profiletbl_address.address_type": "primary",
+            "profiletbl_address.blocked": "false"
+          }
+        }
+      },
+      "class": "contact_field contact_client",
+      "no-option": "Select Client/Company"
+    },
+    "customer_type": {
+      "label": "Client/Company Type",
+      "group": "Customer",
 
-            "ajaxchain": [
-                {
-                    "target": "spv_id",
-                    "src": {
-                        "type": "sql",
-                        "queryid": "forms%40hse.external_observations%40fields.company_code_id.ajaxchain.0"
-                    }
-                },
-                {
-                    "target": "sector_id",
-                    "src": {
-                        "type": "sql",
-                        "queryid": "forms%40hse.external_observations%40fields.company_code_id.ajaxchain.1"
-                    }
-                }
-            ],
-            "options": [
-                {
-                    "title": "WEL",
-                    "value": 1
-                },
-                {
-                    "title": "WMEL",
-                    "value": 2
-                }
-            ]
-        },
-        "spv_id": {
-            "label": "SPV",
-            "type": "select",
-            "required": true,
-            "width": 4,
-            "options": []
-        },
-        "sector_id": {
-            "label": "Sector",
-            "type": "select",
-            "required": true,
-            "width": 4,
-            "ajaxchain": {
-                "target": "project_function_id",
-                "src": {
-                    "type": "sql",
-                    "queryid": "forms%40hse.external_observations%40fields.sector_id.ajaxchain.0"
-                }
-            },
-            "options": []
-        },
-        "project_function_id": {
-            "label": "Project Function ",
-            "type": "select",
-            "required": true,
-            "width": 5,
-            "ajaxchain": {
-                "target": "location_id",
-                "src": {
-                    "type": "sql",
-                    "queryid": "forms%40hse.external_observations%40fields.project_function_id.ajaxchain.0"
-                }
-            },
-            "options": []
-        },
-        "location_id": {
-            "label": "Location",
-            "type": "select",
-            "required": true,
-            "width": 5,
-            "options": []
-        },
-        "month": {
-            "label": "Month",
-            "type": "select",
-            "groupid": "month_name",
-            "required": true,
-            "width": 4,
-            "options": [
-                {
-                    "title": "January",
-                    "value": "1",
-                    "category": "quarter1",
-                    "privilege": "*"
-                },
-                {
-                    "title": "February",
-                    "value": "2",
-                     "category": "quarter1",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "March",
-                    "value": "3",
-                     "category": "quarter1",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "April",
-                    "value": "4",
-                     "category": "quarter1",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "May",
-                    "value": "5",
-                     "category": "quarter2",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "June",
-                    "value": "6",
-                    "class": null,
-                    "category": "quarter2",
-                    "privilege": "*"
-                },
-                {
-                    "title": "July",
-                    "value": "7",
-                    "class": null,
-                    "category": "quarter2",
-                    "privilege": "*"
-                },
-                {
-                    "title": "August",
-                    "value": "8",
-                    "class": null,
-                    "category": "quarter2",
-                    "privilege": "*"
-                },
-                {
-                    "title": "September",
-                    "value": "9",
-                    "class": null,
-                    "category": "quarter3",
-                    "privilege": "*"
-                },
-                {
-                    "title": "October",
-                    "value": "10",
-                    "category": "quarter3",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "November",
-                    "value": "11",
-                    "class": null,
-                     "category": "quarter3",
-                    "privilege": "*"
-                },
-                {
-                    "title": "December",
-                    "value": "12",
-                    "class": null,
-                     "category": "quarter3",
-                    "privilege": "*"
-                }
-            ]
-        },
-        "subject": {
-            "label": "Subject",
-            "type": "text",
-            "required": true,
-            "width": 4
-        },
-        "letter_no": {
-            "label": "Letter No",
-            "type": "text",
-            "required": true,
-            "width": 4
-        },
-        "issued_by": {
-            "label": "Issued By",
-            "type": "text",
-            "required": true,
-            "width": 4
-        },
-        "observation_issued_count": {
-            "label": "No. of observation issued",
-            "type": "number",
-            "required": true,
-            "width": 4
-        },
-        "observation_report_file": {
-            "label": "Observation Report",
-            "type": "file",
-            "width": 4
-        },
-        "compliance_report_file": {
-            "label": "Compliance Report",
-            "type": "file",
-            "width": 4
-        }
-    },
-    "infoview": {
-        "template": "cards",
-        "groups": {
-            "category_details": {
-                "label": "Category Details",
-                "type": "module",
-                "src": "infoviewTable",
-                "vmode": "edit",
-                "config": {
-                    "type": "sql",
-                    "uimode": "grid",
-                    "uiswitcher": false,
-                    "policy_create": "hse.create.access",
-                    "policy_view": "hse.view.access",
-                    "policy_delete": "hse.delete.access",
-                    "policy_update": "hse.update.access",
-                    "toolbar": {
-                        "search": true,
-                        "print": false,
-                        "export": false,
-                        "email": false
-                    },
-                    "orderby": "hse_observations_external_details.edited_on DESC",
-                    "colkey": "hse_observations_external_id",
-                    "popup.form": {
-                        "source": {
-                            "type": "sql",
-                            "dbopsid": "forms%40hse.external_observations%40"
-                        },
-                        "forcefill": {
-                            "guid": "#SESS_GUID#",
-                            "created_by": "#SESS_USER_ID#",
-                            "hse_observations_external_id": "#refid#"
-                        },
-                        "fields": {
-                            "type": {
-                                "label": "Type",
-                                "type": "dataSelector",
-                                "required": true,
-                                "groupid": "hse_observations_external_type",
-                                "width": 4
-                            },
-                            "type_issued": {
-                                "label": " Issued Count",
-                                "type": "number",
-                                "width": 4
-                            },
-                            "type_closed": {
-                                "label": "Closed Count",
-                                "type": "number",
-                                "width": 4
-                            },
-                            "type_wip": {
-                                "label": "Work In Progress Count",
-                                "type": "number",
-                                "width": 4
-                            },
-                            "type_not_applicable": {
-                                "label": "Not Applicable Count",
-                                "type": "number",
-                                "width": 4
-                            },
-                            "type_open": {
-                                "label": "Open Count",
-                                "type": "number",
-                                "width": 4
-                            }
-                        }
-                    },
-                    "datagrid": {
-                        "id": {
-                            "label": "ID",
-                            "searchable": true
-                        },
-                        "type": {
-                            "label": "Type",
-                            "searchable": true,
-                            "sortable": true,
-                            "formatter": "pretty"
-                        },
-                        "type_issued": {
-                            "label": " Issued Count",
-                            "searchable": true,
-                            "sortable": true
-                        },
-                        "type_closed": {
-                            "label": "Closed Count",
-                            "searchable": true,
-                            "sortable": true
-                        },
-                        "type_wip": {
-                            "label": "Work In Progress Count",
-                            "searchable": true,
-                            "sortable": true
-                        },
-                        "type_not_applicable": {
-                            "label": "Not Applicable Count",
-                            "searchable": true,
-                            "sortable": true
-                        },
-                        "type_open": {
-                            "label": "Open Count",
-                            "searchable": true,
-                            "sortable": true
-                        }
-                    },
-                    "actions": {
-                        "addInfoRecord": {
-                            "label": "Add Record"
-                        }
-                    },
-                    "buttons": {
-                        "editRecord": {
-                            "label": "Edit Record",
-                            "icon": "fa fa-pen"
-                        },
-                        "deleteRecord": {
-                            "label": "Delete Record",
-                            "icon": "fa fa-trash text-red-500"
-                        }
-                    },
-                    "queryid": "forms%40hse.external_observations%40infoview.groups.category_details"
-                },
-                "width": 12
-            }
-        }
-    },
-    "module_refid": "hse.external_observations",
-    "module_type": "forms"
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "groupid": "profile_customer_type",
+  "default": "old",
+  "no-option": "Select Client/Company Type",
+  "required": true
+},
+"contact_name": {
+  "label": "Contact Name",
+  "type": "text",
+  "group": "Customer",
+  "required": true,
+  "class": "contact_field contact_field_mandetory",
+  "hidden": false,
+  "width": 4
+},
+"contact_email": {
+  "label": "Email",
+  "type": "email",
+  "group": "Customer",
+  "required": true,
+  "class": "contact_field contact_field_mandetory",
+  "hidden": false,
+  "width": 4
+},
+"contact_mobile": {
+  "label": "Mobile",
+  "type": "phone",
+  "group": "Customer",
+  "required": true,
+  "minlength": 10,
+  "maxlength": 10,
+  "class": "contact_field contact_field_mandetory",
+  "hidden": false,
+  "width": 4
+},
+"contact_address": {
+  "label": "Address",
+  "type": "textarea",
+  "group": "Customer",
+  "class": "contact_field",
+  "width": 12,
+  "hidden": false
+},
+"contact_street": {
+  "label": "Street",
+  "type": "text",
+  "group": "Customer",
+  "class": "contact_field",
+  "hidden": false,
+  "width": 4
+},
+"contact_city": {
+  "label": "City",
+  "group": "Customer",
+  "class": "contact_field",
+  "hidden": false,
+  "type": "suggest",
+  "width": 4
+},
+"contact_state": {
+  "label": "State",
+  "type": "suggest",
+  "group": "Customer",
+  "class": "contact_field",
+  "hidden": false,
+  "width": 4
+},
+"contact_zipcode": {
+  "label": "Zipcode",
+  "type": "text",
+  "group": "Customer",
+  "class": "contact_field",
+  "hidden": false,
+  "width": 6
+},
+"contact_country": {
+  "label": "Country",
+  "type": "suggest",
+  "groupid": "country",
+  "group": "Customer",
+  "class": "contact_field",
+  "hidden": false,
+  "width": 6
+},
+"lead_date": {
+  "label": "Lead Date",
+  "group": "Lead Details",
+  "type": "date",
+  "required": true,
+  "default": "#SESS_CURRENT_DATE#",
+  "width": 6
+},
+"lead_year": {
+  "label": "Lead Year",
+  "group": "Lead Details",
+  "required": true,
+  "hidden": true,
+  "width": 4
+},
+"net_amount": {
+  "label": "Net Amount",
+  "group": "Lead Details",
+  "type": "text",
+  "vmode": "edit",
+  "required": true
+},
+"lead_value": {
+  "label": "Lead Value",
+  "group": "Lead Details",
+  "type": "text",
+  "required": false
+},
+"lead_priority": {
+  "label": "Lead Priority",
+  "group": "Lead Details",
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "groupid": "lead_priority",
+  "required": true
+},
+"lead_source": {
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "label": "Lead Source",
+  "group": "Lead Details",
+  "groupid": "leads_source",
+  "required": true
+},
+"lead_status": {
+  "label": "Lead Status",
+  "group": "Lead Details",
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "groupid": "lead_status",
+  "no-option": "Select Lead Status",
+  "required": true,
+  "width": 6
+},
+"lead_type": {
+  "label": "Lead Type",
+  "group": "Lead Details",
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "groupid": "lead_type",
+  "suggest": true,
+  "required": true,
+  "width": 6
+},
+"enquiry_type": {
+  "label": "Enquiry Type",
+  "group": "Lead Details",
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "groupid": "lead_enquiry_type",
+  "required": true,
+  "width": 6
+},
+"marketting_source": {
+  "type": "select",
+  "options": {
+    "chat": "chat",
+    "direct": "direct"
+  },
+  "label": "Marketing Source",
+  "group": "Lead Details",
+  "groupid": "lead_marketing_source",
+  "no-option": "Select Marketing Source",
+  "required": true
+},
+"marketting_campaign": {
+  "label": "Marketing Campaign",
+  "group": "Lead Details",
+  "required": true
+},
+"enquiry_product_descs": {
+  "label": "Enquiry Details",
+  "group": "More",
+  "type": "textarea",
+  "maxlength": 255,
+  "required": true,
+  "width": 12
+},
+"blocked": {
+  "label": "Blocked",
+  "group": "Lead Details",
+  "type": "select",
+  "vmode": "view",
+  "required": true,
+  "options": {
+    "": false,
+    "true": "True",
+    "false": "False"
+  }
+},
+"enquiry_due": {
+  "label": "Delivery Due On",
+  "group": "More",
+  "type": "date",
+  "width": 12
+},
+"open_by": {
+  "label": "Open By",
+  "group": "More",
+  "type": "dataSelectorFromTable",
+  "table": "staff_tbl",
+  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+  "where": {
+    "blocked": "false",
+    "status in ('active','under_notice','probationary')": "RAW",
+    "loginid <> ''": "RAW",
+    "length(full_name)>0": "RAW"
+  },
+  "default": "#SESS_USER_ID#",
+  "width": 4
+},
+"assigned_to": {
+  "label": "Assigned To",
+  "group": "More",
+  "type": "dataSelectorFromTable",
+  "table": "staff_tbl",
+  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+  "where": {
+    "blocked": "false",
+    "status in ('active','under_notice','probationary')": "RAW",
+    "loginid <> ''": "RAW",
+    "length(full_name)>0": "RAW"
+  },
+  "default": "#SESS_USER_ID#",
+  "width": 4
+},
+"manager": {
+  "label": "Manager",
+  "group": "More",
+  "type": "dataSelectorFromTable",
+  "table": "staff_tbl",
+  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+  "where": {
+    "blocked": "false",
+    "status in ('active','under_notice','probationary')": "RAW",
+    "length(full_name)>0": "RAW"
+  },
+  "default": "#SESS_REPORTING_TO#",
+  "width": 4
+},
+"tags": {
+  "label": "Tags",
+  "group": "More",
+  "type": "tags",
+  "width": 12
+},
+"remarks": {
+  "label": "Remarks",
+  "group": "Lead Details",
+  "width": "12",
+  "maxlength": 255,
+  "type": "textarea"
+},
+"prelead_id": {
+  "label": "Prelead ID",
+  "group": "More",
+  "type": "text",
+  "hidden": true,
+  "width": 12
 }
+  }
+}
+

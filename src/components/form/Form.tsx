@@ -155,7 +155,14 @@ export default function LogiksForm({
           const res = await Promise.resolve(methodFn(finalValues));
           callback?.(res);
           if (methods?.handleActions) {
-            methods.handleActions(formJson?.gotolink);
+            let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
+            const link = formJson?.gotolink?.replace(
+              "{hashid}",
+              String(referenceid)
+            );
+
+            methods.handleActions(link);
+
           }
         } catch (err) {
           callback?.(err)
@@ -180,7 +187,14 @@ export default function LogiksForm({
         });
         callback?.(res);
         if (methods?.handleActions) {
-          methods.handleActions(formJson?.gotolink);
+          let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
+          const link = formJson?.gotolink?.replace(
+            "{hashid}",
+            String(referenceid)
+          );
+
+          methods.handleActions(link);
+
         }
       } catch (err) {
         callback?.(err)
@@ -260,9 +274,17 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
+
+        console.log("res", res);
+
         callback?.(res);
         if (methods?.handleActions) {
-          methods.handleActions(formJson?.gotolink);
+          let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
+          const link = formJson?.gotolink?.replace(
+            "{hashid}",
+            String(referenceid)
+          );
+          methods.handleActions(link);
         }
       } catch (err) {
         callback?.(err)
