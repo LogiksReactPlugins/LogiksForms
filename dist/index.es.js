@@ -2114,7 +2114,7 @@ function Ge({
       if (a)
         try {
           const M = await Promise.resolve(a(F));
-          m?.(M), r?.handleActions && r.handleActions(e?.gotolinks);
+          m?.(M), r?.handleActions && r.handleActions(e?.gotolink);
         } catch (M) {
           m?.(M), console.error("Method execution failed:", M);
         }
@@ -2133,7 +2133,7 @@ function Ge({
             Authorization: `Bearer ${y?.accessToken}`
           }
         });
-        m?.($), r?.handleActions && r.handleActions(e?.gotolinks);
+        m?.($), r?.handleActions && r.handleActions(e?.gotolink);
       } catch ($) {
         m?.($), console.error("API fetch failed:", $);
       }
@@ -2190,7 +2190,7 @@ function Ge({
             Authorization: `Bearer ${$?.accessToken}`
           }
         });
-        m?.(w), r?.handleActions && r.handleActions(e?.gotolinks);
+        m?.(w), r?.handleActions && r.handleActions(e?.gotolink);
       } catch (a) {
         m?.(a), console.error("API fetch failed:", a);
       }

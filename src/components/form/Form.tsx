@@ -155,7 +155,7 @@ export default function LogiksForm({
           const res = await Promise.resolve(methodFn(finalValues));
           callback?.(res);
           if (methods?.handleActions) {
-            methods.handleActions(formJson?.gotolinks);
+            methods.handleActions(formJson?.gotolink);
           }
         } catch (err) {
           callback?.(err)
@@ -180,7 +180,7 @@ export default function LogiksForm({
         });
         callback?.(res);
         if (methods?.handleActions) {
-          methods.handleActions(formJson?.gotolinks);
+          methods.handleActions(formJson?.gotolink);
         }
       } catch (err) {
         callback?.(err)
@@ -262,7 +262,7 @@ export default function LogiksForm({
         });
         callback?.(res);
         if (methods?.handleActions) {
-          methods.handleActions(formJson?.gotolinks);
+          methods.handleActions(formJson?.gotolink);
         }
       } catch (err) {
         callback?.(err)

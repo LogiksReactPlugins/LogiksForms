@@ -81,7 +81,7 @@ export interface FormJson {
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
     widget?: boolean;
-    gotolinks?: string;
+    gotolink?: string;
 }
 export interface FormProps {
     formJson: FormJson;
