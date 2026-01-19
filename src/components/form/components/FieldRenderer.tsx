@@ -404,7 +404,7 @@ export default function FieldRenderer({
           }
 
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, { refid: value });
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value);
 
           let valueKey = field.valueKey ?? "value";
           let labelKey = field.labelKey ?? "title";
@@ -479,7 +479,7 @@ export default function FieldRenderer({
         let valueKey = field.valueKey ?? "value";
 
         let labelKey = field.labelKey ?? "title";
-        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, filter);
+        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, filter);
 
 
         const rawItems = Array.isArray(res?.data?.data)
@@ -635,6 +635,7 @@ export default function FieldRenderer({
               {filteredOptions.length > 0 ? (
                 filteredOptions.map(([val, label], idx) => (
                   <div
+                    id={`${key}-${val}`}
                     key={val}
                     data-index={idx}
                     className={`px-3 py-2 cursor-pointer text-sm
@@ -765,8 +766,8 @@ export default function FieldRenderer({
         );
 
       }
-      console.log("formik.values[key]", formik.values[key]);
-      console.log("filteredOptionsddddddddddddddd", filteredOptions);
+
+
 
 
       return (
@@ -839,7 +840,7 @@ export default function FieldRenderer({
                   console.log("label", label);
 
                   return <div
-
+                    id={`${key}-${val}`}
                     key={val}
                     data-index={idx}
                     onClick={(e) => {
@@ -885,6 +886,7 @@ export default function FieldRenderer({
             </label>
             <div className="relative">
               <textarea
+                id={key}
 
                 className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
                 onFocus={() => setIsFocused(true)}
@@ -922,6 +924,7 @@ export default function FieldRenderer({
               className={`${baseInputClasses} ${focusClasses} appearance-none cursor-pointer pr-12`}
               onFocus={() => setIsFocused(true)}
               name={key}
+              id={key}
               value={formik.values[key]}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
@@ -1025,6 +1028,7 @@ export default function FieldRenderer({
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
+                  id={`${key}-${val}`}
                   type="checkbox"
                   checked={valueArray.includes(val)}
                   onChange={(e) => {
@@ -1169,6 +1173,7 @@ export default function FieldRenderer({
             )}
 
             <input
+              id={key}
               type="file"
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
@@ -1221,7 +1226,7 @@ export default function FieldRenderer({
 
           <div className="relative">
             <textarea
-              id={`${key}-json`}
+              id={key}
               name={key}
               value={formik.values[key]}
               onChange={(e) => formik.setFieldValue(key, e.target.value)}
@@ -1263,6 +1268,7 @@ export default function FieldRenderer({
             )}
 
             <input
+              id={key}
               type="date"
               name={key}
               value={formik.values[key]}
@@ -1308,6 +1314,7 @@ export default function FieldRenderer({
             )}
 
             <input
+              id={key}
               type={field.type || "text"}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}

@@ -576,6 +576,7 @@ export async function fetchDataByquery(
   sqlOpsUrls: Record<string, any>,
   query: Record<string, any> | undefined,
   querid: string | undefined,
+  refid: string | undefined = undefined,
   filter: Record<string, any> = {}
 ): Promise<AxiosResponse<any>> {
   try {
@@ -600,6 +601,7 @@ export async function fetchDataByquery(
       data: {
         "queryid": queryId,
         "filter": filter,
+        "refid": refid,
         "page": 0,
         "limit": 10000
       },
