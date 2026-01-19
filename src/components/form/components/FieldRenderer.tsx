@@ -558,13 +558,13 @@ export default function FieldRenderer({
 
   console.log("options", options);
 
-  const executeMethod = async () => {
+  const executeMethod = async (id:string) => {
     if (field.method) {
       const methodName = field.method as keyof typeof methods | undefined;
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          await Promise.resolve(methodFn());
+          await Promise.resolve(methodFn(id));
 
         } catch (err) {
           console.error("Method execution failed:", err);
@@ -653,6 +653,7 @@ export default function FieldRenderer({
               {filteredOptions.length > 0 ? (
                 filteredOptions.map(([val, label], idx) => (
                   <div
+                  onClick={(e)=> executeMethod(`${key}-${val}`)}
                     id={`${key}-${val}`}
                     key={val}
                     data-index={idx}
@@ -701,7 +702,7 @@ export default function FieldRenderer({
               onToggle={handleToggle}
               ref={detailsRef}
               onKeyDown={(e) => handleKeyDown(e, false)}
-              onClick={executeMethod}
+             
             >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
@@ -754,6 +755,7 @@ export default function FieldRenderer({
                         }`}
                     >
                       <input
+                      onClick={(e)=> executeMethod(`${key}-${val}`)}
                         id={`${key}-${val}`}
                         type="checkbox"
 
@@ -799,7 +801,7 @@ export default function FieldRenderer({
             onToggle={handleToggle}
             ref={detailsRef}
             onKeyDown={(e) => handleKeyDown(e, true)}
-            onClick={executeMethod}
+         
           >
             <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
               <span className="text-sm text-gray-700">
@@ -860,6 +862,7 @@ export default function FieldRenderer({
                   console.log("label", label);
 
                   return <div
+                  
                     id={`${key}-${val}`}
                     key={val}
                     data-index={idx}
@@ -870,6 +873,7 @@ export default function FieldRenderer({
                       detailsRef.current?.removeAttribute("open");
                       setSearch("");
                       setHighlightedIndex(0);
+                      executeMethod(`${key}-${val}`)
                     }}
                     className={`px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
                         ${formik.values[key] === val
@@ -907,7 +911,7 @@ export default function FieldRenderer({
             <div className="relative">
               <textarea
                 id={key}
-                onClick={executeMethod}
+                onClick={(e)=>executeMethod(`${key}`)}
                 className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
                 onFocus={() => setIsFocused(true)}
                 name={key}
@@ -943,7 +947,7 @@ export default function FieldRenderer({
             <select
               className={`${baseInputClasses} ${focusClasses} appearance-none cursor-pointer pr-12`}
               onFocus={() => setIsFocused(true)}
-                 onClick={executeMethod}
+                 onClick={(e)=>executeMethod(`${key}`)}
               name={key}
               id={key}
               value={formik.values[key]}
@@ -1002,7 +1006,7 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <div    onClick={executeMethod} className={`flex ${optionCount > 3 ? "flex-col" : ""} gap-2 ml-1`}>
+          <div    className={`flex ${optionCount > 3 ? "flex-col" : ""} gap-2 ml-1`}>
             {Object.entries(options || {}).map(([val, label]) => (
               <label
                 key={val}
@@ -1010,6 +1014,7 @@ export default function FieldRenderer({
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
+                 onClick={(e)=>executeMethod(`${key}-${val}`)}
                   id={`${key}-${val}`}
                   type="radio"
                   name={key}
@@ -1042,13 +1047,14 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div    onClick={executeMethod} className="flex flex-col gap-2 ml-1">
+          <div     className="flex flex-col gap-2 ml-1">
             {Object.entries(options || {}).map(([val, label]) => (
               <label
                 key={val}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
+                  onClick={(e)=>executeMethod(`${key}-${val}`)}
                   id={`${key}-${val}`}
                   type="checkbox"
                   checked={valueArray.includes(val)}
@@ -1120,6 +1126,7 @@ export default function FieldRenderer({
             {values.map((val) => (
               <span
                 key={val}
+                 onClick={(e)=>executeMethod(key)}
                 className="flex items-center gap-2 px-2 py-1 rounded-full text-sm bg-indigo-50 border border-indigo-100"
               >
                 <span className="text-indigo-700">{getLabel(val)}</span>
@@ -1194,7 +1201,7 @@ export default function FieldRenderer({
             )}
 
             <input
-               onClick={executeMethod}
+               onClick={(e)=>executeMethod(key)}
               id={key}
               type="file"
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
@@ -1246,8 +1253,9 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div    onClick={executeMethod} className="relative">
+          <div    className="relative">
             <textarea
+             onClick={(e)=>executeMethod(key)}
               id={key}
               name={key}
               value={formik.values[key]}
@@ -1282,7 +1290,7 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div    onClick={executeMethod} className="relative">
+          <div   className="relative">
             {field.icon && (
               <div className="absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                 {renderIcon(field)}
@@ -1290,6 +1298,7 @@ export default function FieldRenderer({
             )}
 
             <input
+              onClick={(e)=> executeMethod(`${key}`)}
               id={key}
               type="date"
               name={key}
@@ -1336,7 +1345,7 @@ export default function FieldRenderer({
             )}
 
             <input
-               onClick={executeMethod}
+                onClick={(e)=> executeMethod(`${key}`)}
               id={key}
               type={field.type || "text"}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}

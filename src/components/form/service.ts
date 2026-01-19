@@ -69,7 +69,7 @@ export const sqlClient = {
             });
             dbopsId = refid;
         }
-        console.log("dbopsId",dbopsId);
+     
         
         const res = await axios.post(
             endpoints.baseURL + endpoints.dbopsFetch,
