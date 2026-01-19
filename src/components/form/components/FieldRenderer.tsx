@@ -497,7 +497,7 @@ export default function FieldRenderer({
         const mapped = formatOptions(
           valueKey,
           labelKey,
-          { data: normalizedItems },
+          normalizedItems,
           field.groupKey
         );
 

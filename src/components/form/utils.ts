@@ -391,21 +391,14 @@ export const replacePlaceholders = (
 };
 
 
-
 export const formatOptions = (
   valueKey: string,
   labelKey: string,
-  items: any,
+  items: any[],
   groupKey?: string
 ): SelectOptions => {
-  console.log("items", items);
+  if (!Array.isArray(items) || items.length === 0) return {};
 
-
-  if (!Array.isArray(items) || items.length === 0) {
-    return {};
-  }
-
-  // auto-detect group key
   const resolvedGroupKey =
     groupKey ??
     (items[0] && typeof items[0] === "object" && "category" in items[0]
@@ -415,9 +408,11 @@ export const formatOptions = (
   // ---- flat options ----
   if (!resolvedGroupKey) {
     const mapped: FlatOptions = {};
-    items.forEach((item: any) => {
-      if (item[valueKey] != null && item[labelKey] != null) {
-        mapped[item[valueKey]] = item[labelKey];
+    items.forEach(item => {
+      const value = item[valueKey];
+      const label = item[labelKey];
+      if (value != null && label != null) {
+        mapped[String(value)] = String(label);
       }
     });
     return mapped;
@@ -426,7 +421,7 @@ export const formatOptions = (
   // ---- grouped options ----
   const grouped: GroupedOptions = {};
 
-  items.forEach((item: any) => {
+  items.forEach(item => {
     const group = item[resolvedGroupKey] ?? "Others";
     const value = item[valueKey];
     const label = item[labelKey];
@@ -434,7 +429,7 @@ export const formatOptions = (
     if (value == null || label == null) return;
 
     if (!grouped[group]) grouped[group] = {};
-    grouped[group][value] = label;
+    grouped[group][String(value)] = String(label);
   });
 
   return grouped;
@@ -583,9 +578,6 @@ export async function fetchDataByquery(
 ): Promise<AxiosResponse<any>> {
   try {
 
-    console.log("query", query);
-
-
     let queryId = querid;
 
     if (!queryId) {
@@ -649,9 +641,6 @@ type Row = Record<string, unknown>;
 export const normalizeRowSafe = (row: Row): Row => {
   const result: Row = {};
 
-  console.log("row", row);
-
-
   for (const [key, value] of Object.entries(row)) {
     const normalizedKey = key.includes(".")
       ? key.split(".").pop()!
@@ -664,8 +653,6 @@ export const normalizeRowSafe = (row: Row): Row => {
 
     result[normalizedKey] = value;
   }
-  console.log("result", result);
-
   return result;
 };
 
