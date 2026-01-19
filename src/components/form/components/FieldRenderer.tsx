@@ -558,6 +558,24 @@ export default function FieldRenderer({
 
   console.log("options", options);
 
+  const executeMethod = async () => {
+    if (field.method) {
+      const methodName = field.method as keyof typeof methods | undefined;
+      const methodFn = methodName ? methods[methodName] : undefined;
+      if (methodFn) {
+        try {
+          await Promise.resolve(methodFn());
+
+        } catch (err) {
+          console.error("Method execution failed:", err);
+
+        }
+      } else {
+        console.error("No Method available:");
+      }
+    }
+  }
+
   switch (field.type) {
 
     case "autocomplete": {
@@ -683,6 +701,7 @@ export default function FieldRenderer({
               onToggle={handleToggle}
               ref={detailsRef}
               onKeyDown={(e) => handleKeyDown(e, false)}
+              onClick={executeMethod}
             >
               <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
                 <span className="text-sm text-gray-700">
@@ -780,6 +799,7 @@ export default function FieldRenderer({
             onToggle={handleToggle}
             ref={detailsRef}
             onKeyDown={(e) => handleKeyDown(e, true)}
+            onClick={executeMethod}
           >
             <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
               <span className="text-sm text-gray-700">
@@ -887,7 +907,7 @@ export default function FieldRenderer({
             <div className="relative">
               <textarea
                 id={key}
-
+                onClick={executeMethod}
                 className={`${baseInputClasses} ${focusClasses} min-h-[120px] resize-none`}
                 onFocus={() => setIsFocused(true)}
                 name={key}
@@ -923,6 +943,7 @@ export default function FieldRenderer({
             <select
               className={`${baseInputClasses} ${focusClasses} appearance-none cursor-pointer pr-12`}
               onFocus={() => setIsFocused(true)}
+                 onClick={executeMethod}
               name={key}
               id={key}
               value={formik.values[key]}
@@ -981,7 +1002,7 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <div className={`flex ${optionCount > 3 ? "flex-col" : ""} gap-2 ml-1`}>
+          <div    onClick={executeMethod} className={`flex ${optionCount > 3 ? "flex-col" : ""} gap-2 ml-1`}>
             {Object.entries(options || {}).map(([val, label]) => (
               <label
                 key={val}
@@ -1021,7 +1042,7 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div className="flex flex-col gap-2 ml-1">
+          <div    onClick={executeMethod} className="flex flex-col gap-2 ml-1">
             {Object.entries(options || {}).map(([val, label]) => (
               <label
                 key={val}
@@ -1164,7 +1185,7 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
 
           </label>
-          <div className="relative">
+          <div  className="relative">
 
             {field.icon && (
               <div className="absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -1173,6 +1194,7 @@ export default function FieldRenderer({
             )}
 
             <input
+               onClick={executeMethod}
               id={key}
               type="file"
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
@@ -1224,7 +1246,7 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div className="relative">
+          <div    onClick={executeMethod} className="relative">
             <textarea
               id={key}
               name={key}
@@ -1260,7 +1282,7 @@ export default function FieldRenderer({
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
 
-          <div className="relative">
+          <div    onClick={executeMethod} className="relative">
             {field.icon && (
               <div className="absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                 {renderIcon(field)}
@@ -1314,6 +1336,7 @@ export default function FieldRenderer({
             )}
 
             <input
+               onClick={executeMethod}
               id={key}
               type={field.type || "text"}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
