@@ -72,24 +72,33 @@ export default function FieldRenderer({
 
       let labelKey = field.labelKey ?? "title";
       if (field?.options) {
-        console.log("field?.options", field?.options);
 
-        const rawItems = Array.isArray(field?.options)
-          ? field?.options
-          : [field?.options];
+        //  CASE 1: flat or grouped object
+        // { "1": "WEL" } OR { quarter1: { "1": "January" } }
+        if (
+          typeof field.options === "object" &&
+          !Array.isArray(field.options)
+        ) {
+          const values = Object.values(field.options);
+          if (values.length && typeof values[0] === "string") {
+            setOptions(field.options as SelectOptions);
+            return;
+          }
+        }
 
-        console.log("rawItems", rawItems);
+        // CASE 2 / 3: array of rows (flat or grouped via `category`)
+        const rawItems = Array.isArray(field.options)
+          ? field.options
+          : [field.options];
 
+        const normalizedItems = rawItems.map(normalizeRowSafe);
 
-        const normalizedItems = Array.isArray(rawItems)
-          ? rawItems.map(normalizeRowSafe)
-          : [];
-
-        console.log("normalizedItems", normalizedItems);
-
-
-        const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
-        console.log("mappedddddddddddddddddddddddd", mapped);
+        const mapped = formatOptions(
+          valueKey,
+          labelKey,
+          normalizedItems,
+          field.groupKey // auto-uses `category` if present
+        );
 
         setOptions(mapped);
         return;
