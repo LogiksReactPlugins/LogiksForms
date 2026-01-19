@@ -398,6 +398,7 @@ export const formatOptions = (
   items: any,
   groupKey?: string
 ): SelectOptions => {
+  console.log("items", items);
 
 
   if (!Array.isArray(items) || items.length === 0) {
@@ -469,20 +470,35 @@ type FlatEntry = [string, string];
 export const flattenOptions = (options: SelectOptions): FlatEntry[] => {
   if (!options) return [];
 
-  const first = Object.values(options)[0];
-
-  // flat
-  if (typeof first === "string") {
-    return Object.entries(options as Record<string, string>);
+  //  array options: [{ value, title/label }]
+  if (Array.isArray(options)) {
+    return options.map(
+      (o): FlatEntry => [
+        String(o.value),
+        String(o.title ?? o.label ?? o.value),
+      ]
+    );
   }
 
-  // grouped
-  return Object.values(options as GroupedOptions).flatMap(group =>
-    Object.entries(group)
-  );
+  const values = Object.values(options);
+  if (!values.length) return [];
+
+  const first = values[0];
+
+  //  flat object: { value: label }
+  if (typeof first === "string") {
+    return Object.entries(options as Record<string, string>)
+      .map(([v, l]): FlatEntry => [String(v), l]);
+  }
+
+  // grouped object: { group: { value: label } }
+  return Object.values(options as Record<string, Record<string, string>>)
+    .flatMap(group =>
+      Object.entries(group).map(
+        ([v, l]): FlatEntry => [String(v), l]
+      )
+    );
 };
-
-
 
 
 export const isGroupedOptions = (
@@ -567,6 +583,9 @@ export async function fetchDataByquery(
 ): Promise<AxiosResponse<any>> {
   try {
 
+    console.log("query", query);
+
+
     let queryId = querid;
 
     if (!queryId) {
@@ -586,7 +605,9 @@ export async function fetchDataByquery(
       url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
       data: {
         "queryid": queryId,
-        "filter": filter
+        "filter": filter,
+        "page": 0,
+        "limit": 10000
       },
       headers: {
         "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
@@ -628,6 +649,9 @@ type Row = Record<string, unknown>;
 export const normalizeRowSafe = (row: Row): Row => {
   const result: Row = {};
 
+  console.log("row", row);
+
+
   for (const [key, value] of Object.entries(row)) {
     const normalizedKey = key.includes(".")
       ? key.split(".").pop()!
@@ -640,6 +664,7 @@ export const normalizeRowSafe = (row: Row): Row => {
 
     result[normalizedKey] = value;
   }
+  console.log("result", result);
 
   return result;
 };

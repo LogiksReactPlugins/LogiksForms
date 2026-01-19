@@ -32,6 +32,7 @@ export default function FieldRenderer({
   React.useEffect(() => {
     searchRef.current = search;
   }, [search]);
+
   const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
     const detailsEl = e.currentTarget; //  currentTarget is strongly typed
     if (!detailsEl.open) {
@@ -67,14 +68,34 @@ export default function FieldRenderer({
     let isMounted = true;
 
     const fetchData = async () => {
-      if (field?.options) {
-        setOptions(field.options);
-        return;
-      }
-
       let valueKey = field.valueKey ?? "value";
 
       let labelKey = field.labelKey ?? "title";
+      if (field?.options) {
+        console.log("field?.options", field?.options);
+
+        const rawItems = Array.isArray(field?.options)
+          ? field?.options
+          : [field?.options];
+
+        console.log("rawItems", rawItems);
+
+
+        const normalizedItems = Array.isArray(rawItems)
+          ? rawItems.map(normalizeRowSafe)
+          : [];
+
+        console.log("normalizedItems", normalizedItems);
+
+
+        const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
+        console.log("mappedddddddddddddddddddddddd", mapped);
+
+        setOptions(mapped);
+        return;
+      }
+
+
 
       const source = field?.source ?? {};
 
@@ -191,7 +212,7 @@ export default function FieldRenderer({
             : [];
 
           const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
-    
+
           if (isMounted) setOptions(mapped);
 
         } catch (err) {
@@ -212,6 +233,7 @@ export default function FieldRenderer({
     field.where,
     refid
   ]);
+
 
   const baseInputClasses = `
     w-full px-4 py-2 rounded-lg border border-gray-200 transition-all duration-300 
@@ -238,6 +260,9 @@ export default function FieldRenderer({
     () => flattenOptions(options),
     [options]
   );
+
+  console.log("flatOptions", flatOptions);
+
 
   const optionCount = flatOptions.length;
 
@@ -354,18 +379,25 @@ export default function FieldRenderer({
           if (!src || typeof src !== "object") continue;
           if (!sqlOpsUrls) continue;
 
-          const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
-            refid: value,
-          });
+          let query: sqlQueryProps | undefined;
 
-          const query = {
-            ...src,
-            table: src.table,
-            cols: src.columns,
-            where: resolvedWhere,
-          };
+          if (!src.queryid) {
+            if (!src.table || !src.columns) {
+              throw new Error("SQL query requires field.table");
+            }
+            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+              refid: value,
+            });
+            query = {
+              ...src,
+              table: src.table,
+              cols: src.columns,
+              where: resolvedWhere,
+            };
+          }
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
+
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid);
 
           let valueKey = field.valueKey ?? "value";
           let labelKey = field.labelKey ?? "title";
@@ -408,17 +440,27 @@ export default function FieldRenderer({
     const timer = setTimeout(async () => {
       try {
 
-        const resolvedWhere = refid ? replacePlaceholders(field.where ?? {}, {
-          refid: refid,
-        }) : field.where
+        let query: sqlQueryProps | undefined;
 
-        const query = {
-          ...field,
-          table: field.table,
-          cols: field.columns || field.cols,
-          where: resolvedWhere
+        if (!field.queryid) {
 
-        };
+          if (!field.table || !field.cols) {
+            throw new Error("SQL query requires field.table");
+          }
+
+          const resolvedWhere = refid ? replacePlaceholders(field.where ?? {}, {
+            refid: refid,
+          }) : field.where
+
+          query = {
+            ...field,
+            table: field.table,
+            cols: field.columns || field.cols,
+            where: resolvedWhere
+
+          };
+        }
+
 
         let filter: Record<string, [string, string]> = {};
 
@@ -716,6 +758,9 @@ export default function FieldRenderer({
         );
 
       }
+      console.log("formik.values[key]", formik.values[key]);
+      console.log("filteredOptionsddddddddddddddd", filteredOptions);
+
 
       return (
         <div className="relative">
@@ -783,8 +828,10 @@ export default function FieldRenderer({
 
               {/* Filtered options */}
               {filteredOptions.length > 0 ? (
-                filteredOptions.map(([val, label], idx) => (
-                  <div
+                filteredOptions.map(([val, label], idx) => {
+                  console.log("label", label);
+
+                  return <div
 
                     key={val}
                     data-index={idx}
@@ -806,7 +853,7 @@ export default function FieldRenderer({
                   >
                     {label}
                   </div>
-                ))
+                })
               ) : (
                 <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
               )}
@@ -874,7 +921,7 @@ export default function FieldRenderer({
               disabled={field.disabled}
             >
               <option value="" disabled>
-                {field?.["no-option"] || "Please select an option"}
+                {field?.["no-option"] || `Please select ${field.label}`}
               </option>
 
 

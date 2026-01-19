@@ -1,13 +1,22 @@
 import { FormikProps } from 'formik';
 import { AxiosRequestConfig } from 'axios';
 import { ReactNode } from 'react';
+type SqlSrcByTable = {
+    table: string;
+    columns: string;
+    where?: Record<string, string>;
+    queryid?: never;
+};
+type SqlSrcByQueryId = {
+    queryid: string;
+    where?: Record<string, string>;
+    table?: never;
+    columns?: never;
+};
+type AutocompleteSrc = SqlSrcByTable | SqlSrcByQueryId;
 export type AutocompleteConfig = {
     target: string;
-    src: {
-        table: string;
-        columns?: string;
-        where?: Record<string, string>;
-    };
+    src: AutocompleteSrc;
 };
 export interface FormField {
     name: string;
@@ -109,4 +118,5 @@ export interface sqlQueryProps {
     cols: string;
     where?: Record<string, string>;
 }
+export {};
 //# sourceMappingURL=Form.types.d.ts.map

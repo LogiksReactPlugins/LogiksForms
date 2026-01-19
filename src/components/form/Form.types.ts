@@ -3,16 +3,28 @@ import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
 
+type SqlSrcByTable = {
+  table: string;
+  columns: string;
+  where?: Record<string, string>;
+  queryid?: never;
+};
 
+type SqlSrcByQueryId = {
+  queryid: string;
+  where?: Record<string, string>;
+  table?: never;
+  columns?: never;
+};
+
+type AutocompleteSrc = SqlSrcByTable | SqlSrcByQueryId;
 
 export type AutocompleteConfig = {
-    target: string;
-    src: {
-        table: string;
-        columns?: string;
-        where?: Record<string, string>;
-    };
+  target: string;
+  src: AutocompleteSrc;
 };
+
+
 export interface FormField {
     name: string;
     label?: string;
@@ -48,7 +60,7 @@ export interface FormField {
     method?: string;
     vmode?: string;
     "no-option"?: string;
-    queryid?:string;
+    queryid?: string;
 
 }
 
