@@ -16,7 +16,8 @@ export default function AccordionFormView({
   methods = {},
   components = {},
   sqlOpsUrls = {},
-  refid
+  refid,
+  module_refid
 }: GroupedFormViewPrps) {
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -75,6 +76,7 @@ export default function AccordionFormView({
                     >
                       <FieldRenderer
                         refid={refid}
+                        module_refid={module_refid}
                         sqlOpsUrls={sqlOpsUrls}
                         components={components}
                         key={field.name}

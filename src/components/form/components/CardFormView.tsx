@@ -16,7 +16,8 @@ export default function CardFormView({
   methods = {},
   components = {},
   sqlOpsUrls = {},
-  refid
+  refid,
+  module_refid
 }: GroupedFormViewPrps) {
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -81,6 +82,7 @@ export default function CardFormView({
                     >
                       <FieldRenderer
                         refid={refid}
+                        module_refid={module_refid}
                         sqlOpsUrls={sqlOpsUrls}
                         components={components}
                         key={field.name}

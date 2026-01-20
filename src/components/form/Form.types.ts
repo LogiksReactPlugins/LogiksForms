@@ -92,6 +92,7 @@ export interface FormJson {
     source: Record<string, any>;
     widget?: boolean;
     gotolink?: string;
+    module_refid?: string | undefined
 }
 
 export interface FormProps {
@@ -102,7 +103,8 @@ export interface FormProps {
     onCancel?: () => void;
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>
-    initialvalues?: Record<string, any>
+    initialvalues?: Record<string, any>;
+
 
 }
 export type FlatOptions = Record<string, string>;
@@ -119,6 +121,7 @@ export interface BaseFormViewProps {
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+    module_refid?: string | undefined
 
 }
 
@@ -137,6 +140,7 @@ export interface FieldRendererProps {
     components?: Record<string, ReactNode>
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+    module_refid?: string | undefined
     optionsOverride?: SelectOptions;
     setFieldOptions?: (
         fieldName: string,

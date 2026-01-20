@@ -417,4 +417,152 @@ export declare const example10: {
         };
     };
 };
+export declare const example1: {
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        runQuery: string;
+        operation: string;
+        refid: string;
+    };
+    source: {
+        type: string;
+        table: string;
+        cols: string;
+        where: {
+            id: string;
+        };
+    };
+    forcefill: {
+        guid: string;
+        site: string;
+    };
+    gotolink: string;
+    fields: {
+        menuid: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
+            table: string;
+            columns: string;
+            groupBy: string;
+        };
+        title: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        link: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        menugroup: {
+            label: string;
+            group: string;
+            type: string;
+            table: string;
+            columns: string;
+            where: {
+                "link='#'": string;
+            };
+            orderby: string;
+        };
+        category: {
+            label: string;
+            type: string;
+            group: string;
+        };
+        class: {
+            label: string;
+            group: string;
+        };
+        iconpath: {
+            label: string;
+            group: string;
+            width: number;
+        };
+        tips: {
+            label: string;
+            group: string;
+            width: number;
+        };
+        weight: {
+            label: string;
+            group: string;
+            type: string;
+            default: number;
+            width: number;
+        };
+        to_check: {
+            label: string;
+            group: string;
+        };
+        privilege: {
+            label: string;
+            group: string;
+            default: string;
+        };
+        device: {
+            label: string;
+            group: string;
+            type: string;
+            options: {
+                "*": string;
+                PC: string;
+                Mobile: string;
+                Tablet: string;
+            };
+            multiple: boolean;
+        };
+        target: {
+            label: string;
+            group: string;
+            type: string;
+            required: boolean;
+            options: {
+                ajax: string;
+                blank: string;
+                _blank: string;
+                _parent: string;
+                _self: string;
+                _top: string;
+            };
+            width: number;
+        };
+        onmenu: {
+            label: string;
+            group: string;
+            type: string;
+            options: {
+                "": string;
+                false: string;
+                true: string;
+            };
+            required: boolean;
+            default: string;
+        };
+        blocked: {
+            label: string;
+            group: string;
+            type: string;
+            vmode: string;
+            options: {
+                "": string;
+                false: string;
+                true: string;
+            };
+            required: boolean;
+        };
+    };
+    module_refid: string;
+    module_type: string;
+};
 //# sourceMappingURL=data.d.ts.map

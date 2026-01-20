@@ -98,7 +98,7 @@ export default function LogiksForm({
             },
             fields: transformedObject(formJson.fields, sqlOpsUrls.operation),
 
-          }, source?.dbopsid);
+          }, source?.dbopsid, formJson?.module_refid);
 
           if (isMounted) setResolvedData(data);
         } catch (err) {
@@ -251,7 +251,8 @@ export default function LogiksForm({
               "source": query,
               "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
               "forcefill": formJson.forcefill,
-              "datahash": resHashId.data.refhash
+              "datahash": resHashId.data.refhash,
+              srcid: formJson?.module_refid
             },
 
             headers: {
@@ -306,6 +307,7 @@ export default function LogiksForm({
       components={components}
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
+      module_refid={formJson?.module_refid}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -317,6 +319,7 @@ export default function LogiksForm({
       components={components}
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
+      module_refid={formJson?.module_refid}
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -329,6 +332,7 @@ export default function LogiksForm({
       widget={formJson?.widget}
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
+      module_refid={formJson?.module_refid}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -340,6 +344,7 @@ export default function LogiksForm({
       components={components}
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
+      module_refid={formJson?.module_refid}
     />
   };
 

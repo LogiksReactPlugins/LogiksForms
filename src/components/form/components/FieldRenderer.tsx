@@ -12,6 +12,7 @@ export default function FieldRenderer({
   methods = {},
   sqlOpsUrls,
   refid,
+  module_refid,
   optionsOverride,
   setFieldOptions
 }: FieldRendererProps) {
@@ -206,7 +207,7 @@ export default function FieldRenderer({
 
           //  Optional where — added only if present
 
-          const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
+          const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
 
           const rawItems = Array.isArray(res?.data?.data)
             ? res.data.data
@@ -363,7 +364,7 @@ export default function FieldRenderer({
             where: resolvedWhere,
           };
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid);
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
 
           const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
 
@@ -404,7 +405,7 @@ export default function FieldRenderer({
           }
 
 
-          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value);
+          const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
 
           let valueKey = field.valueKey ?? "value";
           let labelKey = field.labelKey ?? "title";
@@ -479,7 +480,7 @@ export default function FieldRenderer({
         let valueKey = field.valueKey ?? "value";
 
         let labelKey = field.labelKey ?? "title";
-        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, filter);
+        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid, filter);
 
 
         const rawItems = Array.isArray(res?.data?.data)

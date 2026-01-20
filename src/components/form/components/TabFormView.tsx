@@ -16,7 +16,9 @@ export default function TabFormView({
   components = {},
   sqlOpsUrls = {},
   widget,
-  refid
+  refid,
+  module_refid
+  
 }: GroupedFormViewPrps) {
   const groupNames = Object.keys(groupedFields);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
@@ -180,6 +182,7 @@ export default function TabFormView({
               >
                 <FieldRenderer
                   refid={refid}
+                  module_refid={module_refid}
                   sqlOpsUrls={sqlOpsUrls}
                   key={field.name}
                   field={field}

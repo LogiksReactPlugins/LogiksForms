@@ -82,6 +82,7 @@ export interface FormJson {
     source: Record<string, any>;
     widget?: boolean;
     gotolink?: string;
+    module_refid?: string | undefined;
 }
 export interface FormProps {
     formJson: FormJson;
@@ -105,6 +106,7 @@ export interface BaseFormViewProps {
     widget?: boolean | undefined;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+    module_refid?: string | undefined;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;
@@ -119,6 +121,7 @@ export interface FieldRendererProps {
     components?: Record<string, ReactNode>;
     sqlOpsUrls?: Record<string, any> | undefined;
     refid?: string | undefined;
+    module_refid?: string | undefined;
     optionsOverride?: SelectOptions;
     setFieldOptions?: (fieldName: string, options: SelectOptions) => void;
 }

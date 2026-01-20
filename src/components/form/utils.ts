@@ -577,6 +577,7 @@ export async function fetchDataByquery(
   query: Record<string, any> | undefined,
   querid: string | undefined,
   refid: string | undefined = undefined,
+  module_refid: string | undefined = undefined,
   filter: Record<string, any> = {}
 ): Promise<AxiosResponse<any>> {
   try {
@@ -587,7 +588,7 @@ export async function fetchDataByquery(
       const resQueryId = await axios({
         method: "POST",
         url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-        data: { "query": query ?? {} },
+        data: { "query": query ?? {}, "srcid": module_refid },
         headers: {
           "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
         },

@@ -1,20 +1,20 @@
 
 
 export const example10 = {
-       "endPoints": {
-        "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkVLZzNZbWRybWUwbzN2Z1Z1UFg0WlBJN2E2TXRtQ2RtQ0FRY1hUcExMT0RFdERRbldKZjhYZ2YrWU5uQUxVdEhrcmVBTkJsVTdUQVFqSjFoY21YVy9ndnp5VS9Oc2ZybzJEeXBycFM1bzlvMStrbmpBaTFXTGhTQUgrNFNvQXNjSGx5YzRBMnNkTjZLelpUdXV3MkprRTNJZStUU0RvVGhhZlZoektNRnZibTJkMGdtRnZBMGF1ME9VQUFyTTNlTlFSUDN3MGRsWGo1VzdjaUxLNjhMQXBZWnV3SGlobXFNNXpqeDc3M2FGZEYrSHVsdFRRMTRFalZwS1hCRkRGMGF0WUNyMStValhHUnVEUUwzRDZRakVZWTNuMWRUcmpzWFV6dGZNeWM9IiwiaWF0IjoxNzY4ODQwOTA2LCJleHAiOjE3Njg4NDQ1MDYsImp0aSI6ImFjYzoxOjE3Njg4NDA5MDY2NDI6d2ViIn0.4-UCiBPzPdffx_gjb4B5vDtXr0nlucNw3RI6kxSWOXI",
-        "dbopsGetHash": "/api/dbops",
-        "dbopsGetRefId": "/api/dbops/save",
-        "dbopsCreate": "/api/dbops/create",
-        "dbopsUpdate": "/api/dbops/update",
-        "dbopsFetch": "/api/dbops/fetch",
-        "registerQuery": "/api/query/save",
-        "runQuery": "/api/query/run",
-        "operation": "create",
-        "refid": "1"
+  "endPoints": {
+    "baseURL": "http://192.168.0.20:9999",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkVLZzNZbWRybWUwbzN2Z1Z1UFg0WlBJN2E2TXRtQ2RtQ0FRY1hUcExMT0RFdERRbldKZjhYZ2YrWU5uQUxVdEhrcmVBTkJsVTdUQVFqSjFoY21YVy9ndnp5VS9Oc2ZybzJEeXBycFM1bzlvMStrbmpBaTFXTGhTQUgrNFNvQXNjSGx5YzRBMnNkTjZLelpUdXV3MkprRTNJZStUU0RvVGhhZlZoektNRnZibTJkMGdtRnZBMGF1ME9VQUFyTTNlTlFSUDN3MGRsWGo1VzdjaUxLNjhMQXBZWnV3SGlobXFNNXpqeDc3M2FGZEYrSHVsdFRRMTRFalZwS1hCRkRGMGF0WUNyMStValhHUnVEUUwzRDZRakVZWTNuMWRUcmpzWFV6dGZNeWM9IiwiaWF0IjoxNzY4ODQwOTA2LCJleHAiOjE3Njg4NDQ1MDYsImp0aSI6ImFjYzoxOjE3Njg4NDA5MDY2NDI6d2ViIn0.4-UCiBPzPdffx_gjb4B5vDtXr0nlucNw3RI6kxSWOXI",
+    "dbopsGetHash": "/api/dbops",
+    "dbopsGetRefId": "/api/dbops/save",
+    "dbopsCreate": "/api/dbops/create",
+    "dbopsUpdate": "/api/dbops/update",
+    "dbopsFetch": "/api/dbops/fetch",
+    "registerQuery": "/api/query/save",
+    "runQuery": "/api/query/run",
+    "operation": "create",
+    "refid": "1"
 
-    },
+  },
   "source": {
     "type": "sql",
     "table": "leads_tbl"
@@ -136,289 +136,439 @@ export const example10 = {
       "label": "Client/Company Type",
       "group": "Customer",
 
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "groupid": "profile_customer_type",
-  "default": "old",
-  "no-option": "Select Client/Company Type",
-  "required": true
-},
-"contact_name": {
-  "label": "Contact Name",
-  "type": "text",
-  "group": "Customer",
-  "required": true,
-  "class": "contact_field contact_field_mandetory",
-  "hidden": false,
-  "width": 4
-},
-"contact_email": {
-  "label": "Email",
-  "type": "email",
-  "group": "Customer",
-  "required": true,
-  "class": "contact_field contact_field_mandetory",
-  "hidden": false,
-  "width": 4
-},
-"contact_mobile": {
-  "label": "Mobile",
-  "type": "phone",
-  "group": "Customer",
-  "required": true,
-  "minlength": 10,
-  "maxlength": 10,
-  "class": "contact_field contact_field_mandetory",
-  "hidden": false,
-  "width": 4
-},
-"contact_address": {
-  "label": "Address",
-  "type": "textarea",
-  "group": "Customer",
-  "class": "contact_field",
-  "width": 12,
-  "hidden": false
-},
-"contact_street": {
-  "label": "Street",
-  "type": "text",
-  "group": "Customer",
-  "class": "contact_field",
-  "hidden": false,
-  "width": 4
-},
-"contact_city": {
-  "label": "City",
-  "group": "Customer",
-  "class": "contact_field",
-  "hidden": false,
-  "type": "suggest",
-  "width": 4
-},
-"contact_state": {
-  "label": "State",
-  "type": "suggest",
-  "group": "Customer",
-  "class": "contact_field",
-  "hidden": false,
-  "width": 4
-},
-"contact_zipcode": {
-  "label": "Zipcode",
-  "type": "text",
-  "group": "Customer",
-  "class": "contact_field",
-  "hidden": false,
-  "width": 6
-},
-"contact_country": {
-  "label": "Country",
-  "type": "suggest",
-  "groupid": "country",
-  "group": "Customer",
-  "class": "contact_field",
-  "hidden": false,
-  "width": 6
-},
-"lead_date": {
-  "label": "Lead Date",
-  "group": "Lead Details",
-  "type": "date",
-  "required": true,
-  "default": "#SESS_CURRENT_DATE#",
-  "width": 6
-},
-"lead_year": {
-  "label": "Lead Year",
-  "group": "Lead Details",
-  "required": true,
-  "hidden": true,
-  "width": 4
-},
-"net_amount": {
-  "label": "Net Amount",
-  "group": "Lead Details",
-  "type": "text",
-  "vmode": "edit",
-  "required": true
-},
-"lead_value": {
-  "label": "Lead Value",
-  "group": "Lead Details",
-  "type": "text",
-  "required": false
-},
-"lead_priority": {
-  "label": "Lead Priority",
-  "group": "Lead Details",
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "groupid": "lead_priority",
-  "required": true
-},
-"lead_source": {
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "label": "Lead Source",
-  "group": "Lead Details",
-  "groupid": "leads_source",
-  "required": true
-},
-"lead_status": {
-  "label": "Lead Status",
-  "group": "Lead Details",
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "groupid": "lead_status",
-  "no-option": "Select Lead Status",
-  "required": true,
-  "width": 6
-},
-"lead_type": {
-  "label": "Lead Type",
-  "group": "Lead Details",
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "groupid": "lead_type",
-  "suggest": true,
-  "required": true,
-  "width": 6
-},
-"enquiry_type": {
-  "label": "Enquiry Type",
-  "group": "Lead Details",
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "groupid": "lead_enquiry_type",
-  "required": true,
-  "width": 6
-},
-"marketting_source": {
-  "type": "select",
-  "options": {
-    "chat": "chat",
-    "direct": "direct"
-  },
-  "label": "Marketing Source",
-  "group": "Lead Details",
-  "groupid": "lead_marketing_source",
-  "no-option": "Select Marketing Source",
-  "required": true
-},
-"marketting_campaign": {
-  "label": "Marketing Campaign",
-  "group": "Lead Details",
-  "required": true
-},
-"enquiry_product_descs": {
-  "label": "Enquiry Details",
-  "group": "More",
-  "type": "textarea",
-  "maxlength": 255,
-  "required": true,
-  "width": 12
-},
-"blocked": {
-  "label": "Blocked",
-  "group": "Lead Details",
-  "type": "select",
-  "vmode": "view",
-  "required": true,
-  "options": {
-    "": false,
-    "true": "True",
-    "false": "False"
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "groupid": "profile_customer_type",
+      "default": "old",
+      "no-option": "Select Client/Company Type",
+      "required": true
+    },
+    "contact_name": {
+      "label": "Contact Name",
+      "type": "text",
+      "group": "Customer",
+      "required": true,
+      "class": "contact_field contact_field_mandetory",
+      "hidden": false,
+      "width": 4
+    },
+    "contact_email": {
+      "label": "Email",
+      "type": "email",
+      "group": "Customer",
+      "required": true,
+      "class": "contact_field contact_field_mandetory",
+      "hidden": false,
+      "width": 4
+    },
+    "contact_mobile": {
+      "label": "Mobile",
+      "type": "phone",
+      "group": "Customer",
+      "required": true,
+      "minlength": 10,
+      "maxlength": 10,
+      "class": "contact_field contact_field_mandetory",
+      "hidden": false,
+      "width": 4
+    },
+    "contact_address": {
+      "label": "Address",
+      "type": "textarea",
+      "group": "Customer",
+      "class": "contact_field",
+      "width": 12,
+      "hidden": false
+    },
+    "contact_street": {
+      "label": "Street",
+      "type": "text",
+      "group": "Customer",
+      "class": "contact_field",
+      "hidden": false,
+      "width": 4
+    },
+    "contact_city": {
+      "label": "City",
+      "group": "Customer",
+      "class": "contact_field",
+      "hidden": false,
+      "type": "suggest",
+      "width": 4
+    },
+    "contact_state": {
+      "label": "State",
+      "type": "suggest",
+      "group": "Customer",
+      "class": "contact_field",
+      "hidden": false,
+      "width": 4
+    },
+    "contact_zipcode": {
+      "label": "Zipcode",
+      "type": "text",
+      "group": "Customer",
+      "class": "contact_field",
+      "hidden": false,
+      "width": 6
+    },
+    "contact_country": {
+      "label": "Country",
+      "type": "suggest",
+      "groupid": "country",
+      "group": "Customer",
+      "class": "contact_field",
+      "hidden": false,
+      "width": 6
+    },
+    "lead_date": {
+      "label": "Lead Date",
+      "group": "Lead Details",
+      "type": "date",
+      "required": true,
+      "default": "#SESS_CURRENT_DATE#",
+      "width": 6
+    },
+    "lead_year": {
+      "label": "Lead Year",
+      "group": "Lead Details",
+      "required": true,
+      "hidden": true,
+      "width": 4
+    },
+    "net_amount": {
+      "label": "Net Amount",
+      "group": "Lead Details",
+      "type": "text",
+      "vmode": "edit",
+      "required": true
+    },
+    "lead_value": {
+      "label": "Lead Value",
+      "group": "Lead Details",
+      "type": "text",
+      "required": false
+    },
+    "lead_priority": {
+      "label": "Lead Priority",
+      "group": "Lead Details",
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "groupid": "lead_priority",
+      "required": true
+    },
+    "lead_source": {
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "label": "Lead Source",
+      "group": "Lead Details",
+      "groupid": "leads_source",
+      "required": true
+    },
+    "lead_status": {
+      "label": "Lead Status",
+      "group": "Lead Details",
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "groupid": "lead_status",
+      "no-option": "Select Lead Status",
+      "required": true,
+      "width": 6
+    },
+    "lead_type": {
+      "label": "Lead Type",
+      "group": "Lead Details",
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "groupid": "lead_type",
+      "suggest": true,
+      "required": true,
+      "width": 6
+    },
+    "enquiry_type": {
+      "label": "Enquiry Type",
+      "group": "Lead Details",
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "groupid": "lead_enquiry_type",
+      "required": true,
+      "width": 6
+    },
+    "marketting_source": {
+      "type": "select",
+      "options": {
+        "chat": "chat",
+        "direct": "direct"
+      },
+      "label": "Marketing Source",
+      "group": "Lead Details",
+      "groupid": "lead_marketing_source",
+      "no-option": "Select Marketing Source",
+      "required": true
+    },
+    "marketting_campaign": {
+      "label": "Marketing Campaign",
+      "group": "Lead Details",
+      "required": true
+    },
+    "enquiry_product_descs": {
+      "label": "Enquiry Details",
+      "group": "More",
+      "type": "textarea",
+      "maxlength": 255,
+      "required": true,
+      "width": 12
+    },
+    "blocked": {
+      "label": "Blocked",
+      "group": "Lead Details",
+      "type": "select",
+      "vmode": "view",
+      "required": true,
+      "options": {
+        "": false,
+        "true": "True",
+        "false": "False"
+      }
+    },
+    "enquiry_due": {
+      "label": "Delivery Due On",
+      "group": "More",
+      "type": "date",
+      "width": 12
+    },
+    "open_by": {
+      "label": "Open By",
+      "group": "More",
+      "type": "dataSelectorFromTable",
+      "table": "staff_tbl",
+      "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+      "where": {
+        "blocked": "false",
+        "status in ('active','under_notice','probationary')": "RAW",
+        "loginid <> ''": "RAW",
+        "length(full_name)>0": "RAW"
+      },
+      "default": "#SESS_USER_ID#",
+      "width": 4
+    },
+    "assigned_to": {
+      "label": "Assigned To",
+      "group": "More",
+      "type": "dataSelectorFromTable",
+      "table": "staff_tbl",
+      "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+      "where": {
+        "blocked": "false",
+        "status in ('active','under_notice','probationary')": "RAW",
+        "loginid <> ''": "RAW",
+        "length(full_name)>0": "RAW"
+      },
+      "default": "#SESS_USER_ID#",
+      "width": 4
+    },
+    "manager": {
+      "label": "Manager",
+      "group": "More",
+      "type": "dataSelectorFromTable",
+      "table": "staff_tbl",
+      "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
+      "where": {
+        "blocked": "false",
+        "status in ('active','under_notice','probationary')": "RAW",
+        "length(full_name)>0": "RAW"
+      },
+      "default": "#SESS_REPORTING_TO#",
+      "width": 4
+    },
+    "tags": {
+      "label": "Tags",
+      "group": "More",
+      "type": "tags",
+      "width": 12
+    },
+    "remarks": {
+      "label": "Remarks",
+      "group": "Lead Details",
+      "width": "12",
+      "maxlength": 255,
+      "type": "textarea"
+    },
+    "prelead_id": {
+      "label": "Prelead ID",
+      "group": "More",
+      "type": "text",
+      "hidden": true,
+      "width": 12
+    }
   }
-},
-"enquiry_due": {
-  "label": "Delivery Due On",
-  "group": "More",
-  "type": "date",
-  "width": 12
-},
-"open_by": {
-  "label": "Open By",
-  "group": "More",
-  "type": "dataSelectorFromTable",
-  "table": "staff_tbl",
-  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
-  "where": {
-    "blocked": "false",
-    "status in ('active','under_notice','probationary')": "RAW",
-    "loginid <> ''": "RAW",
-    "length(full_name)>0": "RAW"
-  },
-  "default": "#SESS_USER_ID#",
-  "width": 4
-},
-"assigned_to": {
-  "label": "Assigned To",
-  "group": "More",
-  "type": "dataSelectorFromTable",
-  "table": "staff_tbl",
-  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
-  "where": {
-    "blocked": "false",
-    "status in ('active','under_notice','probationary')": "RAW",
-    "loginid <> ''": "RAW",
-    "length(full_name)>0": "RAW"
-  },
-  "default": "#SESS_USER_ID#",
-  "width": 4
-},
-"manager": {
-  "label": "Manager",
-  "group": "More",
-  "type": "dataSelectorFromTable",
-  "table": "staff_tbl",
-  "columns": "concat(full_name,' [',loginid,']') as title,loginid as value",
-  "where": {
-    "blocked": "false",
-    "status in ('active','under_notice','probationary')": "RAW",
-    "length(full_name)>0": "RAW"
-  },
-  "default": "#SESS_REPORTING_TO#",
-  "width": 4
-},
-"tags": {
-  "label": "Tags",
-  "group": "More",
-  "type": "tags",
-  "width": 12
-},
-"remarks": {
-  "label": "Remarks",
-  "group": "Lead Details",
-  "width": "12",
-  "maxlength": 255,
-  "type": "textarea"
-},
-"prelead_id": {
-  "label": "Prelead ID",
-  "group": "More",
-  "type": "text",
-  "hidden": true,
-  "width": 12
 }
-  }
+
+export const example1 = {
+  "endPoints": {
+    "baseURL": "http://192.168.0.20:9999",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkVLZzNZbWRybWUwbzN2Z1Z1UFg0WlBJN2E2TXRtQ2RtQ0FRY1hUcExMT0RFdERRbldKZjhYZ2YrWU5uQUxVdEhrcmVBTkJsVTdUQVFqSjFoY21YVy9ndnp5VS9Oc2ZybzJEeXBycFM1bzlvMStrbmpBaTFXTGhTQUgrNFNvQXNjSGx5YzRBMnNkTjZLelpUdXV3MkprRTNJZStUU0RvVGhhZlZoektNRnZibTJkMGdtRnZBMGF1ME9VQUFyTTNlTlFSUDN3MGRsWGo1VzdjaUxLNjhMQXBZWnV3SGlobXFNNXpqeDc3M2FGZEYrSHVsdFRRMTRFalZwS1hCRkRGMGF0WUNyMStValhHUnVEUUwzRDZRakVZWTNuMWRUcmpzWFV6dGZNeWM9IiwiaWF0IjoxNzY4ODQwOTA2LCJleHAiOjE3Njg4NDQ1MDYsImp0aSI6ImFjYzoxOjE3Njg4NDA5MDY2NDI6d2ViIn0.4-UCiBPzPdffx_gjb4B5vDtXr0nlucNw3RI6kxSWOXI",
+    "dbopsGetHash": "/api/dbops",
+    "dbopsGetRefId": "/api/dbops/save",
+    "dbopsCreate": "/api/dbops/create",
+    "dbopsUpdate": "/api/dbops/update",
+    "dbopsFetch": "/api/dbops/fetch",
+    "registerQuery": "/api/query/save",
+    "runQuery": "/api/query/run",
+    "operation": "create",
+    "refid": "1"
+
+  },
+  "source": {
+    "type": "sql",
+    "table": "do_links",
+    "cols": "*",
+    "where": {
+      "id": "#refid#"
+    }
+  },
+  "forcefill": {
+    "guid": "#SESS_GUID#",
+    "site": "*"
+  },
+  "gotolink": "infoview/form/{hashid}?",
+  "fields": {
+    "menuid": {
+      "label": "MenuGroup",
+      "group": "Info",
+      "required": true,
+      "type": "autocomplete",
+      "table": "do_links",
+      "columns": "menuid as title ,menuid as value",
+      "groupBy": "menuid"
+    },
+    "title": {
+      "label": "Title",
+      "group": "Info",
+      "required": true
+    },
+    "link": {
+      "label": "Link",
+      "group": "Info",
+      "required": true
+    },
+    "menugroup": {
+      "label": "Group",
+      "group": "Info",
+      "type": "dataSelectorFromTable",
+      "table": "do_links",
+      "columns": "title as title ,id as value",
+      "where": {
+        "link='#'": "RAW"
+      },
+      "orderby": "title asc"
+    },
+    "category": {
+      "label": "Category",
+      "type": "text",
+      "group": "Info"
+    },
+    "class": {
+      "label": "Class",
+      "group": "Info"
+    },
+    "iconpath": {
+      "label": "Icon (Choose the icon class fron here: 'https://fontawesome.com/icons')",
+      "group": "Info",
+      "width": 12
+    },
+    "tips": {
+      "label": "Tooltip",
+      "group": "Info",
+      "width": 4
+    },
+    "weight": {
+      "label": "Weight/Ordering",
+      "group": "Info",
+      "type": "number",
+      "default": 0,
+      "width": 4
+    },
+    "to_check": {
+      "label": "Scope Rules/Permission",
+      "group": "Admin"
+    },
+    "privilege": {
+      "label": "Privilege Level",
+      "group": "Admin",
+      "default": "*"
+    },
+    "device": {
+      "label": "Device",
+      "group": "Admin",
+      "type": "dataSelectorFromTable",
+      "options": {
+        "*": "All",
+        "PC": "PC",
+        "Mobile": "Mobile",
+        "Tablet": "Tablet"
+      },
+      "multiple": true
+    },
+    "target": {
+      "label": "Target",
+      "group": "Info",
+      "type": "select",
+      "required": true,
+      "options": {
+        "ajax": "ajax",
+        "blank": "blank",
+        "_blank": "_blank",
+        "_parent": "_parent",
+        "_self": "_self",
+        "_top": "_top"
+      },
+      "width": 12
+    },
+    "onmenu": {
+      "label": "On Menu",
+      "group": "Admin",
+      "type": "select",
+      "options": {
+        "": "Select Status",
+        "false": "False",
+        "true": "True"
+      },
+      "required": true,
+      "default": "true"
+    },
+    "blocked": {
+      "label": "Blocked",
+      "group": "Admin",
+      "type": "select",
+      "vmode": "edit",
+      "options": {
+        "": "Select Status",
+        "false": "False",
+        "true": "True"
+      },
+      "required": true
+    }
+  },
+  "module_refid": "menuManager.main",
+  "module_type": "forms"
 }
 
