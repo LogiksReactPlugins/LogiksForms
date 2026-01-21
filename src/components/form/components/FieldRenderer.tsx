@@ -30,11 +30,18 @@ export default function FieldRenderer({
   const [open, setOpen] = useState(false);
   const searchRef = React.useRef(search);
 
+  const isDisabled = field.disabled === true;
+
   React.useEffect(() => {
     searchRef.current = search;
   }, [search]);
 
   const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
+    if (isDisabled) {
+      e.preventDefault();
+      detailsRef.current?.removeAttribute("open");
+      return;
+    }
     const detailsEl = e.currentTarget; //  currentTarget is strongly typed
     if (!detailsEl.open) {
       setSearch("");
@@ -244,10 +251,14 @@ export default function FieldRenderer({
 
 
   const baseInputClasses = `
-    w-full px-4 py-2 rounded-lg border border-gray-200 transition-all duration-300 
-    bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
-    focus:outline-none focus:ring-0
-  `;
+  w-full px-4 py-2 rounded-lg border transition-all duration-300
+  backdrop-blur-sm text-gray-800 placeholder-gray-400
+  focus:outline-none focus:ring-0
+
+  ${isDisabled
+      ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+      : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
+`;
 
   const focusClasses = `
     border-gradient-to-r 
@@ -269,7 +280,6 @@ export default function FieldRenderer({
     [options]
   );
 
-  console.log("flatOptions", flatOptions);
 
 
   const optionCount = flatOptions.length;
@@ -557,7 +567,7 @@ export default function FieldRenderer({
     }
   };
 
-  console.log("options", options);
+
 
   const executeFieldMethod = async (
     trigger: "onChange" | "onBlur" | "onFocus" | "onClick",
@@ -595,6 +605,7 @@ export default function FieldRenderer({
           : getOptionLabel(options, value) ?? String(value ?? "");
 
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isDisabled) return;
         const val = e.target.value;
         setSearch(val);
         setHighlightedIndex(0);
@@ -648,10 +659,10 @@ export default function FieldRenderer({
             }}
 
 
-            disabled={field.disabled}
+            disabled={isDisabled}
           />
 
-          {open && (
+          {open && !isDisabled && (
             <div
               ref={listRef}
               className="absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1"
@@ -704,13 +715,24 @@ export default function FieldRenderer({
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <details className="relative w-full"
+            <details
+              className={`relative w-full ${isDisabled ? "opacity-70" : ""}`}
               onToggle={handleToggle}
               ref={detailsRef}
-              onKeyDown={(e) => handleKeyDown(e, false)}
+              onKeyDown={(e) => {
+                if (isDisabled) return;
+                handleKeyDown(e, false)
+              }}
 
             >
-              <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
+              <summary
+                className={`
+    select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
+    ${isDisabled
+                    ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white border-gray-300 cursor-pointer"}`}
+
+              >
                 <span className="text-sm text-gray-700">
                   {valueArray?.length > 0
                     ? valueArray.join(", ")
@@ -732,7 +754,7 @@ export default function FieldRenderer({
               </summary>
 
               {/* Dropdown body */}
-              <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+              {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
                 {/* 🔍 Search input */}
                 {field.search && <div className="sticky top-0 bg-white p-1">
                   <input
@@ -775,7 +797,7 @@ export default function FieldRenderer({
                           executeFieldMethod("onChange", field, `${key}-${val}`)
                         }}
                         onBlur={formik.handleBlur}
-                        disabled={field.disabled}
+                        disabled={isDisabled}
                         className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                       />
                       {label}
@@ -784,7 +806,7 @@ export default function FieldRenderer({
                 ) : (
                   <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
                 )}
-              </div>
+              </div>}
             </details>
 
             {formik.touched[key] && formik.errors[key] && (
@@ -801,13 +823,28 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <details className="relative w-full"
+          <details
+            className={`relative w-full ${isDisabled ? "opacity-70" : ""}`}
+
             onToggle={handleToggle}
             ref={detailsRef}
-            onKeyDown={(e) => handleKeyDown(e, true)}
+            onKeyDown={(e) => {
+              if (isDisabled) return;
+              handleKeyDown(e, true)
+            }}
 
           >
-            <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
+            <summary
+              className={`
+    select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
+    ${isDisabled
+                  ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-white border-gray-300 cursor-pointer"
+                }
+  `}
+
+
+            >
               <span className="text-sm text-gray-700">
                 {formik.values[key]
                   ? getOptionLabel(options, formik.values[key]) ?? "Select option"
@@ -829,7 +866,7 @@ export default function FieldRenderer({
             </summary>
 
             {/* Dropdown body */}
-            <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+            {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
               {/*  Search input */}
               {field.search && <div className="sticky top-0 bg-white p-1">
                 <input
@@ -892,7 +929,7 @@ export default function FieldRenderer({
               ) : (
                 <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
               )}
-            </div>
+            </div>}
           </details>
 
           {formik.touched[key] && formik.errors[key] && (
@@ -931,7 +968,7 @@ export default function FieldRenderer({
                 }
                 }
                 placeholder={field.placeholder}
-                disabled={field.disabled}
+                disabled={isDisabled}
               />
               {/* Animated border glow */}
               <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
@@ -958,13 +995,25 @@ export default function FieldRenderer({
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <details className="relative w-full"
+            <details
+
+              className={`relative w-full ${isDisabled ? " opacity-70" : ""}`}
               onToggle={handleToggle}
               ref={detailsRef}
-              onKeyDown={(e) => handleKeyDown(e, false)}
+              onKeyDown={(e) => {
+                if (isDisabled) return;
+                handleKeyDown(e, false)
+              }}
 
             >
-              <summary className="cursor-pointer select-none border border-gray-300 rounded-lg px-3 py-2 bg-white flex justify-between items-center">
+              <summary
+                className={`
+    select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
+    ${isDisabled
+                    ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white border-gray-300 cursor-pointer"}
+  `}
+              >
                 <span className="text-sm text-gray-700">
                   {valueArray?.length > 0
                     ? valueArray.join(", ")
@@ -986,13 +1035,13 @@ export default function FieldRenderer({
               </summary>
 
               {/* Dropdown body */}
-              <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+              {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
                 {/* 🔍 Search input */}
                 {field.search && <div className="sticky top-0 bg-white p-1">
                   <input
                     type="text"
                     value={search}
-                    onChange={(e) => { setSearch(e.target.value); setHighlightedIndex(0); }}
+                    onChange={(e) => { if (isDisabled) return; setSearch(e.target.value); setHighlightedIndex(0); }}
                     placeholder="Search..."
                     className="px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
                 bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
@@ -1029,7 +1078,7 @@ export default function FieldRenderer({
                           executeFieldMethod("onChange", field, `${key}-${val}`)
                         }}
                         onBlur={formik.handleBlur}
-                        disabled={field.disabled}
+                        disabled={isDisabled}
                         className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                       />
                       {label}
@@ -1038,7 +1087,7 @@ export default function FieldRenderer({
                 ) : (
                   <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
                 )}
-              </div>
+              </div>}
             </details>
 
             {formik.touched[key] && formik.errors[key] && (
@@ -1057,7 +1106,7 @@ export default function FieldRenderer({
           </label>
           <div className="relative">
             <select
-              className={`${baseInputClasses} ${focusClasses} appearance-none cursor-pointer pr-12`}
+              className={`${baseInputClasses} ${focusClasses} appearance-none ${!isDisabled ? "cursor-pointer" : ""} pr-12`}
               onFocus={() => setIsFocused(true)}
 
               name={key}
@@ -1073,7 +1122,7 @@ export default function FieldRenderer({
                 executeFieldMethod("onChange", field, `${key}`)
               }
               }
-              disabled={field.disabled}
+              disabled={isDisabled}
             >
               <option value="" disabled>
                 {field?.["no-option"] || `Please select ${field.label}`}
@@ -1151,8 +1200,10 @@ export default function FieldRenderer({
                   }
                   }
                   onBlur={formik.handleBlur}
-                  disabled={field.disabled}
-                  className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  disabled={isDisabled}
+                  className={`h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500
+                    ${isDisabled ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" : ""}
+                    `}
                 />
                 {label}
               </label>
@@ -1198,8 +1249,10 @@ export default function FieldRenderer({
 
 
                   onBlur={formik.handleBlur}
-                  disabled={field.disabled}
-                  className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  disabled={isDisabled}
+                  className={`h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500
+                    ${isDisabled ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" : ""}
+                    `}
                 />
                 {label}
               </label>
@@ -1224,6 +1277,7 @@ export default function FieldRenderer({
         : Object.entries(options || {}).map(([value, label]) => ({ value, label }));
 
       const addTag = (val: string) => {
+        if (isDisabled) return;
         if (val && !values.includes(val)) {
           formik.setFieldValue(key, [...values, val]);
           setSearch("");
@@ -1248,9 +1302,13 @@ export default function FieldRenderer({
           </label>
 
           <div
-            className={`${baseInputClasses} flex flex-wrap gap-2 min-h-[42px] max-h-[120px] overflow-y-auto items-center`}
+            className={`${baseInputClasses} 
+            flex flex-wrap gap-2 min-h-[42px] max-h-[120px] overflow-y-auto items-center
+            ${isDisabled ? "pointer-events-none opacity-70" : ""}
+            `
+            }
             onClick={() =>
-              !field.disabled &&
+              !isDisabled &&
               document.getElementById(`${key}-input`)?.focus()
             }
           >
@@ -1267,7 +1325,7 @@ export default function FieldRenderer({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (!field.disabled) removeTag(val);
+                    if (!isDisabled) removeTag(val);
                   }}
                   onMouseDown={(e) => e.preventDefault()}
                   className="ml-1 text-indigo-500 hover:text-red-500 focus:outline-none"
@@ -1295,7 +1353,7 @@ export default function FieldRenderer({
                   : ""
               }
               className="flex-1 min-w-[120px] border-none outline-none text-sm bg-transparent p-1"
-              disabled={field.disabled}
+              disabled={isDisabled}
             />
           </div>
 
@@ -1348,9 +1406,8 @@ export default function FieldRenderer({
 
 
               onBlur={formik.handleBlur}
-
               placeholder={field.placeholder}
-              disabled={field.disabled}
+              disabled={isDisabled}
 
             />
             {/* Animated border glow */}
@@ -1404,7 +1461,7 @@ export default function FieldRenderer({
               }
               onBlur={formik.handleBlur}
               placeholder={field.placeholder || "Enter valid JSON"}
-              disabled={field.disabled}
+              disabled={isDisabled}
               className={`${baseInputClasses} ${focusClasses} min-h-[200px] font-mono text-sm resize-y`}
             />
             <div
@@ -1457,7 +1514,7 @@ export default function FieldRenderer({
               }
               onBlur={formik.handleBlur}
               placeholder={field.placeholder}
-              disabled={field.disabled}
+              disabled={isDisabled}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""
                 }`}
             />
@@ -1511,9 +1568,10 @@ export default function FieldRenderer({
                 executeFieldMethod("onChange", field, `${key}`)
               }
               }
+              step={field.step}
               placeholder={field.placeholder}
-              disabled={field.disabled}
-              min={field.min}
+              disabled={isDisabled}
+              min={field.min ?? 1}
               max={field.max}
 
 
@@ -1563,8 +1621,9 @@ export default function FieldRenderer({
                 executeFieldMethod("onChange", field, `${key}`)
               }
               }
+              step={field.step}
               placeholder={field.placeholder}
-              disabled={field.disabled}
+              disabled={isDisabled}
               minLength={field.minlength}
               maxLength={field.maxlength}
 

@@ -69,6 +69,7 @@ export interface FormField {
     onBlur?: string;
     onFocus?: string;
     onClick?: string;
+    step?: string | number;
 
 }
 

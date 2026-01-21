@@ -134,7 +134,7 @@ export default function LogiksForm({
         geo = await fetchGeolocation();
 
       } catch (err) {
-        console.log("catch fetchGeolocation", err);
+        console.error("catch fetchGeolocation", err);
         geo = null;
       }
     }
@@ -276,8 +276,7 @@ export default function LogiksForm({
           },
         });
 
-        console.log("res", res);
-
+      
         callback?.(res);
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid

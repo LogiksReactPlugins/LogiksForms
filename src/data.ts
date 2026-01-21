@@ -433,8 +433,9 @@ export const example1 = {
     "dbopsFetch": "/api/dbops/fetch",
     "registerQuery": "/api/query/save",
     "runQuery": "/api/query/run",
+    "uploadURL": "/api/files/upload",
     "operation": "create",
-    "refid": "1"
+
 
   },
   "source": {
@@ -454,16 +455,24 @@ export const example1 = {
     "menuid": {
       "label": "MenuGroup",
       "group": "Info",
-      "required": true,
+      "disabled": true,
+     
+     
       "type": "autocomplete",
       "table": "do_links",
       "columns": "menuid as title ,menuid as value",
-      "groupBy": "menuid"
+      "groupBy": "menuid",
+      "options":{
+        "1":"Crikcekt",
+        "2":"Volleyball"
+      }
     },
     "title": {
       "label": "Title",
+      "type": "month",
       "group": "Info",
-      "required": true
+      "required": true,
+      disabled: true,
     },
     "link": {
       "label": "Link",
@@ -472,6 +481,7 @@ export const example1 = {
     },
     "menugroup": {
       "label": "Group",
+      disabled: true,
       "group": "Info",
       "type": "dataSelectorFromTable",
       "table": "do_links",
@@ -498,7 +508,8 @@ export const example1 = {
     "tips": {
       "label": "Tooltip",
       "group": "Info",
-      "width": 4
+      "width": 4,
+      disabled: true,
     },
     "weight": {
       "label": "Weight/Ordering",
@@ -514,7 +525,8 @@ export const example1 = {
     "privilege": {
       "label": "Privilege Level",
       "group": "Admin",
-      "default": "*"
+      "default": "*",
+      disabled: true,
     },
     "device": {
       "label": "Device",
@@ -526,7 +538,8 @@ export const example1 = {
         "Mobile": "Mobile",
         "Tablet": "Tablet"
       },
-      "multiple": true
+      "multiple": true,
+      disabled: true,
     },
     "target": {
       "label": "Target",
@@ -541,7 +554,8 @@ export const example1 = {
         "_self": "_self",
         "_top": "_top"
       },
-      "width": 12
+      "width": 12,
+      disabled: true,
     },
     "onmenu": {
       "label": "On Menu",

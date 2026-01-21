@@ -6,7 +6,7 @@ function App() {
     const getFormData = (data: Record<string, any>) => {
 
         if (data) {
-            console.log("received data", data);
+           
             return
         }
         return {

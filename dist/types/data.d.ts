@@ -428,8 +428,8 @@ export declare const example1: {
         dbopsFetch: string;
         registerQuery: string;
         runQuery: string;
+        uploadURL: string;
         operation: string;
-        refid: string;
     };
     source: {
         type: string;
@@ -448,16 +448,22 @@ export declare const example1: {
         menuid: {
             label: string;
             group: string;
-            required: boolean;
+            disabled: boolean;
             type: string;
             table: string;
             columns: string;
             groupBy: string;
+            options: {
+                "1": string;
+                "2": string;
+            };
         };
         title: {
             label: string;
+            type: string;
             group: string;
             required: boolean;
+            disabled: boolean;
         };
         link: {
             label: string;
@@ -466,6 +472,7 @@ export declare const example1: {
         };
         menugroup: {
             label: string;
+            disabled: boolean;
             group: string;
             type: string;
             table: string;
@@ -493,6 +500,7 @@ export declare const example1: {
             label: string;
             group: string;
             width: number;
+            disabled: boolean;
         };
         weight: {
             label: string;
@@ -509,6 +517,7 @@ export declare const example1: {
             label: string;
             group: string;
             default: string;
+            disabled: boolean;
         };
         device: {
             label: string;
@@ -521,6 +530,7 @@ export declare const example1: {
                 Tablet: string;
             };
             multiple: boolean;
+            disabled: boolean;
         };
         target: {
             label: string;
@@ -536,6 +546,7 @@ export declare const example1: {
                 _top: string;
             };
             width: number;
+            disabled: boolean;
         };
         onmenu: {
             label: string;
