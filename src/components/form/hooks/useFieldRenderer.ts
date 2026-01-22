@@ -1,0 +1,654 @@
+import { useRef, useState, useEffect, useMemo } from "react";
+import axios from 'axios';
+import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
+import { flattenOptions, formatOptions, getPersistentKey, getSearchColumns, isAutocompleteConfig, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import { fetchDataByquery } from "../service.js";
+
+//DRY implementation pending
+
+export default function useFieldRenderer({
+    field,
+    formik,
+    methods = {},
+    sqlOpsUrls,
+    refid,
+    module_refid = "menuManager.main",
+    optionsOverride,
+    setFieldOptions
+}: FieldRendererProps) {
+
+    const [isFocused, setIsFocused] = useState(false);
+
+    const [options, setOptions] = useState<SelectOptions>(
+        optionsOverride ?? field.options ?? {}
+    );
+
+    const dateRef = useRef<HTMLInputElement | null>(null);
+    const [search, setSearch] = useState("");
+    const [highlightedIndex, setHighlightedIndex] = useState(0);
+    const listRef = useRef<HTMLDivElement>(null);
+    const detailsRef = useRef<HTMLDetailsElement>(null);
+    const [open, setOpen] = useState(false);
+    const searchRef = useRef(search);
+
+    const isDisabled = field.disabled === true;
+
+    useEffect(() => {
+        searchRef.current = search;
+    }, [search]);
+
+    const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
+        if (isDisabled) {
+            e.preventDefault();
+            detailsRef.current?.removeAttribute("open");
+            return;
+        }
+        const detailsEl = e.currentTarget; //  currentTarget is strongly typed
+        if (!detailsEl.open) {
+            setSearch("");
+        }
+    };
+
+    useEffect(() => {
+        if (!optionsOverride) return;
+        if (Object.keys(optionsOverride).length === 0) return;
+
+        setOptions(optionsOverride);
+    }, [optionsOverride]);
+
+    // Close on outside click
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
+                detailsRef.current.open = false;
+                setSearch(""); // reset search if needed
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const key = field.name;
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchData = async () => {
+            let valueKey = field.valueKey ?? "value";
+            let labelKey = field.labelKey ?? "title";
+
+            if (field?.options) {
+
+                //  CASE 1: flat or grouped object
+                // { "1": "WEL" } OR { quarter1: { "1": "January" } }
+                if (
+                    typeof field.options === "object" &&
+                    !Array.isArray(field.options)
+                ) {
+                    const values = Object.values(field.options);
+                    if (values.length && typeof values[0] === "string") {
+                        setOptions(field.options as SelectOptions);
+                        return;
+                    }
+                }
+
+                // CASE 2 / 3: array of rows (flat or grouped via `category`)
+                const rawItems = Array.isArray(field.options)
+                    ? field.options
+                    : [field.options];
+
+                const normalizedItems = rawItems.map(normalizeRowSafe);
+
+                const mapped = formatOptions(
+                    valueKey,
+                    labelKey,
+                    normalizedItems,
+                    field.groupKey // auto-uses `category` if present
+                );
+
+                setOptions(mapped);
+                return;
+            }
+
+            const source = field?.source ?? {};
+
+            // Case 1: Method source
+            if (field.type === "dataMethod") {
+                const methodName = field.method as keyof typeof methods | undefined;
+                const methodFn = methodName ? methods[methodName] : undefined;
+                if (methodFn) {
+                    try {
+                        const res = await Promise.resolve(methodFn());
+                        const rawItems = Array.isArray(res?.data?.data)
+                            ? res.data.data
+                            : Array.isArray(res?.data)
+                                ? res.data
+                                : res;
+
+                        const normalizedItems = Array.isArray(rawItems)
+                            ? rawItems.map(normalizeRowSafe)
+                            : [];
+                        const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
+
+                        if (isMounted) setOptions(mapped);
+                    } catch (err) {
+                        console.error("Method execution failed:", err);
+                        if (isMounted) setOptions({});
+                    }
+                } else {
+                    if (isMounted) setOptions({});
+                }
+            }
+
+            // Case 2: API source
+            if (source.type === "api" && source.url) {
+                try {
+                    const res = await axios({
+                        method: source.method || "GET",
+                        url: source.url,
+                        data: source.body ?? {},
+                        params: source.params ?? {},
+                        headers: source.headers ?? {},
+                    });
+                    const rawItems = Array.isArray(res?.data?.data)
+                        ? res.data.data
+                        : Array.isArray(res?.data)
+                            ? res.data
+                            : res;
+
+                    const normalizedItems = Array.isArray(rawItems)
+                        ? rawItems.map(normalizeRowSafe)
+                        : [];
+
+                    const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
+
+                    if (isMounted) setOptions(mapped);
+
+                } catch (err) {
+                    console.error("API execution failed:", err);
+                    if (isMounted) setOptions({});
+                }
+            }
+
+            // Case 3: Sql source
+
+            if (field.table || field.type === "dataSelector" || field.queryid) {
+
+                if (!sqlOpsUrls) {
+                    console.error("SQL source requires formJson.endPoints but it is missing");
+                    return;
+                }
+
+                try {
+
+                    let query: sqlQueryProps | undefined;
+
+                    if (field.type === "dataSelector") {
+                        query = {
+                            table: "do_lists",
+                            cols: "title,value",
+                            where: {
+                                groupid: field.groupid ?? "",
+                            },
+                        };
+
+                    } else if (!field.queryid) {
+                        // inline SQL
+                        if (!field.table || !field.columns) {
+                            console.error("Invalid SQL field config", field);
+                            return;
+                        }
+
+                        query = {
+                            table: field.table,
+                            cols: field.columns,
+                            where: field.where
+                                ? refid
+                                    ? replacePlaceholders(field.where, { refid })
+                                    : field.where
+                                : undefined,
+                        };
+                    }
+
+                    //  Optional where — added only if present
+
+                    const res = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
+
+                    const rawItems = Array.isArray(res?.data?.data)
+                        ? res.data.data
+                        : Array.isArray(res?.data)
+                            ? res.data
+                            : res;
+
+                    const normalizedItems = Array.isArray(rawItems)
+                        ? rawItems.map(normalizeRowSafe)
+                        : [];
+
+                    const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
+
+                    if (isMounted) setOptions(mapped);
+
+                } catch (err) {
+                    console.error("API fetch failed:", err);
+                }
+            }
+        };
+
+        fetchData();
+        return () => {
+            isMounted = false;
+        };
+    }, [
+        field.options,
+        field.source,
+        field.table,
+        field.columns,
+        field.where,
+        refid,
+        field.queryid,
+        field.groupKey,
+        field.valueKey,
+        field.labelKey
+    ]);
+
+
+    const baseInputClasses = `
+  w-full px-4 py-2 rounded-lg border transition-all duration-300
+  backdrop-blur-sm text-gray-800 placeholder-gray-400
+  focus:outline-none focus:ring-0
+
+  ${isDisabled
+            ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+            : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
+`;
+
+    const focusClasses = `
+    border-gradient-to-r 
+    focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
+  `;
+
+    const labelClasses = `
+    block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700
+  `;
+
+
+
+    const flatOptions = useMemo(
+        () => flattenOptions(options),
+        [options]
+    );
+
+
+
+    const optionCount = flatOptions.length;
+
+    const filteredOptions = useMemo(() => {
+        // API search mode → backend already filtered
+        if (field.search) {
+            return flatOptions;
+        }
+        if (!search) return flatOptions;
+        return flatOptions.filter(([, label]) =>
+            label.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [field.search, search, flatOptions]);
+
+
+    //  Handle keyboard navigation
+    const handleKeyDown = (e: React.KeyboardEvent, is_single: boolean) => {
+
+        if (!(detailsRef.current?.open === true || open === true)) return;
+
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlightedIndex((prev) =>
+                prev + 1 < filteredOptions.length ? prev + 1 : 0
+            );
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlightedIndex((prev) =>
+                prev - 1 >= 0 ? prev - 1 : filteredOptions.length - 1
+            );
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            const [val] = filteredOptions[highlightedIndex] || [];
+            if (val) {
+                let value = is_single ? val : [...formik.values[field.name], val];
+                formik.setFieldValue(field.name, value);
+                handlePersist(value)
+            }
+            if (detailsRef.current) {
+                detailsRef.current!.open = false;
+            }
+
+        } else if (e.key === "Escape") {
+            detailsRef.current!.open = false;
+            setSearch("");
+            setOpen(false);
+        }
+    };
+
+
+    //  Auto-scroll highlighted option into view
+    useEffect(() => {
+        const activeEl = listRef.current?.querySelector<HTMLElement>(
+            `[data-index="${highlightedIndex}"]`
+        );
+        activeEl?.scrollIntoView({ block: "nearest" });
+    }, [highlightedIndex]);
+
+    useEffect(() => {
+        if (highlightedIndex >= filteredOptions.length) {
+            setHighlightedIndex(0);
+        }
+    }, [filteredOptions, highlightedIndex]);
+
+
+
+    useEffect(() => {
+        const ac = field.autocomplete;          // always single
+        const aj = field.ajaxchain;             // single | array | undefined
+
+        if (!ac && !aj) return;
+
+        const value = formik.values[field.name];
+        if (!value) return;
+
+        const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
+
+        const run = async () => {
+            try {
+                // ---------- AUTOCOMPLETE ----------
+                if (isAutocompleteConfig(ac)) {
+                    const src = ac.src;
+                    if (!src || !sqlOpsUrls) return;
+
+                    const resolvedWhere = replacePlaceholders(src.where ?? {}, {
+                        refid: value,
+                    });
+
+                    const query = {
+                        ...src,
+                        table: src.table,
+                        cols: src.columns,
+                        where: resolvedWhere,
+                    };
+
+                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
+
+                    const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+
+                    if (row) {
+                        ac.target
+                            .split(",")
+                            .map(t => t.trim())
+                            .forEach(t => {
+                                if (row[t] !== undefined) {
+                                    formik.setFieldValue(t, row[t]);
+                                }
+                            });
+                    }
+                }
+
+                // ---------- AJAX CHAIN (ARRAY SAFE) ----------
+                for (const chain of ajaxChains) {
+                    const src = chain.src;
+                    if (!chain || typeof chain !== "object") continue;
+                    if (!src || typeof src !== "object") continue;
+                    if (!sqlOpsUrls) continue;
+
+                    let query: sqlQueryProps | undefined;
+
+                    if (!src.queryid) {
+                        if (!src.table || !src.columns) {
+                            throw new Error("SQL query requires field.table");
+                        }
+                        const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                            refid: value,
+                        });
+                        query = {
+                            ...src,
+                            table: src.table,
+                            cols: src.columns,
+                            where: resolvedWhere,
+                        };
+                    }
+
+
+                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+
+                    let valueKey = field.valueKey ?? "value";
+                    let labelKey = field.labelKey ?? "title";
+
+                    const rawItems = Array.isArray(res?.data?.data)
+                        ? res.data.data
+                        : Array.isArray(res?.data)
+                            ? res.data
+                            : res;
+
+                    const normalizedItems = Array.isArray(rawItems)
+                        ? rawItems.map(normalizeRowSafe)
+                        : [];
+
+                    const mapped = formatOptions(
+                        valueKey,
+                        labelKey,
+                        normalizedItems,
+                        field.groupKey
+                    );
+
+                    setFieldOptions?.(chain.target, mapped);
+                }
+            } catch (err) {
+                console.error("Autocomplete / AjaxChain fetch failed", err);
+            }
+        };
+
+        run();
+    }, [formik.values[field.name]]);
+
+
+    useEffect(() => {
+        if (!field.search) return;
+        if (!search.trim()) return;
+        if (!field.table || !sqlOpsUrls) return;
+        const searchColumns = getSearchColumns(field.columns ?? "");
+
+        const controller = new AbortController();
+        const timer = setTimeout(async () => {
+            try {
+
+                let query: sqlQueryProps | undefined;
+
+                if (!field.queryid) {
+
+                    if (!field.table || !field.cols) {
+                        throw new Error("SQL query requires field.table");
+                    }
+
+                    const resolvedWhere = refid ? replacePlaceholders(field.where ?? {}, {
+                        refid: refid,
+                    }) : field.where
+
+                    query = {
+                        ...field,
+                        table: field.table,
+                        cols: field.columns || field.cols,
+                        where: resolvedWhere
+
+                    };
+                }
+
+
+                let filter: Record<string, [string, string]> = {};
+
+                if (Array.isArray(searchColumns)) {
+                    searchColumns.forEach((column) => {
+                        filter[column] = [search, "LIKE"]
+                    })
+                }
+                let valueKey = field.valueKey ?? "value";
+
+                let labelKey = field.labelKey ?? "title";
+                const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid, filter);
+
+
+                const rawItems = Array.isArray(res?.data?.data)
+                    ? res.data.data
+                    : Array.isArray(res?.data)
+                        ? res.data
+                        : res;
+
+                const normalizedItems = Array.isArray(rawItems)
+                    ? rawItems.map(normalizeRowSafe)
+                    : [];
+
+                const mapped = formatOptions(
+                    valueKey,
+                    labelKey,
+                    normalizedItems,
+                    field.groupKey
+                );
+
+                setOptions(mapped);
+            } catch (err) {
+                if (axios.isCancel(err)) return;
+                console.error("Search fetch failed", err);
+            }
+        }, 500); // debounce
+
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
+    }, [search, refid]);
+
+
+    const handleFileUpload = async (files: FileList) => {
+
+        if (files.length === 0) {
+            console.error("No file");
+            return;
+        }
+        const uploadUrl = sqlOpsUrls?.baseURL + sqlOpsUrls?.uploadURL;
+        if (!uploadUrl) {
+            console.error("No Upload URL ");
+            return;
+        }
+        const isMultiple = field.multiple === true;
+
+        try {
+            const uploads = await Promise.all(
+                Array.from(files).map(async (file) => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    const res = await axios({
+                        method: "POST",
+                        url: uploadUrl,
+                        data: formData,
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                        },
+                    });
+
+                    return res.data; // { id, url, ... }
+                })
+            );
+            let fieldValue = isMultiple ? uploads.map(file => file.path) : uploads[0]?.path
+
+            formik.setFieldValue(
+                key,
+                fieldValue
+            );
+            handlePersist(fieldValue)
+        } catch (err) {
+            console.error("File upload failed", err);
+            formik.setFieldError(key, "File upload failed");
+        }
+    };
+
+
+
+    const executeFieldMethod = async (
+        trigger: "onChange" | "onBlur" | "onFocus" | "onClick",
+        field: FormField,
+        value?: any
+    ) => {
+        const methodName = field[trigger] as keyof typeof methods | undefined;
+        if (!methodName) return;
+
+        const fn = methods?.[methodName];
+        if (typeof fn !== "function") {
+            console.error(`Method "${String(methodName)}" not found`);
+            return;
+        }
+
+        try {
+            await Promise.resolve(fn(value));
+        } catch (err) {
+            console.error(`Method "${String(methodName)}" failed`, err);
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isDisabled) return;
+        const val = e.target.value;
+        setSearch(val);
+        setHighlightedIndex(0);
+
+        if (val.trim()) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+            formik.setFieldValue(key, "");
+        }
+    };
+    const handleSelect = (val: string) => {
+        formik.setFieldValue(key, val); // store selected value
+        handlePersist(val)
+        setSearch("");
+        setOpen(false);
+        executeFieldMethod("onChange", field, `${key}-${val}`)
+    };
+
+    function handlePersist(value: any) {
+        const persistentKey = getPersistentKey(field);
+        if (persistentKey && module_refid) {
+            writePersistedValue(module_refid, persistentKey, value);
+        }
+    }
+
+
+    return {
+        setHighlightedIndex,
+        executeFieldMethod,
+        handleFileUpload,
+        handleKeyDown,
+        handleToggle,
+        setSearch,
+        setOpen,
+        setIsFocused,
+        handleInputChange,
+        handleSelect,
+        handlePersist,
+        optionCount,
+        baseInputClasses,
+        focusClasses,
+        labelClasses,
+        search,
+        highlightedIndex,
+        options,
+        isDisabled,
+        key,
+        filteredOptions,
+        open,
+        listRef,
+        detailsRef,
+        isFocused
+
+    }
+}

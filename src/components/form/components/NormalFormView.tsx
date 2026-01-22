@@ -19,7 +19,7 @@ export default function NormalFormView({
   refid,
   module_refid
 }: SimpleFormViewProps) {
-  const flatfields = flatFields(fields,sqlOpsUrls.operation);
+  const flatfields = flatFields(fields, sqlOpsUrls.operation);
 
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
@@ -40,7 +40,7 @@ export default function NormalFormView({
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
     flatfields.forEach((field) => {
-      intializeForm([field], values, schema, data);
+      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls.operation);
     });
 
     return {

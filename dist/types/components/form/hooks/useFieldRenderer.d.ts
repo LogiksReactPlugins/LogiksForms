@@ -1,0 +1,29 @@
+import { FieldRendererProps, FormField, SelectOptions } from '../Form.types.js';
+export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
+    setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
+    executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
+    handleFileUpload: (files: FileList) => Promise<void>;
+    handleKeyDown: (e: React.KeyboardEvent, is_single: boolean) => void;
+    handleToggle: (e: React.SyntheticEvent<HTMLDetailsElement>) => void;
+    setSearch: import('react').Dispatch<import('react').SetStateAction<string>>;
+    setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>;
+    setIsFocused: import('react').Dispatch<import('react').SetStateAction<boolean>>;
+    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleSelect: (val: string) => void;
+    handlePersist: (value: any) => void;
+    optionCount: number;
+    baseInputClasses: string;
+    focusClasses: string;
+    labelClasses: string;
+    search: string;
+    highlightedIndex: number;
+    options: SelectOptions;
+    isDisabled: boolean;
+    key: string;
+    filteredOptions: import('../utils.js').FlatEntry[];
+    open: boolean;
+    listRef: import('react').RefObject<HTMLDivElement | null>;
+    detailsRef: import('react').RefObject<HTMLDetailsElement | null>;
+    isFocused: boolean;
+};
+//# sourceMappingURL=useFieldRenderer.d.ts.map

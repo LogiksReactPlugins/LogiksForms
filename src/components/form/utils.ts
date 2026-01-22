@@ -80,15 +80,35 @@ export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,
   validationSchema: Record<string, Yup.AnySchema>,
-  data?: Record<string, any>
+  data?: Record<string, any>,
+  module_refid?: string,
+  operation?: "create" | "update"
 ) => {
+
+  const persisted =
+    operation === "create" && module_refid
+      ? readPersistedValues(module_refid)
+      : {};
+
   formFields.forEach((field) => {
     const name = field?.name;
     if (!name) return;
 
     let value = data?.[name];
 
+    const persistentKey =
+      operation === "create" && module_refid
+        ? getPersistentKey(field)
+        : null;
 
+    if (
+      operation === "create" &&
+      persistentKey &&
+      persisted[persistentKey] !== undefined &&
+      (value === undefined || value === null)
+    ) {
+      value = persisted[persistentKey];
+    }
 
     if (value === undefined || value === null) {
       value = field.default;
@@ -462,7 +482,7 @@ export const getOptionLabel = (
 
 
 
-type FlatEntry = [string, string];
+export type FlatEntry = [string, string];
 
 export const flattenOptions = (options: SelectOptions): FlatEntry[] => {
   if (!options) return [];
@@ -572,51 +592,6 @@ export function flatFields(
 }
 
 
-export async function fetchDataByquery(
-  sqlOpsUrls: Record<string, any>,
-  query: Record<string, any> | undefined,
-  querid: string | undefined,
-  refid: string | undefined = undefined,
-  module_refid: string | undefined = undefined,
-  filter: Record<string, any> = {}
-): Promise<AxiosResponse<any>> {
-  try {
-
-    let queryId = querid;
-
-    if (!queryId) {
-      const resQueryId = await axios({
-        method: "POST",
-        url: sqlOpsUrls.baseURL + sqlOpsUrls.registerQuery,
-        data: { "query": query ?? {}, "srcid": module_refid },
-        headers: {
-          "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-        },
-      });
-      queryId = resQueryId.data.queryid;
-    }
-
-    const res = await axios({
-      method: "POST",
-      url: sqlOpsUrls.baseURL + sqlOpsUrls.runQuery,
-      data: {
-        "queryid": queryId,
-        "filter": filter,
-        "refid": refid,
-        "page": 0,
-        "limit": 10000
-      },
-      headers: {
-        "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-      },
-    });
-
-    return res
-  } catch (error) {
-    throw error;
-  }
-}
-
 
 export function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig {
   return (
@@ -661,6 +636,40 @@ export const normalizeRowSafe = (row: Row): Row => {
   return result;
 };
 
+const STORAGE_PREFIX = "__form_persist__";
+
+const getStorageKey = (module_refid: string) =>
+  `${STORAGE_PREFIX}:${module_refid}`;
+
+export function getPersistentKey(field: FormField): string | null {
+  if (!field.persistent) return null;
+  if (field.persistent === true) return field.name;
+  if (typeof field.persistent === "string") return field.persistent;
+  return null;
+}
+
+export function readPersistedValues(module_refid: string): Record<string, any> {
+  try {
+    return JSON.parse(localStorage.getItem(getStorageKey(module_refid)) || "{}");
+  } catch {
+    return {};
+  }
+};
+
+export function writePersistedValue(
+  module_refid: string,
+  key: string,
+  value: any
+) {
+  const existing = readPersistedValues(module_refid);
+  localStorage.setItem(
+    getStorageKey(module_refid),
+    JSON.stringify({
+      ...existing,
+      [key]: value,
+    })
+  );
+};
 
 
 

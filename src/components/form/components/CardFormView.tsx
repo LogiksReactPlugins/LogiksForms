@@ -35,14 +35,14 @@ export default function CardFormView({
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
     Object.values(groupedFields).flat().forEach((field) => {
-      intializeForm([field], values, schema, data);
+      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls.operation);
     });
 
     return {
       initialValues: values,
       validationSchema: schema,
     };
-  }, [groupedFields, data]);
+  }, [groupedFields, data, module_refid, sqlOpsUrls.operation]);
 
 
 

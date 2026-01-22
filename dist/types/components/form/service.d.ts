@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { SqlEndpoints } from './Form.types.js';
 type SqlSource = {
     table: string;
@@ -27,5 +28,6 @@ export declare const sqlClient: {
         values: any;
     }, module_refid: string | undefined): Promise<any>;
 };
+export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any> | undefined, querid: string | undefined, refid?: string | undefined, module_refid?: string | undefined, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
 export {};
 //# sourceMappingURL=service.d.ts.map

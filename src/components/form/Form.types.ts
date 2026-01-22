@@ -70,6 +70,7 @@ export interface FormField {
     onFocus?: string;
     onClick?: string;
     step?: string | number;
+    persistent?: string| boolean;
 
 }
 

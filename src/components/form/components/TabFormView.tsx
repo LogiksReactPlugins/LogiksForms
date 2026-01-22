@@ -46,12 +46,13 @@ export default function TabFormView({
     if (widget) {
       Object.entries(groupedFields).forEach(([step, fields]) => {
         const stepSchema: Record<string, Yup.AnySchema> = {};
-        intializeForm(fields, values, stepSchema, data);
+        intializeForm(fields, values, stepSchema, data,module_refid, sqlOpsUrls.operation);
+        
         stepSchemas[step] = stepSchema;
       });
     } else {
       Object.entries(groupedFields).forEach(([_, fields]) => {
-        intializeForm(fields, values, globalSchema, data);
+        intializeForm(fields, values, globalSchema, data, module_refid, sqlOpsUrls.operation);
       });
     }
 
@@ -60,7 +61,7 @@ export default function TabFormView({
       validationSchema: globalSchema,
       stepperSchemas: stepSchemas,
     };
-  }, [groupedFields, data, widget]);
+  }, [groupedFields, data, widget,module_refid, sqlOpsUrls.operation]);
 
 
 

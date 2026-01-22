@@ -1,5 +1,4 @@
 import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig } from './Form.types.js';
-import { AxiosResponse } from 'axios';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
@@ -7,7 +6,7 @@ export declare function transformedObject(originalObject: Record<string, any>, o
     label: string;
     required: boolean;
 }>;
-export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>) => void;
+export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: "create" | "update") => void;
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export declare const tailwindGrid: Record<ColWidth, string>;
 export declare const tailwindCols: Record<ColWidth, string>;
@@ -17,16 +16,18 @@ export declare const isHidden: (hidden?: boolean | string) => boolean;
 export declare const replacePlaceholders: (input: any, vars: Record<string, string | number>) => any;
 export declare const formatOptions: (valueKey: string, labelKey: string, items: any[], groupKey?: string) => SelectOptions;
 export declare const getOptionLabel: (options: SelectOptions, value: string) => string | undefined;
-type FlatEntry = [string, string];
+export type FlatEntry = [string, string];
 export declare const flattenOptions: (options: SelectOptions) => FlatEntry[];
 export declare const isGroupedOptions: (options: SelectOptions) => options is GroupedOptions;
 export declare function fetchGeolocation(): Promise<string | null>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export declare function flatFields(fields: Record<string, Omit<FormField, "name">>, operation?: string): FormField[];
-export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any> | undefined, querid: string | undefined, refid?: string | undefined, module_refid?: string | undefined, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
 export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
 export declare function getSearchColumns(columns: string): string[];
 type Row = Record<string, unknown>;
 export declare const normalizeRowSafe: (row: Row) => Row;
+export declare function getPersistentKey(field: FormField): string | null;
+export declare function readPersistedValues(module_refid: string): Record<string, any>;
+export declare function writePersistedValue(module_refid: string, key: string, value: any): void;
 export {};
 //# sourceMappingURL=utils.d.ts.map
