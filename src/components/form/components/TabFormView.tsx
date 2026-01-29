@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
+import CommonInfo from './CommonInfo.js';
 
 
 export default function TabFormView({
@@ -14,13 +15,14 @@ export default function TabFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls = {},
+  sqlOpsUrls,
   widget,
   refid,
   module_refid
-  
+
 }: GroupedFormViewPrps) {
-  const groupNames = Object.keys(groupedFields);
+  const { common: commonFields = [], ...tabGroups } = groupedFields;
+  const groupNames = Object.keys(tabGroups);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -28,7 +30,7 @@ export default function TabFormView({
   >({});
 
 
-  
+
 
   const setOptionsForField = (name: string, options: SelectOptions) => {
     setFieldOptions(prev => ({
@@ -46,8 +48,8 @@ export default function TabFormView({
     if (widget) {
       Object.entries(groupedFields).forEach(([step, fields]) => {
         const stepSchema: Record<string, Yup.AnySchema> = {};
-        intializeForm(fields, values, stepSchema, data,module_refid, sqlOpsUrls.operation);
-        
+        intializeForm(fields, values, stepSchema, data, module_refid, sqlOpsUrls.operation);
+
         stepSchemas[step] = stepSchema;
       });
     } else {
@@ -61,7 +63,7 @@ export default function TabFormView({
       validationSchema: globalSchema,
       stepperSchemas: stepSchemas,
     };
-  }, [groupedFields, data, widget,module_refid, sqlOpsUrls.operation]);
+  }, [groupedFields, data, widget, module_refid, sqlOpsUrls.operation]);
 
 
 
@@ -130,49 +132,72 @@ export default function TabFormView({
     })
   }
 
+
   return (
     <div className=" max-w-full  m-4">
       {/* Modern Tab Navigation */}
-      <div className="relative">
-        <div className="relative bg-gray-100 rounded-t-lg px-1 pt-1  shadow-inner">
-          {/* Tab buttons */}
-          <nav className="relative flex" >
-            {groupNames.map((group, index) => (
-              <button
-                key={group}
-                type="button"
-                onClick={() => setActiveTabIndex(index)}
-                className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
-                  ? 'text-action bg-white'
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
-                  }`}
+      <form onSubmit={handleSubmit} className="w-full mx-auto">
+        <div className="relative">
 
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
-                  {/* Add icons based on common tab names */}
+          <div className="relative  rounded-t-lg px-1 pt-1  shadow-inner">
+           
 
-                  {group}
-                </span>
-              </button>
-            ))}
-          </nav>
+          
+            {commonFields.length > 0 && (
+               <div className='p-3'>
+              <CommonInfo
+                refid={refid}
+                module_refid={module_refid}
+                sqlOpsUrls={sqlOpsUrls}
+                fields={commonFields}
+                formik={formik}
+                methods={methods}
+                setFieldOptions={setOptionsForField}
+                fieldOptions={fieldOptions}
+
+              />
+               </div>
+            )}
+             
+            {/* Tab buttons */}
+            <nav className="relative flex bg-gray-100" >
+              {groupNames.map((group, index) => (
+                <button
+                  key={group}
+                  type="button"
+                  onClick={() => setActiveTabIndex(index)}
+                  className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
+                    ? 'text-action bg-white'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
+                    }`}
+
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
+                    {/* Add icons based on common tab names */}
+
+                    {group}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
         </div>
-      </div>
 
-      {/* Content Area with Animation */}
+        {/* Content Area with Animation */}
 
-      <div
-        key={groupNames[activeTabIndex]}
-        className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
-      >
-        {/* Content Header */}
+        <div
+          key={groupNames[activeTabIndex]}
+          className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
+        >
+          {/* Content Header */}
 
-        <form onSubmit={handleSubmit} className="w-full mx-auto">
+
+
           {/* Fields Container */}
           <div className='grid grid-cols-12 gap-4'>
-            {currentStepKey && groupedFields[currentStepKey]?.map((field, index) => {
+            {currentStepKey && tabGroups[currentStepKey]?.map((field, index) => {
 
-              if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode==="edit" && sqlOpsUrls.operation === "create")) {
+              if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {
                 return null;
               }
 
@@ -212,29 +237,30 @@ export default function TabFormView({
               </button>
             </div>
           </div>
-        </form>
-        {/* Progress Indicator */}
-        <div className="mt-2 pt-3  border-t border-gray-100">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center">
-              <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
-              <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
-            </div>
 
-            <div className="flex gap-1">
-              {groupNames.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
-                    ? 'bg-action w-6'
-                    : 'bg-gray-300'
-                    }`}
-                ></div>
-              ))}
+          {/* Progress Indicator */}
+          <div className="mt-2 pt-3  border-t border-gray-100">
+            <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center">
+                <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
+                <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
+              </div>
+
+              <div className="flex gap-1">
+                {groupNames.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
+                      ? 'bg-action w-6'
+                      : 'bg-gray-300'
+                      }`}
+                  ></div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
 
     </div>
   );

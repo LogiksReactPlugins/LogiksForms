@@ -5,6 +5,7 @@ import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Card from './Card.js'
 import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
+import CommonInfo from './CommonInfo.js';
 
 
 export default function CardFormView({
@@ -15,11 +16,11 @@ export default function CardFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls = {},
+  sqlOpsUrls,
   refid,
   module_refid
 }: GroupedFormViewPrps) {
-
+  const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
   >({});
@@ -67,12 +68,27 @@ export default function CardFormView({
 
         <form onSubmit={formik.handleSubmit} className="p-4 mx-auto">
           <div className="space-y-2">
-            {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
+            {commonFields.length > 0 && (
+              <Card title="Common">
+                <CommonInfo
+                  refid={refid}
+                  module_refid={module_refid}
+                  sqlOpsUrls={sqlOpsUrls}
+                  fields={commonFields}
+                  formik={formik}
+                  methods={methods}
+                  setFieldOptions={setOptionsForField}
+                  fieldOptions={fieldOptions}
+
+                />
+              </Card>
+            )}
+            {tabGroups && Object.entries(tabGroups).map(([group, fields], index) => (
               <Card key={group} title={group}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
 
-                    if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode==="edit" && sqlOpsUrls.operation === "create")) {
+                    if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {
                       return null;
                     }
                     return <div

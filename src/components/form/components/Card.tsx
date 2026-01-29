@@ -36,7 +36,7 @@ export default function Card({ title, children }: CardProps) {
                     className={`transition-all duration-500 ease-in-out overflow-hidden max-h-[2000px] opacity-100'
             }`}
                 >
-                    <div className="px-6 pb-6 bg-gradient-to-br from-gray-50/50 to-white">
+                    <div className="px-4 pb-4 bg-gradient-to-br from-gray-50/50 to-white">
                         <div className="space-y-5 pt-4">{children}</div>
                     </div>
                 </div>

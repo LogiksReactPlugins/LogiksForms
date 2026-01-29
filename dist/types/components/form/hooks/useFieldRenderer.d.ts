@@ -1,4 +1,5 @@
 import { FieldRendererProps, FormField, SelectOptions } from '../Form.types.js';
+import { handlePersist } from '../utils.js';
 export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
@@ -10,7 +11,8 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     setIsFocused: import('react').Dispatch<import('react').SetStateAction<boolean>>;
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelect: (val: string) => void;
-    handlePersist: (value: any) => void;
+    handlePersist: typeof handlePersist;
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     optionCount: number;
     baseInputClasses: string;
     focusClasses: string;
@@ -23,6 +25,7 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     filteredOptions: import('../utils.js').FlatEntry[];
     open: boolean;
     listRef: import('react').RefObject<HTMLDivElement | null>;
+    inputRef: import('react').RefObject<HTMLInputElement | null>;
     detailsRef: import('react').RefObject<HTMLDetailsElement | null>;
     isFocused: boolean;
 };

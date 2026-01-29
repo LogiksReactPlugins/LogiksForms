@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
-import { flattenOptions, formatOptions, getPersistentKey, getSearchColumns, isAutocompleteConfig, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
-import { fetchDataByquery } from "../service.js";
+import { flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import { fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
 
@@ -24,6 +24,7 @@ export default function useFieldRenderer({
     );
 
     const dateRef = useRef<HTMLInputElement | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
     const listRef = useRef<HTMLDivElement>(null);
@@ -318,7 +319,7 @@ export default function useFieldRenderer({
             if (val) {
                 let value = is_single ? val : [...formik.values[field.name], val];
                 formik.setFieldValue(field.name, value);
-                handlePersist(value)
+                handlePersist(value, field, module_refid)
             }
             if (detailsRef.current) {
                 detailsRef.current!.open = false;
@@ -533,38 +534,18 @@ export default function useFieldRenderer({
             console.error("No file");
             return;
         }
-        const uploadUrl = sqlOpsUrls?.baseURL + sqlOpsUrls?.uploadURL;
-        if (!uploadUrl) {
-            console.error("No Upload URL ");
-            return;
-        }
-        const isMultiple = field.multiple === true;
 
         try {
-            const uploads = await Promise.all(
-                Array.from(files).map(async (file) => {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    const res = await axios({
-                        method: "POST",
-                        url: uploadUrl,
-                        data: formData,
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
-                        },
-                    });
-
-                    return res.data; // { id, url, ... }
-                })
-            );
-            let fieldValue = isMultiple ? uploads.map(file => file.path) : uploads[0]?.path
+            const uploads = await uploadFiles(sqlOpsUrls, files);
+            const value = field.multiple
+                ? uploads.map(f => f.path)
+                : uploads[0]?.path;
 
             formik.setFieldValue(
                 key,
-                fieldValue
+                value
             );
-            handlePersist(fieldValue)
+            handlePersist(value, field, module_refid)
         } catch (err) {
             console.error("File upload failed", err);
             formik.setFieldError(key, "File upload failed");
@@ -609,17 +590,18 @@ export default function useFieldRenderer({
     };
     const handleSelect = (val: string) => {
         formik.setFieldValue(key, val); // store selected value
-        handlePersist(val)
+        handlePersist(val, field, module_refid)
         setSearch("");
         setOpen(false);
         executeFieldMethod("onChange", field, `${key}-${val}`)
     };
 
-    function handlePersist(value: any) {
-        const persistentKey = getPersistentKey(field);
-        if (persistentKey && module_refid) {
-            writePersistedValue(module_refid, persistentKey, value);
-        }
+
+
+
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const files = e.currentTarget.files;
+        if (files) handleFileUpload(files);
     }
 
 
@@ -635,6 +617,7 @@ export default function useFieldRenderer({
         handleInputChange,
         handleSelect,
         handlePersist,
+        handleFileChange,
         optionCount,
         baseInputClasses,
         focusClasses,
@@ -647,6 +630,7 @@ export default function useFieldRenderer({
         filteredOptions,
         open,
         listRef,
+        inputRef,
         detailsRef,
         isFocused
 

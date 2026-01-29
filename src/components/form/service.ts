@@ -175,3 +175,55 @@ export async function fetchDataByquery(
         throw error;
     }
 }
+
+export async function getPreviewUrl(
+    fileUrl: string,
+    sqlOpsUrls: Record<string, any>
+): Promise<string> {
+    let previewPath = sqlOpsUrls.previewPath ?? "/api/files/preview"
+    const res = await axios.get(
+        `${sqlOpsUrls.baseURL}${previewPath}?uri=${encodeURIComponent(fileUrl)}`,
+        {
+            responseType: "blob",
+            headers: {
+                "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            }
+        },
+
+    );
+
+    return URL.createObjectURL(res.data);
+}
+
+
+type UploadResponse = {
+    path: string;
+    [key: string]: any;
+};
+
+export async function uploadFiles(
+    sqlOpsUrls: SqlEndpoints,
+    files: FileList
+): Promise<UploadResponse[]> {
+    if (!sqlOpsUrls?.uploadURL) {
+        throw new Error("Upload URL missing");
+    }
+
+    const uploadUrl = sqlOpsUrls.baseURL + sqlOpsUrls.uploadURL;
+
+    return Promise.all(
+        Array.from(files).map(async (file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const res = await axios.post(uploadUrl, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${sqlOpsUrls.accessToken}`,
+                },
+            });
+
+            return res.data;
+        })
+    );
+}

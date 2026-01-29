@@ -1,7 +1,10 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
 import { getOptionLabel, isGroupedOptions } from '../utils.js';
+import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
+import PhotoAvatarRenderer from './PhotoAvatarRenderer.js';
+
 
 
 export default function FieldRenderer({
@@ -20,7 +23,7 @@ export default function FieldRenderer({
     handleToggle, setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
-    options, isDisabled, key, filteredOptions, open, listRef, detailsRef, isFocused
+    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid,
@@ -34,8 +37,10 @@ export default function FieldRenderer({
     return null;
   };
 
-  switch (field.type) {
 
+  switch (field.type) {
+    case "suggest":
+    case "autosuggest":
     case "autocomplete": {
       // Formik stores ONLY the selected value (id)
       const value: string = formik.values[key] ?? "";
@@ -63,10 +68,10 @@ export default function FieldRenderer({
                 if (filteredOptions[highlightedIndex]) {
                   const [val] = filteredOptions[highlightedIndex];
                   formik.setFieldValue(key, val);
-                  handlePersist(val)
+                  handlePersist(val, field, module_refid)
                 } else if (search.trim()) {
                   formik.setFieldValue(key, search.trim());
-                  handlePersist(search.trim())
+                  handlePersist(search.trim(), field, module_refid)
                 }
                 setOpen(false);
                 return;
@@ -140,6 +145,8 @@ export default function FieldRenderer({
             executeFieldMethod={executeFieldMethod}
             setHighlightedIndex={setHighlightedIndex}
             handlePersist={handlePersist}
+            module_refid={module_refid}
+            options={options}
           />
         );
 
@@ -215,7 +222,7 @@ export default function FieldRenderer({
                   e.preventDefault();
                   e.stopPropagation();
                   formik.setFieldValue(key, "");
-                  handlePersist("")
+                  handlePersist("", field, module_refid)
                   detailsRef.current?.removeAttribute("open");
                   setSearch("");
                 }}
@@ -236,7 +243,7 @@ export default function FieldRenderer({
                       e.preventDefault();
                       e.stopPropagation();
                       formik.setFieldValue(key, val);
-                      handlePersist(val)
+                      handlePersist(val, field, module_refid)
                       detailsRef.current?.removeAttribute("open");
                       setSearch("");
                       setHighlightedIndex(0);
@@ -283,7 +290,7 @@ export default function FieldRenderer({
                 onBlur={formik.handleBlur}
                 onChange={(e) => {
                   formik.setFieldValue(key, e.target.value);
-                  handlePersist(e.target.value)
+                  handlePersist(e.target.value, field, module_refid)
                   executeFieldMethod("onChange", field, `${key}`)
                 }}
                 placeholder={field.placeholder}
@@ -323,6 +330,8 @@ export default function FieldRenderer({
             executeFieldMethod={executeFieldMethod}
             setHighlightedIndex={setHighlightedIndex}
             handlePersist={handlePersist}
+            module_refid={module_refid}
+            options={options}
           />
         );
 
@@ -344,7 +353,7 @@ export default function FieldRenderer({
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
-                handlePersist(e.target.value)
+                handlePersist(e.target.value, field, module_refid)
                 executeFieldMethod("onChange", field, `${key}`)
               }}
               disabled={isDisabled}
@@ -412,7 +421,7 @@ export default function FieldRenderer({
                   value={val}
                   onChange={(e) => {
                     formik.setFieldValue(key, e.target.value);
-                    handlePersist(e.target.value)
+                    handlePersist(e.target.value, field, module_refid)
                     executeFieldMethod("onChange", field, `${key}-${val}`)
                   }
                   }
@@ -457,7 +466,7 @@ export default function FieldRenderer({
                       : valueArray.filter((v) => v !== val);
 
                     formik.setFieldValue(key, next);
-                    handlePersist(next)
+                    handlePersist(next, field, module_refid)
                     executeFieldMethod("onChange", field, `${key}-${val}`)
                   }}
                   onBlur={formik.handleBlur}
@@ -492,7 +501,7 @@ export default function FieldRenderer({
         if (val && !values.includes(val)) {
           let newValues = [...values, val];
           formik.setFieldValue(key, newValues);
-          handlePersist(newValues)
+          handlePersist(newValues, field, module_refid)
           setSearch("");
         }
       };
@@ -503,7 +512,7 @@ export default function FieldRenderer({
           key,
           value
         );
-        handlePersist(value)
+        handlePersist(value, field, module_refid)
       };
 
       const getLabel = (val: string) =>
@@ -579,9 +588,21 @@ export default function FieldRenderer({
         </div>
       );
     }
-    case "attachment":
+
     case "photo":
-    case "avatar":
+    case "avatar": {
+
+      return (
+        <PhotoAvatarRenderer
+          formik={formik}
+          field={field}
+          sqlOpsUrls={sqlOpsUrls}
+          module_refid={module_refid}
+
+        />
+      );
+    }
+    case "attachment":
     case "file":
       const isMultiple = field.multiple === true;
       const files = Array.isArray(formik.values[key])
@@ -595,7 +616,7 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <div className="relative">
+          <div className="relative mb-1">
             {field.icon && (
               <div className="absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                 {renderIcon(field)}
@@ -624,11 +645,8 @@ export default function FieldRenderer({
           </div>
           {files.map((file) => {
             const name = file?.split("/").pop();
-            if (!name) return null;
             return (
-              <div key={file} className="mt-1">
-                <span className="text-sm">{name}</span>
-              </div>
+              <FilePreviewTrigger key={name} sqlOpsUrls={sqlOpsUrls} filePath={file} />
             );
           })}
 
@@ -653,7 +671,7 @@ export default function FieldRenderer({
               value={formik.values[key]}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
-                 handlePersist(e.target.value)
+                handlePersist(e.target.value, field, module_refid)
                 executeFieldMethod("onChange", field, `${key}`)
               }
               }
@@ -702,7 +720,7 @@ export default function FieldRenderer({
               value={formik.values[key]}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
-                 handlePersist(e.target.value)
+                handlePersist(e.target.value, field, module_refid)
                 executeFieldMethod("onChange", field, `${key}`)
               }}
               onBlur={formik.handleBlur}
@@ -748,7 +766,7 @@ export default function FieldRenderer({
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
-                handlePersist(e.target.value)
+                handlePersist(e.target.value, field, module_refid)
                 executeFieldMethod("onChange", field, `${key}`)
               }}
               step={field.step}
@@ -791,7 +809,7 @@ export default function FieldRenderer({
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
-                handlePersist(e.target.value)
+                handlePersist(e.target.value, field, module_refid)
                 executeFieldMethod("onChange", field, `${key}`)
               }}
               step={field.step}

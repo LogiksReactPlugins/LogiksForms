@@ -70,25 +70,43 @@ export interface FormField {
     onFocus?: string;
     onClick?: string;
     step?: string | number;
-    persistent?: string| boolean;
+    persistent?: string | boolean;
 
+}
+
+
+export interface CommonInfoProps {
+    fields: FormField[];
+    formik: FormikProps<Record<string, any>>;
+    methods?: Record<string, Function>;
+    components?: Record<string, ReactNode>
+    sqlOpsUrls: SqlEndpoints;
+    refid?: string | undefined;
+    module_refid?: string | undefined
+    fieldOptions: Record<string, SelectOptions>;
+
+    setFieldOptions: (
+        fieldName: string,
+        options: SelectOptions
+    ) => void;
 }
 
 export interface SqlEndpoints {
     baseURL: string;
     dbopsGetRefId: string;
     accessToken: string;
-    operation: string;
+    operation: "fetch" | "create" | "update" | "delete";
     dbopsGetHash: string;
     dbopsFetch?: string;
     dbopsUpdate?: string;
     dbopsCreate?: string;
+    uploadURL?: string;
 };
 
 export interface FormJson {
     title?: string | undefined;
     template?: string;
-    endPoints?: SqlEndpoints;
+    endPoints: SqlEndpoints;
     forcefill?: Record<string, string>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
@@ -121,7 +139,7 @@ export interface BaseFormViewProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
-    sqlOpsUrls?: Record<string, any> | undefined;
+    sqlOpsUrls: SqlEndpoints;
     refid?: string | undefined;
     module_refid?: string | undefined
 
@@ -140,7 +158,7 @@ export interface FieldRendererProps {
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>
-    sqlOpsUrls?: Record<string, any> | undefined;
+    sqlOpsUrls: SqlEndpoints;
     refid?: string | undefined;
     module_refid?: string | undefined
     optionsOverride?: SelectOptions;
@@ -156,3 +174,4 @@ export interface sqlQueryProps {
     where?: Record<string, string>;
 };
 
+export type FileCategory = "image" | "pdf" | "video" | "text" | "other";

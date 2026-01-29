@@ -1,6 +1,6 @@
 import * as Yup from "yup";
-import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, sqlQueryProps, AutocompleteConfig } from "./Form.types.js";
-import axios, { type AxiosResponse } from "axios";
+import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory } from "./Form.types.js";
+import { IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
   if (json.template === 'simple') return 'simple';
@@ -82,7 +82,7 @@ export const intializeForm = (
   validationSchema: Record<string, Yup.AnySchema>,
   data?: Record<string, any>,
   module_refid?: string,
-  operation?: "create" | "update"
+  operation?: "create" | "update" | "fetch" | "delete"
 ) => {
 
   const persisted =
@@ -591,6 +591,19 @@ export function flatFields(
   }));
 }
 
+export function handlePersist(value: any, field: FormField, module_refid: string | undefined) {
+  console.log("field", field);
+
+  const persistentKey = getPersistentKey(field);
+  console.log("sssssssssssssssssssss", persistentKey);
+  console.log("sssssssssdddddddddddddddddddd", module_refid);
+
+
+  if (persistentKey && module_refid) {
+    writePersistedValue(module_refid, persistentKey, value);
+  }
+}
+
 
 
 export function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig {
@@ -669,6 +682,28 @@ export function writePersistedValue(
       [key]: value,
     })
   );
+};
+
+
+
+export function getFileExtension(path = "") {
+  return path.split(".").pop()?.toLowerCase() ?? "";
+}
+
+export function getMimeCategory(ext: string) {
+  if (IMAGE_EXT.includes(ext)) return "image";
+  if (VIDEO_EXT.includes(ext)) return "video";
+  if (PDF_EXT.includes(ext)) return "pdf";
+  if (TEXT_EXT.includes(ext)) return "text";
+  return "other";
+}
+
+export const fileIconClassMap: Record<FileCategory, string> = {
+  image: "fa fa-file-image",
+  pdf: "fa fa-file-pdf",
+  video: "fa fa-file-video",
+  text: "fa fa-file-lines",
+  other: "fa fa-file"
 };
 
 

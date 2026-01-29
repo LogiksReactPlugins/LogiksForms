@@ -9,413 +9,249 @@ export declare const example10: {
         dbopsFetch: string;
         registerQuery: string;
         runQuery: string;
+        uploadURL: string;
         operation: string;
-        refid: string;
     };
     source: {
         type: string;
-        table: string;
+        dbopsid: string;
     };
+    template: string;
     forcefill: {
-        groupuid: string;
         guid: string;
-        company_id: string;
-    };
-    actions11: {
-        newContact: {
-            icon: string;
-            label: string;
-            class: string;
-        };
-    };
-    simpleform: boolean;
-    buttons: {
-        markAsDeal: {
-            label: string;
-            icon: string;
-            class: string;
-            float: string;
-            policy: string;
-        };
-        markAsLost: {
-            label: string;
-            icon: string;
-            class: string;
-            policy: string;
-        };
-        markAsJunk: {
-            label: string;
-            icon: string;
-            class: string;
-            policy: string;
-        };
-        markAsNext: {
-            label: string;
-            icon: string;
-            class: string;
-            policy: string;
-        };
+        groupuid: string;
     };
     gotolink: string;
     fields: {
-        title: {
-            label: string;
+        company_code_id: {
             group: string;
-            required: boolean;
-        };
-        broker_name: {
             label: string;
             type: string;
-            table: string;
-            columns: string;
-            search: boolean;
-            group: string;
             "no-option": string;
-            autocomplete: {
+            required: boolean;
+            width: number;
+            persistent: boolean;
+            ajaxchain: {
                 target: string;
                 src: {
-                    table: string;
-                    columns: string;
-                    where: {
-                        org_code: string;
-                    };
+                    type: string;
+                    queryid: string;
                 };
-            };
+            }[];
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        sector_id: {
+            group: string;
+            label: string;
+            type: string;
+            "no-option": string;
             required: boolean;
-        };
-        broker_email: {
-            label: string;
-            type: string;
-            group: string;
-            hidden: boolean;
-        };
-        broker_mobile: {
-            label: string;
-            type: string;
-            group: string;
-            hidden: boolean;
-        };
-        broker_address: {
-            label: string;
-            type: string;
-            group: string;
             width: number;
-            hidden: boolean;
-        };
-        customer_id: {
-            label: string;
-            group: string;
-            type: string;
-            table: string;
-            columns: string;
-            search: boolean;
-            where: {
-                "(type like '%customer%' OR type like '%other%')": string;
-                "length(full_name)>0": string;
-            };
-            autocomplete123: {
+            ajaxchain: {
                 target: string;
                 src: {
-                    table: string;
-                    columns: string;
-                    where: {
-                        "profiletbl.id": string;
-                        "profiletbl_address.profile_id": string;
-                        "profiletbl_address.address_type": string;
-                        "profiletbl_address.blocked": string;
-                    };
+                    type: string;
+                    queryid: string;
                 };
             };
-            class: string;
+            options: never[];
+        };
+        project_function_id: {
+            group: string;
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
             "no-option": string;
-        };
-        customer_type: {
-            label: string;
-            group: string;
-            type: string;
-            options: {
-                chat: string;
-                direct: string;
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    queryid: string;
+                };
             };
-            groupid: string;
-            default: string;
-            "no-option": string;
-            required: boolean;
+            options: never[];
         };
-        contact_name: {
+        location_id: {
             label: string;
             type: string;
-            group: string;
-            required: boolean;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_email: {
-            label: string;
-            type: string;
-            group: string;
-            required: boolean;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_mobile: {
-            label: string;
-            type: string;
-            group: string;
-            required: boolean;
-            minlength: number;
-            maxlength: number;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_address: {
-            label: string;
-            type: string;
-            group: string;
-            class: string;
-            width: number;
-            hidden: boolean;
-        };
-        contact_street: {
-            label: string;
-            type: string;
-            group: string;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_city: {
-            label: string;
-            group: string;
-            class: string;
-            hidden: boolean;
-            type: string;
-            width: number;
-        };
-        contact_state: {
-            label: string;
-            type: string;
-            group: string;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_zipcode: {
-            label: string;
-            type: string;
-            group: string;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        contact_country: {
-            label: string;
-            type: string;
-            groupid: string;
-            group: string;
-            class: string;
-            hidden: boolean;
-            width: number;
-        };
-        lead_date: {
-            label: string;
-            group: string;
-            type: string;
-            required: boolean;
-            default: string;
-            width: number;
-        };
-        lead_year: {
-            label: string;
-            group: string;
-            required: boolean;
-            hidden: boolean;
-            width: number;
-        };
-        net_amount: {
-            label: string;
-            group: string;
-            type: string;
-            vmode: string;
-            required: boolean;
-        };
-        lead_value: {
-            label: string;
-            group: string;
-            type: string;
-            required: boolean;
-        };
-        lead_priority: {
-            label: string;
-            group: string;
-            type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
-            groupid: string;
-            required: boolean;
-        };
-        lead_source: {
-            type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
-            label: string;
-            group: string;
-            groupid: string;
-            required: boolean;
-        };
-        lead_status: {
-            label: string;
-            group: string;
-            type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
-            groupid: string;
             "no-option": string;
             required: boolean;
             width: number;
-        };
-        lead_type: {
-            label: string;
+            options: never[];
             group: string;
+        };
+        training_date: {
+            group: string;
+            label: string;
             type: string;
-            options: {
-                chat: string;
-                direct: string;
-            };
+            required: boolean;
+            width: number;
+        };
+        training_duration_min: {
+            group: string;
+            label: string;
+            type: string;
+            onChange: string;
+            required: boolean;
+            width: number;
+        };
+        participant_count: {
+            group: string;
+            label: string;
+            onChange: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        training_man_hours: {
+            group: string;
+            label: string;
+            type: string;
+            disabled: boolean;
+            required: boolean;
+            width: number;
+        };
+        training_conducted_by: {
+            group: string;
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+            queryid: string;
+        };
+        trainer: {
+            group: string;
+            label: string;
+            type: string;
             groupid: string;
-            suggest: boolean;
             required: boolean;
             width: number;
-        };
-        enquiry_type: {
-            label: string;
-            group: string;
-            type: string;
             options: {
-                chat: string;
-                direct: string;
-            };
+                title: string;
+                value: string;
+                class: null;
+                privilege: string;
+            }[];
+        };
+        category: {
+            group: string;
+            label: string;
+            type: string;
             groupid: string;
             required: boolean;
             width: number;
-        };
-        marketting_source: {
-            type: string;
             options: {
-                chat: string;
-                direct: string;
-            };
-            label: string;
+                title: string;
+                value: string;
+                class: null;
+                privilege: string;
+            }[];
+        };
+        section: {
             group: string;
+            label: string;
+            type: string;
             groupid: string;
-            "no-option": string;
-            required: boolean;
-        };
-        marketting_campaign: {
-            label: string;
-            group: string;
-            required: boolean;
-        };
-        enquiry_product_descs: {
-            label: string;
-            group: string;
-            type: string;
-            maxlength: number;
             required: boolean;
             width: number;
-        };
-        blocked: {
-            label: string;
-            group: string;
-            type: string;
-            vmode: string;
-            required: boolean;
             options: {
-                "": boolean;
-                true: string;
-                false: string;
-            };
+                title: string;
+                value: string;
+                class: null;
+                privilege: string;
+            }[];
         };
-        enquiry_due: {
-            label: string;
+        training_photograph: {
             group: string;
+            label: string;
             type: string;
+            required: boolean;
             width: number;
         };
-        open_by: {
+        training_attendance_scan: {
             label: string;
-            group: string;
             type: string;
-            table: string;
-            columns: string;
-            where: {
-                blocked: string;
-                "status in ('active','under_notice','probationary')": string;
-                "loginid <> ''": string;
-                "length(full_name)>0": string;
-            };
-            default: string;
-            width: number;
-        };
-        assigned_to: {
-            label: string;
             group: string;
-            type: string;
-            table: string;
-            columns: string;
-            where: {
-                blocked: string;
-                "status in ('active','under_notice','probationary')": string;
-                "loginid <> ''": string;
-                "length(full_name)>0": string;
-            };
-            default: string;
-            width: number;
-        };
-        manager: {
-            label: string;
-            group: string;
-            type: string;
-            table: string;
-            columns: string;
-            where: {
-                blocked: string;
-                "status in ('active','under_notice','probationary')": string;
-                "length(full_name)>0": string;
-            };
-            default: string;
-            width: number;
-        };
-        tags: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        remarks: {
-            label: string;
-            group: string;
-            width: string;
-            maxlength: number;
-            type: string;
-        };
-        prelead_id: {
-            label: string;
-            group: string;
-            type: string;
-            hidden: boolean;
+            required: boolean;
             width: number;
         };
     };
+    infoview: {
+        template: string;
+        groups: {
+            training_topics: {
+                label: string;
+                type: string;
+                src: string;
+                vmode: string;
+                config: {
+                    type: string;
+                    uimode: string;
+                    uiswitcher: boolean;
+                    policy_create: string;
+                    policy_view: string;
+                    policy_delete: string;
+                    policy_update: string;
+                    toolbar: {
+                        search: boolean;
+                        print: boolean;
+                        export: boolean;
+                        email: boolean;
+                    };
+                    colkey: string;
+                    form: {
+                        source: {
+                            type: string;
+                            dbopsid: string;
+                        };
+                        forcefill: {
+                            guid: string;
+                            created_by: string;
+                            quality_training_id: string;
+                        };
+                        fields: {
+                            training_topics: {
+                                label: string;
+                                type: string;
+                                required: boolean;
+                                width: number;
+                            };
+                        };
+                    };
+                    datagrid: {
+                        training_topics: {
+                            label: string;
+                            searchable: boolean;
+                        };
+                    };
+                    actions1: {
+                        addInfoRecord: {
+                            label: string;
+                        };
+                    };
+                    buttons: {
+                        editRecord: {
+                            label: string;
+                            icon: string;
+                        };
+                        deleteRecord: {
+                            label: string;
+                            icon: string;
+                        };
+                    };
+                    queryid: string;
+                };
+                width: number;
+            };
+        };
+    };
+    script: string;
+    module_refid: string;
+    module_type: string;
 };
 export declare const example1: {
     endPoints: {
@@ -431,146 +267,215 @@ export declare const example1: {
         uploadURL: string;
         operation: string;
     };
+    hooks: {
+        preload: {
+            helpers: string[];
+        };
+        postsubmit: {
+            method: string[];
+        };
+    };
     source: {
         type: string;
-        table: string;
-        cols: string;
-        where: {
-            id: string;
-        };
+        dbopsid: string;
     };
-    forcefill: {
-        guid: string;
-        site: string;
-    };
-    gotolink: string;
+    DEBUG: boolean;
     fields: {
-        menuid: {
+        userid: {
             label: string;
-            group: string;
-            disabled: boolean;
-            type: string;
-            table: string;
-            columns: string;
-            groupBy: string;
-            options: {
-                "1": string;
-                "2": string;
-            };
-        };
-        title: {
-            label: string;
-            type: string;
-            group: string;
-            required: boolean;
-            disabled: boolean;
-        };
-        link: {
-            label: string;
-            group: string;
             required: boolean;
         };
-        menugroup: {
+        name: {
             label: string;
-            disabled: boolean;
-            group: string;
-            type: string;
-            table: string;
-            columns: string;
-            where: {
-                "link='#'": string;
-            };
-            orderby: string;
+            required: boolean;
         };
-        category: {
+        email: {
             label: string;
-            type: string;
-            group: string;
-        };
-        class: {
-            label: string;
-            group: string;
-        };
-        iconpath: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        tips: {
-            label: string;
-            group: string;
-            width: number;
-            disabled: boolean;
-        };
-        weight: {
-            label: string;
-            group: string;
-            type: string;
-            default: number;
-            width: number;
-        };
-        to_check: {
-            label: string;
-            group: string;
-        };
-        privilege: {
-            label: string;
-            group: string;
-            default: string;
-            disabled: boolean;
-        };
-        device: {
-            label: string;
-            group: string;
-            type: string;
-            options: {
-                "*": string;
-                PC: string;
-                Mobile: string;
-                Tablet: string;
-            };
-            multiple: boolean;
-            disabled: boolean;
-        };
-        target: {
-            label: string;
-            group: string;
             type: string;
             required: boolean;
-            options: {
-                ajax: string;
-                blank: string;
-                _blank: string;
-                _parent: string;
-                _self: string;
-                _top: string;
+            validate: {
+                email: boolean;
             };
-            width: number;
-            disabled: boolean;
         };
-        onmenu: {
+        mobile: {
+            label: string;
+            required: boolean;
+            validate: {
+                mobile: boolean;
+            };
+        };
+        remarks: {
+            label: string;
+            type: string;
+            width: string;
+            validate: {};
+        };
+        organization_name: {
+            label: string;
+            group: string;
+        };
+        organization_position: {
+            label: string;
+            group: string;
+        };
+        organization_email: {
+            label: string;
+            group: string;
+            type: string;
+        };
+        address: {
+            label: string;
+            group: string;
+        };
+        region: {
+            label: string;
+            group: string;
+        };
+        country: {
+            label: string;
+            group: string;
+            type: string;
+            method: {
+                name: string;
+                valuefield: string;
+                "": boolean;
+            };
+            options: never[];
+        };
+        zipcode: {
+            label: string;
+            group: string;
+        };
+        tags: {
+            label: string;
+            group: string;
+            type: string;
+        };
+        gender: {
             label: string;
             group: string;
             type: string;
             options: {
                 "": string;
-                false: string;
-                true: string;
+                male: string;
+                female: string;
             };
-            required: boolean;
-            default: string;
+        };
+        dob: {
+            label: string;
+            group: string;
+            type: string;
         };
         blocked: {
             label: string;
             group: string;
+            required: boolean;
             type: string;
-            vmode: string;
+            options: {
+                true: string;
+                false: string;
+            };
+        };
+        guid: {
+            label: string;
+            group: string;
+            required: boolean;
+        };
+        privilegeid: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
+            orderby: string;
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        accessid: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
+            orderby: string;
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        groupid: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
+            orderby: string;
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        roles: {
+            label: string;
+            group: string;
+            required: boolean;
+            multiple: boolean;
+            type: string;
+            orderby: string;
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        refid: {
+            label: string;
+            group: string;
+        };
+        registered_site: {
+            label: string;
+            group: string;
+            type: string;
+            orderby: string;
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        expires: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
+        };
+        security_policy: {
+            label: string;
+            group: string;
+            required: boolean;
+            type: string;
             options: {
                 "": string;
-                false: string;
-                true: string;
+                open: string;
+                closed: string;
             };
+        };
+        privacy: {
+            label: string;
+            group: string;
             required: boolean;
+            type: string;
+            options: {
+                "": string;
+                public: string;
+                private: string;
+                protected: string;
+            };
+        };
+        geolocation: {
+            label: string;
+            group: string;
+        };
+        geoip: {
+            label: string;
+            group: string;
         };
     };
     module_refid: string;

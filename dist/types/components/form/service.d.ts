@@ -29,5 +29,11 @@ export declare const sqlClient: {
     }, module_refid: string | undefined): Promise<any>;
 };
 export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any> | undefined, querid: string | undefined, refid?: string | undefined, module_refid?: string | undefined, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
+export declare function getPreviewUrl(fileUrl: string, sqlOpsUrls: Record<string, any>): Promise<string>;
+type UploadResponse = {
+    path: string;
+    [key: string]: any;
+};
+export declare function uploadFiles(sqlOpsUrls: SqlEndpoints, files: FileList): Promise<UploadResponse[]>;
 export {};
 //# sourceMappingURL=service.d.ts.map

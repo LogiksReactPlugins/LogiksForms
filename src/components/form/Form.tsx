@@ -11,7 +11,7 @@ import CardFormView from "./components/CardFormView.js";
 import { sqlClient } from "./service.js";
 type ViewMode = "accordion" | "cards" | "tab" | "simple";
 export default function LogiksForm({
-  formJson = { title: "", fields: {}, source: {} },
+  formJson,
   methods = {},
   userid = null,
   onCancel = () => { },
@@ -276,7 +276,7 @@ export default function LogiksForm({
           },
         });
 
-      
+
         callback?.(res);
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
@@ -349,7 +349,7 @@ export default function LogiksForm({
 
   return (
     <div className="relative">
-      {formView[viewMode] ?? formView.simple}
+      {formView[viewMode]}
     </div>
   );
 }

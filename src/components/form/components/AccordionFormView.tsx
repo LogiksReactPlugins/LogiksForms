@@ -5,6 +5,7 @@ import FieldRenderer from './FieldRenderer.js';
 import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
 import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
+import CommonInfo from './CommonInfo.js';
 
 
 export default function AccordionFormView({
@@ -15,11 +16,11 @@ export default function AccordionFormView({
   onCancel = () => { },
   methods = {},
   components = {},
-  sqlOpsUrls = {},
+  sqlOpsUrls,
   refid,
   module_refid
 }: GroupedFormViewPrps) {
-
+  const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, SelectOptions>
   >({});
@@ -42,7 +43,7 @@ export default function AccordionFormView({
       initialValues: values,
       validationSchema: schema,
     };
-  }, [groupedFields, data,module_refid, sqlOpsUrls.operation]);
+  }, [groupedFields, data, module_refid, sqlOpsUrls.operation]);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -61,9 +62,24 @@ export default function AccordionFormView({
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
 
         <form onSubmit={formik.handleSubmit} className="p-4 mx-auto">
-          <div className="space-y-2">
-            {groupedFields && Object.entries(groupedFields).map(([group, fields], index) => (
-              <Accordion key={group} title={group} isFirst={index === 0}>
+          <div className="space-y-2" >
+            {commonFields.length > 0 && (
+              <Accordion title="Common" isFirst={true}>
+                <CommonInfo
+                  refid={refid}
+                  module_refid={module_refid}
+                  sqlOpsUrls={sqlOpsUrls}
+                  fields={commonFields}
+                  formik={formik}
+                  methods={methods}
+                  setFieldOptions={setOptionsForField}
+                  fieldOptions={fieldOptions}
+
+                />
+              </Accordion>
+            )}
+            {tabGroups && Object.entries(tabGroups).map(([group, fields], index) => (
+              <Accordion key={group} title={group} isFirst={index === 0 && commonFields.length === 0}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
                     if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {

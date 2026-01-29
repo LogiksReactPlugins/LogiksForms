@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FormikProps } from "formik";
-import type { FlatEntry } from '../utils.js';
-import type { FormField } from '../Form.types.js';
+import { getOptionLabel, type FlatEntry } from '../utils.js';
+import type { FormField, SelectOptions } from '../Form.types.js';
 
 
 type MultiSelectProps = {
@@ -16,7 +16,7 @@ type MultiSelectProps = {
 
     valueArray: string[];
     labelClasses: string;
-
+    options: SelectOptions;
     search: string;
     setSearch: React.Dispatch<React.SetStateAction<string>>;
 
@@ -30,7 +30,8 @@ type MultiSelectProps = {
         field: FormField,
         value?: any
     ) => void;
-    handlePersist: (value: any) => void
+    handlePersist: (value: any, field: FormField, module_refid: string) => void;
+    module_refid: string;
 };
 
 export default function MultiSelect({
@@ -49,9 +50,12 @@ export default function MultiSelect({
     formik,
     setHighlightedIndex,
     executeFieldMethod,
-    handlePersist
+    handlePersist,
+    module_refid,
+    options
 
 }: MultiSelectProps) {
+ 
     const key = field.name;
     return (
         <div className="relative">
@@ -60,7 +64,6 @@ export default function MultiSelect({
                 {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
             <details
-
                 className={`relative w-full ${isDisabled ? " opacity-70" : ""}`}
                 onToggle={handleToggle}
                 ref={detailsRef}
@@ -80,7 +83,8 @@ export default function MultiSelect({
                 >
                     <span className="text-sm text-gray-700">
                         {valueArray?.length > 0
-                            ? valueArray.join(", ")
+                            ? valueArray.map(v => getOptionLabel(options, v) ?? v)
+                                .join(", ")
                             : `Select ${field.label}`}
                     </span>
                     <svg
@@ -139,7 +143,7 @@ export default function MultiSelect({
                                             : valueArray?.filter(v => v !== val);
 
                                         formik.setFieldValue(key, next);
-                                        handlePersist(next)
+                                        handlePersist(next, field, module_refid)
                                         executeFieldMethod("onChange", field, `${key}-${val}`)
                                     }}
                                     onBlur={formik.handleBlur}

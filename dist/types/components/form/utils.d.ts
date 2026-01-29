@@ -1,4 +1,4 @@
-import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig } from './Form.types.js';
+import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig, FileCategory } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
@@ -6,7 +6,7 @@ export declare function transformedObject(originalObject: Record<string, any>, o
     label: string;
     required: boolean;
 }>;
-export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: "create" | "update") => void;
+export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: "create" | "update" | "fetch" | "delete") => void;
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export declare const tailwindGrid: Record<ColWidth, string>;
 export declare const tailwindCols: Record<ColWidth, string>;
@@ -22,6 +22,7 @@ export declare const isGroupedOptions: (options: SelectOptions) => options is Gr
 export declare function fetchGeolocation(): Promise<string | null>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export declare function flatFields(fields: Record<string, Omit<FormField, "name">>, operation?: string): FormField[];
+export declare function handlePersist(value: any, field: FormField, module_refid: string | undefined): void;
 export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
 export declare function getSearchColumns(columns: string): string[];
 type Row = Record<string, unknown>;
@@ -29,5 +30,8 @@ export declare const normalizeRowSafe: (row: Row) => Row;
 export declare function getPersistentKey(field: FormField): string | null;
 export declare function readPersistedValues(module_refid: string): Record<string, any>;
 export declare function writePersistedValue(module_refid: string, key: string, value: any): void;
+export declare function getFileExtension(path?: string): string;
+export declare function getMimeCategory(ext: string): "image" | "pdf" | "video" | "text" | "other";
+export declare const fileIconClassMap: Record<FileCategory, string>;
 export {};
 //# sourceMappingURL=utils.d.ts.map
