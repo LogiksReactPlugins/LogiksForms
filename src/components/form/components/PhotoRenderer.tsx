@@ -33,6 +33,8 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
     return (
         <img alt={field_name}
             title={field_name}
-            src={previewUrl} className="object-contain h-full w-full" />
+            src={previewUrl} 
+            className="h-24 w-24 object-cover rounded border border-dashed  cursor-pointer hover:opacity-90"
+            />
     )
 }

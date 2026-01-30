@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import PhotoRenderer from './PhotoRenderer.js';
-import { Field, type FormikProps } from 'formik';
+import type { FormikProps } from "formik";
 import type { FormField, SqlEndpoints } from '../Form.types.js';
 import { uploadFiles } from '../service.js';
 import { handlePersist } from '../utils.js';
@@ -54,7 +54,7 @@ export default function PhotoAvatarRenderer({
 
             <div
                 onClick={() => inputRef.current?.click()}
-                className="h-24 w-24 border border-dashed cursor-pointer overflow-hidden"
+               
             >
                 {formik.values[key] ? (
                     <PhotoRenderer field_name={key} filePath={formik.values[key]} sqlOpsUrls={sqlOpsUrls} />

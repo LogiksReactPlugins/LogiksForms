@@ -105,7 +105,7 @@ export default function FieldRenderer({
                 ))
               ) : (
                 <div className="px-3 py-2 text-sm text-gray-400">
-                  {`No matches press enter to add "${displayValue}" `}
+                  {`Press "ENTER" to ADD "${displayValue}" `}
                 </div>
               )}
             </div>
