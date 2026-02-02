@@ -122,16 +122,28 @@ export default function useFieldRenderer({
                 const methodFn = methodName ? methods[methodName] : undefined;
                 if (methodFn) {
                     try {
-                        const res = await Promise.resolve(methodFn());
+                        const res = await methodFn();
                         const rawItems = Array.isArray(res?.data?.data)
                             ? res.data.data
                             : Array.isArray(res?.data)
                                 ? res.data
                                 : res;
 
+                        if (
+                            typeof rawItems === "object" &&
+                            !Array.isArray(rawItems)
+                        ) {
+                            const values = Object.values(rawItems);
+                            if (values.length && typeof values[0] === "string") {
+                                setOptions(rawItems as SelectOptions);
+                                return;
+                            }
+                        }
+
                         const normalizedItems = Array.isArray(rawItems)
                             ? rawItems.map(normalizeRowSafe)
                             : [];
+
                         const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
                         if (isMounted) setOptions(mapped);
@@ -154,11 +166,24 @@ export default function useFieldRenderer({
                         params: source.params ?? {},
                         headers: source.headers ?? {},
                     });
+
+                    
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
                         : Array.isArray(res?.data)
                             ? res.data
                             : res;
+
+                             if (
+                            typeof rawItems === "object" &&
+                            !Array.isArray(rawItems)
+                        ) {
+                            const values = Object.values(rawItems);
+                            if (values.length && typeof values[0] === "string") {
+                                setOptions(rawItems as SelectOptions);
+                                return;
+                            }
+                        }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -223,6 +248,18 @@ export default function useFieldRenderer({
                         : Array.isArray(res?.data)
                             ? res.data
                             : res;
+
+
+                             if (
+                            typeof rawItems === "object" &&
+                            !Array.isArray(rawItems)
+                        ) {
+                            const values = Object.values(rawItems);
+                            if (values.length && typeof values[0] === "string") {
+                                setOptions(rawItems as SelectOptions);
+                                return;
+                            }
+                        }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)

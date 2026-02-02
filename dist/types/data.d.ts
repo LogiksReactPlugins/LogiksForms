@@ -1,257 +1,248 @@
 export declare const example10: {
-    endPoints: {
-        baseURL: string;
-        accessToken: string;
-        dbopsGetHash: string;
-        dbopsGetRefId: string;
-        dbopsCreate: string;
-        dbopsUpdate: string;
-        dbopsFetch: string;
-        registerQuery: string;
-        runQuery: string;
-        uploadURL: string;
-        operation: string;
+    template: string;
+    preload: {
+        helpers: string[];
     };
     source: {
         type: string;
-        dbopsid: string;
+        method: string;
+        where: string[];
     };
-    template: string;
-    forcefill: {
-        guid: string;
-        groupuid: string;
-    };
-    gotolink: string;
     fields: {
-        company_code_id: {
-            group: string;
+        persona_avatar: {
             label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
-            width: number;
-            persistent: boolean;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            }[];
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        sector_id: {
             group: string;
-            label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
-            width: number;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
-            options: never[];
-        };
-        project_function_id: {
-            group: string;
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-            "no-option": string;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
-            options: never[];
-        };
-        location_id: {
-            label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
-            width: number;
-            options: never[];
-            group: string;
-        };
-        training_date: {
-            group: string;
-            label: string;
-            type: string;
-            required: boolean;
             width: number;
         };
-        training_duration_min: {
-            group: string;
+        persona_code: {
             label: string;
-            type: string;
-            onChange: string;
-            required: boolean;
+            group: string;
             width: number;
         };
-        participant_count: {
-            group: string;
+        persona_name: {
             label: string;
-            onChange: string;
-            type: string;
-            required: boolean;
+            group: string;
             width: number;
         };
-        training_man_hours: {
-            group: string;
+        persona_group: {
             label: string;
-            type: string;
-            disabled: boolean;
-            required: boolean;
-            width: number;
-        };
-        training_conducted_by: {
             group: string;
-            label: string;
             type: string;
-            required: boolean;
             width: number;
-            queryid: string;
-        };
-        trainer: {
-            group: string;
-            label: string;
-            type: string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        category: {
-            group: string;
-            label: string;
-            type: string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        section: {
-            group: string;
-            label: string;
-            type: string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        training_photograph: {
-            group: string;
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
-        training_attendance_scan: {
-            label: string;
-            type: string;
-            group: string;
-            required: boolean;
-            width: number;
-        };
-    };
-    infoview: {
-        template: string;
-        groups: {
-            training_topics: {
-                label: string;
+            source: {
                 type: string;
-                src: string;
-                vmode: string;
-                config: {
-                    type: string;
-                    uimode: string;
-                    uiswitcher: boolean;
-                    policy_create: string;
-                    policy_view: string;
-                    policy_delete: string;
-                    policy_update: string;
-                    toolbar: {
-                        search: boolean;
-                        print: boolean;
-                        export: boolean;
-                        email: boolean;
-                    };
-                    colkey: string;
-                    form: {
-                        source: {
-                            type: string;
-                            dbopsid: string;
-                        };
-                        forcefill: {
-                            guid: string;
-                            created_by: string;
-                            quality_training_id: string;
-                        };
-                        fields: {
-                            training_topics: {
-                                label: string;
-                                type: string;
-                                required: boolean;
-                                width: number;
-                            };
-                        };
-                    };
-                    datagrid: {
-                        training_topics: {
-                            label: string;
-                            searchable: boolean;
-                        };
-                    };
-                    actions1: {
-                        addInfoRecord: {
-                            label: string;
-                        };
-                    };
-                    buttons: {
-                        editRecord: {
-                            label: string;
-                            icon: string;
-                        };
-                        deleteRecord: {
-                            label: string;
-                            icon: string;
-                        };
-                    };
-                    queryid: string;
+                method: string;
+                url: string;
+                headers: {
+                    appid: string;
+                    "Content-Type": string;
+                    'Auth-Token': string;
+                    Authorization: string;
                 };
-                width: number;
+            };
+            valueKey: string;
+            labelKey: string;
+        };
+        persona_type: {
+            label: string;
+            group: string;
+            width: number;
+            type: string;
+            method: string;
+        };
+        persona_descs: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        persona_howtouse: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        user_variables: {
+            label: string;
+            group: string;
+            type: string;
+            formatter: string;
+            width: number;
+        };
+        datastore_id: {
+            label: string;
+            group: string;
+            formatter: string;
+            width: number;
+        };
+        datastore_strategy: {
+            label: string;
+            group: string;
+            width: number;
+            type: string;
+            options: {
+                single: string;
+                merge: string;
+            };
+        };
+        datastore_params: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        prompt_engine: {
+            label: string;
+            group: string;
+            type: string;
+            source: {
+                type: string;
+                method: string;
+            };
+            width: number;
+        };
+        persona_prompt: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        persona_prompt_template: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        persona_refurl: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        persona_llm: {
+            label: string;
+            group: string;
+            type: string;
+            source: {
+                type: string;
+                method: string;
+                url: string;
+                headers: {
+                    appid: string;
+                    "Content-Type": string;
+                    'Auth-Token': string;
+                    Authorization: string;
+                };
+            };
+            valueKey: string;
+            labelKey: string;
+            width: number;
+        };
+        studio_editors: {
+            label: string;
+            group: string;
+            width: number;
+        };
+        studio_testers: {
+            label: string;
+            group: string;
+            width: number;
+        };
+        tags: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        enable_optimizer: {
+            label: string;
+            group: string;
+            width: number;
+            type: string;
+            options: {
+                true: string;
+                false: string;
+            };
+        };
+        persona_uikit: {
+            label: string;
+            group: string;
+            width: number;
+        };
+        persona_preform: {
+            label: string;
+            group: string;
+            type: string;
+            width: number;
+        };
+        available_actions: {
+            label: string;
+            type: string;
+            multiple: boolean;
+            source: {
+                type: string;
+                method: string;
+                url: string;
+                headers: {
+                    appid: string;
+                    "Content-Type": string;
+                    'Auth-Token': string;
+                    Authorization: string;
+                };
+            };
+            valueKey: string;
+            labelKey: string;
+            group: string;
+            width: number;
+        };
+        available_tools: {
+            label: string;
+            type: string;
+            multiple: boolean;
+            source: {
+                type: string;
+                method: string;
+                url: string;
+                headers: {
+                    appid: string;
+                    "Content-Type": string;
+                    'Auth-Token': string;
+                    Authorization: string;
+                };
+            };
+            valueKey: string;
+            labelKey: string;
+            group: string;
+            width: number;
+        };
+        rating: {
+            label: string;
+            group: string;
+            formatter: string;
+            width: number;
+        };
+        visibility: {
+            label: string;
+            group: string;
+            width: number;
+            type: string;
+            options: {
+                public: string;
+                private: string;
+            };
+        };
+        status: {
+            label: string;
+            required: boolean;
+            group: string;
+            width: number;
+            type: string;
+            options: {
+                published: string;
+                draft: string;
             };
         };
     };
-    script: string;
-    module_refid: string;
-    module_type: string;
 };
 export declare const example1: {
     endPoints: {
@@ -283,7 +274,9 @@ export declare const example1: {
     fields: {
         userid: {
             label: string;
+            type: string;
             required: boolean;
+            width: number;
         };
         name: {
             label: string;
@@ -335,11 +328,7 @@ export declare const example1: {
             label: string;
             group: string;
             type: string;
-            method: {
-                name: string;
-                valuefield: string;
-                "": boolean;
-            };
+            method: string;
             options: never[];
         };
         zipcode: {

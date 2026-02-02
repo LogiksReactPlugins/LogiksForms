@@ -4,6 +4,7 @@ import { getOptionLabel, isGroupedOptions } from '../utils.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
 import PhotoAvatarRenderer from './PhotoAvatarRenderer.js';
+import RichTextEditor from './RichTextArea.js';
 
 
 
@@ -270,6 +271,32 @@ export default function FieldRenderer({
           )}
         </div>
       );
+    }
+    case "richtextarea": {
+      return (
+        <div className="relative">
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+
+          <RichTextEditor
+            value={formik.values[key] ?? ''}
+            disabled={isDisabled}
+            onChange={(html) => {
+              formik.setFieldValue(key, html)
+              handlePersist(html, field, module_refid)
+              executeFieldMethod("onChange", field, key)
+            }}
+          />
+
+          {formik.touched[key] && formik.errors[key] && (
+            <span className="text-xs text-red-500">
+              {String(formik.errors[key])}
+            </span>
+          )}
+        </div>
+      )
     }
 
     case "textarea":

@@ -6,7 +6,7 @@ export declare function transformedObject(originalObject: Record<string, any>, o
     label: string;
     required: boolean;
 }>;
-export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: "create" | "update" | "fetch" | "delete") => void;
+export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: string) => void;
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export declare const tailwindGrid: Record<ColWidth, string>;
 export declare const tailwindCols: Record<ColWidth, string>;

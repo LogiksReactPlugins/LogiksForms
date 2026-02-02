@@ -82,7 +82,7 @@ export const intializeForm = (
   validationSchema: Record<string, Yup.AnySchema>,
   data?: Record<string, any>,
   module_refid?: string,
-  operation?: "create" | "update" | "fetch" | "delete"
+  operation?: string
 ) => {
 
   const persisted =
@@ -592,13 +592,9 @@ export function flatFields(
 }
 
 export function handlePersist(value: any, field: FormField, module_refid: string | undefined) {
-  console.log("field", field);
 
   const persistentKey = getPersistentKey(field);
-  console.log("sssssssssssssssssssss", persistentKey);
-  console.log("sssssssssdddddddddddddddddddd", module_refid);
-
-
+ 
   if (persistentKey && module_refid) {
     writePersistedValue(module_refid, persistentKey, value);
   }
@@ -632,6 +628,10 @@ export function getSearchColumns(columns: string): string[] {
 type Row = Record<string, unknown>;
 
 export const normalizeRowSafe = (row: Row): Row => {
+
+   if (row == null || typeof row !== "object") {
+    return { value: row, title: row };
+  }
   const result: Row = {};
 
   for (const [key, value] of Object.entries(row)) {

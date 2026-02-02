@@ -34,6 +34,6 @@ type UploadResponse = {
     path: string;
     [key: string]: any;
 };
-export declare function uploadFiles(sqlOpsUrls: SqlEndpoints, files: FileList): Promise<UploadResponse[]>;
+export declare function uploadFiles(sqlOpsUrls: SqlEndpoints | undefined, files: FileList): Promise<UploadResponse[]>;
 export {};
 //# sourceMappingURL=service.d.ts.map

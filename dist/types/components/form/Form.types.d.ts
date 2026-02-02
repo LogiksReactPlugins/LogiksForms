@@ -43,7 +43,7 @@ export interface FormField {
     where?: Record<string, string>;
     autocomplete?: "off" | AutocompleteConfig;
     ajaxchain?: AutocompleteConfig | AutocompleteConfig[];
-    validate?: Record<string, string | number>;
+    validate?: Record<string, string | number | boolean>;
     groupid?: string;
     hidden?: boolean;
     value?: string | undefined;
@@ -70,7 +70,7 @@ export interface CommonInfoProps {
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
-    sqlOpsUrls: SqlEndpoints;
+    sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
     fieldOptions: Record<string, SelectOptions>;
@@ -80,7 +80,7 @@ export interface SqlEndpoints {
     baseURL: string;
     dbopsGetRefId: string;
     accessToken: string;
-    operation: "fetch" | "create" | "update" | "delete";
+    operation: string;
     dbopsGetHash: string;
     dbopsFetch?: string;
     dbopsUpdate?: string;
@@ -90,7 +90,7 @@ export interface SqlEndpoints {
 export interface FormJson {
     title?: string | undefined;
     template?: string;
-    endPoints: SqlEndpoints;
+    endPoints?: SqlEndpoints;
     forcefill?: Record<string, string>;
     fields: Record<string, Omit<FormField, "name">>;
     source: Record<string, any>;
@@ -118,7 +118,7 @@ export interface BaseFormViewProps {
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
     widget?: boolean | undefined;
-    sqlOpsUrls: SqlEndpoints;
+    sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
 }
@@ -133,7 +133,7 @@ export interface FieldRendererProps {
     formik: FormikProps<Record<string, any>>;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;
-    sqlOpsUrls: SqlEndpoints;
+    sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
     optionsOverride?: SelectOptions;

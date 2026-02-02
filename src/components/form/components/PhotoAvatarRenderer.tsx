@@ -8,7 +8,7 @@ import { handlePersist } from '../utils.js';
 type PhotoAvatarRendererProps = {
     field: FormField;
     formik: FormikProps<Record<string, any>>;
-    sqlOpsUrls: SqlEndpoints;
+    sqlOpsUrls?: SqlEndpoints | undefined;
     module_refid?: string | undefined;
 };
 

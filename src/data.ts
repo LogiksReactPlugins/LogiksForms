@@ -1,310 +1,254 @@
-
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoicGtYNjdHNldiVkZ5b2N6RFRia0ZDa1pXSXlvOUY1UUQrdGRWb01RTlJZQldIdDlDSmsyNlBWWHU1TTZpUmFJSndheVdNZ2N3RE5yUlhCOXpVaVg1ZDV4Y2NlZ1RFYTRXSlk4ZXM0N0R3OFJNTDIvMXZIQlFheHZwQjBFQzlJWUdybXJ6dUZMdnl6N2l4UT09IiwidGltZXN0YW1wIjoxNzcwMDA2NDA2LCJleHAiOm51bGwsImlhdCI6MTc3MDAwNjQwNn0.BUB18m4GQkrv6PbqYn7SwQYGOftwBHrPco8kwAhuR08";
+const AuthKey = "g0MxEf0uh7vr";
 
 export const example10 = {
-  "endPoints": {
-    "baseURL": "http://192.168.0.20:9999",
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkpONWIxeUY4OE5PNy9GWkNiZVFhZ2RlR0ZGbU5QbnVBWmhxR2haOG51Y0Z2NFFqYzVGVE81clZBeWdwaVZPNkVPcEZjaEhWbDROTHcwbnRxWkYwM1FnTWlEcEpzUFBsQmpUb1dzekp4b3IvZElUQnZzWnE5emtWbUhXRWZjNGdMVk1CdzNWMnEwTzRkY2IrNnR4UG4wMlJDbm94TjVLR3NWU003cnEwNjdIS3lrSEx3R2thbWN5WHozaUMzZ25sK0VXbEJia1lscnlZUHdyS1A5Rk4wV3E1aUtCdk1hVzVwc0pMSWZIK1JHMXcwTjZrQkpjaXNEV2VWNWk5UUtUYU1VVWxJcGlZalpGNVllR2Q0RTZkcktYVHhCWVBRTDNnK3ZiZitsTDg9IiwiaWF0IjoxNzY5NjY2NzIxLCJleHAiOjE3Njk2NzAzMjEsImp0aSI6ImFjYzoxOjE3Njk2NjY3MjE3NDY6d2ViIn0.g4NtGuLaICdUyGhCqTNbf4DtH9P4dF8JjZJPR3F68Zg",
-    "dbopsGetHash": "/api/dbops",
-    "dbopsGetRefId": "/api/dbops/save",
-    "dbopsCreate": "/api/dbops/create",
-    "dbopsUpdate": "/api/dbops/update",
-    "dbopsFetch": "/api/dbops/fetch",
-    "registerQuery": "/api/query/save",
-    "runQuery": "/api/query/run",
-    "uploadURL": "/api/files/upload",
-    "operation": "update",
-  },
-  "source": {
-    "type": "sql",
-    "dbopsid": "forms%40quality.quality_training%403"
-  },
-  template: "tabs",
-  "forcefill": {
-    "guid": "#SESS_GUID#",
-    "groupuid": "#SESS_GROUP_NAME#"
-  },
-  "gotolink": "infoview/quality.quality_training/{hashid}",
-  "fields": {
-    "company_code_id": {
-      "group": "Info",
-      "label": "Company",
-      "type": "select",
-      "no-option": "Select Company",
-      "required": true,
-      "width": 4,
-      persistent: true,
-      "ajaxchain": [
-        {
-          "target": "sector_id",
-          "src": {
-            "type": "sql",
-            "queryid": "forms%40quality.quality_training%40fields.company_code_id.ajaxchain.0"
-          }
-        }
-      ],
-      "options": [
-        {
-          "title": "WEL",
-          "value": 1
+     "template":"simple",
+    "preload": {
+        "helpers": ["countries"]
+    },
+    "source": {
+        "type": "method",
+        "method": "getFormData",
+        "where": ["userid"]
+    },
+    "fields": {
+        "persona_avatar": {
+            "label": "Avatar",
+            "group": "info",
+            "width": 12
         },
-        {
-          "title": "WMEL",
-          "value": 2
-        }
-      ]
-    },
-    "sector_id": {
-      "group": "common",
-      "label": "Sector",
-      "type": "select",
-      "no-option": "Select Sector",
-      "required": true,
-      "width": 4,
-      "ajaxchain": {
-        "target": "project_function_id",
-        "src": {
-          "type": "sql",
-          "queryid": "forms%40quality.quality_training%40fields.sector_id.ajaxchain.0"
-        }
-      },
-      "options": []
-    },
-    "project_function_id": {
-      "group": "Project",
-      "label": "Project Function ",
-      "type": "select",
-      "required": true,
-      "width": 4,
-      "no-option": "Select Project Function",
-      "ajaxchain": {
-        "target": "location_id",
-        "src": {
-          "type": "sql",
-          "queryid": "forms%40quality.quality_training%40fields.project_function_id.ajaxchain.0"
-        }
-      },
-      "options": []
-    },
-    "location_id": {
-      "label": "Location",
-      "type": "select",
-      "no-option": "Select Location",
-      "required": true,
-      "width": 4,
-      "options": [],
-      "group": "Info"
-    },
-    "training_date": {
-      "group": "Info",
-      "label": "Training Date",
-      "type": "date",
-      "required": true,
-      "width": 4
-    },
-    "training_duration_min": {
-      "group": "Info",
-      "label": "Training Duration (Min)",
-      "type": "number",
-      "onChange": "calculateManHours",
-      "required": true,
-      "width": 4
-    },
-    "participant_count": {
-      "group": "Project",
-      "label": "Participant Count",
-      "onChange": "calculateManHours",
-      "type": "number",
-      "required": true,
-      "width": 4
-    },
-    "training_man_hours": {
-      "group": "Project",
-      "label": "Training Man Hours",
-      "type": "number",
-      "disabled": true,
-      "required": false,
-      "width": 4
-    },
-    "training_conducted_by": {
-      "group": "Project",
-      "label": "Conducted By",
-      "type": "autocomplete",
-      "required": true,
-      "width": 4,
-      "queryid": "forms%40quality.quality_training%40undefined"
-    },
-    "trainer": {
-      "group": "Project",
-      "label": "Trainer",
-      "type": "select",
-      "groupid": "traning_trainer",
-      "required": true,
-      "width": 4,
-      "options": [
-        {
-          "title": "Internal",
-          "value": "internal",
-          "class": null,
-          "privilege": "*"
+        "persona_code": {
+            "label": "Persona Code",
+            "group": "info",
+            "width": 6
         },
-        {
-          "title": "External",
-          "value": "external",
-          "class": null,
-          "privilege": "*"
-        }
-      ]
-    },
-    "category": {
-      "group": "Project",
-      "label": "Category",
-      "type": "select",
-      "groupid": "traning_category",
-      "required": true,
-      "width": 4,
-      "options": [
-        {
-          "title": "On Site",
-          "value": "On_site",
-          "class": null,
-          "privilege": "*"
+        "persona_name": {
+            "label": "Persona Name",
+            "group": "info",
+            "width": 6
         },
-        {
-          "title": "Class Room",
-          "value": "class_room",
-          "class": null,
-          "privilege": "*"
-        },
-        {
-          "title": "Mock Drill",
-          "value": "mock_drill",
-          "class": null,
-          "privilege": "*"
-        }
-      ]
-    },
-    "section": {
-      "group": "Project",
-      "label": "Section",
-      "type": "select",
-      "groupid": "section_master",
-      "required": false,
-      "width": 4,
-      "options": [
-        {
-          "title": "KIYAAN",
-          "value": "kiyaan",
-          "class": null,
-          "privilege": "*"
-        },
-        {
-          "title": "RSDCPL",
-          "value": "rsdcpl",
-          "class": null,
-          "privilege": "*"
-        },
-        {
-          "title": "SPL",
-          "value": "spl",
-          "class": null,
-          "privilege": "*"
-        },
-        {
-          "title": "TEJAS",
-          "value": "tejas",
-          "class": null,
-          "privilege": "*"
-        }
-      ]
-    },
-    "training_photograph": {
-      "group": "Project",
-      "label": "Training Photograph (Max. Size:10MB )",
-      "type": "file",
-      "required": false,
-      "width": 4
-    },
-    "training_attendance_scan": {
-      "label": "Training Attendance Scan (Max. Size:10MB )",
-      "type": "avatar",
-      "group": "common",
-      "required": false,
-      "width": 4
-    }
-  },
-  "infoview": {
-    "template": "cards",
-    "groups": {
-      "training_topics": {
-        "label": "Training Topics",
-        "type": "module",
-        "src": "infoviewTable",
-        "vmode": "edit",
-        "config": {
-          "type": "sql",
-          "uimode": "grid",
-          "uiswitcher": false,
-          "policy_create": "datahub.quality.create",
-          "policy_view": "datahub.quality.access",
-          "policy_delete": "quality.delete.access",
-          "policy_update": "quality.update.access",
-          "toolbar": {
-            "search": true,
-            "print": false,
-            "export": false,
-            "email": false
-          },
-          "colkey": "quality_training_id",
-          "form": {
+        "persona_group": {
+            "label": "Group",
+            "group": "info",
+            "type": 'select',
+            "width": 6,
             "source": {
-              "type": "sql",
-              "dbopsid": "forms%40quality.quality_training.infoview.training_topics%40"
+                "type": 'api',
+                "method": "get",
+                "url": "http://192.168.0.20:8888/skills/personas/groups",
+                "headers": {
+                    "appid": "app01",
+                    "Content-Type": "application/json",
+                    'Auth-Token': token || "",
+                    "Authorization": `Bearer ${AuthKey}`
+                },
             },
-            "forcefill": {
-              "guid": "#SESS_GUID#",
-              "created_by": "#SESS_USER_ID#",
-              "quality_training_id": "#refid#"
-            },
-            "fields": {
-              "training_topics": {
-                "label": "Training Topics",
-                "type": "textarea",
-                "required": true,
-                "width": 12
-              }
-            }
-          },
-          "datagrid": {
-            "training_topics": {
-              "label": "Training Topics",
-              "searchable": true
-            }
-          },
-          "actions1": {
-            "addInfoRecord": {
-              "label": "Add Record"
-            }
-          },
-          "buttons": {
-            "editRecord": {
-              "label": "Edit Record",
-              "icon": "fa fa-pen"
-            },
-            "deleteRecord": {
-              "label": "Delete Record",
-              "icon": "fa fa-trash text-red-500"
-            }
-          },
-          "queryid": "forms%40quality.quality_training.infoviewTable.training_topics%40infoview.groups.training_topics"
+            "valueKey": "persona_group",
+            "labelKey": "persona_group"
         },
-        "width": 12
-      }
+        "persona_type": {
+            "label": "Persona Type",
+            "group": "info",
+            "width": 6,
+            "type": "dataMethod",
+            "method": "getPersonaTypesList",
+        },
+        "persona_descs": {
+            "label": "Description",
+            "group": "info",
+            "type": "textarea",
+            "width": 12
+        },
+        "persona_howtouse": {
+            "label": "How to use",
+            "group": "info",
+            "type": "textarea",
+            "width": 12
+        },
+        "user_variables": {
+            "label": "User Variables",
+            "group": "info",
+            "type": "json",
+            "formatter": "object",
+            "width": 12
+        },
+         "datastore_id": {
+            "label": "Datastore Id",
+            "group": "Data Store",
+            "formatter": "number",
+            "width": 6
+        },
+        "datastore_strategy": {
+            "label": "Datastore Strategy",
+            "group": "Data Store",
+            "width": 6,
+            "type": "select",
+            "options": {
+                "single": "Single",
+                "merge": "Merge"
+            }
+        },
+        "datastore_params": {
+            "label": "Datastore Params",
+            "group": "Data Store",
+            "type": "textarea",
+            "width": 12
+        },
+        "prompt_engine": {
+            "label": "Prompt Engine",
+            "group": "Prompt Engine",
+            "type": 'select',
+            "source": {
+                "type": 'method',
+                "method": "getEngineList"
+            },
+            "width": 12
+        },
+        "persona_prompt": {
+            "label": "Persona Prompt",
+            "group": "Prompt Engine",
+            "type": "textarea",
+            "width": 12
+        },
+        "persona_prompt_template": {
+            "label": "Persona Prompt Template",
+            "group": "Prompt Engine",
+            "type": "textarea",
+            "width": 12
+        },
+        "persona_refurl": {
+            "label": "Persona Refurl",
+            "group": "Details",
+            "type": "textarea",
+            "width": 12
+        },
+        "persona_llm": {
+            "label": "Persona LLM",
+            "group": "Details",
+            "type": "select",
+            "source": {
+                "type": 'api',
+                "method": "post",
+                "url": "http://192.168.0.20:8888/myapps/models",
+                "headers": {
+                    "appid": "app01",
+                    "Content-Type": "application/json",
+                    'Auth-Token': token || "",
+                    "Authorization": `Bearer ${AuthKey}`
+                },
+            },
+            "valueKey": "llmcode",
+            "labelKey": "llmcode",
+            "width": 12
+        },
+        "studio_editors": {
+            "label": "Studio Editors",
+            "group": "Details",
+            "width": 6
+        },
+        "studio_testers": {
+            "label": "Studio Testers",
+            "group": "Details",
+            "width": 6
+        },
+        "tags": {
+            "label": "Tags",
+            "group": "Details",
+            "type": "textarea",
+            "width": 12
+        },
+        "enable_optimizer": {
+            "label": "Enable Optimizer",
+            "group": "Details",
+            "width": 6,
+            "type": "select",
+            "options": {
+                "true": "True",
+                "false": "False"
+            },
+        },
+        "persona_uikit": {
+            "label": "Persona UI Kit",
+            "group": "Details",
+            "width": 6
+        },
+        "persona_preform": {
+            "label": "Persona Preform",
+            "group": "Details",
+            "type": "textarea",
+            "width": 12
+        },
+        "available_actions": {
+            "label": "Available Actions",
+            "type": "checkbox",
+            "multiple": true,
+            "source": {
+                "type": 'api',
+                "method": "post",
+                "url": `http://192.168.0.20:8888/admin/actions`,
+                "headers": {
+                    "appid": "app01",
+                    "Content-Type": "application/json",
+                    'Auth-Token': token || "",
+                    "Authorization": `Bearer ${AuthKey}`
+                },
+            },
+            "valueKey": "action_name",
+            "labelKey": "action_name",
+            "group": "Details",
+            "width": 6
+        },
+        // causing error in LRC
+        "available_tools": {
+            "label": "Available Tools",
+            "type": "checkbox",
+            "multiple": true,
+            "source": {
+                "type": 'api',
+                "method": "get",
+                "url": `http://192.168.0.20:8888/tools`,
+                "headers": {
+                    "appid": "app01",
+                    "Content-Type": "application/json",
+                    'Auth-Token': token || "",
+                    "Authorization": `Bearer ${AuthKey}`
+                },
+            },
+            "valueKey": "name",
+            "labelKey": "name",
+            "group": "Details",
+            "width": 6
+        },
+        "rating": {
+            "label": "Rating",
+            "group": "Details",
+            "formatter": "number",
+            "width": 4
+        },
+        "visibility": {
+            "label": "Visibility",
+            "group": "Details",
+            "width": 4,
+            "type": "select",
+            "options": {
+                "public": "public",
+                "private": "private"
+            }
+        },
+        "status": {
+            "label": "Status",
+            "required": true,
+            "group": "Details",
+            "width": 4,
+            "type": "select",
+            "options": {
+                "published": "published",
+                "draft": "draft"
+            }
+        }
     }
-  },
-  "script": "ZnVuY3Rpb24gc2V0TmF0aXZlVmFsdWUoZWxlbWVudCwgdmFsdWUpIHsKICBjb25zdCB2YWx1ZVNldHRlciA9IE9iamVjdC5nZXRPd25Qcm9wZXJ0eURlc2NyaXB0b3IoCiAgICB3aW5kb3cuSFRNTElucHV0RWxlbWVudC5wcm90b3R5cGUsCiAgICAidmFsdWUiCiAgKS5zZXQ7CgogIHZhbHVlU2V0dGVyLmNhbGwoZWxlbWVudCwgdmFsdWUpOwoKICBlbGVtZW50LmRpc3BhdGNoRXZlbnQobmV3IEV2ZW50KCJpbnB1dCIsIHsgYnViYmxlczogdHJ1ZSB9KSk7Cn0KCmZ1bmN0aW9uIGNhbGN1bGF0ZU1hbkhvdXJzKCkgewogIGNvbnN0IGR1cmF0aW9uID0gTnVtYmVyKGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJ0cmFpbmluZ19kdXJhdGlvbl9taW4iKT8udmFsdWUpIHx8IDA7CiAgY29uc3QgcGFydGljaXBhbnQgPSBOdW1iZXIoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInBhcnRpY2lwYW50X2NvdW50Iik/LnZhbHVlKSB8fCAwOwoKICBjb25zdCBtYW5Ib3VycyA9IGR1cmF0aW9uICogcGFydGljaXBhbnQ7CiAKICBjb25zdCBtYW5Ib3Vyc0lucHV0ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInRyYWluaW5nX21hbl9ob3VycyIpOwogIGlmIChtYW5Ib3Vyc0lucHV0KSB7CiAgICBzZXROYXRpdmVWYWx1ZShtYW5Ib3Vyc0lucHV0LCBtYW5Ib3Vycyk7CiAgfQp9Cgo=",
-  "module_refid": "quality.quality_training",
-  "module_type": "forms"
 }
+
 
 export const example1 = {
     "endPoints": {
@@ -340,7 +284,9 @@ export const example1 = {
     "fields": {
         "userid": {
             "label": "Login ID",
-            "required": true
+            "type":"richtextarea",
+            "required": true,
+            width:12
         },
         "name": {
             "label": "Full Name",
@@ -392,11 +338,7 @@ export const example1 = {
             "label": "Country",
             "group": "address",
             "type": "select",
-            "method": {
-                "name": "getCountrySelector",
-                "valuefield": "default",
-                "": false
-            },
+            "method": "getCountrySelector",
             "options": []
         },
         "zipcode": {

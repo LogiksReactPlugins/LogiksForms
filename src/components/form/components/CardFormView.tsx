@@ -36,14 +36,14 @@ export default function CardFormView({
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
     Object.values(groupedFields).flat().forEach((field) => {
-      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls.operation);
+      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls?.operation);
     });
 
     return {
       initialValues: values,
       validationSchema: schema,
     };
-  }, [groupedFields, data, module_refid, sqlOpsUrls.operation]);
+  }, [groupedFields, data, module_refid, sqlOpsUrls?.operation]);
 
 
 
@@ -88,7 +88,7 @@ export default function CardFormView({
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
 
-                    if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {
+                    if (isHidden(field.hidden) || field.type === "geolocation") {
                       return null;
                     }
                     return <div

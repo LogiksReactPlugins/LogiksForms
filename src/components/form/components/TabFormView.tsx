@@ -48,13 +48,13 @@ export default function TabFormView({
     if (widget) {
       Object.entries(groupedFields).forEach(([step, fields]) => {
         const stepSchema: Record<string, Yup.AnySchema> = {};
-        intializeForm(fields, values, stepSchema, data, module_refid, sqlOpsUrls.operation);
+        intializeForm(fields, values, stepSchema, data, module_refid, sqlOpsUrls?.operation);
 
         stepSchemas[step] = stepSchema;
       });
     } else {
       Object.entries(groupedFields).forEach(([_, fields]) => {
-        intializeForm(fields, values, globalSchema, data, module_refid, sqlOpsUrls.operation);
+        intializeForm(fields, values, globalSchema, data, module_refid, sqlOpsUrls?.operation);
       });
     }
 
@@ -63,7 +63,7 @@ export default function TabFormView({
       validationSchema: globalSchema,
       stepperSchemas: stepSchemas,
     };
-  }, [groupedFields, data, widget, module_refid, sqlOpsUrls.operation]);
+  }, [groupedFields, data, widget, module_refid, sqlOpsUrls?.operation]);
 
 
 
@@ -197,7 +197,7 @@ export default function TabFormView({
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && tabGroups[currentStepKey]?.map((field, index) => {
 
-              if (isHidden(field.hidden) || field.type === "geolocation" || (field.vmode === "edit" && sqlOpsUrls.operation === "create")) {
+              if (isHidden(field.hidden) || field.type === "geolocation") {
                 return null;
               }
 

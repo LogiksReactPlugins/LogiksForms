@@ -202,7 +202,7 @@ type UploadResponse = {
 };
 
 export async function uploadFiles(
-    sqlOpsUrls: SqlEndpoints,
+    sqlOpsUrls: SqlEndpoints | undefined,
     files: FileList
 ): Promise<UploadResponse[]> {
     if (!sqlOpsUrls?.uploadURL) {
