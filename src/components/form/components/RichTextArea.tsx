@@ -1,22 +1,5 @@
 import { lazy, Suspense, useMemo } from "react";
 
-/* TinyMCE core */
-import "tinymce/tinymce";
-import "tinymce/icons/default";
-import "tinymce/themes/silver";
-import "tinymce/models/dom";
-
-/* REQUIRED SKINS */
-import "tinymce/skins/ui/oxide/skin.min.css";
-import "tinymce/skins/content/default/content.min.css";
-
-/* Plugins */
-import "tinymce/plugins/lists";
-import "tinymce/plugins/link";
-import "tinymce/plugins/image";
-import "tinymce/plugins/table";
-import "tinymce/plugins/code";
-
 const Editor = lazy(() =>
   import("@tinymce/tinymce-react").then(m => ({ default: m.Editor }))
 );
@@ -39,6 +22,8 @@ export default function RichTextEditor({
       statusbar: false,
       branding: false,
       promotion: false,
+      skin: false,
+      content_css: false,
 
       plugins: [
         "lists",
@@ -76,7 +61,7 @@ export default function RichTextEditor({
       <Editor
         licenseKey="gpl"
         value={value}
-        disabled={disabled}
+        readonly={disabled}
         onEditorChange={onChange}
         init={init}
       />
