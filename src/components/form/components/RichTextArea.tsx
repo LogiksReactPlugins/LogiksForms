@@ -17,8 +17,7 @@ export default function RichTextEditor({
 }: RichTextAreaProps) {
   const init = useMemo(
     () => ({
-      base_url:"/tinymce",
-      suffix:".min",
+     
       height: 500,
       menubar: false,
       statusbar: false,

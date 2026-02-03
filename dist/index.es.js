@@ -1309,8 +1309,6 @@ function mt({
 }) {
   const n = fe(
     () => ({
-      base_url: "/tinymce",
-      suffix: ".min",
       height: 500,
       menubar: !1,
       statusbar: !1,
