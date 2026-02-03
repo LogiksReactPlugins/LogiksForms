@@ -1309,6 +1309,8 @@ function mt({
 }) {
   const n = fe(
     () => ({
+      base_url: "/tinymce",
+      suffix: ".min",
       height: 500,
       menubar: !1,
       statusbar: !1,
@@ -1342,6 +1344,7 @@ function mt({
         pt,
         {
           licenseKey: "gpl",
+          tinymceScriptSrc: "/tinymce/tinymce.min.js",
           value: e,
           readonly: i,
           onEditorChange: r,
