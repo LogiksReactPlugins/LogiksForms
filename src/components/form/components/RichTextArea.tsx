@@ -61,7 +61,7 @@ export default function RichTextEditor({
     >
       <Editor
         licenseKey="gpl"
-        tinymceScriptSrc="/tinymce/tinymce.min.js"
+      
         value={value}
         readonly={disabled}
         onEditorChange={onChange}

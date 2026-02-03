@@ -1342,7 +1342,6 @@ function mt({
         pt,
         {
           licenseKey: "gpl",
-          tinymceScriptSrc: "/tinymce/tinymce.min.js",
           value: e,
           readonly: i,
           onEditorChange: r,
