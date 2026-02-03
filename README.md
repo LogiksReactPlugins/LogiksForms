@@ -140,26 +140,3 @@ Forms are JSON files controlled by Logiks Form Schema 1.0. They can be places in
 ### Autocomplete Elements (if false)
 + autocomplete: false :: this stops the field to have autocomplete by html5
 
-
-## Rich Text Editor (TinyMCE)
-
-`logiks-forms` uses **TinyMCE in self-hosted mode** for rich-text fields.
-
-To keep the library lightweight and compatible across different projects, **TinyMCE assets are not bundled automatically**.  
-Each consuming project must make TinyMCE available at runtime.
-
----
-
-### One-time setup (required)
-
-In the **consuming project**, install TinyMCE:
-
-```bash
-npm install tinymce @tinymce/tinymce-react
-
-```
-
-```bash
-cp -r node_modules/tinymce public/tinymce
-
-```

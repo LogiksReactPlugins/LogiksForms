@@ -52016,7 +52016,7 @@ function AJ() {
 }
 AJ();
 const _J = FQ(
-  () => import("./index-CJTfH1_L.js").then((V) => ({ default: V.Editor }))
+  () => import("@tinymce/tinymce-react").then((V) => ({ default: V.Editor }))
 );
 function OJ({
   value: V,
