@@ -8,6 +8,7 @@ import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
 import RichTextToolbar from './RIchTextToolbar.js'
+import { useEffect } from "react";
 
 type RichTextEditorProps = {
   value: string
@@ -50,6 +51,18 @@ export default function RichTextEditor({
       onChange(editor.getHTML())
     },
   })
+
+   useEffect(() => {
+  if (!editor) return;
+
+  const current = editor.getHTML();
+
+  if (value && value !== current) {
+    editor.commands.setContent(value, {
+      emitUpdate: false,
+    });
+  }
+}, [value, editor]);
 
   if (!editor) return null;
 

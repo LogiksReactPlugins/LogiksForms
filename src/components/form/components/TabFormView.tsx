@@ -103,6 +103,9 @@ export default function TabFormView({
     }
   })
 
+  console.log("formi",formik.values);
+  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

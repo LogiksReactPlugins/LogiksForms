@@ -2,251 +2,109 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoicGtYNjdHNldi
 const AuthKey = "g0MxEf0uh7vr";
 
 export const example10 = {
-     "template":"simple",
-    "preload": {
-        "helpers": ["countries"]
+       "endPoints": {
+    "baseURL": "http://192.168.0.20:9999",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkpTL1RZc0pobitQNW5ScHQ1Sjhud3ArRVFhcmtxRVk0Z3BNZFBTMWNZTmdvR0NWSG5ia2RjWEJBNVMxY043WVR5aFB3RWpHU3BPWHN2ME9TRjdDekVWTll1SWttWUJTakJxaGRsV0doUHFyTFVSaGpQMEZycVd1Wm52Z0xMYjZoRlRPa1RDSjlkckVFbVIrbW1wV2IyVkh4N2NlelBuY01mQy84M0hPckk1QmNEeGhjUDdKYzFlL25SQU5xaVRhK1VaMXRCenZjaFNaUkg4MUVOcmIyOVY4ZkNWVnhIdmdZVE5qOEpBS2IzN0E4V0N6QTEvSkk0UTdvY0lrVVZhUHR4OVc0bzE5OGhaNXArTCtacUdCNE0rb0JuYllZekV6V3FDTVdDWUZuIiwiaWF0IjoxNzcwNzI5NjQwLCJleHAiOjE3NzA3MzMyNDAsImp0aSI6ImFjYzoxOjE3NzA3Mjk2NDA2MDg6d2ViIn0.gyiT1cAKZ3qGGCPyv2c_IAD6gD2GfbQ2_JRlFchQY3k",
+    "dbopsGetHash": "/api/dbops",
+    "dbopsGetRefId": "/api/dbops/save",
+    "dbopsCreate": "/api/dbops/create",
+    "dbopsUpdate": "/api/dbops/update",
+    "dbopsFetch": "/api/dbops/fetch",
+    "registerQuery": "/api/query/save",
+    "runQuery": "/api/query/run",
+    "uploadURL": "/api/files/upload",
+    "operation": "update",
+  },
+    "forcefill": {
+        "groupuid": "#SESS_GROUP_NAME#",
+        "guid": "#SESS_GUID#"
     },
     "source": {
-        "type": "method",
-        "method": "getFormData",
-        "where": ["userid"]
+        "type": "sql",
+        "dbopsid": "forms%40termsandcondition_1.main%401"
     },
     "fields": {
-        "persona_avatar": {
-            "label": "Avatar",
-            "group": "info",
-            "width": 12
+        "title": {
+            "label": "Title",
+            "group": "Info",
+            "required": true
         },
-        "persona_code": {
-            "label": "Persona Code",
-            "group": "info",
-            "width": 6
-        },
-        "persona_name": {
-            "label": "Persona Name",
-            "group": "info",
-            "width": 6
-        },
-        "persona_group": {
-            "label": "Group",
-            "group": "info",
-            "type": 'select',
-            "width": 6,
-            "source": {
-                "type": 'api',
-                "method": "get",
-                "url": "http://192.168.0.20:8888/skills/personas/groups",
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "persona_group",
-            "labelKey": "persona_group"
-        },
-        "persona_type": {
-            "label": "Persona Type",
-            "group": "info",
-            "width": 6,
-            "type": "dataMethod",
-            "method": "getPersonaTypesList",
-        },
-        "persona_descs": {
-            "label": "Description",
-            "group": "info",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_howtouse": {
-            "label": "How to use",
-            "group": "info",
-            "type": "textarea",
-            "width": 12
-        },
-        "user_variables": {
-            "label": "User Variables",
-            "group": "info",
-            "type": "json",
-            "formatter": "object",
-            "width": 12
-        },
-         "datastore_id": {
-            "label": "Datastore Id",
-            "group": "Data Store",
-            "formatter": "number",
-            "width": 6
-        },
-        "datastore_strategy": {
-            "label": "Datastore Strategy",
-            "group": "Data Store",
-            "width": 6,
+        "category": {
+            "label": "Category",
+            "group": "Info",
             "type": "select",
-            "options": {
-                "single": "Single",
-                "merge": "Merge"
-            }
-        },
-        "datastore_params": {
-            "label": "Datastore Params",
-            "group": "Data Store",
-            "type": "textarea",
-            "width": 12
-        },
-        "prompt_engine": {
-            "label": "Prompt Engine",
-            "group": "Prompt Engine",
-            "type": 'select',
-            "source": {
-                "type": 'method',
-                "method": "getEngineList"
-            },
-            "width": 12
-        },
-        "persona_prompt": {
-            "label": "Persona Prompt",
-            "group": "Prompt Engine",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_prompt_template": {
-            "label": "Persona Prompt Template",
-            "group": "Prompt Engine",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_refurl": {
-            "label": "Persona Refurl",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_llm": {
-            "label": "Persona LLM",
-            "group": "Details",
-            "type": "select",
-            "source": {
-                "type": 'api',
-                "method": "post",
-                "url": "http://192.168.0.20:8888/myapps/models",
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "llmcode",
-            "labelKey": "llmcode",
-            "width": 12
-        },
-        "studio_editors": {
-            "label": "Studio Editors",
-            "group": "Details",
-            "width": 6
-        },
-        "studio_testers": {
-            "label": "Studio Testers",
-            "group": "Details",
-            "width": 6
-        },
-        "tags": {
-            "label": "Tags",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "enable_optimizer": {
-            "label": "Enable Optimizer",
-            "group": "Details",
-            "width": 6,
-            "type": "select",
-            "options": {
-                "true": "True",
-                "false": "False"
-            },
-        },
-        "persona_uikit": {
-            "label": "Persona UI Kit",
-            "group": "Details",
-            "width": 6
-        },
-        "persona_preform": {
-            "label": "Persona Preform",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "available_actions": {
-            "label": "Available Actions",
-            "type": "checkbox",
-            "multiple": true,
-            "source": {
-                "type": 'api',
-                "method": "post",
-                "url": `http://192.168.0.20:8888/admin/actions`,
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "action_name",
-            "labelKey": "action_name",
-            "group": "Details",
-            "width": 6
-        },
-        // causing error in LRC
-        "available_tools": {
-            "label": "Available Tools",
-            "type": "checkbox",
-            "multiple": true,
-            "source": {
-                "type": 'api',
-                "method": "get",
-                "url": `http://192.168.0.20:8888/tools`,
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "name",
-            "labelKey": "name",
-            "group": "Details",
-            "width": 6
-        },
-        "rating": {
-            "label": "Rating",
-            "group": "Details",
-            "formatter": "number",
-            "width": 4
-        },
-        "visibility": {
-            "label": "Visibility",
-            "group": "Details",
-            "width": 4,
-            "type": "select",
-            "options": {
-                "public": "public",
-                "private": "private"
-            }
-        },
-        "status": {
-            "label": "Status",
+            "groupid": "accounts_terms",
             "required": true,
-            "group": "Details",
-            "width": 4,
+            "options": [
+                {
+                    "title": "purchase_payment_terms",
+                    "value": "purchase_payment_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Purchase Terms",
+                    "value": "purchase_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Quotation Terms",
+                    "value": "quotations_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Payment Terms",
+                    "value": "payment_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Invoices Terms",
+                    "value": "invoices_terms",
+                    "class": "",
+                    "privilege": "*"
+                }
+            ]
+        },
+        "terms": {
+            "label": "Terms",
+            "group": "Info",
+            "type": "richtextarea",
+            "required": true
+        },
+        "blocked": {
+            "label": "Blocked",
+            "group": "Info",
             "type": "select",
-            "options": {
-                "published": "published",
-                "draft": "draft"
-            }
+            "groupid": "boolean",
+            "vmode": "edit",
+            "required": true,
+            "options": [
+                {
+                    "title": "False",
+                    "value": "false",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "True",
+                    "value": "true",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "True",
+                    "value": null,
+                    "class": null,
+                    "privilege": "*"
+                }
+            ]
         }
-    }
+    },
+    "module_refid": "termsandcondition_1.main",
+    "module_type": "forms"
 }
 
 
