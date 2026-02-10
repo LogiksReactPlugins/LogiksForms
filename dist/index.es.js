@@ -12647,33 +12647,24 @@ function _f({
         class: "tiptap focus:outline-none min-h-[120px]"
       }
     },
-    onUpdate: ({ editor: i }) => {
-      e(i.getHTML());
+    onUpdate: ({ editor: s }) => {
+      e(s.getHTML());
     }
   });
-  if (ve(() => {
+  return ve(() => {
     if (!r) return;
-    const i = r.getHTML();
-    t && t !== i && r.commands.setContent(t, {
+    const s = r.getHTML();
+    t !== void 0 && t !== s && r.commands.setContent(t, {
       emitUpdate: !1
     });
-  }, [t, r]), !r) return null;
-  const s = `
-  w-full rounded-lg border transition-all duration-300
-  backdrop-blur-sm text-gray-800 placeholder-gray-400
-  focus:outline-none focus:ring-0
-
-  ${n ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
-`;
-  return /* @__PURE__ */ m.jsxs(
+  }, [t, r]), r ? /* @__PURE__ */ m.jsxs(
     "div",
     {
       className: `
-    ${s} 
-    border-gradient-to-r 
-    focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
-   py-2focus-within:ring-1 focus-within:ring-indigo-500
-  `,
+        w-full rounded-lg border transition-all duration-300
+        backdrop-blur-sm text-gray-800
+        ${n ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60" : "bg-white border-gray-300 hover:border-gray-400 focus-within:ring-1 focus-within:ring-indigo-500"}
+      `,
       children: [
         !n && /* @__PURE__ */ m.jsx(Vf, { editor: r }),
         /* @__PURE__ */ m.jsx(
@@ -12685,7 +12676,7 @@ function _f({
         )
       ]
     }
-  );
+  ) : null;
 }
 function qt({
   field: t,

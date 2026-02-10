@@ -57,7 +57,7 @@ export default function RichTextEditor({
 
   const current = editor.getHTML();
 
-  if (value && value !== current) {
+if (value !== undefined && value !== current) {
     editor.commands.setContent(value, {
       emitUpdate: false,
     });
@@ -66,28 +66,19 @@ export default function RichTextEditor({
 
   if (!editor) return null;
 
-  const baseInputClasses = `
-  w-full rounded-lg border transition-all duration-300
-  backdrop-blur-sm text-gray-800 placeholder-gray-400
-  focus:outline-none focus:ring-0
-
-  ${disabled
-      ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
-      : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
-`;
-
- const focusClasses = `
-    border-gradient-to-r 
-    focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
-  `;
+ 
 
 
   return (
 
     <div
-      className={`
-    ${baseInputClasses} ${focusClasses} py-2focus-within:ring-1 focus-within:ring-indigo-500
-  `}
+   className={`
+        w-full rounded-lg border transition-all duration-300
+        backdrop-blur-sm text-gray-800
+        ${disabled
+          ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60"
+          : "bg-white border-gray-300 hover:border-gray-400 focus-within:ring-1 focus-within:ring-indigo-500"}
+      `}
     >
       {!disabled && <RichTextToolbar editor={editor} />}
       <EditorContent
