@@ -24,7 +24,7 @@ export default function FieldRenderer({
     handleToggle, setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
-    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused
+    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused, exactMatch
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid,
@@ -66,13 +66,13 @@ export default function FieldRenderer({
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                if (filteredOptions[highlightedIndex]) {
-                  const [val] = filteredOptions[highlightedIndex];
+                if (exactMatch) {
+                  const [val] = exactMatch;
                   formik.setFieldValue(key, val);
-                  handlePersist(val, field, module_refid)
+                  handlePersist(val, field, module_refid);
                 } else if (search.trim()) {
                   formik.setFieldValue(key, search.trim());
-                  handlePersist(search.trim(), field, module_refid)
+                  handlePersist(search.trim(), field, module_refid);
                 }
                 setOpen(false);
                 return;
@@ -88,7 +88,7 @@ export default function FieldRenderer({
               ref={listRef}
               className="absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1"
             >
-              {filteredOptions.length > 0 ? (
+              {filteredOptions.length > 0 && exactMatch ? (
                 filteredOptions.map(([val, label], idx) => (
                   <div
                     id={`${key}-${val}`}

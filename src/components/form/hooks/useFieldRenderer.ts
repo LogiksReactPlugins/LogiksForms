@@ -23,7 +23,6 @@ export default function useFieldRenderer({
         optionsOverride ?? field.options ?? {}
     );
 
-    const dateRef = useRef<HTMLInputElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -167,23 +166,23 @@ export default function useFieldRenderer({
                         headers: source.headers ?? {},
                     });
 
-                    
+
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
                         : Array.isArray(res?.data)
                             ? res.data
                             : res;
 
-                             if (
-                            typeof rawItems === "object" &&
-                            !Array.isArray(rawItems)
-                        ) {
-                            const values = Object.values(rawItems);
-                            if (values.length && typeof values[0] === "string") {
-                                setOptions(rawItems as SelectOptions);
-                                return;
-                            }
+                    if (
+                        typeof rawItems === "object" &&
+                        !Array.isArray(rawItems)
+                    ) {
+                        const values = Object.values(rawItems);
+                        if (values.length && typeof values[0] === "string") {
+                            setOptions(rawItems as SelectOptions);
+                            return;
                         }
+                    }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -250,16 +249,16 @@ export default function useFieldRenderer({
                             : res;
 
 
-                             if (
-                            typeof rawItems === "object" &&
-                            !Array.isArray(rawItems)
-                        ) {
-                            const values = Object.values(rawItems);
-                            if (values.length && typeof values[0] === "string") {
-                                setOptions(rawItems as SelectOptions);
-                                return;
-                            }
+                    if (
+                        typeof rawItems === "object" &&
+                        !Array.isArray(rawItems)
+                    ) {
+                        const values = Object.values(rawItems);
+                        if (values.length && typeof values[0] === "string") {
+                            setOptions(rawItems as SelectOptions);
+                            return;
                         }
+                    }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -318,6 +317,23 @@ export default function useFieldRenderer({
         () => flattenOptions(options),
         [options]
     );
+  
+    const exactMatch = useMemo(() => {
+
+        if (!field.type) return null
+        if (!["suggest", "autosuggest", "autocomplete"].includes(field.type)) {
+            return null;
+        }
+
+        if (!search.trim()) return null;
+
+        const normalized = search.trim().toLowerCase();
+
+        return flatOptions.find(([, label]) => {
+            const value = label.trim().toLowerCase();
+            return value === normalized;
+        });
+    }, [field.type, search, flatOptions]);
 
 
 
@@ -669,7 +685,8 @@ export default function useFieldRenderer({
         listRef,
         inputRef,
         detailsRef,
-        isFocused
+        isFocused,
+        exactMatch
 
     }
 }
