@@ -1,6 +1,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+
 import Image from "@tiptap/extension-image";
 import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
@@ -53,7 +54,7 @@ export default function RichTextEditor({
   if (!editor) return null;
 
   const baseInputClasses = `
-  w-full px-4 py-2 rounded-lg border transition-all duration-300
+  w-full rounded-lg border transition-all duration-300
   backdrop-blur-sm text-gray-800 placeholder-gray-400
   focus:outline-none focus:ring-0
 
@@ -62,14 +63,17 @@ export default function RichTextEditor({
       : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
 `;
 
+ const focusClasses = `
+    border-gradient-to-r 
+    focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
+  `;
+
 
   return (
 
     <div
       className={`
-    ${baseInputClasses} 
-     py-2
-    focus-within:ring-1 focus-within:ring-indigo-500
+    ${baseInputClasses} ${focusClasses} py-2focus-within:ring-1 focus-within:ring-indigo-500
   `}
     >
       {!disabled && <RichTextToolbar editor={editor} />}

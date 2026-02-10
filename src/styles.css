@@ -17,6 +17,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: auto;
 }
 
+.tiptap strong {
+  font-weight: 700;
+}
+
+.tiptap b {
+  font-weight: 700;
+}
+
 .tiptap h1 {
   font-size: 1.5rem;
   font-weight: 700;

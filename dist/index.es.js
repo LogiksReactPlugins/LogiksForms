@@ -12647,13 +12647,13 @@ function _f({
         class: "tiptap focus:outline-none min-h-[120px]"
       }
     },
-    onUpdate: ({ editor: o }) => {
-      e(o.getHTML());
+    onUpdate: ({ editor: i }) => {
+      e(i.getHTML());
     }
   });
   if (!r) return null;
   const s = `
-  w-full px-4 py-2 rounded-lg border transition-all duration-300
+  w-full rounded-lg border transition-all duration-300
   backdrop-blur-sm text-gray-800 placeholder-gray-400
   focus:outline-none focus:ring-0
 
@@ -12664,8 +12664,9 @@ function _f({
     {
       className: `
     ${s} 
-     py-2
-    focus-within:ring-1 focus-within:ring-indigo-500
+    border-gradient-to-r 
+    focus:border-gray-400 focus:shadow-lg focus:shadow-gray-100/50
+   py-2focus-within:ring-1 focus-within:ring-indigo-500
   `,
       children: [
         !n && /* @__PURE__ */ m.jsx(Vf, { editor: r }),
