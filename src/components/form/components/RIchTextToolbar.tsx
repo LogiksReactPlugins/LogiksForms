@@ -142,6 +142,62 @@ export default function RichTextToolbar({ editor }: { editor: Editor }) {
             .run()
         }
       />
+
+      {editor.isActive('table') && (
+        <>
+          
+
+          <ToolbarButton
+            title="Add Row Above"
+            icon="fa-solid fa-arrow-up"
+            disabled={!editor.can().addRowBefore()}
+            onClick={() => editor.chain().focus().addRowBefore().run()}
+          />
+
+          <ToolbarButton
+            title="Add Row Below"
+            icon="fa-solid fa-arrow-down"
+            disabled={!editor.can().addRowAfter()}
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+          />
+
+          <ToolbarButton
+            title="Add Column Left"
+            icon="fa-solid fa-arrow-left"
+            disabled={!editor.can().addColumnBefore()}
+            onClick={() => editor.chain().focus().addColumnBefore().run()}
+          />
+
+          <ToolbarButton
+            title="Add Column Right"
+            icon="fa-solid fa-arrow-right"
+            disabled={!editor.can().addColumnAfter()}
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+          />
+
+          <ToolbarButton
+            title="Delete Row"
+            icon="fa-solid fa-minus"
+            disabled={!editor.can().deleteRow()}
+            onClick={() => editor.chain().focus().deleteRow().run()}
+          />
+
+          <ToolbarButton
+            title="Delete Column"
+            icon="fa-solid fa-trash"
+            disabled={!editor.can().deleteColumn()}
+            onClick={() => editor.chain().focus().deleteColumn().run()}
+          />
+
+          <ToolbarButton
+            title="Delete Table"
+            icon="fa-solid fa-xmark"
+            disabled={!editor.can().deleteTable()}
+            onClick={() => editor.chain().focus().deleteTable().run()}
+          />
+        </>
+      )}
+
       <Divider />
 
       {/* code */}
