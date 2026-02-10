@@ -1,92 +1,84 @@
-import { Editor } from "@tinymce/tinymce-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import Image from "@tiptap/extension-image";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableHeader } from "@tiptap/extension-table-header";
+import { TableCell } from "@tiptap/extension-table-cell";
+import RichTextToolbar from './RIchTextToolbar.js'
 
-type RichTextAreaProps = {
-  value: string;
-  onChange: (html: string) => void;
-  disabled?: boolean;
-};
-
-function waitForTinyMCE(): Promise<void> {
-  return new Promise((resolve) => {
-    if ((window as any).tinymce) {
-      resolve();
-      return;
-    }
-
-    const interval = setInterval(() => {
-      if ((window as any).tinymce) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 50);
-  });
+type RichTextEditorProps = {
+  value: string
+  onChange: (html: string) => void
+  disabled?: boolean
 }
 
 export default function RichTextEditor({
   value,
   onChange,
-  disabled = false,
-}: RichTextAreaProps) {
-  const [ready, setReady] = useState(false);
+  disabled
+}: RichTextEditorProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link.configure({
+        openOnClick: false,
+      }),
+      Image,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
 
-  useEffect(() => {
-    let cancelled = false;
+    ],
+    content: value || '',
+    editable: !disabled,
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          'tiptap focus:outline-none min-h-[120px]',
+      },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML())
+    },
+  })
 
-    waitForTinyMCE().then(() => {
-      if (!cancelled) setReady(true);
-    });
+  if (!editor) return null;
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const baseInputClasses = `
+  w-full px-4 py-2 rounded-lg border transition-all duration-300
+  backdrop-blur-sm text-gray-800 placeholder-gray-400
+  focus:outline-none focus:ring-0
 
-  const init = useMemo(
-    () => ({
-      height: 500,
-      menubar: false,
-      statusbar: false,
-      branding: false,
-      promotion: false,
+  ${disabled
+      ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+      : "bg-white border-gray-300 hover:border-gray-400 focus:border-indigo-500 focus:shadow-md"}
+`;
 
-      // IMPORTANT: host app provides CSS
-      skin: false,
-      content_css: false,
-
-      plugins: ["lists", "link", "image", "table", "code"],
-
-      toolbar:
-        "undo redo | bold italic underline | bullist numlist | table | link image | code",
-
-      table_toolbar:
-        "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
-
-      content_style: `
-        body {
-          font-family: Inter, system-ui, sans-serif;
-          font-size: 14px;
-        }
-      `,
-    }),
-    []
-  );
-
-  if (!ready) {
-    return (
-      <div className="p-3 text-sm text-gray-400 border rounded-lg">
-        Loading editor…
-      </div>
-    );
-  }
 
   return (
-    <Editor
-      licenseKey="gpl"
-      value={value}
-      readonly={disabled}
-      onEditorChange={onChange}
-      init={init}
-    />
-  );
+
+    <div
+      className={`
+    ${baseInputClasses} 
+     py-2
+    focus-within:ring-1 focus-within:ring-indigo-500
+  `}
+    >
+      {!disabled && <RichTextToolbar editor={editor} />}
+      <EditorContent
+        editor={editor}
+        className="tiptap max-w-none p-3 min-h-[200px] max-h-[220px] overflow-auto focus:outline-none"
+      />
+    </div>
+
+  )
 }
+
+
+

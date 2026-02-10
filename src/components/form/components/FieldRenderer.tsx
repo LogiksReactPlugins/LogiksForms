@@ -744,7 +744,7 @@ export default function FieldRenderer({
               name={key}
               min={field.min}
               max={field.max}
-              value={formik.values[key]}
+              value={formik.values[key] ?? ""}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
                 handlePersist(e.target.value, field, module_refid)

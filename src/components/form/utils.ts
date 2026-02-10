@@ -137,7 +137,7 @@ export const intializeForm = (
 
     else if (field.type === "date") {
       initialValues[name] =
-        typeof value === "string" ? value.slice(0, 10) : "";
+        typeof value === "string" && value.trim() ? value.slice(0, 10) : null;
     }
 
     else if (field.type === "time") {
@@ -190,16 +190,14 @@ export const intializeForm = (
           return false;
         }
       });
+    } else if (field.type === "date") {
+      validator = Yup.string().nullable();
     }
     else {
       validator = Yup.string();
     }
 
-    if (field.required) {
-      validator = validator.required(
-        field.error_message || `${field.label || name} is required`
-      );
-    }
+
 
     // ---------- Direct Regex ----------
     if (field?.validate?.regex && typeof field.validate.regex === "string") {
@@ -232,19 +230,24 @@ export const intializeForm = (
             break;
 
           case "date":
-            validator = Yup.date()
-              .typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)")
-              .transform((value, originalValue) => {
-                if (typeof originalValue === "string") {
-                  const normalized = originalValue.replace(/-/g, "/");
+            validator = (validator as Yup.StringSchema)
+              .nullable()
+              .test(
+                "date",
+                "Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)",
+                (v) => {
+                  if (v == null || v === "") return true;
+
+                  const normalized = v.replace(/-/g, "/");
                   const [d, m, y] = normalized.split("/");
-                  if (d && m && y) {
-                    return new Date(`${y}-${m}-${d}`);
-                  }
+                  if (!d || !m || !y) return false;
+
+                  const date = new Date(`${y}-${m}-${d}`);
+                  return !isNaN(date.getTime());
                 }
-                return value;
-              });
+              );
             break;
+            
 
           case "time":
             validator = (validator as Yup.StringSchema).matches(
@@ -328,6 +331,12 @@ export const intializeForm = (
             break;
         }
       });
+    }
+
+    if (field.required) {
+      validator = validator.required(
+        field.error_message || `${field.label || name} is required`
+      );
     }
 
     validationSchema[name] = validator;
@@ -594,7 +603,7 @@ export function flatFields(
 export function handlePersist(value: any, field: FormField, module_refid: string | undefined) {
 
   const persistentKey = getPersistentKey(field);
- 
+
   if (persistentKey && module_refid) {
     writePersistedValue(module_refid, persistentKey, value);
   }
@@ -629,7 +638,7 @@ type Row = Record<string, unknown>;
 
 export const normalizeRowSafe = (row: Row): Row => {
 
-   if (row == null || typeof row !== "object") {
+  if (row == null || typeof row !== "object") {
     return { value: row, title: row };
   }
   const result: Row = {};
