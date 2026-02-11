@@ -42,7 +42,7 @@ export default function LogiksForm({
         return;
       }
 
-      if (source.type === "method") {
+      if (source.type === "method" && sqlOpsUrls?.operation !== "create") {
         const methodName = source.method as keyof typeof methods | undefined;
         const methodFn = methodName ? methods[methodName] : undefined;
         if (methodFn) {

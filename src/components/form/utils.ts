@@ -198,16 +198,6 @@ export const intializeForm = (
     }
 
 
-
-    // ---------- Direct Regex ----------
-    if (field?.validate?.regex && typeof field.validate.regex === "string") {
-      validator = (validator as Yup.StringSchema).matches(
-        new RegExp(field?.validate?.regex),
-        field?.error_message || "Invalid input format"
-      );
-    }
-
-
     if (field?.validate) {
       Object.entries(field.validate).forEach(([rule, val]) => {
         switch (rule) {
@@ -225,7 +215,7 @@ export const intializeForm = (
           case "regex":
             validator = (validator as Yup.StringSchema).matches(
               new RegExp(val as string),
-              `Must match pattern: ${val}`
+              field?.error_message || `Must match pattern: ${val}`
             );
             break;
 

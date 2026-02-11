@@ -333,10 +333,7 @@ const It = (t, e, n, r, s, o) => {
       } catch {
         return !1;
       }
-    }) : l.type === "date" ? d = oe.string().nullable() : d = oe.string(), l?.validate?.regex && typeof l.validate.regex == "string" && (d = d.matches(
-      new RegExp(l?.validate?.regex),
-      l?.error_message || "Invalid input format"
-    )), l?.validate && Object.entries(l.validate).forEach(([f, h]) => {
+    }) : l.type === "date" ? d = oe.string().nullable() : d = oe.string(), l?.validate && Object.entries(l.validate).forEach(([f, h]) => {
       switch (f) {
         case "email":
           h && (d = d.email("Invalid email format"));
@@ -13849,7 +13846,7 @@ function th({
         y && f({});
         return;
       }
-      if (x.type === "method") {
+      if (x.type === "method" && a?.operation !== "create") {
         const v = x.method, C = v ? e[v] : void 0;
         if (C)
           try {
