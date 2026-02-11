@@ -12421,7 +12421,7 @@ function kt() {
   return /* @__PURE__ */ m.jsx("div", { className: "w-px h-5 bg-gray-300 mx-1" });
 }
 function Vf({ editor: t }) {
-  return /* @__PURE__ */ m.jsxs("div", { className: "flex items-center gap-1 px-2 py-1 border-b bg-gray-50", children: [
+  return /* @__PURE__ */ m.jsxs("div", { className: "flex items-center gap-1 px-2 py-1 border-b-gray-200 bg-gray-50", children: [
     /* @__PURE__ */ m.jsx(
       Z,
       {
@@ -12661,19 +12661,22 @@ function _f({
     "div",
     {
       className: `
-        w-full rounded-lg border transition-all duration-300
+        w-full rounded-lg border border-gray-200 transition-all duration-300
         backdrop-blur-sm text-gray-800
         ${n ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60" : "bg-white border-gray-300 hover:border-gray-400 focus-within:ring-1 focus-within:ring-indigo-500"}
       `,
       children: [
         !n && /* @__PURE__ */ m.jsx(Vf, { editor: r }),
-        /* @__PURE__ */ m.jsx(
-          Xi,
-          {
-            editor: r,
-            className: "tiptap max-w-none p-3 min-h-[200px] max-h-[220px] overflow-auto focus:outline-none"
-          }
-        )
+        /* @__PURE__ */ m.jsxs("div", { className: "resize-y overflow-auto min-h-[200px] max-h-[500px]", children: [
+          /* @__PURE__ */ m.jsx(
+            Xi,
+            {
+              editor: r,
+              className: "tiptap p-3 focus:outline-none min-h-[200px] "
+            }
+          ),
+          "      "
+        ] })
       ]
     }
   ) : null;

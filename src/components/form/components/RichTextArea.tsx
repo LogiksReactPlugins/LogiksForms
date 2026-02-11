@@ -24,13 +24,13 @@ export default function RichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-      link: {
-        openOnClick: false,
-        autolink: true,
-      },
-    }),
+        link: {
+          openOnClick: false,
+          autolink: true,
+        },
+      }),
       Underline,
-  
+
       Image,
       Table.configure({ resizable: true }),
       TableRow,
@@ -52,28 +52,28 @@ export default function RichTextEditor({
     },
   })
 
-   useEffect(() => {
-  if (!editor) return;
+  useEffect(() => {
+    if (!editor) return;
 
-  const current = editor.getHTML();
+    const current = editor.getHTML();
 
-if (value !== undefined && value !== current) {
-    editor.commands.setContent(value, {
-      emitUpdate: false,
-    });
-  }
-}, [value, editor]);
+    if (value !== undefined && value !== current) {
+      editor.commands.setContent(value, {
+        emitUpdate: false,
+      });
+    }
+  }, [value, editor]);
 
   if (!editor) return null;
 
- 
+
 
 
   return (
 
     <div
-   className={`
-        w-full rounded-lg border transition-all duration-300
+      className={`
+        w-full rounded-lg border border-gray-200 transition-all duration-300
         backdrop-blur-sm text-gray-800
         ${disabled
           ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60"
@@ -81,10 +81,12 @@ if (value !== undefined && value !== current) {
       `}
     >
       {!disabled && <RichTextToolbar editor={editor} />}
-      <EditorContent
-        editor={editor}
-        className="tiptap max-w-none p-3 min-h-[200px] max-h-[220px] overflow-auto focus:outline-none"
-      />
+      <div className="resize-y overflow-auto min-h-[200px] max-h-[500px]">
+        <EditorContent
+          editor={editor}
+          className="tiptap p-3 focus:outline-none min-h-[200px] "
+        />      </div>
+
     </div>
 
   )

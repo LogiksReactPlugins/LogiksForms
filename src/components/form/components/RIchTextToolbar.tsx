@@ -13,7 +13,7 @@ export default function RichTextToolbar({ editor }: { editor: Editor }) {
 
 
   return (
-    <div className="flex items-center gap-1 px-2 py-1 border-b bg-gray-50">
+    <div className="flex items-center gap-1 px-2 py-1 border-b-gray-200 bg-gray-50">
       <ToolbarButton
         title="Bold"
         icon="fa-solid fa-bold"
