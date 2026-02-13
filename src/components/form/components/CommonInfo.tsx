@@ -5,6 +5,7 @@ import FieldRenderer from './FieldRenderer.js';
 import type { CommonInfoProps } from '../Form.types.js';
 import PhotoRenderer from './PhotoRenderer.js';
 import PhotoAvatarRenderer from './PhotoAvatarRenderer.js';
+import { useMemo } from 'react';
 
 
 
@@ -21,30 +22,31 @@ export default function CommonInfo({
 
 }: CommonInfoProps) {
 
+    const avatarField = useMemo(
+        () => fields?.find((f) => f.type === "avatar"),
+        [fields]
+    );
+
+
     return (
         <div className="bg-white min-h-3/10 overflow-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Left Column - Avatar */}
-                <div className="lg:col-span-2 flex flex-col ">
-                    <div className="relative w-42 h-42 ">
-                        {
-                            fields?.filter(field => field.type === "avatar").map((field) => {
+                {avatarField && (
 
+                    <div className="lg:col-span-2 flex flex-col items-center">
+                        <div className="relative w-42 h-42 p-2 rounded-sm overflow-hidden bg-gray-100 flex items-center justify-center">
 
-                                return <PhotoAvatarRenderer
-                                    formik={formik}
-                                    field={field}
-                                    sqlOpsUrls={sqlOpsUrls}
-                                    module_refid={module_refid}
+                            <PhotoAvatarRenderer
+                                formik={formik}
+                                field={avatarField}
+                                sqlOpsUrls={sqlOpsUrls}
+                                module_refid={module_refid}
+                            />
 
-                                />
-
-                            })
-
-                        }
-
+                        </div>
                     </div>
-                </div>
+                )}
                 {/* Right Column - Details Grid */}
                 <div className="lg:col-span-10 min-h-0 max-h-40  overflow-y-auto custom-scrollbar">
 

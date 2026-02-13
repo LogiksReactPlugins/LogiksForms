@@ -43,7 +43,7 @@ export default function PhotoAvatarRenderer({
     };
     return (
         <div>
-            <label className="block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700">{field.label}</label>
+         
             <input
                 ref={inputRef}
                 type="file"
@@ -54,14 +54,16 @@ export default function PhotoAvatarRenderer({
 
             <div
                 onClick={() => inputRef.current?.click()}
-               
+
             >
                 {formik.values[key] ? (
                     <PhotoRenderer field_name={key} filePath={formik.values[key]} sqlOpsUrls={sqlOpsUrls} />
                 ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400">
-                        <i className="fa-solid fa-user" />
-                    </div>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/266/266033.png"
+                        alt="avatar placeholder"
+                        className="w-full h-full object-cover opacity-60"
+                    />
                 )}
             </div>
         </div>
