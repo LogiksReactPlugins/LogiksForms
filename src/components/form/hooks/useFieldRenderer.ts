@@ -406,9 +406,17 @@ export default function useFieldRenderer({
         const ac = field.autocomplete;          // always single
         const aj = field.ajaxchain;             // single | array | undefined
 
+        console.log("ac",ac);
+        console.log("aj",aj);
+        
+        
+
         if (!ac && !aj) return;
 
         const value = formik.values[field.name];
+
+        console.log("value",value);
+        
         if (!value) return;
 
         const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
@@ -420,18 +428,25 @@ export default function useFieldRenderer({
                     const src = ac.src;
                     if (!src || !sqlOpsUrls) return;
 
-                    const resolvedWhere = replacePlaceholders(src.where ?? {}, {
-                        refid: value,
-                    });
+                    let query: sqlQueryProps | undefined;
 
-                    const query = {
-                        ...src,
-                        table: src.table,
-                        cols: src.columns,
-                        where: resolvedWhere,
-                    };
+                    if (!src.queryid) {
+                        if (!src.table || !src.columns) {
+                            throw new Error("SQL query requires field.table");
+                        }
+                        const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                            refid: value,
+                        });
+                        query = {
+                            ...src,
+                            table: src.table,
+                            cols: src.columns,
+                            where: resolvedWhere,
+                        };
+                    }
 
-                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
+               
+                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, undefined, module_refid);
 
                     const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
 
