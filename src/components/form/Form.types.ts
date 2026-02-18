@@ -60,6 +60,8 @@ export interface FormField {
     method?: string;
     vmode?: string;
     "no-option"?: string;
+    "nodb"?:boolean;
+    "nosave"?:boolean;
     queryid?: string;
     min?: number | string;
     max?: number | string;

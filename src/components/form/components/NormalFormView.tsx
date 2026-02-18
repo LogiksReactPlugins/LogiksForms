@@ -92,15 +92,17 @@ export default function NormalFormView({
               />
             )}
             <div className='grid grid-cols-12 gap-4'>
-              {otherFields.map((field, index) => {
-                if (isHidden(field.hidden) || field.type === "geolocation") {
-                  return null;
-                }
+              {otherFields.map((field) => {
+                const hidden = isHidden(field.hidden) || field.type === "geolocation";
 
                 return <div
-                  key={field?.name ?? `field-${index}`}
-                  className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
-                    }`}
+                  key={field?.name}
+                  id={`wrapper-${field.name}`}
+                  className={`
+                    col-span-12 md:col-span-6 
+                    ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"} 
+                    ${hidden ? "hidden" : ""}
+                    `}
                 >
                   <FieldRenderer
                     refid={refid}

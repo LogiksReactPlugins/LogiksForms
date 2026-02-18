@@ -82,13 +82,13 @@ export default function AccordionFormView({
               <Accordion key={group} title={group} isFirst={index === 0 && commonFields.length === 0}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
-                    if (isHidden(field.hidden) || field.type === "geolocation") {
-                      return null;
-                    }
+                    const hidden = isHidden(field.hidden) || field.type === "geolocation";
                     return <div
+                      id={`wrapper-${field.name}`}
                       key={field?.name ?? `field-${index}`}
-                      className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
-                        }`}
+                      className={`col-span-12 md:col-span-6 ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
+                        ${hidden ? "hidden" : ""}
+                        `}
                     >
                       <FieldRenderer
                         refid={refid}

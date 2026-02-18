@@ -43,7 +43,7 @@ export default function PhotoAvatarRenderer({
     };
     return (
         <div>
-         
+
             <input
                 ref={inputRef}
                 type="file"
@@ -54,6 +54,7 @@ export default function PhotoAvatarRenderer({
 
             <div
                 onClick={() => inputRef.current?.click()}
+                className='relative w-42 h-42 p-2 rounded-sm '
 
             >
                 {formik.values[key] ? (

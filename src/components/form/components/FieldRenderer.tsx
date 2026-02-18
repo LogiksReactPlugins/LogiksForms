@@ -388,6 +388,10 @@ export default function FieldRenderer({
               <option value="" disabled>
                 {field?.["no-option"] || `Please select ${field.label}`}
               </option>
+
+              <option value="">
+                Clear Selection
+              </option>
               {!isGroupedOptions(options) &&
                 Object.entries(options).map(([val, label]) => (
                   <option key={val} value={val} className="py-2">
@@ -659,7 +663,7 @@ export default function FieldRenderer({
               onChange={(e) => {
                 const files = e.currentTarget.files;
                 if (files) handleFileUpload(files);
-                executeFieldMethod("onChange", field, `${key}`)
+                executeFieldMethod("onChange", field, key)
               }}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder}
