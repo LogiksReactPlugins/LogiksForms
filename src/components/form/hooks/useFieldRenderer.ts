@@ -79,8 +79,12 @@ export default function useFieldRenderer({
         const fetchData = async () => {
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
+            let opts = field?.options;
 
-            if (field?.options) {
+            if (opts && (
+                (Array.isArray(opts) && opts.length > 0) ||
+                (!Array.isArray(opts) && Object.keys(opts).length > 0)
+            )) {
 
                 //  CASE 1: flat or grouped object
                 // { "1": "WEL" } OR { quarter1: { "1": "January" } }
@@ -124,7 +128,7 @@ export default function useFieldRenderer({
                         const res = await methodFn();
                         const rawItems = Array.isArray(res?.data?.data)
                             ? res.data.data
-                            : Array.isArray(res?.data)
+                            : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
                                 ? res.data
                                 : res;
 
@@ -176,7 +180,7 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
-                        : Array.isArray(res?.data)
+                        : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
                             ? res.data
                             : res;
 
@@ -251,7 +255,7 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
-                        : Array.isArray(res?.data)
+                        : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
                             ? res.data
                             : res;
 
@@ -446,7 +450,13 @@ export default function useFieldRenderer({
                         }
 
                         const { data: res } = await axios(config);
-                        row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+                        row =  Array.isArray(res?.data?.data)
+                            ? res.data.data[0]
+                            : Array.isArray(res?.data?.results)
+                                ? res.data.results[0]
+                                : Array.isArray(res?.data)
+                                    ? res.data[0]
+                                    : res?.data;
                     } else {
 
                         let query: sqlQueryProps | undefined;
@@ -469,7 +479,13 @@ export default function useFieldRenderer({
 
                         const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, undefined, module_refid);
 
-                        row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+                        row = Array.isArray(res?.data?.data)
+                            ? res.data.data[0]
+                            : Array.isArray(res?.data?.results)
+                                ? res.data.results[0]
+                                : Array.isArray(res?.data)
+                                    ? res.data[0]
+                                    : res?.data;
                     }
 
                     if (row) {
@@ -538,7 +554,7 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(responseData?.data?.data)
                         ? responseData.data.data
-                        : Array.isArray(responseData?.data)
+                        : Array.isArray(responseData.data.results) ? responseData.data.results : Array.isArray(responseData?.data)
                             ? responseData.data
                             : responseData;
 

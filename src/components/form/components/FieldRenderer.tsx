@@ -803,7 +803,7 @@ export default function FieldRenderer({
               step={field.step}
               placeholder={field.placeholder}
               disabled={isDisabled}
-              min={field.min ?? 1}
+              min={field.min }
               max={field.max}
             />
             {/* Animated border glow */}
