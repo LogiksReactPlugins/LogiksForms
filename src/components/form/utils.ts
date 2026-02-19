@@ -237,7 +237,7 @@ export const intializeForm = (
                 }
               );
             break;
-            
+
 
           case "time":
             validator = (validator as Yup.StringSchema).matches(
@@ -611,7 +611,8 @@ export function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig {
     typeof src === "object" &&
     src !== null &&
     (
-      typeof src.queryid === "string" || 
+      src.type === "api" ||
+      typeof src.queryid === "string" ||
       (typeof src.table === "string" && typeof src.columns !== "undefined")
     )
   );

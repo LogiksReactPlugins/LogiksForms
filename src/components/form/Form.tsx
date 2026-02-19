@@ -60,13 +60,21 @@ export default function LogiksForm({
 
       if (source.type === "api" && sqlOpsUrls?.operation !== "create") {
         try {
-          const response = await axios({
+
+          const config = {
             method: source.method || "GET",
-            url: source.url ?? "",
-            data: source.body ?? {},
-            params: source.params ?? {},
-            headers: source.headers ?? {},
-          });
+            url: sqlOpsUrls?.baseURL + source.endpoint,
+
+            headers: {
+              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            },
+            ...(source.method === "GET"
+              ? { params: { refid: source.refid } }
+              : { data: { refid: source.refid } }),
+          }
+
+
+          const response = await axios(config);
           if (isMounted) setResolvedData(response.data ?? {});
         } catch (err) {
           console.error("API fetch failed:", err);

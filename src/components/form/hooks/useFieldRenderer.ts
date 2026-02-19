@@ -156,15 +156,22 @@ export default function useFieldRenderer({
             }
 
             // Case 2: API source
-            if (source.type === "api" && source.url) {
+            if (source.type === "api" && source.endpoint) {
                 try {
-                    const res = await axios({
+                    const config = {
                         method: source.method || "GET",
-                        url: source.url,
-                        data: source.body ?? {},
-                        params: source.params ?? {},
-                        headers: source.headers ?? {},
-                    });
+                        url: sqlOpsUrls?.baseURL + source.endpoint,
+
+                        headers: {
+                            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                        },
+                        ...(source.method === "GET"
+                            ? { params: { refid: source.refid } }
+                            : { data: { refid: source.refid } }),
+                    }
+
+
+                    const res = await axios(config);
 
 
                     const rawItems = Array.isArray(res?.data?.data)
@@ -317,7 +324,7 @@ export default function useFieldRenderer({
         () => flattenOptions(options),
         [options]
     );
-  
+
     const exactMatch = useMemo(() => {
 
         if (!field.type) return null
@@ -406,17 +413,12 @@ export default function useFieldRenderer({
         const ac = field.autocomplete;          // always single
         const aj = field.ajaxchain;             // single | array | undefined
 
-        console.log("ac",ac);
-        console.log("aj",aj);
-        
-        
-
         if (!ac && !aj) return;
 
         const value = formik.values[field.name];
 
-        console.log("value",value);
-        
+        console.log("value", value);
+
         if (!value) return;
 
         const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
@@ -428,27 +430,47 @@ export default function useFieldRenderer({
                     const src = ac.src;
                     if (!src || !sqlOpsUrls) return;
 
-                    let query: sqlQueryProps | undefined;
+                    let row: any;
 
-                    if (!src.queryid) {
-                        if (!src.table || !src.columns) {
-                            throw new Error("SQL query requires field.table");
+                    if ("type" in src && src.type === "api") {
+                        const config = {
+                            method: src.method || "GET",
+                            url: sqlOpsUrls?.baseURL + src.endpoint,
+
+                            headers: {
+                                "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                            },
+                            ...(src.method === "GET"
+                                ? { params: { refid: value } }
+                                : { data: { refid: value } }),
                         }
-                        const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
-                            refid: value,
-                        });
-                        query = {
-                            ...src,
-                            table: src.table,
-                            cols: src.columns,
-                            where: resolvedWhere,
-                        };
+
+                        const { data: res } = await axios(config);
+                        row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+                    } else {
+
+                        let query: sqlQueryProps | undefined;
+
+                        if (!src.queryid) {
+                            if (!src.table || !src.columns) {
+                                throw new Error("SQL query requires field.table");
+                            }
+                            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                                refid: value,
+                            });
+                            query = {
+                                ...src,
+                                table: src.table,
+                                cols: src.columns,
+                                where: resolvedWhere,
+                            };
+                        }
+
+
+                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, undefined, module_refid);
+
+                        row = Array.isArray(res?.data) ? res.data[0] : res?.data;
                     }
-
-               
-                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, undefined, module_refid);
-
-                    const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
 
                     if (row) {
                         ac.target
@@ -469,34 +491,56 @@ export default function useFieldRenderer({
                     if (!src || typeof src !== "object") continue;
                     if (!sqlOpsUrls) continue;
 
-                    let query: sqlQueryProps | undefined;
+                    let responseData: any;
 
-                    if (!src.queryid) {
-                        if (!src.table || !src.columns) {
-                            throw new Error("SQL query requires field.table");
+                    if ("type" in src && src.type === "api") {
+                        const config = {
+                            method: src.method || "GET",
+                            url: sqlOpsUrls?.baseURL + src.endpoint,
+
+                            headers: {
+                                "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                            },
+                            ...(src.method === "GET"
+                                ? { params: { refid: value } }
+                                : { data: { refid: value } }),
                         }
-                        const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
-                            refid: value,
-                        });
-                        query = {
-                            ...src,
-                            table: src.table,
-                            cols: src.columns,
-                            where: resolvedWhere,
-                        };
+
+
+                        const { data: res } = await axios(config);
+                        responseData = res;
+                    } else {
+
+                        let query: sqlQueryProps | undefined;
+
+                        if (!src.queryid) {
+                            if (!src.table || !src.columns) {
+                                throw new Error("SQL query requires field.table");
+                            }
+                            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                                refid: value,
+                            });
+                            query = {
+                                ...src,
+                                table: src.table,
+                                cols: src.columns,
+                                where: resolvedWhere,
+                            };
+                        }
+
+
+                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+                        responseData = res;
                     }
-
-
-                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
 
                     let valueKey = field.valueKey ?? "value";
                     let labelKey = field.labelKey ?? "title";
 
-                    const rawItems = Array.isArray(res?.data?.data)
-                        ? res.data.data
-                        : Array.isArray(res?.data)
-                            ? res.data
-                            : res;
+                    const rawItems = Array.isArray(responseData?.data?.data)
+                        ? responseData.data.data
+                        : Array.isArray(responseData?.data)
+                            ? responseData.data
+                            : responseData;
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
