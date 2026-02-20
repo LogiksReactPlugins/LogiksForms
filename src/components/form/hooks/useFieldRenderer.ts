@@ -128,9 +128,10 @@ export default function useFieldRenderer({
                         const res = await methodFn();
                         const rawItems = Array.isArray(res?.data?.data)
                             ? res.data.data
-                            : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
-                                ? res.data
-                                : res;
+                            : Array.isArray(res.data.results)
+                                ? res.data.results : Array.isArray(res?.data)
+                                    ? res.data
+                                    : res;
 
                         if (
                             typeof rawItems === "object" &&
@@ -180,9 +181,10 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
-                        : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
-                            ? res.data
-                            : res;
+                        : Array.isArray(res.data.results)
+                            ? res.data.results : Array.isArray(res?.data)
+                                ? res.data
+                                : res;
 
                     if (
                         typeof rawItems === "object" &&
@@ -255,7 +257,7 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(res?.data?.data)
                         ? res.data.data
-                        : Array.isArray(res.data.results) ? res.data.results : Array.isArray(res?.data)
+                        : Array.isArray(res?.data)
                             ? res.data
                             : res;
 
@@ -450,7 +452,7 @@ export default function useFieldRenderer({
                         }
 
                         const { data: res } = await axios(config);
-                        row =  Array.isArray(res?.data?.data)
+                        row = Array.isArray(res?.data?.data)
                             ? res.data.data[0]
                             : Array.isArray(res?.data?.results)
                                 ? res.data.results[0]
@@ -481,11 +483,9 @@ export default function useFieldRenderer({
 
                         row = Array.isArray(res?.data?.data)
                             ? res.data.data[0]
-                            : Array.isArray(res?.data?.results)
-                                ? res.data.results[0]
-                                : Array.isArray(res?.data)
-                                    ? res.data[0]
-                                    : res?.data;
+                            : Array.isArray(res?.data)
+                                ? res.data[0]
+                                : res?.data;
                     }
 
                     if (row) {
@@ -554,9 +554,11 @@ export default function useFieldRenderer({
 
                     const rawItems = Array.isArray(responseData?.data?.data)
                         ? responseData.data.data
-                        : Array.isArray(responseData.data.results) ? responseData.data.results : Array.isArray(responseData?.data)
-                            ? responseData.data
-                            : responseData;
+                        : Array.isArray(responseData.data.results)
+                            ? responseData.data.results
+                            : Array.isArray(responseData?.data)
+                                ? responseData.data
+                                : responseData;
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)

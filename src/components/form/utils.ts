@@ -117,18 +117,16 @@ export const intializeForm = (
     // ---------- Initial Values (NORMALIZED) ----------
 
 
-    if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+    if (field.multiple === true || field.type === "tags") {
       initialValues[name] =
         Array.isArray(value)
           ? value
           : typeof value === "string"
             ? value.split(",").map(v => v.trim()).filter(Boolean)
             : [];
-    }
-
-
-
-    else if (field.type === "json") {
+    } else if (field.type === "checkbox") {
+      initialValues[name] = value === "true";
+    } else if (field.type === "json") {
       initialValues[name] =
         typeof value === "object" && value !== null
           ? JSON.stringify(value, null, 2)

@@ -473,7 +473,8 @@ export default function FieldRenderer({
       )
 
     case "checkbox": {
-      const valueArray: string[] = formik.values[key];
+      const isMultiple = field.multiple === true;
+      const value = formik.values[key];
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -482,22 +483,33 @@ export default function FieldRenderer({
           </label>
 
           <div className="flex flex-col gap-2 ml-1">
-            {Object.entries(options || {}).map(([val, label]) => (
-              <label
+            {Object.entries(options || {}).map(([val, label]) => {
+              const checked = isMultiple
+                ? Array.isArray(value) && value.includes(val)
+                : Boolean(value);
+              return <label
                 key={val}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
                   id={`${key}-${val}`}
                   type="checkbox"
-                  checked={valueArray.includes(val)}
+                  checked={checked}
                   onChange={(e) => {
-                    const next = e.target.checked
-                      ? [...valueArray, val]
-                      : valueArray.filter((v) => v !== val);
+                    let nextValue;
 
-                    formik.setFieldValue(key, next);
-                    handlePersist(next, field, module_refid)
+                    if (isMultiple) {
+                      const current = Array.isArray(value) ? value : [];
+                      nextValue = e.target.checked
+                        ? [...current, val]
+                        : current.filter(v => v !== val);
+                    } else {
+                      nextValue = e.target.checked;
+                    }
+
+
+                    formik.setFieldValue(key, nextValue);
+                    handlePersist(nextValue, field, module_refid)
                     executeFieldMethod("onChange", field, `${key}-${val}`)
                   }}
                   onBlur={formik.handleBlur}
@@ -508,7 +520,7 @@ export default function FieldRenderer({
                 />
                 {label}
               </label>
-            ))}
+            })}
           </div>
 
           {formik.touched[key] && formik.errors[key] && (
@@ -803,7 +815,7 @@ export default function FieldRenderer({
               step={field.step}
               placeholder={field.placeholder}
               disabled={isDisabled}
-              min={field.min }
+              min={field.min}
               max={field.max}
             />
             {/* Animated border glow */}
