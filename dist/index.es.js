@@ -324,7 +324,7 @@ const It = (t, e, n, r, s, o) => {
     if (!a) return;
     let c = r?.[a];
     const u = o === "create" && s ? Qs(l) : null;
-    o === "create" && u && i[u] !== void 0 && c == null && (c = i[u]), c == null && (c = l.default), l.multiple === !0 || l.type === "tags" ? e[a] = Array.isArray(c) ? c : typeof c == "string" ? c.split(",").map((f) => f.trim()).filter(Boolean) : [] : l.type === "checkbox" ? e[a] = c === "true" : l.type === "json" ? e[a] = typeof c == "object" && c !== null ? JSON.stringify(c, null, 2) : c ?? "" : l.type === "date" ? e[a] = typeof c == "string" && c.trim() ? c.slice(0, 10) : null : l.type === "time" ? typeof c == "string" ? c.includes("T") ? e[a] = c.slice(11, 16) : e[a] = c.slice(0, 5) : e[a] = "" : a === "blocked" || a === "blacklist" ? e[a] = String(c ?? "false") : e[a] = c ?? "";
+    o === "create" && u && i[u] !== void 0 && c == null && (c = i[u]), c == null && (c = l.default), l.multiple === !0 || l.type === "tags" ? e[a] = Array.isArray(c) ? c : typeof c == "string" ? c.split(",").map((f) => f.trim()).filter(Boolean) : [] : l.type === "checkbox" ? e[a] = String(c ?? "false") : l.type === "json" ? e[a] = typeof c == "object" && c !== null ? JSON.stringify(c, null, 2) : c ?? "" : l.type === "date" ? e[a] = typeof c == "string" && c.trim() ? c.slice(0, 10) : null : l.type === "time" ? typeof c == "string" ? c.includes("T") ? e[a] = c.slice(11, 16) : e[a] = c.slice(0, 5) : e[a] = "" : a === "blocked" || a === "blacklist" ? e[a] = String(c ?? "false") : e[a] = c ?? "";
     let d;
     l.type === "file" ? d = l.multiple ? le.array().of(le.mixed()) : le.mixed() : l.multiple === !0 || l.type === "tags" ? d = le.array().of(le.string()) : l.type === "email" ? d = le.string().email("Invalid email") : l.type === "number" ? d = le.number().typeError("Must be a number") : l.type === "json" ? d = le.string().test("json", "Invalid JSON", (f) => {
       if (!f) return !0;
@@ -13106,7 +13106,7 @@ function Jt({
           t.required && /* @__PURE__ */ m.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ m.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(_ || {}).map(([M, z]) => {
-          const H = S ? Array.isArray(N) && N.includes(M) : !!N;
+          const H = S ? Array.isArray(N) && N.includes(M) : N === M;
           return /* @__PURE__ */ m.jsxs(
             "label",
             {
@@ -13124,7 +13124,7 @@ function Jt({
                         const R = Array.isArray(N) ? N : [];
                         I = Y.target.checked ? [...R, M] : R.filter((O) => O !== M);
                       } else
-                        I = Y.target.checked;
+                        I = Y.target.checked ? M : "false";
                       e.setFieldValue(w, I), x(I, t, o), c("onChange", t, `${w}-${M}`);
                     },
                     onBlur: e.handleBlur,

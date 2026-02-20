@@ -125,7 +125,7 @@ export const intializeForm = (
             ? value.split(",").map(v => v.trim()).filter(Boolean)
             : [];
     } else if (field.type === "checkbox") {
-      initialValues[name] = value === "true";
+      initialValues[name] = String(value ?? "false");
     } else if (field.type === "json") {
       initialValues[name] =
         typeof value === "object" && value !== null

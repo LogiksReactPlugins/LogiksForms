@@ -486,7 +486,7 @@ export default function FieldRenderer({
             {Object.entries(options || {}).map(([val, label]) => {
               const checked = isMultiple
                 ? Array.isArray(value) && value.includes(val)
-                : Boolean(value);
+                : value === val;
               return <label
                 key={val}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
@@ -504,7 +504,7 @@ export default function FieldRenderer({
                         ? [...current, val]
                         : current.filter(v => v !== val);
                     } else {
-                      nextValue = e.target.checked;
+                      nextValue = e.target.checked ? val : "false";
                     }
 
 
