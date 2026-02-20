@@ -169,7 +169,7 @@ export const intializeForm = (
         : Yup.mixed<File>();
     }
 
-    else if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+    else if (field.multiple === true || field.type === "tags") {
       validator = Yup.array().of(Yup.string());
     }
     else if (field.type === "email") {

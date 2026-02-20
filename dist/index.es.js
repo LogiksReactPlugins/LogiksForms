@@ -326,7 +326,7 @@ const It = (t, e, n, r, s, o) => {
     const u = o === "create" && s ? Qs(l) : null;
     o === "create" && u && i[u] !== void 0 && c == null && (c = i[u]), c == null && (c = l.default), l.multiple === !0 || l.type === "tags" ? e[a] = Array.isArray(c) ? c : typeof c == "string" ? c.split(",").map((f) => f.trim()).filter(Boolean) : [] : l.type === "checkbox" ? e[a] = c === "true" : l.type === "json" ? e[a] = typeof c == "object" && c !== null ? JSON.stringify(c, null, 2) : c ?? "" : l.type === "date" ? e[a] = typeof c == "string" && c.trim() ? c.slice(0, 10) : null : l.type === "time" ? typeof c == "string" ? c.includes("T") ? e[a] = c.slice(11, 16) : e[a] = c.slice(0, 5) : e[a] = "" : a === "blocked" || a === "blacklist" ? e[a] = String(c ?? "false") : e[a] = c ?? "";
     let d;
-    l.type === "file" ? d = l.multiple ? le.array().of(le.mixed()) : le.mixed() : l.multiple === !0 || l.type === "checkbox" || l.type === "tags" ? d = le.array().of(le.string()) : l.type === "email" ? d = le.string().email("Invalid email") : l.type === "number" ? d = le.number().typeError("Must be a number") : l.type === "json" ? d = le.string().test("json", "Invalid JSON", (f) => {
+    l.type === "file" ? d = l.multiple ? le.array().of(le.mixed()) : le.mixed() : l.multiple === !0 || l.type === "tags" ? d = le.array().of(le.string()) : l.type === "email" ? d = le.string().email("Invalid email") : l.type === "number" ? d = le.number().typeError("Must be a number") : l.type === "json" ? d = le.string().test("json", "Invalid JSON", (f) => {
       if (!f) return !0;
       try {
         return JSON.parse(f), !0;
