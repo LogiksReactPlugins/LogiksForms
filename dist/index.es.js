@@ -155,13 +155,13 @@ function tl() {
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
       )), A = this.props.ref, A !== void 0 ? A : null;
     }
-    function c(A, S, N, M, z, H, Y, I) {
+    function c(A, S, N, M, O, H, Y, I) {
       return N = H.ref, A = {
         $$typeof: h,
         type: A,
         key: S,
         props: H,
-        _owner: z
+        _owner: O
       }, (N !== void 0 ? N : null) !== null ? Object.defineProperty(A, "ref", {
         enumerable: !1,
         get: a
@@ -187,7 +187,7 @@ function tl() {
         value: I
       }), Object.freeze && (Object.freeze(A.props), Object.freeze(A)), A;
     }
-    function u(A, S, N, M, z, H, Y, I) {
+    function u(A, S, N, M, O, H, Y, I) {
       var R = S.children;
       if (R !== void 0)
         if (M)
@@ -202,10 +202,10 @@ function tl() {
         else d(R);
       if (V.call(S, "key")) {
         R = t(A);
-        var O = Object.keys(S).filter(function(X) {
+        var z = Object.keys(S).filter(function(X) {
           return X !== "key";
         });
-        M = 0 < O.length ? "{key: someKey, " + O.join(": ..., ") + ": ...}" : "{key: someKey}", $e[R + M] || (O = 0 < O.length ? "{" + O.join(": ..., ") + ": ...}" : "{}", console.error(
+        M = 0 < z.length ? "{key: someKey, " + z.join(": ..., ") + ": ...}" : "{key: someKey}", $e[R + M] || (z = 0 < z.length ? "{" + z.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
@@ -214,7 +214,7 @@ React keys must be passed directly to JSX without using spread:
   <%s key={someKey} {...props} />`,
           M,
           R,
-          O,
+          z,
           R
         ), $e[R + M] = !0);
       }
@@ -230,7 +230,7 @@ React keys must be passed directly to JSX without using spread:
         A,
         R,
         H,
-        z,
+        O,
         s(),
         N,
         Y,
@@ -252,7 +252,7 @@ React keys must be passed directly to JSX without using spread:
       f,
       o
     )(), ze = J(r(o)), $e = {};
-    St.Fragment = g, St.jsx = function(A, S, N, M, z) {
+    St.Fragment = g, St.jsx = function(A, S, N, M, O) {
       var H = 1e4 > w.recentlyCreatedOwnerStacks++;
       return u(
         A,
@@ -260,11 +260,11 @@ React keys must be passed directly to JSX without using spread:
         N,
         !1,
         M,
-        z,
+        O,
         H ? Error("react-stack-top-frame") : Oe,
         H ? J(r(A)) : ze
       );
-    }, St.jsxs = function(A, S, N, M, z) {
+    }, St.jsxs = function(A, S, N, M, O) {
       var H = 1e4 > w.recentlyCreatedOwnerStacks++;
       return u(
         A,
@@ -272,7 +272,7 @@ React keys must be passed directly to JSX without using spread:
         N,
         !0,
         M,
-        z,
+        O,
         H ? Error("react-stack-top-frame") : Oe,
         H ? J(r(A)) : ze
       );
@@ -748,7 +748,7 @@ function wl({
   ve(() => {
     let N = !0;
     return (async () => {
-      let z = t.valueKey ?? "value", H = t.labelKey ?? "title", Y = t?.options;
+      let O = t.valueKey ?? "value", H = t.labelKey ?? "title", Y = t?.options;
       if (Y && (Array.isArray(Y) && Y.length > 0 || !Array.isArray(Y) && Object.keys(Y).length > 0)) {
         if (typeof t.options == "object" && !Array.isArray(t.options)) {
           const X = Object.values(t.options);
@@ -757,10 +757,10 @@ function wl({
             return;
           }
         }
-        const O = (Array.isArray(t.options) ? t.options : [t.options]).map(ut), D = ct(
-          z,
-          H,
+        const z = (Array.isArray(t.options) ? t.options : [t.options]).map(ut), D = ct(
           O,
+          H,
+          z,
           t.groupKey
           // auto-uses `category` if present
         );
@@ -769,10 +769,10 @@ function wl({
       }
       const I = t?.source ?? {};
       if (t.type === "dataMethod") {
-        const R = t.method, O = R ? n[R] : void 0;
-        if (O)
+        const R = t.method, z = R ? n[R] : void 0;
+        if (z)
           try {
-            const D = await O(), X = Array.isArray(D?.data?.data) ? D.data.data : Array.isArray(D.data.results) ? D.data.results : Array.isArray(D?.data) ? D.data : D;
+            const D = await z(), X = Array.isArray(D?.data?.data) ? D.data.data : Array.isArray(D.data.results) ? D.data.results : Array.isArray(D?.data) ? D.data : D;
             if (typeof X == "object" && !Array.isArray(X)) {
               const Ut = Object.values(X);
               if (Ut.length && typeof Ut[0] == "string") {
@@ -780,7 +780,7 @@ function wl({
                 return;
               }
             }
-            const Ee = Array.isArray(X) ? X.map(ut) : [], pe = ct(z, H, Ee, t.groupKey);
+            const Ee = Array.isArray(X) ? X.map(ut) : [], pe = ct(O, H, Ee, t.groupKey);
             N && d(pe);
           } catch (D) {
             console.error("Method execution failed:", D), N && d({});
@@ -797,7 +797,7 @@ function wl({
               Authorization: `Bearer ${r?.accessToken}`
             },
             ...I.method === "GET" ? { params: { refid: I.refid } } : { data: { refid: I.refid } }
-          }, O = await ne(R), D = Array.isArray(O?.data?.data) ? O.data.data : Array.isArray(O.data.results) ? O.data.results : Array.isArray(O?.data) ? O.data : O;
+          }, z = await ne(R), D = Array.isArray(z?.data?.data) ? z.data.data : Array.isArray(z.data.results) ? z.data.results : Array.isArray(z?.data) ? z.data : z;
           if (typeof D == "object" && !Array.isArray(D)) {
             const pe = Object.values(D);
             if (pe.length && typeof pe[0] == "string") {
@@ -805,7 +805,7 @@ function wl({
               return;
             }
           }
-          const X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(z, H, X, t.groupKey);
+          const X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(O, H, X, t.groupKey);
           N && d(Ee);
         } catch (R) {
           console.error("API execution failed:", R), N && d({});
@@ -836,7 +836,7 @@ function wl({
               where: t.where ? s ? Pe(t.where, { refid: s }) : t.where : void 0
             };
           }
-          const O = await Xt(r, R, t?.queryid, void 0, o), D = Array.isArray(O?.data?.data) ? O.data.data : Array.isArray(O?.data) ? O.data : O;
+          const z = await Xt(r, R, t?.queryid, void 0, o), D = Array.isArray(z?.data?.data) ? z.data.data : Array.isArray(z?.data) ? z.data : z;
           if (typeof D == "object" && !Array.isArray(D)) {
             const pe = Object.values(D);
             if (pe.length && typeof pe[0] == "string") {
@@ -844,7 +844,7 @@ function wl({
               return;
             }
           }
-          const X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(z, H, X, t.groupKey);
+          const X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(O, H, X, t.groupKey);
           N && d(Ee);
         } catch (R) {
           console.error("API fetch failed:", R);
@@ -889,17 +889,17 @@ function wl({
     if (x.current?.open === !0 || v === !0)
       if (N.key === "ArrowDown")
         N.preventDefault(), y(
-          (z) => z + 1 < K.length ? z + 1 : 0
+          (O) => O + 1 < K.length ? O + 1 : 0
         );
       else if (N.key === "ArrowUp")
         N.preventDefault(), y(
-          (z) => z - 1 >= 0 ? z - 1 : K.length - 1
+          (O) => O - 1 >= 0 ? O - 1 : K.length - 1
         );
       else if (N.key === "Enter") {
         N.preventDefault();
-        const [z] = K[g] || [];
-        if (z) {
-          let H = M ? z : [...e.values[t.name], z];
+        const [O] = K[g] || [];
+        if (O) {
+          let H = M ? O : [...e.values[t.name], O];
           e.setFieldValue(t.name, H), Nt(H, t, o);
         }
         x.current && (x.current.open = !1);
@@ -914,8 +914,8 @@ function wl({
   }, [K, g]), ve(() => {
     const N = t.autocomplete, M = t.ajaxchain;
     if (!N && !M) return;
-    const z = e.values[t.name];
-    if (console.log("value", z), !z) return;
+    const O = e.values[t.name];
+    if (console.log("value", O), !O) return;
     const H = Array.isArray(M) ? M : M ? [M] : [];
     (async () => {
       try {
@@ -924,41 +924,41 @@ function wl({
           if (!I || !r) return;
           let R;
           if ("type" in I && I.type === "api") {
-            const O = {
+            const z = {
               method: I.method || "GET",
               url: r?.baseURL + I.endpoint,
               headers: {
                 Authorization: `Bearer ${r?.accessToken}`
               },
-              ...I.method === "GET" ? { params: { refid: z } } : { data: { refid: z } }
-            }, { data: D } = await ne(O);
+              ...I.method === "GET" ? { params: { refid: O } } : { data: { refid: O } }
+            }, { data: D } = await ne(z);
             R = Array.isArray(D?.data?.data) ? D.data.data[0] : Array.isArray(D?.data?.results) ? D.data.results[0] : Array.isArray(D?.data) ? D.data[0] : D?.data;
           } else {
-            let O;
+            let z;
             if (!I.queryid) {
               if (!I.table || !I.columns)
                 throw new Error("SQL query requires field.table");
               const X = Pe(I?.where ?? {}, {
-                refid: z
+                refid: O
               });
-              O = {
+              z = {
                 ...I,
                 table: I.table,
                 cols: I.columns,
                 where: X
               };
             }
-            const { data: D } = await Xt(r, O, I?.queryid, void 0, o);
+            const { data: D } = await Xt(r, z, I?.queryid, O, o);
             R = Array.isArray(D?.data?.data) ? D.data.data[0] : Array.isArray(D?.data) ? D.data[0] : D?.data;
           }
-          R && N.target.split(",").map((O) => O.trim()).forEach((O) => {
-            R[O] !== void 0 && e.setFieldValue(O, R[O]);
+          R && N.target.split(",").map((z) => z.trim()).forEach((z) => {
+            R[z] !== void 0 && e.setFieldValue(z, R[z]);
           });
         }
         for (const I of H) {
           const R = I.src;
           if (!I || typeof I != "object" || !R || typeof R != "object" || !r) continue;
-          let O;
+          let z;
           if ("type" in R && R.type === "api") {
             const Gt = {
               method: R.method || "GET",
@@ -966,16 +966,16 @@ function wl({
               headers: {
                 Authorization: `Bearer ${r?.accessToken}`
               },
-              ...R.method === "GET" ? { params: { refid: z } } : { data: { refid: z } }
+              ...R.method === "GET" ? { params: { refid: O } } : { data: { refid: O } }
             }, { data: Fn } = await ne(Gt);
-            O = Fn;
+            z = Fn;
           } else {
             let Gt;
             if (!R.queryid) {
               if (!R.table || !R.columns)
                 throw new Error("SQL query requires field.table");
               const Yi = Pe(R?.where ?? {}, {
-                refid: z
+                refid: O
               });
               Gt = {
                 ...R,
@@ -984,11 +984,11 @@ function wl({
                 where: Yi
               };
             }
-            const { data: Fn } = await Xt(r, Gt, R?.queryid, z, o);
-            O = Fn;
+            const { data: Fn } = await Xt(r, Gt, R?.queryid, O, o);
+            z = Fn;
           }
           let D = t.valueKey ?? "value", X = t.labelKey ?? "title";
-          const Ee = Array.isArray(O?.data?.data) ? O.data.data : Array.isArray(O.data.results) ? O.data.results : Array.isArray(O?.data) ? O.data : O, pe = Array.isArray(Ee) ? Ee.map(ut) : [], Ut = ct(
+          const Ee = Array.isArray(z?.data?.data) ? z.data.data : Array.isArray(z.data.results) ? z.data.results : Array.isArray(z?.data) ? z.data : z, pe = Array.isArray(Ee) ? Ee.map(ut) : [], Ut = ct(
             D,
             X,
             pe,
@@ -1002,7 +1002,7 @@ function wl({
     })();
   }, [e.values[t.name]]), ve(() => {
     if (!t.search || !h.trim() || !t.table || !r) return;
-    const N = pl(t.columns ?? ""), M = new AbortController(), z = setTimeout(async () => {
+    const N = pl(t.columns ?? ""), M = new AbortController(), O = setTimeout(async () => {
       try {
         let H;
         if (!t.queryid) {
@@ -1023,7 +1023,7 @@ function wl({
           Y[pe] = [h, "LIKE"];
         });
         let I = t.valueKey ?? "value", R = t.labelKey ?? "title";
-        const { data: O } = await Xt(r, H, t?.queryid, void 0, o, Y), D = Array.isArray(O?.data?.data) ? O.data.data : Array.isArray(O?.data) ? O.data : O, X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(
+        const { data: z } = await Xt(r, H, t?.queryid, void 0, o, Y), D = Array.isArray(z?.data?.data) ? z.data.data : Array.isArray(z?.data) ? z.data : z, X = Array.isArray(D) ? D.map(ut) : [], Ee = ct(
           I,
           R,
           X,
@@ -1036,7 +1036,7 @@ function wl({
       }
     }, 500);
     return () => {
-      clearTimeout(z), M.abort();
+      clearTimeout(O), M.abort();
     };
   }, [h, s]);
   const Oe = async (N) => {
@@ -1045,15 +1045,15 @@ function wl({
       return;
     }
     try {
-      const M = await to(r, N), z = t.multiple ? M.map((H) => H.path) : M[0]?.path;
+      const M = await to(r, N), O = t.multiple ? M.map((H) => H.path) : M[0]?.path;
       e.setFieldValue(
         F,
-        z
-      ), Nt(z, t, o);
+        O
+      ), Nt(O, t, o);
     } catch (M) {
       console.error("File upload failed", M), e.setFieldError(F, "File upload failed");
     }
-  }, ze = async (N, M, z) => {
+  }, ze = async (N, M, O) => {
     const H = M[N];
     if (!H) return;
     const Y = n?.[H];
@@ -1062,7 +1062,7 @@ function wl({
       return;
     }
     try {
-      await Promise.resolve(Y(z));
+      await Promise.resolve(Y(O));
     } catch (I) {
       console.error(`Method "${String(H)}" failed`, I);
     }
@@ -12793,8 +12793,8 @@ function Jt({
             onKeyDown: (M) => {
               if (M.key === "Enter") {
                 if (M.preventDefault(), Oe) {
-                  const [z] = Oe;
-                  e.setFieldValue(w, z), x(z, t, o);
+                  const [O] = Oe;
+                  e.setFieldValue(w, O), x(O, t, o);
                 } else $.trim() && (e.setFieldValue(w, $.trim()), x($.trim(), t, o));
                 p(!1);
                 return;
@@ -12809,7 +12809,7 @@ function Jt({
           {
             ref: J,
             className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1",
-            children: V.length > 0 && Oe ? V.map(([M, z], H) => /* @__PURE__ */ m.jsx(
+            children: V.length > 0 && Oe ? V.map(([M, O], H) => /* @__PURE__ */ m.jsx(
               "div",
               {
                 id: `${w}-${M}`,
@@ -12817,7 +12817,7 @@ function Jt({
                 className: `px-3 py-2 cursor-pointer text-sm
                   ${F === H ? "bg-gray-100" : "hover:bg-gray-100"}`,
                 onMouseDown: () => b(M),
-                children: z
+                children: O
               },
               M
             )) : /* @__PURE__ */ m.jsx("div", { className: "px-3 py-2 text-sm text-gray-400", children: `Press "ENTER" to ADD "${N}" ` })
@@ -12932,8 +12932,8 @@ function Jt({
                   {
                     id: `${w}-${S}`,
                     "data-index": M,
-                    onClick: (z) => {
-                      z.preventDefault(), z.stopPropagation(), e.setFieldValue(w, S), x(S, t, o), K.current?.removeAttribute("open"), h(""), a(0), c("onChange", t, `${w}-${S}`);
+                    onClick: (O) => {
+                      O.preventDefault(), O.stopPropagation(), e.setFieldValue(w, S), x(S, t, o), K.current?.removeAttribute("open"), h(""), a(0), c("onChange", t, `${w}-${S}`);
                     },
                     className: `px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm 
                         ${e.values[w] === S ? "bg-indigo-50 text-indigo-600 font-medium" : F === M ? "bg-gray-100" : "hover:bg-gray-50"}`,
@@ -13043,7 +13043,7 @@ function Jt({
                 /* @__PURE__ */ m.jsx("option", { value: "", disabled: !0, children: t?.["no-option"] || `Please select ${t.label}` }),
                 /* @__PURE__ */ m.jsx("option", { value: "", children: "Clear Selection" }),
                 !Ur(_) && Object.entries(_).map(([S, N]) => /* @__PURE__ */ m.jsx("option", { value: S, className: "py-2", children: N }, S)),
-                Ur(_) && Object.entries(_).map(([S, N]) => /* @__PURE__ */ m.jsx("optgroup", { label: S, children: Object.entries(N).map(([M, z]) => /* @__PURE__ */ m.jsx("option", { value: M, children: z }, M)) }, S))
+                Ur(_) && Object.entries(_).map(([S, N]) => /* @__PURE__ */ m.jsx("optgroup", { label: S, children: Object.entries(N).map(([M, O]) => /* @__PURE__ */ m.jsx("option", { value: M, children: O }, M)) }, S))
               ]
             }
           ),
@@ -13105,7 +13105,7 @@ function Jt({
           t.label,
           t.required && /* @__PURE__ */ m.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
-        /* @__PURE__ */ m.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(_ || {}).map(([M, z]) => {
+        /* @__PURE__ */ m.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(_ || {}).map(([M, O]) => {
           const H = S ? Array.isArray(N) && N.includes(M) : N === M;
           return /* @__PURE__ */ m.jsxs(
             "label",
@@ -13122,7 +13122,7 @@ function Jt({
                       let I;
                       if (S) {
                         const R = Array.isArray(N) ? N : [];
-                        I = Y.target.checked ? [...R, M] : R.filter((O) => O !== M);
+                        I = Y.target.checked ? [...R, M] : R.filter((z) => z !== M);
                       } else
                         I = Y.target.checked ? M : "false";
                       e.setFieldValue(w, I), x(I, t, o), c("onChange", t, `${w}-${M}`);
@@ -13134,7 +13134,7 @@ function Jt({
                     `
                   }
                 ),
-                z
+                O
               ]
             },
             M
@@ -13144,13 +13144,13 @@ function Jt({
       ] });
     }
     case "tags": {
-      const S = e.values[w], N = $.trim(), M = Array.isArray(_) ? _ : Object.entries(_ || {}).map(([I, R]) => ({ value: I, label: R })), z = (I) => {
+      const S = e.values[w], N = $.trim(), M = Array.isArray(_) ? _ : Object.entries(_ || {}).map(([I, R]) => ({ value: I, label: R })), O = (I) => {
         if (!W && I && !S.includes(I)) {
           let R = [...S, I];
           e.setFieldValue(w, R), x(R, t, o), h("");
         }
       }, H = (I) => {
-        let R = S.filter((O) => O !== I);
+        let R = S.filter((z) => z !== I);
         e.setFieldValue(
           w,
           R
@@ -13200,7 +13200,7 @@ function Jt({
                   value: $,
                   onChange: (I) => h(I.target.value),
                   onKeyDown: (I) => {
-                    (I.key === "Enter" || I.key === ",") && (I.preventDefault(), z(N));
+                    (I.key === "Enter" || I.key === ",") && (I.preventDefault(), O(N));
                   },
                   placeholder: S.length === 0 ? t.placeholder || "Type and press Enter" : "",
                   className: "flex-1 min-w-[120px] border-none outline-none text-sm bg-transparent p-1",

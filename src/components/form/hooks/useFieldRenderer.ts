@@ -479,7 +479,7 @@ export default function useFieldRenderer({
                         }
 
 
-                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, undefined, module_refid);
+                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
 
                         row = Array.isArray(res?.data?.data)
                             ? res.data.data[0]
