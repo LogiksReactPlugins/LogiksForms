@@ -1,5 +1,5 @@
 import LogiksForm from "./components/form/index.js";
-import { example10} from "./data.js"
+import { example1} from "./data.js"
 
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
 
 
     return <LogiksForm
-        formJson={example10}
+        formJson={example1}
         onCancel={() => { }}
       
      

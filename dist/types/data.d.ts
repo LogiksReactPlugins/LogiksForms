@@ -82,214 +82,126 @@ export declare const example1: {
         uploadURL: string;
         operation: string;
     };
-    hooks: {
-        preload: {
-            helpers: string[];
-        };
-        postsubmit: {
-            method: string[];
-        };
-    };
     source: {
         type: string;
         dbopsid: string;
     };
-    DEBUG: boolean;
+    forcefill: {
+        guid: string;
+        groupuid: string;
+    };
+    gotolink: string;
     fields: {
-        userid: {
+        company_code_id: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    queryid: string;
+                };
+            }[];
+            options: {
+                title: string;
+                value: number;
+            }[];
+        };
+        sector_id: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    queryid: string;
+                };
+            };
+            options: never[];
+        };
+        project_function_id: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+            options: never[];
+        };
+        mpr_month: {
             label: string;
             type: string;
             required: boolean;
             width: number;
         };
-        name: {
-            label: string;
-            required: boolean;
-        };
-        email: {
+        mpr: {
             label: string;
             type: string;
+            groupby: string;
             required: boolean;
-            validate: {
-                email: boolean;
+            width: number;
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    queryid: string;
+                };
             };
+            options: {
+                title: string;
+                value: string;
+            }[];
         };
-        mobile: {
+        sub_header: {
             label: string;
+            type: string;
             required: boolean;
-            validate: {
-                mobile: boolean;
+            width: number;
+            autocomplete: {
+                target: string;
+                src: {
+                    type: string;
+                    queryid: string;
+                };
             };
-        };
-        remarks: {
-            label: string;
-            type: string;
-            width: string;
-            validate: {};
-        };
-        organization_name: {
-            label: string;
-            group: string;
-        };
-        organization_position: {
-            label: string;
-            group: string;
-        };
-        organization_email: {
-            label: string;
-            group: string;
-            type: string;
-        };
-        address: {
-            label: string;
-            group: string;
-        };
-        region: {
-            label: string;
-            group: string;
-        };
-        country: {
-            label: string;
-            group: string;
-            type: string;
-            method: string;
             options: never[];
         };
-        zipcode: {
+        weightage: {
             label: string;
-            group: string;
-        };
-        tags: {
-            label: string;
-            group: string;
             type: string;
-        };
-        gender: {
-            label: string;
-            group: string;
-            type: string;
-            options: {
-                "": string;
-                male: string;
-                female: string;
-            };
-        };
-        dob: {
-            label: string;
-            group: string;
-            type: string;
-        };
-        blocked: {
-            label: string;
-            group: string;
             required: boolean;
-            type: string;
-            options: {
-                true: string;
-                false: string;
-            };
+            width: number;
         };
-        guid: {
+        is_code_refrence: {
             label: string;
-            group: string;
-            required: boolean;
-        };
-        privilegeid: {
-            label: string;
-            group: string;
-            required: boolean;
             type: string;
-            orderby: string;
+            required: boolean;
+            width: number;
+        };
+        frequency: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        section: {
+            label: string;
+            type: string;
+            groupid: string;
+            required: boolean;
+            width: number;
             options: {
                 title: string;
-                value: number;
+                value: string;
+                class: null;
+                privilege: string;
             }[];
         };
-        accessid: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        groupid: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        roles: {
-            label: string;
-            group: string;
-            required: boolean;
-            multiple: boolean;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        refid: {
-            label: string;
-            group: string;
-        };
-        registered_site: {
-            label: string;
-            group: string;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        expires: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-        };
-        security_policy: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            options: {
-                "": string;
-                open: string;
-                closed: string;
-            };
-        };
-        privacy: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            options: {
-                "": string;
-                public: string;
-                private: string;
-                protected: string;
-            };
-        };
-        geolocation: {
-            label: string;
-            group: string;
-        };
-        geoip: {
-            label: string;
-            group: string;
-        };
+    };
+    infoview: {
+        template: string;
     };
     module_refid: string;
     module_type: string;

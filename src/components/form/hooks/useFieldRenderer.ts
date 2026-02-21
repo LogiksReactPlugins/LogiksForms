@@ -488,13 +488,15 @@ export default function useFieldRenderer({
                                 : res?.data;
                     }
 
-                    if (row) {
+                     let normalizedRow = normalizeRowSafe(row);
+                   
+                    if (normalizedRow) {
                         ac.target
                             .split(",")
                             .map(t => t.trim())
                             .forEach(t => {
-                                if (row[t] !== undefined) {
-                                    formik.setFieldValue(t, row[t]);
+                                if (normalizedRow[t] !== undefined) {
+                                    formik.setFieldValue(t, normalizedRow[t]);
                                 }
                             });
                     }

@@ -109,9 +109,9 @@ export const example10 = {
 
 
 export const example1 = {
-    "endPoints": {
+         "endPoints": {
     "baseURL": "http://192.168.0.20:9999",
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkpONWIxeUY4OE5PNy9GWkNiZVFhZ2RlR0ZGbU5QbnVBWmhxR2haOG51Y0Z2NFFqYzVGVE81clZBeWdwaVZPNkVPcEZjaEhWbDROTHcwbnRxWkYwM1FnTWlEcEpzUFBsQmpUb1dzekp4b3IvZElUQnZzWnE5emtWbUhXRWZjNGdMVk1CdzNWMnEwTzRkY2IrNnR4UG4wMlJDbm94TjVLR3NWU003cnEwNjdIS3lrSEx3R2thbWN5WHozaUMzZ25sK0VXbEJia1lscnlZUHdyS1A5Rk4wV3E1aUtCdk1hVzVwc0pMSWZIK1JHMXcwTjZrQkpjaXNEV2VWNWk5UUtUYU1VVWxJcGlZalpGNVllR2Q0RTZkcktYVHhCWVBRTDNnK3ZiZitsTDg9IiwiaWF0IjoxNzY5NjY2NzIxLCJleHAiOjE3Njk2NzAzMjEsImp0aSI6ImFjYzoxOjE3Njk2NjY3MjE3NDY6d2ViIn0.g4NtGuLaICdUyGhCqTNbf4DtH9P4dF8JjZJPR3F68Zg",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6Im8vL3psUHRSZys5bzJjNlhVT3h5dlFHYm1keFBubS84QnBRSHAyaTJnR0xKVlpOUUsrUEpnUjBvWWo2djBVZEE2ZGY2Qy9lZFlBWk9QZzJ5OTh0MW9BM0c5eWM1NEZoRTRsWGM5cEF2SzZ4MElMUWFDbjhtMnJOcndVUFFlaU5FUUN2YUZjVUlZSW9zSUdTLzZsYU9zemdpZFZ3bXhPZGxjWEwrM095dkhKelZ2ZFBzNUJ0bHJrdys2WmJob0liSHRFZzZIOWhJSGxYQURRMFpPcHBWOEpJZnVMMDZVdXdyeE92WFhmVXlnZXU4VzZvYjdGNlVCUENZb0kxRFBwR2JSc3YxQVFuZG1MbkVvL3RKUVJxdk5VcTNNajRMKzd4a1NRem9rdUVGIiwiaWF0IjoxNzcxNjY2NTQ3LCJleHAiOjE3NzE2NzAxNDcsImp0aSI6ImFjYzoxOjE3NzE2NjY1NDcxODA6d2ViIn0.Qv9-1imjEU1JKHWRqN1VDx8DUAqtntL_qWWzUIWJo0M",
     "dbopsGetHash": "/api/dbops",
     "dbopsGetRefId": "/api/dbops/save",
     "dbopsCreate": "/api/dbops/create",
@@ -122,293 +122,165 @@ export const example1 = {
     "uploadURL": "/api/files/upload",
     "operation": "update",
   },
-    "hooks": {
-        "preload": {
-            "helpers": [
-                "countries"
-            ]
-        },
-        "postsubmit": {
-            "method": [
-                "updateUserMetas"
-            ]
-        }
-    },
     "source": {
         "type": "sql",
-        "dbopsid": "forms%40userManager.users%401"
+        "dbopsid": "forms%40quality.quality_mpr%40"
     },
-    "DEBUG": true,
+    "forcefill": {
+        "guid": "#SESS_GUID#",
+        "groupuid": "#SESS_GROUP_NAME#"
+    },
+    "gotolink": "infoview/quality.quality_mpr/{hashid}",
     "fields": {
-        "userid": {
-            "label": "Login ID",
-            "type":"richtextarea",
-            "required": true,
-            width:12
-        },
-        "name": {
-            "label": "Full Name",
-            "required": true
-        },
-        "email": {
-            "label": "E-mail",
-            "type": "email",
-            "required": true,
-            "validate": {
-                "email": true
-            }
-        },
-        "mobile": {
-            "label": "Mobile",
-            "required": true,
-            "validate": {
-                "mobile": true
-            }
-        },
-        "remarks": {
-            "label": "Description/Notes",
-            "type": "textarea",
-            "width": "12",
-            "validate": {}
-        },
-        "organization_name": {
-            "label": "Organization Name",
-            "group": "organization"
-        },
-        "organization_position": {
-            "label": "Organization Position",
-            "group": "organization"
-        },
-        "organization_email": {
-            "label": "Organization Email",
-            "group": "organization",
-            "type": "email"
-        },
-        "address": {
-            "label": "Address",
-            "group": "address"
-        },
-        "region": {
-            "label": "Region/State",
-            "group": "address"
-        },
-        "country": {
-            "label": "Country",
-            "group": "address",
+        "company_code_id": {
+            "label": "Company",
             "type": "select",
-            "method": "getCountrySelector",
+            "required": true,
+            "width": 4,
+            "ajaxchain": [
+                {
+                    "target": "sector_id",
+                    "src": {
+                        "type": "sql",
+                        "queryid": "forms%40quality.quality_mpr%40fields.company_code_id.ajaxchain.0"
+                    }
+                }
+            ],
+            "options": [
+                {
+                    "title": "Company",
+                    "value": 1
+                },
+                {
+                    "title": "WEL-JV",
+                    "value": 2
+                },
+                {
+                    "title": "WMEL-JV",
+                    "value": 3
+                }
+            ]
+        },
+        "sector_id": {
+            "label": "Sector",
+            "type": "select",
+            "required": true,
+            "width": 4,
+            "ajaxchain": {
+                "target": "project_function_id",
+                "src": {
+                    "type": "sql",
+                    "queryid": "forms%40quality.quality_mpr%40fields.sector_id.ajaxchain.0"
+                }
+            },
             "options": []
         },
-        "zipcode": {
-            "label": "Zipcode/PIN Code",
-            "group": "address"
-        },
-        "tags": {
-            "label": "Tags",
-            "group": "others",
-            "type": "tags"
-        },
-        "gender": {
-            "label": "Gender",
-            "group": "others",
+        "project_function_id": {
+            "label": "Project Function",
             "type": "select",
-            "options": {
-                "": "false",
-                "male": "Male",
-                "female": "Female"
-            }
-        },
-        "dob": {
-            "label": "Date Of Birth",
-            "group": "others",
-            "type": "date"
-        },
-        "blocked": {
-            "label": "Blocked",
-            "group": "others",
             "required": true,
-            "type": "select",
-            "options": {
-                "true": "Blocked",
-                "false": "Not Blocked"
-            }
+            "width": 4,
+            "options": []
         },
-        "guid": {
-            "label": "GUID",
-            "group": "admin",
-            "required": true
-        },
-        "privilegeid": {
-            "label": "Privlege ID",
-            "group": "admin",
+        "mpr_month": {
+            "label": "MPR Month",
+            "type": "month",
             "required": true,
+            "width": 4
+        },
+        "mpr": {
+            "label": "MPR",
             "type": "select",
-            "orderby": "name asc",
+            "groupby": "mpr_name",
+            "required": true,
+            "width": 4,
+            "ajaxchain": {
+                "target": "sub_header",
+                "src": {
+                    "type": "sql",
+                    "queryid": "forms%40quality.quality_mpr%40fields.mpr.ajaxchain.0"
+                }
+            },
             "options": [
                 {
-                    "title": "admin",
-                    "value": 5
+                    "title": "Tests",
+                    "value": "Tests"
                 },
                 {
-                    "title": "root",
-                    "value": 1
-                },
-                {
-                    "title": "Testing",
-                    "value": 6
-                },
-                {
-                    "title": "wf_l1",
-                    "value": 7
-                },
-                {
-                    "title": "wf_l2",
-                    "value": 8
+                    "title": "Test ",
+                    "value": "Test "
                 }
             ]
         },
-        "accessid": {
-            "label": "Access ID",
-            "group": "admin",
-            "required": true,
+        "sub_header": {
+            "label": "Sub Header",
             "type": "select",
-            "orderby": "name asc",
+            "required": false,
+            "width": 4,
+            "autocomplete": {
+                "target": "weightage,is_code_refrence,frequency",
+                "src": {
+                    "type": "sql",
+                    "queryid": "forms%40quality.quality_mpr%40fields.sub_header.autocomplete.0"
+                }
+            },
+            "options": []
+        },
+        "weightage": {
+            "label": "Weightage",
+            "type": "number",
+            "required": false,
+            "width": 4
+        },
+        "is_code_refrence": {
+            "label": "Is Code Refrence",
+            "type": "text",
+            "required": false,
+            "width": 4
+        },
+        "frequency": {
+            "label": "Frequency",
+            "type": "text",
+            "required": false,
+            "width": 4
+        },
+        "section": {
+            "label": "Section",
+            "type": "select",
+            "groupid": "section_master",
+            "required": false,
+            "width": 4,
             "options": [
                 {
-                    "title": "All Sites",
-                    "value": 1
+                    "title": "KIYAAN",
+                    "value": "kiyaan",
+                    "class": null,
+                    "privilege": "*"
+                },
+                {
+                    "title": "RSDCPL",
+                    "value": "rsdcpl",
+                    "class": null,
+                    "privilege": "*"
+                },
+                {
+                    "title": "SPL",
+                    "value": "spl",
+                    "class": null,
+                    "privilege": "*"
+                },
+                {
+                    "title": "TEJAS",
+                    "value": "tejas",
+                    "class": null,
+                    "privilege": "*"
                 }
             ]
-        },
-        "groupid": {
-            "label": "Group/Team",
-            "group": "admin",
-            "required": true,
-            "type": "select",
-            "orderby": "group_name asc",
-            "options": [
-                {
-                    "title": "Default",
-                    "value": 1
-                },
-                {
-                    "title": "group1111",
-                    "value": 7
-                },
-                {
-                    "title": "grp name",
-                    "value": 3
-                },
-                {
-                    "title": "grp1 name",
-                    "value": 4
-                },
-                {
-                    "title": "grp2 name e",
-                    "value": 5
-                },
-                {
-                    "title": "Silk",
-                    "value": 2
-                },
-                {
-                    "title": "Test",
-                    "value": 6
-                }
-            ]
-        },
-        "roles": {
-            "label": "Roles",
-            "group": "admin",
-            "required": true,
-            "multiple": true,
-            "type": "dataSelectorFromTable",
-            "orderby": "name asc",
-            "options": [
-                {
-                    "title": "Admin",
-                    "value": 1
-                },
-                {
-                    "title": "Business",
-                    "value": 3
-                },
-                {
-                    "title": "Manager",
-                    "value": 2
-                },
-                {
-                    "title": "quality1",
-                    "value": 7
-                },
-                {
-                    "title": "quality2",
-                    "value": 8
-                },
-                {
-                    "title": "user",
-                    "value": 5
-                },
-                {
-                    "title": "User - updated",
-                    "value": 4
-                }
-            ]
-        },
-        "refid": {
-            "label": "User Reference Code",
-            "group": "admin"
-        },
-        "registered_site": {
-            "label": "User Registered Site",
-            "group": "admin",
-            "type": "select",
-            "orderby": "name asc",
-            "options": [
-                {
-                    "title": "All Sites",
-                    "value": 1
-                }
-            ]
-        },
-        "expires": {
-            "label": "Account Expires On",
-            "group": "security",
-            "required": true,
-            "type": "date"
-        },
-        "security_policy": {
-            "label": "User Security Policy",
-            "group": "security",
-            "required": true,
-            "type": "select",
-            "options": {
-                "": "false",
-                "open": "Open",
-                "closed": "Closed"
-            }
-        },
-        "privacy": {
-            "label": "Data Privacy Policy",
-            "group": "security",
-            "required": true,
-            "type": "select",
-            "options": {
-                "": "false",
-                "public": "Public",
-                "private": "Private",
-                "protected": "Protected"
-            }
-        },
-        "geolocation": {
-            "label": "Geo Location (For Login Lock)",
-            "group": "security"
-        },
-        "geoip": {
-            "label": "Geo IP (For Login Lock)",
-            "group": "security"
         }
     },
-    "module_refid": "userManager.users",
+    "infoview": {
+        "template": "cards"
+    },
+    "module_refid": "quality.quality_mpr",
     "module_type": "forms"
 }
