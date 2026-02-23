@@ -177,14 +177,19 @@ export default function useFieldRenderer({
 
 
                     const res = await axios(config);
+                   
 
 
-                    const rawItems = Array.isArray(res?.data?.data)
-                        ? res.data.data
-                        : Array.isArray(res.data.results)
-                            ? res.data.results : Array.isArray(res?.data)
-                                ? res.data
-                                : res;
+                    const rawItems = Array.isArray(res.data?.results?.options) ?
+                        res.data?.results?.options : Array.isArray(res?.data?.data)
+                            ? res.data.data
+                            : Array.isArray(res.data?.results)
+                                ? res.data?.results :
+                                Array.isArray(res?.data)
+                                    ? res.data
+                                    : res;
+
+console.log("rawItems",rawItems);
 
                     if (
                         typeof rawItems === "object" &&
@@ -201,7 +206,10 @@ export default function useFieldRenderer({
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
+                      
+
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
+
 
                     if (isMounted) setOptions(mapped);
 
@@ -452,13 +460,14 @@ export default function useFieldRenderer({
                         }
 
                         const { data: res } = await axios(config);
-                        row = Array.isArray(res?.data?.data)
-                            ? res.data.data[0]
-                            : Array.isArray(res?.data?.results)
-                                ? res.data.results[0]
-                                : Array.isArray(res?.data)
-                                    ? res.data[0]
-                                    : res?.data;
+                        row = Array.isArray(res?.data?.results.options) ? res?.data?.results.options[0] :
+                            Array.isArray(res?.data?.data)
+                                ? res.data.data[0]
+                                : Array.isArray(res?.data?.results)
+                                    ? res.data.results[0]
+                                    : Array.isArray(res?.data)
+                                        ? res.data[0]
+                                        : res?.data;
                     } else {
 
                         let query: sqlQueryProps | undefined;
@@ -488,8 +497,8 @@ export default function useFieldRenderer({
                                 : res?.data;
                     }
 
-                     let normalizedRow = normalizeRowSafe(row);
-                   
+                    let normalizedRow = normalizeRowSafe(row);
+
                     if (normalizedRow) {
                         ac.target
                             .split(",")
