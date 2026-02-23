@@ -109,9 +109,9 @@ export const example10 = {
 
 
 export const example1 = {
-         "endPoints": {
+      "endPoints": {
     "baseURL": "http://192.168.0.20:9999",
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6Im8vL3psUHRSZys5bzJjNlhVT3h5dlFHYm1keFBubS84QnBRSHAyaTJnR0xKVlpOUUsrUEpnUjBvWWo2djBVZEE2ZGY2Qy9lZFlBWk9QZzJ5OTh0MW9BM0c5eWM1NEZoRTRsWGM5cEF2SzZ4MElMUWFDbjhtMnJOcndVUFFlaU5FUUN2YUZjVUlZSW9zSUdTLzZsYU9zemdpZFZ3bXhPZGxjWEwrM095dkhKelZ2ZFBzNUJ0bHJrdys2WmJob0liSHRFZzZIOWhJSGxYQURRMFpPcHBWOEpJZnVMMDZVdXdyeE92WFhmVXlnZXU4VzZvYjdGNlVCUENZb0kxRFBwR2JSc3YxQVFuZG1MbkVvL3RKUVJxdk5VcTNNajRMKzd4a1NRem9rdUVGIiwiaWF0IjoxNzcxNjY2NTQ3LCJleHAiOjE3NzE2NzAxNDcsImp0aSI6ImFjYzoxOjE3NzE2NjY1NDcxODA6d2ViIn0.Qv9-1imjEU1JKHWRqN1VDx8DUAqtntL_qWWzUIWJo0M",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6InRTRjJ5aVgvQkYyckJXV2VZYmZtMGpKSGkrYWp1OHZlN3dMQVdwZ0gxMlA3VVhJU2F0WWtRS1czbzc0OW1obzR4Y2lHOUZDY2FONVdTSUpaSHhkZ0JWWDRVYUlmbGh4NmxwNXppcGNFVjgyVTlyQTVmdXlFa1Bpb3IwaU1aVHN0cjEzNyttWGN1NjJrMnFQREhyRDR6VGl2bWluMXVkWFlQc29rams2VEdPSmkweWZPSSt4KzVxVVYxdUp5M05FYklPRXN1U2laOTdDcUV4YWEzMHgwN0R1V1dsMDM1dDhicTJqVjRNTXNaalVXTUNhUzk5ZE9DM2FweHBBd1JjOVJlTys0TUp1ai80QTJ2YWJhSkw5c2V6VXJPZUJhbjdVQlVackN5cXExVEE9PSIsImlhdCI6MTc3MTg1NDMwNywiZXhwIjoxNzcxODU3OTA3LCJqdGkiOiJhY2M6MToxNzcxODU0MzA3MDkzOndlYiJ9.mPO6W1A8ijoN8T0kzpAPEjYXeZ3vQzaw40kXXAQvBOc",
     "dbopsGetHash": "/api/dbops",
     "dbopsGetRefId": "/api/dbops/save",
     "dbopsCreate": "/api/dbops/create",
@@ -120,167 +120,262 @@ export const example1 = {
     "registerQuery": "/api/query/save",
     "runQuery": "/api/query/run",
     "uploadURL": "/api/files/upload",
-    "operation": "update",
+    "operation": "create",
   },
-    "source": {
-        "type": "sql",
-        "dbopsid": "forms%40quality.quality_mpr%40"
-    },
-    "forcefill": {
-        "guid": "#SESS_GUID#",
-        "groupuid": "#SESS_GROUP_NAME#"
-    },
-    "gotolink": "infoview/quality.quality_mpr/{hashid}",
-    "fields": {
-        "company_code_id": {
-            "label": "Company",
-            "type": "select",
-            "required": true,
-            "width": 4,
-            "ajaxchain": [
-                {
-                    "target": "sector_id",
-                    "src": {
-                        "type": "sql",
-                        "queryid": "forms%40quality.quality_mpr%40fields.company_code_id.ajaxchain.0"
+        "source": {
+            "type": "sql",
+            "dbopsid": "forms%40projectfunction.project%40"
+        },
+        "forcefill": {
+            "guid": "#SESS_GUID#",
+            "type": "project",
+            "edited_by": "#SESS_USER_ID#"
+        },
+        "fields": {
+            "code": {
+                "label": "Code",
+                "required": true,
+                "groupid": "projectfunction",
+                "width": 6,
+                "type": "text"
+            },
+            "title": {
+                "label": "Title",
+                "required": true,
+                "width": 6,
+                "type": "text"
+            },
+            "company_id": {
+                "label": "Company/ SPV",
+                "type": "select",
+              
+                "source": {
+                    "type": "api",
+                    "method": "post",
+                    "endpoint": "/api/services/eofficeGlobal/get_company"
+                },
+                "ajaxchain": [
+                    {
+                        "target": "sector_id",
+                        "src": {
+                            "type": "api",
+                            "method": "post",
+                            "endpoint": "/api/services/eofficeGlobal/get_sector"
+                        }
                     }
-                }
-            ],
-            "options": [
-                {
-                    "title": "Company",
-                    "value": 1
-                },
-                {
-                    "title": "WEL-JV",
-                    "value": 2
-                },
-                {
-                    "title": "WMEL-JV",
-                    "value": 3
-                }
-            ]
-        },
-        "sector_id": {
-            "label": "Sector",
-            "type": "select",
-            "required": true,
-            "width": 4,
-            "ajaxchain": {
-                "target": "project_function_id",
-                "src": {
-                    "type": "sql",
-                    "queryid": "forms%40quality.quality_mpr%40fields.sector_id.ajaxchain.0"
-                }
+                ],
+                "no-option": "Select Company/ SPV",
+                "width": 4,
+                "options": []
             },
-            "options": []
-        },
-        "project_function_id": {
-            "label": "Project Function",
-            "type": "select",
-            "required": true,
-            "width": 4,
-            "options": []
-        },
-        "mpr_month": {
-            "label": "MPR Month",
-            "type": "month",
-            "required": true,
-            "width": 4
-        },
-        "mpr": {
-            "label": "MPR",
-            "type": "select",
-            "groupby": "mpr_name",
-            "required": true,
-            "width": 4,
-            "ajaxchain": {
-                "target": "sub_header",
-                "src": {
-                    "type": "sql",
-                    "queryid": "forms%40quality.quality_mpr%40fields.mpr.ajaxchain.0"
-                }
+            "sector_id": {
+                "label": "Sector",
+                "no-option": "Select Sector",
+                "type": "select",
+                "valueKey": "id",
+                "required": true,
+                "width": 4,
+                "options": []
             },
-            "options": [
-                {
-                    "title": "Tests",
-                    "value": "Tests"
-                },
-                {
-                    "title": "Test ",
-                    "value": "Test "
-                }
-            ]
-        },
-        "sub_header": {
-            "label": "Sub Header",
-            "type": "select",
-            "required": false,
-            "width": 4,
-            "autocomplete": {
-                "target": "weightage,is_code_refrence,frequency",
-                "src": {
-                    "type": "sql",
-                    "queryid": "forms%40quality.quality_mpr%40fields.sub_header.autocomplete.0"
-                }
+            "location_id": {
+                "label": "Location",
+                "type": "select",
+                "multiple": true,
+                "search": true,
+                "required": true,
+                "width": 4,
+                "options": [
+                    {
+                        "value": 1,
+                        "title": "Begusarai"
+                    },
+                    {
+                        "value": 2,
+                        "title": "Mokama"
+                    },
+                    {
+                        "value": 3,
+                        "title": "Pune"
+                    },
+                    {
+                        "value": 4,
+                        "title": "Shirur"
+                    },
+                    {
+                        "value": 5,
+                        "title": "KARAIKAL"
+                    },
+                    {
+                        "value": 6,
+                        "title": "KARAIMEDU"
+                    },
+                    {
+                        "value": 7,
+                        "title": "MAYILADUTHURA"
+                    },
+                    {
+                        "value": 8,
+                        "title": "NAMBUKURUCHI"
+                    },
+                    {
+                        "value": 9,
+                        "title": "PUDUCHERRY"
+                    },
+                    {
+                        "value": 10,
+                        "title": "Nagapattinam"
+                    },
+                    {
+                        "value": 11,
+                        "title": "AURANGABAD"
+                    },
+                    {
+                        "value": 12,
+                        "title": "CHHATARPUR"
+                    },
+                    {
+                        "value": 13,
+                        "title": "CHUNAR"
+                    },
+                    {
+                        "value": 14,
+                        "title": "KAIMUR"
+                    },
+                    {
+                        "value": 15,
+                        "title": "MIRZAPUR"
+                    },
+                    {
+                        "value": 16,
+                        "title": "MOHANIA"
+                    },
+                    {
+                        "value": 17,
+                        "title": "MUGALSARAI"
+                    },
+                    {
+                        "value": 18,
+                        "title": "REWA"
+                    },
+                    {
+                        "value": 19,
+                        "title": "ROHTAS"
+                    },
+                    {
+                        "value": 20,
+                        "title": "SASARAM"
+                    },
+                    {
+                        "value": 21,
+                        "title": "VARANASI"
+                    },
+                    {
+                        "value": 22,
+                        "title": "Delhi RO"
+                    },
+                    {
+                        "value": 23,
+                        "title": "Delhi"
+                    },
+                    {
+                        "value": 24,
+                        "title": "Bhandup"
+                    },
+                    {
+                        "value": 25,
+                        "title": "Dewas"
+                    },
+                    {
+                        "value": 26,
+                        "title": "Dharavi"
+                    },
+                    {
+                        "value": 27,
+                        "title": "Panjarapur"
+                    },
+                    {
+                        "value": 28,
+                        "title": "Lucknow RO"
+                    },
+                    {
+                        "value": 29,
+                        "title": "Bulandashar"
+                    },
+                    {
+                        "value": 30,
+                        "title": "Amethi"
+                    },
+                    {
+                        "value": 31,
+                        "title": "Jaunpur"
+                    },
+                    {
+                        "value": 32,
+                        "title": "Badhoi"
+                    },
+                    {
+                        "value": 33,
+                        "title": "Akbarpur"
+                    },
+                    {
+                        "value": 34,
+                        "title": "Ambedakar Nagar"
+                    },
+                    {
+                        "value": 35,
+                        "title": "Chandauli"
+                    },
+                    {
+                        "value": 36,
+                        "title": "Ayodhya"
+                    },
+                    {
+                        "value": 37,
+                        "title": "Mumbai HO"
+                    },
+                    {
+                        "value": 38,
+                        "title": "Mumbai"
+                    },
+                    {
+                        "value": 39,
+                        "title": "Ahmedabad"
+                    }
+                ]
             },
-            "options": []
+            "description": {
+                "label": "Description",
+                "width": 12,
+                "type": "textarea"
+            },
+            "blocked": {
+                "label": "Blocked",
+                "type": "select",
+                "groupid": "boolean",
+                "width": 12,
+                "vmode": "edit",
+                "options": [
+                    {
+                        "title": "False",
+                        "value": "false",
+                        "class": "",
+                        "privilege": "*"
+                    },
+                    {
+                        "title": "True",
+                        "value": "true",
+                        "class": "",
+                        "privilege": "*"
+                    },
+                    {
+                        "title": "True",
+                        "value": null,
+                        "class": null,
+                        "privilege": "*"
+                    }
+                ]
+            }
         },
-        "weightage": {
-            "label": "Weightage",
-            "type": "number",
-            "required": false,
-            "width": 4
-        },
-        "is_code_refrence": {
-            "label": "Is Code Refrence",
-            "type": "text",
-            "required": false,
-            "width": 4
-        },
-        "frequency": {
-            "label": "Frequency",
-            "type": "text",
-            "required": false,
-            "width": 4
-        },
-        "section": {
-            "label": "Section",
-            "type": "select",
-            "groupid": "section_master",
-            "required": false,
-            "width": 4,
-            "options": [
-                {
-                    "title": "KIYAAN",
-                    "value": "kiyaan",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "RSDCPL",
-                    "value": "rsdcpl",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "SPL",
-                    "value": "spl",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "TEJAS",
-                    "value": "tejas",
-                    "class": null,
-                    "privilege": "*"
-                }
-            ]
-        }
-    },
-    "infoview": {
-        "template": "cards"
-    },
-    "module_refid": "quality.quality_mpr",
-    "module_type": "forms"
-}
+        "module_refid": "projectfunction.project",
+        "module_type": "forms"
+    }

@@ -177,7 +177,7 @@ export default function useFieldRenderer({
 
 
                     const res = await axios(config);
-                   
+
 
 
                     const rawItems = Array.isArray(res.data?.results?.options) ?
@@ -189,7 +189,7 @@ export default function useFieldRenderer({
                                     ? res.data
                                     : res;
 
-console.log("rawItems",rawItems);
+
 
                     if (
                         typeof rawItems === "object" &&
@@ -206,7 +206,7 @@ console.log("rawItems",rawItems);
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
-                      
+
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
 
@@ -430,9 +430,6 @@ console.log("rawItems",rawItems);
         if (!ac && !aj) return;
 
         const value = formik.values[field.name];
-
-        console.log("value", value);
-
         if (!value) return;
 
         const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
@@ -447,6 +444,8 @@ console.log("rawItems",rawItems);
                     let row: any;
 
                     if ("type" in src && src.type === "api") {
+                        let key = field.parameter ? field.parameter : field.name;
+                        let params = { [key]: value, refid: value }
                         const config = {
                             method: src.method || "GET",
                             url: sqlOpsUrls?.baseURL + src.endpoint,
@@ -454,13 +453,14 @@ console.log("rawItems",rawItems);
                             headers: {
                                 "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
                             },
+
                             ...(src.method === "GET"
-                                ? { params: { refid: value } }
-                                : { data: { refid: value } }),
+                                ? { params }
+                                : { data: params }),
                         }
 
                         const { data: res } = await axios(config);
-                        row = Array.isArray(res?.data?.results.options) ? res?.data?.results.options[0] :
+                        row = Array.isArray(res?.data?.results?.options) ? res?.data?.results?.options[0] :
                             Array.isArray(res?.data?.data)
                                 ? res.data.data[0]
                                 : Array.isArray(res?.data?.results)
@@ -519,8 +519,11 @@ console.log("rawItems",rawItems);
                     if (!sqlOpsUrls) continue;
 
                     let responseData: any;
-
+                  
                     if ("type" in src && src.type === "api") {
+                        let key = field.parameter ? field.parameter : field.name;
+
+                        let params = { [key]: value, refid: value }
                         const config = {
                             method: src.method || "GET",
                             url: sqlOpsUrls?.baseURL + src.endpoint,
@@ -529,11 +532,9 @@ console.log("rawItems",rawItems);
                                 "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
                             },
                             ...(src.method === "GET"
-                                ? { params: { refid: value } }
-                                : { data: { refid: value } }),
+                                ? { params }
+                                : { data: params}),
                         }
-
-
                         const { data: res } = await axios(config);
                         responseData = res;
                     } else {
@@ -563,13 +564,13 @@ console.log("rawItems",rawItems);
                     let valueKey = field.valueKey ?? "value";
                     let labelKey = field.labelKey ?? "title";
 
-                    const rawItems = Array.isArray(responseData?.data?.data)
-                        ? responseData.data.data
-                        : Array.isArray(responseData.data.results)
-                            ? responseData.data.results
-                            : Array.isArray(responseData?.data)
-                                ? responseData.data
-                                : responseData;
+                    const rawItems = Array.isArray(responseData?.results?.options) ?
+                     responseData?.results?.options : Array.isArray(responseData.data)
+                        ? responseData.data
+                        : Array.isArray(responseData.results)
+                            ? responseData.results
+                            : responseData
+                                       
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)

@@ -88,120 +88,87 @@ export declare const example1: {
     };
     forcefill: {
         guid: string;
-        groupuid: string;
+        type: string;
+        edited_by: string;
     };
-    gotolink: string;
     fields: {
-        company_code_id: {
+        code: {
             label: string;
+            required: boolean;
+            groupid: string;
+            width: number;
             type: string;
+        };
+        title: {
+            label: string;
             required: boolean;
             width: number;
+            type: string;
+        };
+        company_id: {
+            label: string;
+            type: string;
+            source: {
+                type: string;
+                method: string;
+                endpoint: string;
+            };
             ajaxchain: {
                 target: string;
                 src: {
                     type: string;
-                    queryid: string;
+                    method: string;
+                    endpoint: string;
                 };
             }[];
-            options: {
-                title: string;
-                value: number;
-            }[];
+            "no-option": string;
+            width: number;
+            options: never[];
         };
         sector_id: {
             label: string;
+            "no-option": string;
             type: string;
-            required: boolean;
-            width: number;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
-            options: never[];
-        };
-        project_function_id: {
-            label: string;
-            type: string;
+            valueKey: string;
             required: boolean;
             width: number;
             options: never[];
         };
-        mpr_month: {
+        location_id: {
             label: string;
             type: string;
+            multiple: boolean;
+            search: boolean;
             required: boolean;
             width: number;
-        };
-        mpr: {
-            label: string;
-            type: string;
-            groupby: string;
-            required: boolean;
-            width: number;
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
             options: {
+                value: number;
                 title: string;
-                value: string;
             }[];
         };
-        sub_header: {
+        description: {
             label: string;
-            type: string;
-            required: boolean;
             width: number;
-            autocomplete: {
-                target: string;
-                src: {
-                    type: string;
-                    queryid: string;
-                };
-            };
-            options: never[];
-        };
-        weightage: {
-            label: string;
             type: string;
-            required: boolean;
-            width: number;
         };
-        is_code_refrence: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
-        frequency: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
-        section: {
+        blocked: {
             label: string;
             type: string;
             groupid: string;
-            required: boolean;
             width: number;
-            options: {
+            vmode: string;
+            options: ({
                 title: string;
                 value: string;
+                class: string;
+                privilege: string;
+            } | {
+                title: string;
+                value: null;
                 class: null;
                 privilege: string;
-            }[];
+            })[];
         };
-    };
-    infoview: {
-        template: string;
     };
     module_refid: string;
     module_type: string;
