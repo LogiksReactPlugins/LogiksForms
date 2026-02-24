@@ -1,92 +1,47 @@
-import { Editor } from "@tinymce/tinymce-react";
-import { useEffect, useMemo, useState } from "react";
+import { Tiptap, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
-type RichTextAreaProps = {
-  value: string;
-  onChange: (html: string) => void;
-  disabled?: boolean;
-};
-
-function waitForTinyMCE(): Promise<void> {
-  return new Promise((resolve) => {
-    if ((window as any).tinymce) {
-      resolve();
-      return;
-    }
-
-    const interval = setInterval(() => {
-      if ((window as any).tinymce) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 50);
-  });
+type RichTextEditorProps = {
+  value: string
+  onChange: (html: string) => void
+  disabled?: boolean
 }
 
 export default function RichTextEditor({
   value,
   onChange,
-  disabled = false,
-}: RichTextAreaProps) {
-  const [ready, setReady] = useState(false);
+  disabled
+}: RichTextEditorProps) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: value || '',
+    editable: !disabled,
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          'tiptap focus:outline-none min-h-[120px]',
+      },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML())
+    },
+  })
 
-  useEffect(() => {
-    let cancelled = false;
-
-    waitForTinyMCE().then(() => {
-      if (!cancelled) setReady(true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const init = useMemo(
-    () => ({
-      height: 500,
-      menubar: false,
-      statusbar: false,
-      branding: false,
-      promotion: false,
-
-      // IMPORTANT: host app provides CSS
-      skin: false,
-      content_css: false,
-
-      plugins: ["lists", "link", "image", "table", "code"],
-
-      toolbar:
-        "undo redo | bold italic underline | bullist numlist | table | link image | code",
-
-      table_toolbar:
-        "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
-
-      content_style: `
-        body {
-          font-family: Inter, system-ui, sans-serif;
-          font-size: 14px;
-        }
-      `,
-    }),
-    []
-  );
-
-  if (!ready) {
-    return (
-      <div className="p-3 text-sm text-gray-400 border rounded-lg">
-        Loading editor…
-      </div>
-    );
-  }
+  if (!editor) return null
 
   return (
-    <Editor
-      licenseKey="gpl"
-      value={value}
-      readonly={disabled}
-      onEditorChange={onChange}
-      init={init}
-    />
-  );
+    <Tiptap instance={editor}>
+      <div
+        className={`
+          border rounded-lg px-3 py-2 bg-white
+          transition
+          ${disabled ? 'bg-gray-100 opacity-70' : 'hover:border-gray-400'}
+          focus-within:ring-2 focus-within:ring-indigo-500
+        `}
+      >
+        <Tiptap.Content />
+      </div>
+    </Tiptap>
+  )
 }

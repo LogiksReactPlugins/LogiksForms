@@ -66,5 +66,11 @@
       "require": "./dist/index.umd.js"
     },
     "./style.css": "./dist/logiks-forms.css"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.7.5",
+    "@tiptap/pm": "^3.19.0",
+    "@tiptap/react": "^3.19.0",
+    "@tiptap/starter-kit": "^3.19.0"
   }
 }
