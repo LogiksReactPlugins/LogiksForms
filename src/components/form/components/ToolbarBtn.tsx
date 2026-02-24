@@ -27,7 +27,10 @@ export function ToolbarButton(props: ToolbarButtonProps) {
       type="button"
       title={title}
       disabled={disabled}
-      onClick={onClick}
+        onMouseDown={(e) => {
+        e.preventDefault()   
+        onClick()
+      }}
       className={`
         h-8 min-w-[32px] px-2
         flex items-center justify-center gap-1

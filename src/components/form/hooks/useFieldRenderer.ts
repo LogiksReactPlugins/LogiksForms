@@ -23,7 +23,6 @@ export default function useFieldRenderer({
         optionsOverride ?? field.options ?? {}
     );
 
-    const dateRef = useRef<HTMLInputElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -80,8 +79,12 @@ export default function useFieldRenderer({
         const fetchData = async () => {
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
+            let opts = field?.options;
 
-            if (field?.options) {
+            if (opts && (
+                (Array.isArray(opts) && opts.length > 0) ||
+                (!Array.isArray(opts) && Object.keys(opts).length > 0)
+            )) {
 
                 //  CASE 1: flat or grouped object
                 // { "1": "WEL" } OR { quarter1: { "1": "January" } }
@@ -125,9 +128,10 @@ export default function useFieldRenderer({
                         const res = await methodFn();
                         const rawItems = Array.isArray(res?.data?.data)
                             ? res.data.data
-                            : Array.isArray(res?.data)
-                                ? res.data
-                                : res;
+                            : Array.isArray(res.data.results)
+                                ? res.data.results : Array.isArray(res?.data)
+                                    ? res.data
+                                    : res;
 
                         if (
                             typeof rawItems === "object" &&
@@ -157,39 +161,55 @@ export default function useFieldRenderer({
             }
 
             // Case 2: API source
-            if (source.type === "api" && source.url) {
+            if (source.type === "api" && source.endpoint) {
                 try {
-                    const res = await axios({
+                    const config = {
                         method: source.method || "GET",
-                        url: source.url,
-                        data: source.body ?? {},
-                        params: source.params ?? {},
-                        headers: source.headers ?? {},
-                    });
+                        url: sqlOpsUrls?.baseURL + source.endpoint,
 
-                    
-                    const rawItems = Array.isArray(res?.data?.data)
-                        ? res.data.data
-                        : Array.isArray(res?.data)
-                            ? res.data
-                            : res;
+                        headers: {
+                            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                        },
+                        ...(source.method === "GET"
+                            ? { params: { refid: source.refid } }
+                            : { data: { refid: source.refid } }),
+                    }
 
-                             if (
-                            typeof rawItems === "object" &&
-                            !Array.isArray(rawItems)
-                        ) {
-                            const values = Object.values(rawItems);
-                            if (values.length && typeof values[0] === "string") {
-                                setOptions(rawItems as SelectOptions);
-                                return;
-                            }
+
+                    const res = await axios(config);
+
+
+
+                    const rawItems = Array.isArray(res.data?.results?.options) ?
+                        res.data?.results?.options : Array.isArray(res?.data?.data)
+                            ? res.data.data
+                            : Array.isArray(res.data?.results)
+                                ? res.data?.results :
+                                Array.isArray(res?.data)
+                                    ? res.data
+                                    : res;
+
+
+
+                    if (
+                        typeof rawItems === "object" &&
+                        !Array.isArray(rawItems)
+                    ) {
+                        const values = Object.values(rawItems);
+                        if (values.length && typeof values[0] === "string") {
+                            setOptions(rawItems as SelectOptions);
+                            return;
                         }
+                    }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
+
+
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
+
 
                     if (isMounted) setOptions(mapped);
 
@@ -250,16 +270,16 @@ export default function useFieldRenderer({
                             : res;
 
 
-                             if (
-                            typeof rawItems === "object" &&
-                            !Array.isArray(rawItems)
-                        ) {
-                            const values = Object.values(rawItems);
-                            if (values.length && typeof values[0] === "string") {
-                                setOptions(rawItems as SelectOptions);
-                                return;
-                            }
+                    if (
+                        typeof rawItems === "object" &&
+                        !Array.isArray(rawItems)
+                    ) {
+                        const values = Object.values(rawItems);
+                        if (values.length && typeof values[0] === "string") {
+                            setOptions(rawItems as SelectOptions);
+                            return;
                         }
+                    }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -318,6 +338,23 @@ export default function useFieldRenderer({
         () => flattenOptions(options),
         [options]
     );
+
+    const exactMatch = useMemo(() => {
+
+        if (!field.type) return null
+        if (!["suggest", "autosuggest", "autocomplete"].includes(field.type)) {
+            return null;
+        }
+
+        if (!search.trim()) return null;
+
+        const normalized = search.trim().toLowerCase();
+
+        return flatOptions.find(([, label]) => {
+            const value = label.trim().toLowerCase();
+            return value === normalized;
+        });
+    }, [field.type, search, flatOptions]);
 
 
 
@@ -404,28 +441,71 @@ export default function useFieldRenderer({
                     const src = ac.src;
                     if (!src || !sqlOpsUrls) return;
 
-                    const resolvedWhere = replacePlaceholders(src.where ?? {}, {
-                        refid: value,
-                    });
+                    let row: any;
 
-                    const query = {
-                        ...src,
-                        table: src.table,
-                        cols: src.columns,
-                        where: resolvedWhere,
-                    };
+                    if ("type" in src && src.type === "api") {
+                        let key = field.parameter ? field.parameter : field.name;
+                        let params = { [key]: value, refid: value }
+                        const config = {
+                            method: src.method || "GET",
+                            url: sqlOpsUrls?.baseURL + src.endpoint,
 
-                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid);
+                            headers: {
+                                "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                            },
 
-                    const row = Array.isArray(res?.data) ? res.data[0] : res?.data;
+                            ...(src.method === "GET"
+                                ? { params }
+                                : { data: params }),
+                        }
 
-                    if (row) {
+                        const { data: res } = await axios(config);
+                        row = Array.isArray(res?.data?.results?.options) ? res?.data?.results?.options[0] :
+                            Array.isArray(res?.data?.data)
+                                ? res.data.data[0]
+                                : Array.isArray(res?.data?.results)
+                                    ? res.data.results[0]
+                                    : Array.isArray(res?.data)
+                                        ? res.data[0]
+                                        : res?.data;
+                    } else {
+
+                        let query: sqlQueryProps | undefined;
+
+                        if (!src.queryid) {
+                            if (!src.table || !src.columns) {
+                                throw new Error("SQL query requires field.table");
+                            }
+                            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                                refid: value,
+                            });
+                            query = {
+                                ...src,
+                                table: src.table,
+                                cols: src.columns,
+                                where: resolvedWhere,
+                            };
+                        }
+
+
+                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+
+                        row = Array.isArray(res?.data?.data)
+                            ? res.data.data[0]
+                            : Array.isArray(res?.data)
+                                ? res.data[0]
+                                : res?.data;
+                    }
+
+                    let normalizedRow = normalizeRowSafe(row);
+
+                    if (normalizedRow) {
                         ac.target
                             .split(",")
                             .map(t => t.trim())
                             .forEach(t => {
-                                if (row[t] !== undefined) {
-                                    formik.setFieldValue(t, row[t]);
+                                if (normalizedRow[t] !== undefined) {
+                                    formik.setFieldValue(t, normalizedRow[t]);
                                 }
                             });
                     }
@@ -438,34 +518,59 @@ export default function useFieldRenderer({
                     if (!src || typeof src !== "object") continue;
                     if (!sqlOpsUrls) continue;
 
-                    let query: sqlQueryProps | undefined;
+                    let responseData: any;
+                  
+                    if ("type" in src && src.type === "api") {
+                        let key = field.parameter ? field.parameter : field.name;
 
-                    if (!src.queryid) {
-                        if (!src.table || !src.columns) {
-                            throw new Error("SQL query requires field.table");
+                        let params = { [key]: value, refid: value }
+                        const config = {
+                            method: src.method || "GET",
+                            url: sqlOpsUrls?.baseURL + src.endpoint,
+
+                            headers: {
+                                "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+                            },
+                            ...(src.method === "GET"
+                                ? { params }
+                                : { data: params}),
                         }
-                        const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
-                            refid: value,
-                        });
-                        query = {
-                            ...src,
-                            table: src.table,
-                            cols: src.columns,
-                            where: resolvedWhere,
-                        };
+                        const { data: res } = await axios(config);
+                        responseData = res;
+                    } else {
+
+                        let query: sqlQueryProps | undefined;
+
+                        if (!src.queryid) {
+                            if (!src.table || !src.columns) {
+                                throw new Error("SQL query requires field.table");
+                            }
+                            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                                refid: value,
+                            });
+                            query = {
+                                ...src,
+                                table: src.table,
+                                cols: src.columns,
+                                where: resolvedWhere,
+                            };
+                        }
+
+
+                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+                        responseData = res;
                     }
-
-
-                    const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
 
                     let valueKey = field.valueKey ?? "value";
                     let labelKey = field.labelKey ?? "title";
 
-                    const rawItems = Array.isArray(res?.data?.data)
-                        ? res.data.data
-                        : Array.isArray(res?.data)
-                            ? res.data
-                            : res;
+                    const rawItems = Array.isArray(responseData?.results?.options) ?
+                     responseData?.results?.options : Array.isArray(responseData.data)
+                        ? responseData.data
+                        : Array.isArray(responseData.results)
+                            ? responseData.results
+                            : responseData
+                                       
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -669,7 +774,8 @@ export default function useFieldRenderer({
         listRef,
         inputRef,
         detailsRef,
-        isFocused
+        isFocused,
+        exactMatch
 
     }
 }

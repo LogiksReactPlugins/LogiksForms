@@ -103,6 +103,8 @@ export default function TabFormView({
     }
   })
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -140,25 +142,25 @@ export default function TabFormView({
         <div className="relative">
 
           <div className="relative  rounded-t-lg px-1 pt-1  shadow-inner">
-           
 
-          
+
+
             {commonFields.length > 0 && (
-               <div className='p-3'>
-              <CommonInfo
-                refid={refid}
-                module_refid={module_refid}
-                sqlOpsUrls={sqlOpsUrls}
-                fields={commonFields}
-                formik={formik}
-                methods={methods}
-                setFieldOptions={setOptionsForField}
-                fieldOptions={fieldOptions}
+              <div className='p-3'>
+                <CommonInfo
+                  refid={refid}
+                  module_refid={module_refid}
+                  sqlOpsUrls={sqlOpsUrls}
+                  fields={commonFields}
+                  formik={formik}
+                  methods={methods}
+                  setFieldOptions={setOptionsForField}
+                  fieldOptions={fieldOptions}
 
-              />
-               </div>
+                />
+              </div>
             )}
-             
+
             {/* Tab buttons */}
             <nav className="relative flex bg-gray-100" >
               {groupNames.map((group, index) => (
@@ -197,14 +199,15 @@ export default function TabFormView({
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && tabGroups[currentStepKey]?.map((field, index) => {
 
-              if (isHidden(field.hidden) || field.type === "geolocation") {
-                return null;
-              }
+              const hidden = isHidden(field.hidden) || field.type === "geolocation";
+
 
               return <div
+                id={`wrapper-${field.name}`}
                 key={field?.name ?? `field-${index}`}
-                className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"
-                  }`}
+                className={`col-span-12  ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
+                ${hidden ? "hidden" : ""}
+                `}
               >
                 <FieldRenderer
                   refid={refid}

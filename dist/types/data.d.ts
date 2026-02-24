@@ -1,248 +1,72 @@
 export declare const example10: {
-    template: string;
-    preload: {
-        helpers: string[];
+    endPoints: {
+        baseURL: string;
+        accessToken: string;
+        dbopsGetHash: string;
+        dbopsGetRefId: string;
+        dbopsCreate: string;
+        dbopsUpdate: string;
+        dbopsFetch: string;
+        registerQuery: string;
+        runQuery: string;
+        uploadURL: string;
+        operation: string;
+    };
+    forcefill: {
+        groupuid: string;
+        guid: string;
     };
     source: {
         type: string;
-        method: string;
-        where: string[];
+        dbopsid: string;
     };
     fields: {
-        persona_avatar: {
+        title: {
             label: string;
             group: string;
-            width: number;
-        };
-        persona_code: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        persona_name: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        persona_group: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-            source: {
-                type: string;
-                method: string;
-                url: string;
-                headers: {
-                    appid: string;
-                    "Content-Type": string;
-                    'Auth-Token': string;
-                    Authorization: string;
-                };
-            };
-            valueKey: string;
-            labelKey: string;
-        };
-        persona_type: {
-            label: string;
-            group: string;
-            width: number;
-            type: string;
-            method: string;
-        };
-        persona_descs: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        persona_howtouse: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        user_variables: {
-            label: string;
-            group: string;
-            type: string;
-            formatter: string;
-            width: number;
-        };
-        datastore_id: {
-            label: string;
-            group: string;
-            formatter: string;
-            width: number;
-        };
-        datastore_strategy: {
-            label: string;
-            group: string;
-            width: number;
-            type: string;
-            options: {
-                single: string;
-                merge: string;
-            };
-        };
-        datastore_params: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        prompt_engine: {
-            label: string;
-            group: string;
-            type: string;
-            source: {
-                type: string;
-                method: string;
-            };
-            width: number;
-        };
-        persona_prompt: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        persona_prompt_template: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        persona_refurl: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        persona_llm: {
-            label: string;
-            group: string;
-            type: string;
-            source: {
-                type: string;
-                method: string;
-                url: string;
-                headers: {
-                    appid: string;
-                    "Content-Type": string;
-                    'Auth-Token': string;
-                    Authorization: string;
-                };
-            };
-            valueKey: string;
-            labelKey: string;
-            width: number;
-        };
-        studio_editors: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        studio_testers: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        tags: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        enable_optimizer: {
-            label: string;
-            group: string;
-            width: number;
-            type: string;
-            options: {
-                true: string;
-                false: string;
-            };
-        };
-        persona_uikit: {
-            label: string;
-            group: string;
-            width: number;
-        };
-        persona_preform: {
-            label: string;
-            group: string;
-            type: string;
-            width: number;
-        };
-        available_actions: {
-            label: string;
-            type: string;
-            multiple: boolean;
-            source: {
-                type: string;
-                method: string;
-                url: string;
-                headers: {
-                    appid: string;
-                    "Content-Type": string;
-                    'Auth-Token': string;
-                    Authorization: string;
-                };
-            };
-            valueKey: string;
-            labelKey: string;
-            group: string;
-            width: number;
-        };
-        available_tools: {
-            label: string;
-            type: string;
-            multiple: boolean;
-            source: {
-                type: string;
-                method: string;
-                url: string;
-                headers: {
-                    appid: string;
-                    "Content-Type": string;
-                    'Auth-Token': string;
-                    Authorization: string;
-                };
-            };
-            valueKey: string;
-            labelKey: string;
-            group: string;
-            width: number;
-        };
-        rating: {
-            label: string;
-            group: string;
-            formatter: string;
-            width: number;
-        };
-        visibility: {
-            label: string;
-            group: string;
-            width: number;
-            type: string;
-            options: {
-                public: string;
-                private: string;
-            };
-        };
-        status: {
-            label: string;
             required: boolean;
+        };
+        category: {
+            label: string;
             group: string;
-            width: number;
             type: string;
+            groupid: string;
+            required: boolean;
             options: {
-                published: string;
-                draft: string;
-            };
+                title: string;
+                value: string;
+                class: string;
+                privilege: string;
+            }[];
+        };
+        terms: {
+            label: string;
+            group: string;
+            type: string;
+            required: boolean;
+        };
+        blocked: {
+            label: string;
+            group: string;
+            type: string;
+            groupid: string;
+            vmode: string;
+            required: boolean;
+            options: ({
+                title: string;
+                value: string;
+                class: string;
+                privilege: string;
+            } | {
+                title: string;
+                value: null;
+                class: null;
+                privilege: string;
+            })[];
         };
     };
+    module_refid: string;
+    module_type: string;
 };
 export declare const example1: {
     endPoints: {
@@ -258,213 +82,92 @@ export declare const example1: {
         uploadURL: string;
         operation: string;
     };
-    hooks: {
-        preload: {
-            helpers: string[];
-        };
-        postsubmit: {
-            method: string[];
-        };
-    };
     source: {
         type: string;
         dbopsid: string;
     };
-    DEBUG: boolean;
+    forcefill: {
+        guid: string;
+        type: string;
+        edited_by: string;
+    };
     fields: {
-        userid: {
+        code: {
             label: string;
+            required: boolean;
+            groupid: string;
+            width: number;
             type: string;
+        };
+        title: {
+            label: string;
             required: boolean;
             width: number;
+            type: string;
         };
-        name: {
-            label: string;
-            required: boolean;
-        };
-        email: {
+        company_id: {
             label: string;
             type: string;
-            required: boolean;
-            validate: {
-                email: boolean;
+            source: {
+                type: string;
+                method: string;
+                endpoint: string;
             };
-        };
-        mobile: {
-            label: string;
-            required: boolean;
-            validate: {
-                mobile: boolean;
-            };
-        };
-        remarks: {
-            label: string;
-            type: string;
-            width: string;
-            validate: {};
-        };
-        organization_name: {
-            label: string;
-            group: string;
-        };
-        organization_position: {
-            label: string;
-            group: string;
-        };
-        organization_email: {
-            label: string;
-            group: string;
-            type: string;
-        };
-        address: {
-            label: string;
-            group: string;
-        };
-        region: {
-            label: string;
-            group: string;
-        };
-        country: {
-            label: string;
-            group: string;
-            type: string;
-            method: string;
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    method: string;
+                    endpoint: string;
+                };
+            }[];
+            "no-option": string;
+            width: number;
             options: never[];
         };
-        zipcode: {
+        sector_id: {
             label: string;
-            group: string;
-        };
-        tags: {
-            label: string;
-            group: string;
+            "no-option": string;
             type: string;
+            valueKey: string;
+            required: boolean;
+            width: number;
+            options: never[];
         };
-        gender: {
+        location_id: {
             label: string;
-            group: string;
             type: string;
+            multiple: boolean;
+            search: boolean;
+            required: boolean;
+            width: number;
             options: {
-                "": string;
-                male: string;
-                female: string;
-            };
+                value: number;
+                title: string;
+            }[];
         };
-        dob: {
+        description: {
             label: string;
-            group: string;
+            width: number;
             type: string;
         };
         blocked: {
             label: string;
-            group: string;
-            required: boolean;
             type: string;
-            options: {
-                true: string;
-                false: string;
-            };
-        };
-        guid: {
-            label: string;
-            group: string;
-            required: boolean;
-        };
-        privilegeid: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            orderby: string;
-            options: {
+            groupid: string;
+            width: number;
+            vmode: string;
+            options: ({
                 title: string;
-                value: number;
-            }[];
-        };
-        accessid: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            orderby: string;
-            options: {
+                value: string;
+                class: string;
+                privilege: string;
+            } | {
                 title: string;
-                value: number;
-            }[];
-        };
-        groupid: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        roles: {
-            label: string;
-            group: string;
-            required: boolean;
-            multiple: boolean;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        refid: {
-            label: string;
-            group: string;
-        };
-        registered_site: {
-            label: string;
-            group: string;
-            type: string;
-            orderby: string;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        expires: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-        };
-        security_policy: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            options: {
-                "": string;
-                open: string;
-                closed: string;
-            };
-        };
-        privacy: {
-            label: string;
-            group: string;
-            required: boolean;
-            type: string;
-            options: {
-                "": string;
-                public: string;
-                private: string;
-                protected: string;
-            };
-        };
-        geolocation: {
-            label: string;
-            group: string;
-        };
-        geoip: {
-            label: string;
-            group: string;
+                value: null;
+                class: null;
+                privilege: string;
+            })[];
         };
     };
     module_refid: string;

@@ -2,258 +2,9 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoicGtYNjdHNldi
 const AuthKey = "g0MxEf0uh7vr";
 
 export const example10 = {
-     "template":"simple",
-    "preload": {
-        "helpers": ["countries"]
-    },
-    "source": {
-        "type": "method",
-        "method": "getFormData",
-        "where": ["userid"]
-    },
-    "fields": {
-        "persona_avatar": {
-            "label": "Avatar",
-            "group": "info",
-            "width": 12
-        },
-        "persona_code": {
-            "label": "Persona Code",
-            "group": "info",
-            "width": 6
-        },
-        "persona_name": {
-            "label": "Persona Name",
-            "group": "info",
-            "width": 6
-        },
-        "persona_group": {
-            "label": "Group",
-            "group": "info",
-            "type": 'select',
-            "width": 6,
-            "source": {
-                "type": 'api',
-                "method": "get",
-                "url": "http://192.168.0.20:8888/skills/personas/groups",
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "persona_group",
-            "labelKey": "persona_group"
-        },
-        "persona_type": {
-            "label": "Persona Type",
-            "group": "info",
-            "width": 6,
-            "type": "dataMethod",
-            "method": "getPersonaTypesList",
-        },
-        "persona_descs": {
-            "label": "Description",
-            "group": "info",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_howtouse": {
-            "label": "How to use",
-            "group": "info",
-            "type": "textarea",
-            "width": 12
-        },
-        "user_variables": {
-            "label": "User Variables",
-            "group": "info",
-            "type": "json",
-            "formatter": "object",
-            "width": 12
-        },
-         "datastore_id": {
-            "label": "Datastore Id",
-            "group": "Data Store",
-            "formatter": "number",
-            "width": 6
-        },
-        "datastore_strategy": {
-            "label": "Datastore Strategy",
-            "group": "Data Store",
-            "width": 6,
-            "type": "select",
-            "options": {
-                "single": "Single",
-                "merge": "Merge"
-            }
-        },
-        "datastore_params": {
-            "label": "Datastore Params",
-            "group": "Data Store",
-            "type": "textarea",
-            "width": 12
-        },
-        "prompt_engine": {
-            "label": "Prompt Engine",
-            "group": "Prompt Engine",
-            "type": 'select',
-            "source": {
-                "type": 'method',
-                "method": "getEngineList"
-            },
-            "width": 12
-        },
-        "persona_prompt": {
-            "label": "Persona Prompt",
-            "group": "Prompt Engine",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_prompt_template": {
-            "label": "Persona Prompt Template",
-            "group": "Prompt Engine",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_refurl": {
-            "label": "Persona Refurl",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "persona_llm": {
-            "label": "Persona LLM",
-            "group": "Details",
-            "type": "select",
-            "source": {
-                "type": 'api',
-                "method": "post",
-                "url": "http://192.168.0.20:8888/myapps/models",
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "llmcode",
-            "labelKey": "llmcode",
-            "width": 12
-        },
-        "studio_editors": {
-            "label": "Studio Editors",
-            "group": "Details",
-            "width": 6
-        },
-        "studio_testers": {
-            "label": "Studio Testers",
-            "group": "Details",
-            "width": 6
-        },
-        "tags": {
-            "label": "Tags",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "enable_optimizer": {
-            "label": "Enable Optimizer",
-            "group": "Details",
-            "width": 6,
-            "type": "select",
-            "options": {
-                "true": "True",
-                "false": "False"
-            },
-        },
-        "persona_uikit": {
-            "label": "Persona UI Kit",
-            "group": "Details",
-            "width": 6
-        },
-        "persona_preform": {
-            "label": "Persona Preform",
-            "group": "Details",
-            "type": "textarea",
-            "width": 12
-        },
-        "available_actions": {
-            "label": "Available Actions",
-            "type": "checkbox",
-            "multiple": true,
-            "source": {
-                "type": 'api',
-                "method": "post",
-                "url": `http://192.168.0.20:8888/admin/actions`,
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "action_name",
-            "labelKey": "action_name",
-            "group": "Details",
-            "width": 6
-        },
-        // causing error in LRC
-        "available_tools": {
-            "label": "Available Tools",
-            "type": "checkbox",
-            "multiple": true,
-            "source": {
-                "type": 'api',
-                "method": "get",
-                "url": `http://192.168.0.20:8888/tools`,
-                "headers": {
-                    "appid": "app01",
-                    "Content-Type": "application/json",
-                    'Auth-Token': token || "",
-                    "Authorization": `Bearer ${AuthKey}`
-                },
-            },
-            "valueKey": "name",
-            "labelKey": "name",
-            "group": "Details",
-            "width": 6
-        },
-        "rating": {
-            "label": "Rating",
-            "group": "Details",
-            "formatter": "number",
-            "width": 4
-        },
-        "visibility": {
-            "label": "Visibility",
-            "group": "Details",
-            "width": 4,
-            "type": "select",
-            "options": {
-                "public": "public",
-                "private": "private"
-            }
-        },
-        "status": {
-            "label": "Status",
-            "required": true,
-            "group": "Details",
-            "width": 4,
-            "type": "select",
-            "options": {
-                "published": "published",
-                "draft": "draft"
-            }
-        }
-    }
-}
-
-
-export const example1 = {
-    "endPoints": {
+       "endPoints": {
     "baseURL": "http://192.168.0.20:9999",
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkpONWIxeUY4OE5PNy9GWkNiZVFhZ2RlR0ZGbU5QbnVBWmhxR2haOG51Y0Z2NFFqYzVGVE81clZBeWdwaVZPNkVPcEZjaEhWbDROTHcwbnRxWkYwM1FnTWlEcEpzUFBsQmpUb1dzekp4b3IvZElUQnZzWnE5emtWbUhXRWZjNGdMVk1CdzNWMnEwTzRkY2IrNnR4UG4wMlJDbm94TjVLR3NWU003cnEwNjdIS3lrSEx3R2thbWN5WHozaUMzZ25sK0VXbEJia1lscnlZUHdyS1A5Rk4wV3E1aUtCdk1hVzVwc0pMSWZIK1JHMXcwTjZrQkpjaXNEV2VWNWk5UUtUYU1VVWxJcGlZalpGNVllR2Q0RTZkcktYVHhCWVBRTDNnK3ZiZitsTDg9IiwiaWF0IjoxNzY5NjY2NzIxLCJleHAiOjE3Njk2NzAzMjEsImp0aSI6ImFjYzoxOjE3Njk2NjY3MjE3NDY6d2ViIn0.g4NtGuLaICdUyGhCqTNbf4DtH9P4dF8JjZJPR3F68Zg",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkpTL1RZc0pobitQNW5ScHQ1Sjhud3ArRVFhcmtxRVk0Z3BNZFBTMWNZTmdvR0NWSG5ia2RjWEJBNVMxY043WVR5aFB3RWpHU3BPWHN2ME9TRjdDekVWTll1SWttWUJTakJxaGRsV0doUHFyTFVSaGpQMEZycVd1Wm52Z0xMYjZoRlRPa1RDSjlkckVFbVIrbW1wV2IyVkh4N2NlelBuY01mQy84M0hPckk1QmNEeGhjUDdKYzFlL25SQU5xaVRhK1VaMXRCenZjaFNaUkg4MUVOcmIyOVY4ZkNWVnhIdmdZVE5qOEpBS2IzN0E4V0N6QTEvSkk0UTdvY0lrVVZhUHR4OVc0bzE5OGhaNXArTCtacUdCNE0rb0JuYllZekV6V3FDTVdDWUZuIiwiaWF0IjoxNzcwNzI5NjQwLCJleHAiOjE3NzA3MzMyNDAsImp0aSI6ImFjYzoxOjE3NzA3Mjk2NDA2MDg6d2ViIn0.gyiT1cAKZ3qGGCPyv2c_IAD6gD2GfbQ2_JRlFchQY3k",
     "dbopsGetHash": "/api/dbops",
     "dbopsGetRefId": "/api/dbops/save",
     "dbopsCreate": "/api/dbops/create",
@@ -264,293 +15,367 @@ export const example1 = {
     "uploadURL": "/api/files/upload",
     "operation": "update",
   },
-    "hooks": {
-        "preload": {
-            "helpers": [
-                "countries"
-            ]
-        },
-        "postsubmit": {
-            "method": [
-                "updateUserMetas"
-            ]
-        }
+    "forcefill": {
+        "groupuid": "#SESS_GROUP_NAME#",
+        "guid": "#SESS_GUID#"
     },
     "source": {
         "type": "sql",
-        "dbopsid": "forms%40userManager.users%401"
+        "dbopsid": "forms%40termsandcondition_1.main%401"
     },
-    "DEBUG": true,
     "fields": {
-        "userid": {
-            "label": "Login ID",
-            "type":"richtextarea",
-            "required": true,
-            width:12
-        },
-        "name": {
-            "label": "Full Name",
+        "title": {
+            "label": "Title",
+            "group": "Info",
             "required": true
         },
-        "email": {
-            "label": "E-mail",
-            "type": "email",
-            "required": true,
-            "validate": {
-                "email": true
-            }
-        },
-        "mobile": {
-            "label": "Mobile",
-            "required": true,
-            "validate": {
-                "mobile": true
-            }
-        },
-        "remarks": {
-            "label": "Description/Notes",
-            "type": "textarea",
-            "width": "12",
-            "validate": {}
-        },
-        "organization_name": {
-            "label": "Organization Name",
-            "group": "organization"
-        },
-        "organization_position": {
-            "label": "Organization Position",
-            "group": "organization"
-        },
-        "organization_email": {
-            "label": "Organization Email",
-            "group": "organization",
-            "type": "email"
-        },
-        "address": {
-            "label": "Address",
-            "group": "address"
-        },
-        "region": {
-            "label": "Region/State",
-            "group": "address"
-        },
-        "country": {
-            "label": "Country",
-            "group": "address",
+        "category": {
+            "label": "Category",
+            "group": "Info",
             "type": "select",
-            "method": "getCountrySelector",
-            "options": []
+            "groupid": "accounts_terms",
+            "required": true,
+            "options": [
+                {
+                    "title": "purchase_payment_terms",
+                    "value": "purchase_payment_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Purchase Terms",
+                    "value": "purchase_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Quotation Terms",
+                    "value": "quotations_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Payment Terms",
+                    "value": "payment_terms",
+                    "class": "",
+                    "privilege": "*"
+                },
+                {
+                    "title": "Invoices Terms",
+                    "value": "invoices_terms",
+                    "class": "",
+                    "privilege": "*"
+                }
+            ]
         },
-        "zipcode": {
-            "label": "Zipcode/PIN Code",
-            "group": "address"
-        },
-        "tags": {
-            "label": "Tags",
-            "group": "others",
-            "type": "tags"
-        },
-        "gender": {
-            "label": "Gender",
-            "group": "others",
-            "type": "select",
-            "options": {
-                "": "false",
-                "male": "Male",
-                "female": "Female"
-            }
-        },
-        "dob": {
-            "label": "Date Of Birth",
-            "group": "others",
-            "type": "date"
+        "terms": {
+            "label": "Terms",
+            "group": "Info",
+            "type": "richtextarea",
+            "required": true
         },
         "blocked": {
             "label": "Blocked",
-            "group": "others",
-            "required": true,
+            "group": "Info",
             "type": "select",
-            "options": {
-                "true": "Blocked",
-                "false": "Not Blocked"
-            }
-        },
-        "guid": {
-            "label": "GUID",
-            "group": "admin",
-            "required": true
-        },
-        "privilegeid": {
-            "label": "Privlege ID",
-            "group": "admin",
+            "groupid": "boolean",
+            "vmode": "edit",
             "required": true,
-            "type": "select",
-            "orderby": "name asc",
             "options": [
                 {
-                    "title": "admin",
-                    "value": 5
+                    "title": "False",
+                    "value": "false",
+                    "class": "",
+                    "privilege": "*"
                 },
                 {
-                    "title": "root",
-                    "value": 1
+                    "title": "True",
+                    "value": "true",
+                    "class": "",
+                    "privilege": "*"
                 },
                 {
-                    "title": "Testing",
-                    "value": 6
-                },
-                {
-                    "title": "wf_l1",
-                    "value": 7
-                },
-                {
-                    "title": "wf_l2",
-                    "value": 8
+                    "title": "True",
+                    "value": null,
+                    "class": null,
+                    "privilege": "*"
                 }
             ]
-        },
-        "accessid": {
-            "label": "Access ID",
-            "group": "admin",
-            "required": true,
-            "type": "select",
-            "orderby": "name asc",
-            "options": [
-                {
-                    "title": "All Sites",
-                    "value": 1
-                }
-            ]
-        },
-        "groupid": {
-            "label": "Group/Team",
-            "group": "admin",
-            "required": true,
-            "type": "select",
-            "orderby": "group_name asc",
-            "options": [
-                {
-                    "title": "Default",
-                    "value": 1
-                },
-                {
-                    "title": "group1111",
-                    "value": 7
-                },
-                {
-                    "title": "grp name",
-                    "value": 3
-                },
-                {
-                    "title": "grp1 name",
-                    "value": 4
-                },
-                {
-                    "title": "grp2 name e",
-                    "value": 5
-                },
-                {
-                    "title": "Silk",
-                    "value": 2
-                },
-                {
-                    "title": "Test",
-                    "value": 6
-                }
-            ]
-        },
-        "roles": {
-            "label": "Roles",
-            "group": "admin",
-            "required": true,
-            "multiple": true,
-            "type": "dataSelectorFromTable",
-            "orderby": "name asc",
-            "options": [
-                {
-                    "title": "Admin",
-                    "value": 1
-                },
-                {
-                    "title": "Business",
-                    "value": 3
-                },
-                {
-                    "title": "Manager",
-                    "value": 2
-                },
-                {
-                    "title": "quality1",
-                    "value": 7
-                },
-                {
-                    "title": "quality2",
-                    "value": 8
-                },
-                {
-                    "title": "user",
-                    "value": 5
-                },
-                {
-                    "title": "User - updated",
-                    "value": 4
-                }
-            ]
-        },
-        "refid": {
-            "label": "User Reference Code",
-            "group": "admin"
-        },
-        "registered_site": {
-            "label": "User Registered Site",
-            "group": "admin",
-            "type": "select",
-            "orderby": "name asc",
-            "options": [
-                {
-                    "title": "All Sites",
-                    "value": 1
-                }
-            ]
-        },
-        "expires": {
-            "label": "Account Expires On",
-            "group": "security",
-            "required": true,
-            "type": "date"
-        },
-        "security_policy": {
-            "label": "User Security Policy",
-            "group": "security",
-            "required": true,
-            "type": "select",
-            "options": {
-                "": "false",
-                "open": "Open",
-                "closed": "Closed"
-            }
-        },
-        "privacy": {
-            "label": "Data Privacy Policy",
-            "group": "security",
-            "required": true,
-            "type": "select",
-            "options": {
-                "": "false",
-                "public": "Public",
-                "private": "Private",
-                "protected": "Protected"
-            }
-        },
-        "geolocation": {
-            "label": "Geo Location (For Login Lock)",
-            "group": "security"
-        },
-        "geoip": {
-            "label": "Geo IP (For Login Lock)",
-            "group": "security"
         }
     },
-    "module_refid": "userManager.users",
+    "module_refid": "termsandcondition_1.main",
     "module_type": "forms"
 }
+
+
+export const example1 = {
+      "endPoints": {
+    "baseURL": "http://192.168.0.20:9999",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6InRTRjJ5aVgvQkYyckJXV2VZYmZtMGpKSGkrYWp1OHZlN3dMQVdwZ0gxMlA3VVhJU2F0WWtRS1czbzc0OW1obzR4Y2lHOUZDY2FONVdTSUpaSHhkZ0JWWDRVYUlmbGh4NmxwNXppcGNFVjgyVTlyQTVmdXlFa1Bpb3IwaU1aVHN0cjEzNyttWGN1NjJrMnFQREhyRDR6VGl2bWluMXVkWFlQc29rams2VEdPSmkweWZPSSt4KzVxVVYxdUp5M05FYklPRXN1U2laOTdDcUV4YWEzMHgwN0R1V1dsMDM1dDhicTJqVjRNTXNaalVXTUNhUzk5ZE9DM2FweHBBd1JjOVJlTys0TUp1ai80QTJ2YWJhSkw5c2V6VXJPZUJhbjdVQlVackN5cXExVEE9PSIsImlhdCI6MTc3MTg1NDMwNywiZXhwIjoxNzcxODU3OTA3LCJqdGkiOiJhY2M6MToxNzcxODU0MzA3MDkzOndlYiJ9.mPO6W1A8ijoN8T0kzpAPEjYXeZ3vQzaw40kXXAQvBOc",
+    "dbopsGetHash": "/api/dbops",
+    "dbopsGetRefId": "/api/dbops/save",
+    "dbopsCreate": "/api/dbops/create",
+    "dbopsUpdate": "/api/dbops/update",
+    "dbopsFetch": "/api/dbops/fetch",
+    "registerQuery": "/api/query/save",
+    "runQuery": "/api/query/run",
+    "uploadURL": "/api/files/upload",
+    "operation": "create",
+  },
+        "source": {
+            "type": "sql",
+            "dbopsid": "forms%40projectfunction.project%40"
+        },
+        "forcefill": {
+            "guid": "#SESS_GUID#",
+            "type": "project",
+            "edited_by": "#SESS_USER_ID#"
+        },
+        "fields": {
+            "code": {
+                "label": "Code",
+                "required": true,
+                "groupid": "projectfunction",
+                "width": 6,
+                "type": "text"
+            },
+            "title": {
+                "label": "Title",
+                "required": true,
+                "width": 6,
+                "type": "text"
+            },
+            "company_id": {
+                "label": "Company/ SPV",
+                "type": "select",
+              
+                "source": {
+                    "type": "api",
+                    "method": "post",
+                    "endpoint": "/api/services/eofficeGlobal/get_company"
+                },
+                "ajaxchain": [
+                    {
+                        "target": "sector_id",
+                        "src": {
+                            "type": "api",
+                            "method": "post",
+                            "endpoint": "/api/services/eofficeGlobal/get_sector"
+                        }
+                    }
+                ],
+                "no-option": "Select Company/ SPV",
+                "width": 4,
+                "options": []
+            },
+            "sector_id": {
+                "label": "Sector",
+                "no-option": "Select Sector",
+                "type": "select",
+                "valueKey": "id",
+                "required": true,
+                "width": 4,
+                "options": []
+            },
+            "location_id": {
+                "label": "Location",
+                "type": "select",
+                "multiple": true,
+                "search": true,
+                "required": true,
+                "width": 4,
+                "options": [
+                    {
+                        "value": 1,
+                        "title": "Begusarai"
+                    },
+                    {
+                        "value": 2,
+                        "title": "Mokama"
+                    },
+                    {
+                        "value": 3,
+                        "title": "Pune"
+                    },
+                    {
+                        "value": 4,
+                        "title": "Shirur"
+                    },
+                    {
+                        "value": 5,
+                        "title": "KARAIKAL"
+                    },
+                    {
+                        "value": 6,
+                        "title": "KARAIMEDU"
+                    },
+                    {
+                        "value": 7,
+                        "title": "MAYILADUTHURA"
+                    },
+                    {
+                        "value": 8,
+                        "title": "NAMBUKURUCHI"
+                    },
+                    {
+                        "value": 9,
+                        "title": "PUDUCHERRY"
+                    },
+                    {
+                        "value": 10,
+                        "title": "Nagapattinam"
+                    },
+                    {
+                        "value": 11,
+                        "title": "AURANGABAD"
+                    },
+                    {
+                        "value": 12,
+                        "title": "CHHATARPUR"
+                    },
+                    {
+                        "value": 13,
+                        "title": "CHUNAR"
+                    },
+                    {
+                        "value": 14,
+                        "title": "KAIMUR"
+                    },
+                    {
+                        "value": 15,
+                        "title": "MIRZAPUR"
+                    },
+                    {
+                        "value": 16,
+                        "title": "MOHANIA"
+                    },
+                    {
+                        "value": 17,
+                        "title": "MUGALSARAI"
+                    },
+                    {
+                        "value": 18,
+                        "title": "REWA"
+                    },
+                    {
+                        "value": 19,
+                        "title": "ROHTAS"
+                    },
+                    {
+                        "value": 20,
+                        "title": "SASARAM"
+                    },
+                    {
+                        "value": 21,
+                        "title": "VARANASI"
+                    },
+                    {
+                        "value": 22,
+                        "title": "Delhi RO"
+                    },
+                    {
+                        "value": 23,
+                        "title": "Delhi"
+                    },
+                    {
+                        "value": 24,
+                        "title": "Bhandup"
+                    },
+                    {
+                        "value": 25,
+                        "title": "Dewas"
+                    },
+                    {
+                        "value": 26,
+                        "title": "Dharavi"
+                    },
+                    {
+                        "value": 27,
+                        "title": "Panjarapur"
+                    },
+                    {
+                        "value": 28,
+                        "title": "Lucknow RO"
+                    },
+                    {
+                        "value": 29,
+                        "title": "Bulandashar"
+                    },
+                    {
+                        "value": 30,
+                        "title": "Amethi"
+                    },
+                    {
+                        "value": 31,
+                        "title": "Jaunpur"
+                    },
+                    {
+                        "value": 32,
+                        "title": "Badhoi"
+                    },
+                    {
+                        "value": 33,
+                        "title": "Akbarpur"
+                    },
+                    {
+                        "value": 34,
+                        "title": "Ambedakar Nagar"
+                    },
+                    {
+                        "value": 35,
+                        "title": "Chandauli"
+                    },
+                    {
+                        "value": 36,
+                        "title": "Ayodhya"
+                    },
+                    {
+                        "value": 37,
+                        "title": "Mumbai HO"
+                    },
+                    {
+                        "value": 38,
+                        "title": "Mumbai"
+                    },
+                    {
+                        "value": 39,
+                        "title": "Ahmedabad"
+                    }
+                ]
+            },
+            "description": {
+                "label": "Description",
+                "width": 12,
+                "type": "textarea"
+            },
+            "blocked": {
+                "label": "Blocked",
+                "type": "select",
+                "groupid": "boolean",
+                "width": 12,
+                "vmode": "edit",
+                "options": [
+                    {
+                        "title": "False",
+                        "value": "false",
+                        "class": "",
+                        "privilege": "*"
+                    },
+                    {
+                        "title": "True",
+                        "value": "true",
+                        "class": "",
+                        "privilege": "*"
+                    },
+                    {
+                        "title": "True",
+                        "value": null,
+                        "class": null,
+                        "privilege": "*"
+                    }
+                ]
+            }
+        },
+        "module_refid": "projectfunction.project",
+        "module_type": "forms"
+    }

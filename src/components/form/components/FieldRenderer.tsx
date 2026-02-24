@@ -24,7 +24,7 @@ export default function FieldRenderer({
     handleToggle, setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
-    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused
+    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused, exactMatch
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid,
@@ -66,13 +66,13 @@ export default function FieldRenderer({
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                if (filteredOptions[highlightedIndex]) {
-                  const [val] = filteredOptions[highlightedIndex];
+                if (exactMatch) {
+                  const [val] = exactMatch;
                   formik.setFieldValue(key, val);
-                  handlePersist(val, field, module_refid)
+                  handlePersist(val, field, module_refid);
                 } else if (search.trim()) {
                   formik.setFieldValue(key, search.trim());
-                  handlePersist(search.trim(), field, module_refid)
+                  handlePersist(search.trim(), field, module_refid);
                 }
                 setOpen(false);
                 return;
@@ -88,7 +88,7 @@ export default function FieldRenderer({
               ref={listRef}
               className="absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1"
             >
-              {filteredOptions.length > 0 ? (
+              {filteredOptions.length > 0 && exactMatch ? (
                 filteredOptions.map(([val, label], idx) => (
                   <div
                     id={`${key}-${val}`}
@@ -388,6 +388,10 @@ export default function FieldRenderer({
               <option value="" disabled>
                 {field?.["no-option"] || `Please select ${field.label}`}
               </option>
+
+              <option value="">
+                Clear Selection
+              </option>
               {!isGroupedOptions(options) &&
                 Object.entries(options).map(([val, label]) => (
                   <option key={val} value={val} className="py-2">
@@ -469,7 +473,8 @@ export default function FieldRenderer({
       )
 
     case "checkbox": {
-      const valueArray: string[] = formik.values[key];
+      const isMultiple = field.multiple === true;
+      const value = formik.values[key];
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -478,22 +483,33 @@ export default function FieldRenderer({
           </label>
 
           <div className="flex flex-col gap-2 ml-1">
-            {Object.entries(options || {}).map(([val, label]) => (
-              <label
+            {Object.entries(options || {}).map(([val, label]) => {
+              const checked = isMultiple
+                ? Array.isArray(value) && value.includes(val)
+                : value === val;
+              return <label
                 key={val}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
                   id={`${key}-${val}`}
                   type="checkbox"
-                  checked={valueArray.includes(val)}
+                  checked={checked}
                   onChange={(e) => {
-                    const next = e.target.checked
-                      ? [...valueArray, val]
-                      : valueArray.filter((v) => v !== val);
+                    let nextValue;
 
-                    formik.setFieldValue(key, next);
-                    handlePersist(next, field, module_refid)
+                    if (isMultiple) {
+                      const current = Array.isArray(value) ? value : [];
+                      nextValue = e.target.checked
+                        ? [...current, val]
+                        : current.filter(v => v !== val);
+                    } else {
+                      nextValue = e.target.checked ? val : "false";
+                    }
+
+
+                    formik.setFieldValue(key, nextValue);
+                    handlePersist(nextValue, field, module_refid)
                     executeFieldMethod("onChange", field, `${key}-${val}`)
                   }}
                   onBlur={formik.handleBlur}
@@ -504,7 +520,7 @@ export default function FieldRenderer({
                 />
                 {label}
               </label>
-            ))}
+            })}
           </div>
 
           {formik.touched[key] && formik.errors[key] && (
@@ -659,7 +675,7 @@ export default function FieldRenderer({
               onChange={(e) => {
                 const files = e.currentTarget.files;
                 if (files) handleFileUpload(files);
-                executeFieldMethod("onChange", field, `${key}`)
+                executeFieldMethod("onChange", field, key)
               }}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder}
@@ -744,7 +760,7 @@ export default function FieldRenderer({
               name={key}
               min={field.min}
               max={field.max}
-              value={formik.values[key]}
+              value={formik.values[key] ?? ""}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
                 handlePersist(e.target.value, field, module_refid)
@@ -799,7 +815,7 @@ export default function FieldRenderer({
               step={field.step}
               placeholder={field.placeholder}
               disabled={isDisabled}
-              min={field.min ?? 1}
+              min={field.min}
               max={field.max}
             />
             {/* Animated border glow */}

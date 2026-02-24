@@ -25,17 +25,15 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: path.resolve(__dirname, 'src/index.ts'),
         name: 'LogiksForm',
-        formats: ['es', 'umd'],
-        fileName: (format) => `index.${format}.js`
+        formats: ['es'],
+        fileName: () => `index.es.js`
       },
       rollupOptions: {
-        external: ['react', 'react-dom', 'formik', 'yup', 'axios', 'tinymce', '@tinymce/tinymce-react'],
+        external: ['react', 'react-dom', 'formik', 'yup', 'axios', '@tiptap/react', '@tiptap/starter-kit','@tiptap/pm'],
         output: {
           globals: {
             react: 'React',
             'react-dom': 'ReactDOM',
-            axios: "axios",
-            formik: "formik",
             yup: "Yup",
           },
           exports: "named",

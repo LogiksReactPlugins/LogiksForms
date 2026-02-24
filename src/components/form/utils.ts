@@ -117,18 +117,16 @@ export const intializeForm = (
     // ---------- Initial Values (NORMALIZED) ----------
 
 
-    if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+    if (field.multiple === true || field.type === "tags") {
       initialValues[name] =
         Array.isArray(value)
           ? value
           : typeof value === "string"
             ? value.split(",").map(v => v.trim()).filter(Boolean)
             : [];
-    }
-
-
-
-    else if (field.type === "json") {
+    } else if (field.type === "checkbox") {
+      initialValues[name] = String(value ?? "false");
+    } else if (field.type === "json") {
       initialValues[name] =
         typeof value === "object" && value !== null
           ? JSON.stringify(value, null, 2)
@@ -137,7 +135,7 @@ export const intializeForm = (
 
     else if (field.type === "date") {
       initialValues[name] =
-        typeof value === "string" ? value.slice(0, 10) : "";
+        typeof value === "string" && value.trim() ? value.slice(0, 10) : null;
     }
 
     else if (field.type === "time") {
@@ -171,7 +169,7 @@ export const intializeForm = (
         : Yup.mixed<File>();
     }
 
-    else if (field.multiple === true || field.type === "checkbox" || field.type === "tags") {
+    else if (field.multiple === true || field.type === "tags") {
       validator = Yup.array().of(Yup.string());
     }
     else if (field.type === "email") {
@@ -190,23 +188,11 @@ export const intializeForm = (
           return false;
         }
       });
+    } else if (field.type === "date") {
+      validator = Yup.string().nullable();
     }
     else {
       validator = Yup.string();
-    }
-
-    if (field.required) {
-      validator = validator.required(
-        field.error_message || `${field.label || name} is required`
-      );
-    }
-
-    // ---------- Direct Regex ----------
-    if (field?.validate?.regex && typeof field.validate.regex === "string") {
-      validator = (validator as Yup.StringSchema).matches(
-        new RegExp(field?.validate?.regex),
-        field?.error_message || "Invalid input format"
-      );
     }
 
 
@@ -227,24 +213,29 @@ export const intializeForm = (
           case "regex":
             validator = (validator as Yup.StringSchema).matches(
               new RegExp(val as string),
-              `Must match pattern: ${val}`
+              field?.error_message || `Must match pattern: ${val}`
             );
             break;
 
           case "date":
-            validator = Yup.date()
-              .typeError("Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)")
-              .transform((value, originalValue) => {
-                if (typeof originalValue === "string") {
-                  const normalized = originalValue.replace(/-/g, "/");
+            validator = (validator as Yup.StringSchema)
+              .nullable()
+              .test(
+                "date",
+                "Invalid date format (expected dd/MM/yyyy or dd-MM-yyyy)",
+                (v) => {
+                  if (v == null || v === "") return true;
+
+                  const normalized = v.replace(/-/g, "/");
                   const [d, m, y] = normalized.split("/");
-                  if (d && m && y) {
-                    return new Date(`${y}-${m}-${d}`);
-                  }
+                  if (!d || !m || !y) return false;
+
+                  const date = new Date(`${y}-${m}-${d}`);
+                  return !isNaN(date.getTime());
                 }
-                return value;
-              });
+              );
             break;
+
 
           case "time":
             validator = (validator as Yup.StringSchema).matches(
@@ -328,6 +319,12 @@ export const intializeForm = (
             break;
         }
       });
+    }
+
+    if (field.required) {
+      validator = validator.required(
+        field.error_message || `${field.label || name} is required`
+      );
     }
 
     validationSchema[name] = validator;
@@ -594,7 +591,7 @@ export function flatFields(
 export function handlePersist(value: any, field: FormField, module_refid: string | undefined) {
 
   const persistentKey = getPersistentKey(field);
- 
+
   if (persistentKey && module_refid) {
     writePersistedValue(module_refid, persistentKey, value);
   }
@@ -603,13 +600,19 @@ export function handlePersist(value: any, field: FormField, module_refid: string
 
 
 export function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig {
+  if (!ac || typeof ac !== "object") return false;
+
+  const src = (ac as any).src;
+
   return (
-    typeof ac === "object" &&
-    ac !== null &&
     typeof (ac as any).target === "string" &&
-    typeof (ac as any).src === "object" &&
-    (ac as any).src !== null &&
-    typeof (ac as any).src.table === "string"
+    typeof src === "object" &&
+    src !== null &&
+    (
+      src.type === "api" ||
+      typeof src.queryid === "string" ||
+      (typeof src.table === "string" && typeof src.columns !== "undefined")
+    )
   );
 }
 
@@ -629,7 +632,7 @@ type Row = Record<string, unknown>;
 
 export const normalizeRowSafe = (row: Row): Row => {
 
-   if (row == null || typeof row !== "object") {
+  if (row == null || typeof row !== "object") {
     return { value: row, title: row };
   }
   const result: Row = {};

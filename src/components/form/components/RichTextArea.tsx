@@ -1,5 +1,14 @@
-import { Tiptap, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+
+import Image from "@tiptap/extension-image";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableHeader } from "@tiptap/extension-table-header";
+import { TableCell } from "@tiptap/extension-table-cell";
+import RichTextToolbar from './RIchTextToolbar.js'
+import { useEffect } from "react";
 
 type RichTextEditorProps = {
   value: string
@@ -13,7 +22,22 @@ export default function RichTextEditor({
   disabled
 }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit.configure({
+        link: {
+          openOnClick: false,
+          autolink: true,
+        },
+      }),
+      Underline,
+
+      Image,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
+
+    ],
     content: value || '',
     editable: !disabled,
     immediatelyRender: false,
@@ -28,20 +52,45 @@ export default function RichTextEditor({
     },
   })
 
-  if (!editor) return null
+  useEffect(() => {
+    if (!editor) return;
+
+    const current = editor.getHTML();
+
+    if (value !== undefined && value !== current) {
+      editor.commands.setContent(value, {
+        emitUpdate: false,
+      });
+    }
+  }, [value, editor]);
+
+  if (!editor) return null;
+
+
+
 
   return (
-    <Tiptap instance={editor}>
-      <div
-        className={`
-          border rounded-lg px-3 py-2 bg-white
-          transition
-          ${disabled ? 'bg-gray-100 opacity-70' : 'hover:border-gray-400'}
-          focus-within:ring-2 focus-within:ring-indigo-500
-        `}
-      >
-        <Tiptap.Content />
-      </div>
-    </Tiptap>
+
+    <div
+      className={`
+        w-full rounded-lg border border-gray-200 transition-all duration-300
+        backdrop-blur-sm text-gray-800
+        ${disabled
+          ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60"
+          : "bg-white border-gray-300 hover:border-gray-400 focus-within:ring-1 focus-within:ring-indigo-500"}
+      `}
+    >
+      {!disabled && <RichTextToolbar editor={editor} />}
+      <div className="resize-y overflow-auto min-h-[200px] max-h-[500px]">
+        <EditorContent
+          editor={editor}
+          className="tiptap p-3 focus:outline-none min-h-[200px] "
+        />      </div>
+
+    </div>
+
   )
 }
+
+
+

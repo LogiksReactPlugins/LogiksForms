@@ -28,5 +28,6 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     inputRef: import('react').RefObject<HTMLInputElement | null>;
     detailsRef: import('react').RefObject<HTMLDetailsElement | null>;
     isFocused: boolean;
+    exactMatch: import('../utils.js').FlatEntry | null | undefined;
 };
 //# sourceMappingURL=useFieldRenderer.d.ts.map

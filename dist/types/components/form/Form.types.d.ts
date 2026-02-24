@@ -1,6 +1,14 @@
 import { FormikProps } from 'formik';
 import { AxiosRequestConfig } from 'axios';
 import { ReactNode } from 'react';
+type ApiSrc = {
+    type: "api";
+    endpoint: string;
+    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    table?: never;
+    columns?: never;
+    queryid?: never;
+};
 type SqlSrcByTable = {
     table: string;
     columns: string;
@@ -13,7 +21,7 @@ type SqlSrcByQueryId = {
     table?: never;
     columns?: never;
 };
-type AutocompleteSrc = SqlSrcByTable | SqlSrcByQueryId;
+type AutocompleteSrc = ApiSrc | SqlSrcByTable | SqlSrcByQueryId;
 export type AutocompleteConfig = {
     target: string;
     src: AutocompleteSrc;
@@ -21,6 +29,7 @@ export type AutocompleteConfig = {
 export interface FormField {
     name: string;
     label?: string;
+    parameter?: string;
     width?: number | string;
     options?: Record<string, any>;
     group?: string;
@@ -53,6 +62,8 @@ export interface FormField {
     method?: string;
     vmode?: string;
     "no-option"?: string;
+    "nodb"?: boolean;
+    "nosave"?: boolean;
     queryid?: string;
     min?: number | string;
     max?: number | string;
