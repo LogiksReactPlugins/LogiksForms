@@ -4,9 +4,9 @@ import type { AxiosRequestConfig } from "axios";
 import type { ReactNode } from "react";
 
 type ApiSrc = {
-    type: "api";
+    type: string;
     endpoint: string;
-    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    method?: string;
     table?: never;
     columns?: never;
     queryid?: never;

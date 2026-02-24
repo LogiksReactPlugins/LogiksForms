@@ -2,9 +2,9 @@ import { FormikProps } from 'formik';
 import { AxiosRequestConfig } from 'axios';
 import { ReactNode } from 'react';
 type ApiSrc = {
-    type: "api";
+    type: string;
     endpoint: string;
-    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    method?: string;
     table?: never;
     columns?: never;
     queryid?: never;
