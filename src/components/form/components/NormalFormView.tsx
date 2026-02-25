@@ -95,14 +95,25 @@ export default function NormalFormView({
               {otherFields.map((field) => {
                 const hidden = isHidden(field.hidden) || field.type === "geolocation";
 
+                const wrapperClass = `
+    col-span-12 md:col-span-6
+    ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
+    ${hidden ? "hidden" : ""}
+  `;
+                // if (field.type === "static") {
+                //   return (
+                //     <div
+                //       key={field?.name}
+                //       id={`wrapper-${field.name}`}
+                //       className={wrapperClass}
+                //       dangerouslySetInnerHTML={{ __html: field.content ?? "" }}
+                //     />
+                //   );
+                // }
                 return <div
                   key={field?.name}
                   id={`wrapper-${field.name}`}
-                  className={`
-                    col-span-12 md:col-span-6 
-                    ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"} 
-                    ${hidden ? "hidden" : ""}
-                    `}
+                  className={wrapperClass}
                 >
                   <FieldRenderer
                     refid={refid}

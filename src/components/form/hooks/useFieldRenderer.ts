@@ -151,12 +151,15 @@ export default function useFieldRenderer({
                         const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
                         if (isMounted) setOptions(mapped);
+                        return;
                     } catch (err) {
                         console.error("Method execution failed:", err);
                         if (isMounted) setOptions({});
+                        return;
                     }
                 } else {
                     if (isMounted) setOptions({});
+                    return;
                 }
             }
 
@@ -175,10 +178,7 @@ export default function useFieldRenderer({
                             : { data: { refid: source.refid } }),
                     }
 
-
                     const res = await axios(config);
-
-
 
                     const rawItems = Array.isArray(res.data?.results?.options) ?
                         res.data?.results?.options : Array.isArray(res?.data?.data)
@@ -188,8 +188,6 @@ export default function useFieldRenderer({
                                 Array.isArray(res?.data)
                                     ? res.data
                                     : res;
-
-
 
                     if (
                         typeof rawItems === "object" &&
@@ -206,16 +204,14 @@ export default function useFieldRenderer({
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
-
-
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
-
-
                     if (isMounted) setOptions(mapped);
+                    return;
 
                 } catch (err) {
                     console.error("API execution failed:", err);
                     if (isMounted) setOptions({});
+                    return;
                 }
             }
 
@@ -444,8 +440,26 @@ export default function useFieldRenderer({
                     let row: any;
 
                     if ("type" in src && src.type === "api") {
-                        let key = field.parameter ? field.parameter : field.name;
-                        let params = { [key]: value, refid: value }
+                        let curr_field = field.name;
+
+                        if (typeof field.parameter === "string" && field.parameter) {
+                            curr_field = field.parameter
+                        }
+
+                        let params = { [curr_field]: value, refid: value }
+
+                        if (typeof field.parameter === "object" && field.parameter !== null
+                            && Object.keys(field.parameter).length > 0
+
+                        ) {
+
+                            for (const [key, val] of Object.entries(field.parameter)) {
+                                params[key] = key === curr_field
+                                    ? value
+                                    : formik.values?.[val as string];
+                            }
+
+                        }
                         const config = {
                             method: src.method || "GET",
                             url: sqlOpsUrls?.baseURL + src.endpoint,
@@ -519,11 +533,30 @@ export default function useFieldRenderer({
                     if (!sqlOpsUrls) continue;
 
                     let responseData: any;
-                  
-                    if ("type" in src && src.type === "api") {
-                        let key = field.parameter ? field.parameter : field.name;
 
-                        let params = { [key]: value, refid: value }
+                    if ("type" in src && src.type === "api") {
+                        let curr_field = field.name;
+
+                        if (typeof field.parameter === "string" && field.parameter) {
+                            curr_field = field.parameter
+                        }
+
+                        let params = { [curr_field]: value, refid: value }
+
+                        if (typeof field.parameter === "object" && field.parameter !== null
+                            && Object.keys(field.parameter).length > 0
+
+                        ) {
+
+                            for (const [key, val] of Object.entries(field.parameter)) {
+                                params[key] = key === curr_field
+                                    ? value
+                                    : formik.values?.[val as string];
+                            }
+
+                        }
+
+
                         const config = {
                             method: src.method || "GET",
                             url: sqlOpsUrls?.baseURL + src.endpoint,
@@ -533,7 +566,7 @@ export default function useFieldRenderer({
                             },
                             ...(src.method === "GET"
                                 ? { params }
-                                : { data: params}),
+                                : { data: params }),
                         }
                         const { data: res } = await axios(config);
                         responseData = res;
@@ -565,12 +598,12 @@ export default function useFieldRenderer({
                     let labelKey = field.labelKey ?? "title";
 
                     const rawItems = Array.isArray(responseData?.results?.options) ?
-                     responseData?.results?.options : Array.isArray(responseData.data)
-                        ? responseData.data
-                        : Array.isArray(responseData.results)
-                            ? responseData.results
-                            : responseData
-                                       
+                        responseData?.results?.options : Array.isArray(responseData.data)
+                            ? responseData.data
+                            : Array.isArray(responseData.results)
+                                ? responseData.results
+                                : responseData
+
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
@@ -591,13 +624,13 @@ export default function useFieldRenderer({
         };
 
         run();
-    }, [formik.values[field.name]]);
+    }, [formik.values[field.name], formik.values]);
 
 
     useEffect(() => {
         if (!field.search) return;
         if (!search.trim()) return;
-        if (!field.table || !sqlOpsUrls) return;
+        if (!sqlOpsUrls) return;
         const searchColumns = getSearchColumns(field.columns ?? "");
 
         const controller = new AbortController();
@@ -634,10 +667,8 @@ export default function useFieldRenderer({
                     })
                 }
                 let valueKey = field.valueKey ?? "value";
-
                 let labelKey = field.labelKey ?? "title";
                 const { data: res } = await fetchDataByquery(sqlOpsUrls, query, field?.queryid, undefined, module_refid, filter);
-
 
                 const rawItems = Array.isArray(res?.data?.data)
                     ? res.data.data

@@ -83,6 +83,7 @@ export interface FormField {
     onClick?: string;
     step?: string | number;
     persistent?: string | boolean;
+    content?:string;
 
 }
 

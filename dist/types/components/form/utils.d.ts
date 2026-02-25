@@ -33,5 +33,6 @@ export declare function writePersistedValue(module_refid: string, key: string, v
 export declare function getFileExtension(path?: string): string;
 export declare function getMimeCategory(ext: string): "image" | "pdf" | "video" | "text" | "other";
 export declare const fileIconClassMap: Record<FileCategory, string>;
+export declare function sanitizeHtml(html: string): string;
 export {};
 //# sourceMappingURL=utils.d.ts.map
