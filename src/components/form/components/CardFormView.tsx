@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Card from './Card.js'
 import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
@@ -55,7 +55,9 @@ export default function CardFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: (values) => {
-      onSubmit(values)
+      let flatfields = Object.values(groupedFields).flat();
+      let filteredValues = filterSavableValues(values, flatfields);
+      onSubmit(filteredValues)
 
     }
   })

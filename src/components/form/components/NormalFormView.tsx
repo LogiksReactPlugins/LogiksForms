@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { SimpleFormViewProps, SelectOptions, FormField } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
@@ -60,16 +60,19 @@ export default function NormalFormView({
     };
   }, [flatfields, data]);
 
+
+
+
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: (values) => {
-      onSubmit(values)
+      let filteredValues = filterSavableValues(values, flatfields)
+      onSubmit(filteredValues)
     }
   })
-
-
+  
   return (
     <>
 

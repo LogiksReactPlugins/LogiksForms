@@ -717,5 +717,18 @@ export function sanitizeHtml(html: string) {
 }
 
 
+export function filterSavableValues(
+  values: Record<string, any>,
+  flatFields: FormField[]
+): Record<string, any> {
+  const excluded = new Set(
+    flatFields
+      .filter(f => f.nodb === true || f.nosave === true)
+      .map(f => f.name)
+  );
 
+  return Object.fromEntries(
+    Object.entries(values).filter(([key]) => !excluded.has(key))
+  );
+}
 

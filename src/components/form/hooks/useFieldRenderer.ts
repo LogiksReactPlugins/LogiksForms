@@ -624,7 +624,7 @@ export default function useFieldRenderer({
         };
 
         run();
-    }, [formik.values[field.name], formik.values]);
+    }, [formik.values[field.name]]);
 
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import React from 'react'
 import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
@@ -83,6 +83,8 @@ export default function TabFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(currentStepSchema),
     onSubmit: (values) => {
+      let flatfields = Object.values(groupedFields).flat();
+      let filteredValues = filterSavableValues(values, flatfields);
 
       if (widget) {
         if (activeTabIndex < groupNames.length - 1) {
@@ -91,11 +93,11 @@ export default function TabFormView({
 
         if (activeTabIndex === groupNames.length - 1) {
 
-          onSubmit(values)
+          onSubmit(filteredValues)
         }
       } else {
 
-        onSubmit(values);
+        onSubmit(filteredValues);
       }
 
 
