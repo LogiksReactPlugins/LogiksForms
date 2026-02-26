@@ -686,12 +686,14 @@ export default function FieldRenderer({
             <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${isFocused ? 'opacity-20' : ''
               }`} style={{ zIndex: -1, filter: 'blur(8px)' }}></div>
           </div>
-          {files.map((file) => {
-            const name = file?.split("/").pop();
-            return (
-              <FilePreviewTrigger key={name} sqlOpsUrls={sqlOpsUrls} filePath={file} />
-            );
-          })}
+          <div className='flex flex-wrap gap-2'>
+            {files.map((file) => {
+              const name = file?.split("/").pop();
+              return (
+                <FilePreviewTrigger key={name} sqlOpsUrls={sqlOpsUrls} filePath={file} />
+              );
+            })}
+          </div>
 
           {formik.touched[key] && formik.errors[key] &&
             <span className="text-xs text-red-500">{String(formik.errors[key])}</span>

@@ -25,19 +25,20 @@ export default function CommonInfo({
         () => fields?.find((f) => f.type === "avatar"),
         [fields]
     );
-
+    const rightColSpan = avatarField ? 'lg:col-span-10' : 'lg:col-span-12';
 
     return (
-        <div className="bg-white min-h-3/10 overflow-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="bg-white min-h-3/10 ">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 ">
                 {/* Left Column - Avatar */}
                 {avatarField && (
 
-                    <div className="lg:col-span-2 flex flex-col items-center">
+                    <div className="lg:col-span-2 flex flex-col items-center min-h-0 max-h-40 overflow-y-auto ">
                         <div
                             id={`wrapper-${avatarField.name}`}
                             className={`
-                        overflow-hidden bg-gray-100 flex items-center justify-center
+                               
+                          flex items-center justify-center
                          ${avatarField.hidden ? "hidden" : ""}
 
                             `}>
@@ -53,7 +54,7 @@ export default function CommonInfo({
                     </div>
                 )}
                 {/* Right Column - Details Grid */}
-                <div className="lg:col-span-10 min-h-0 max-h-40  overflow-y-auto custom-scrollbar">
+                <div className={`${rightColSpan} min-h-0 max-h-40  overflow-y-auto `}>
 
                     <div className="grid grid-cols-12 gap-2">
                         {fields?.map((field, index) => {

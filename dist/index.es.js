@@ -1867,19 +1867,19 @@ function Bi({
   module_refid: r
 }) {
   let s = e?.name;
-  const o = fn(null), i = async (l) => {
-    const a = l.currentTarget.files;
-    if (!(!a || a.length === 0))
+  const o = fn(null), i = async (a) => {
+    const c = a.currentTarget.files;
+    if (!(!c || c.length === 0))
       try {
-        const c = await Fi(n, a), u = e.multiple ? c.map((d) => d.path) : c[0]?.path;
+        const u = await Fi(n, c), d = e.multiple ? u.map((f) => f.path) : u[0]?.path;
         t.setFieldValue(
           s,
-          u
-        ), hn(u, e, r);
-      } catch (c) {
-        console.error("File upload failed", c), t.setFieldError(s, "File upload failed");
+          d
+        ), hn(d, e, r);
+      } catch (u) {
+        console.error("File upload failed", u), t.setFieldError(s, "File upload failed");
       }
-  };
+  }, l = Array.isArray(t.values[s]) ? t.values[s] : t.values[s] ? [t.values[s]] : [];
   return /* @__PURE__ */ m.jsxs("div", { children: [
     /* @__PURE__ */ m.jsx(
       "input",
@@ -1895,13 +1895,13 @@ function Bi({
       "div",
       {
         onClick: () => o.current?.click(),
-        className: "relative w-42 h-42 p-2 rounded-sm ",
-        children: t.values[s] ? /* @__PURE__ */ m.jsx(Lc, { field_name: s, filePath: t.values[s], sqlOpsUrls: n }) : /* @__PURE__ */ m.jsx(
+        className: "flex flex-wrap gap-2",
+        children: l.length > 0 ? l.map((a) => /* @__PURE__ */ m.jsx(Lc, { field_name: a, filePath: a, sqlOpsUrls: n })) : /* @__PURE__ */ m.jsx(
           "img",
           {
             src: "https://cdn-icons-png.flaticon.com/512/266/266033.png",
             alt: "avatar placeholder",
-            className: "w-full h-full object-cover opacity-60"
+            className: "w-42 h-42 p-2 rounded-sm object-cover opacity-60"
           }
         )
       }
@@ -13813,10 +13813,10 @@ function zn({
           ),
           /* @__PURE__ */ m.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${be ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        N.map((v) => {
+        /* @__PURE__ */ m.jsx("div", { className: "flex flex-wrap gap-2", children: N.map((v) => {
           const T = v?.split("/").pop();
           return /* @__PURE__ */ m.jsx(zc, { sqlOpsUrls: r, filePath: v }, T);
-        }),
+        }) }),
         e.touched[S] && e.errors[S] && /* @__PURE__ */ m.jsx("span", { className: "text-xs text-red-500", children: String(e.errors[S]) })
       ] });
     case "json":
@@ -14008,16 +14008,17 @@ function Rr({
   setFieldOptions: l
 }) {
   const a = Zn(
-    () => t?.find((c) => c.type === "avatar"),
+    () => t?.find((u) => u.type === "avatar"),
     [t]
-  );
-  return /* @__PURE__ */ m.jsx("div", { className: "bg-white min-h-3/10 overflow-auto", children: /* @__PURE__ */ m.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-6", children: [
-    a && /* @__PURE__ */ m.jsx("div", { className: "lg:col-span-2 flex flex-col items-center", children: /* @__PURE__ */ m.jsx(
+  ), c = a ? "lg:col-span-10" : "lg:col-span-12";
+  return /* @__PURE__ */ m.jsx("div", { className: "bg-white min-h-3/10 ", children: /* @__PURE__ */ m.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-6 ", children: [
+    a && /* @__PURE__ */ m.jsx("div", { className: "lg:col-span-2 flex flex-col items-center min-h-0 max-h-40 overflow-y-auto ", children: /* @__PURE__ */ m.jsx(
       "div",
       {
         id: `wrapper-${a.name}`,
         className: `
-                        overflow-hidden bg-gray-100 flex items-center justify-center
+                               
+                          flex items-center justify-center
                          ${a.hidden ? "hidden" : ""}
 
                             `,
@@ -14032,12 +14033,12 @@ function Rr({
         )
       }
     ) }),
-    /* @__PURE__ */ m.jsx("div", { className: "lg:col-span-10 min-h-0 max-h-40  overflow-y-auto custom-scrollbar", children: /* @__PURE__ */ m.jsx("div", { className: "grid grid-cols-12 gap-2", children: t?.map((c, u) => {
-      if (c.type === "avatar") return null;
-      const d = On(c.hidden) || c.type === "geolocation";
-      return /* @__PURE__ */ m.jsx("div", { id: `wrapper-${c.name}`, className: `transition-colors duration-200 col-span-12 md:col-span-6 
-                                ${Mn[Rn(Number(c.width))] || "lg:col-span-4"}
-                                ${d ? "hidden" : ""}
+    /* @__PURE__ */ m.jsx("div", { className: `${c} min-h-0 max-h-40  overflow-y-auto `, children: /* @__PURE__ */ m.jsx("div", { className: "grid grid-cols-12 gap-2", children: t?.map((u, d) => {
+      if (u.type === "avatar") return null;
+      const f = On(u.hidden) || u.type === "geolocation";
+      return /* @__PURE__ */ m.jsx("div", { id: `wrapper-${u.name}`, className: `transition-colors duration-200 col-span-12 md:col-span-6 
+                                ${Mn[Rn(Number(u.width))] || "lg:col-span-4"}
+                                ${f ? "hidden" : ""}
 
                                 `, children: /* @__PURE__ */ m.jsx(
         zn,
@@ -14045,14 +14046,14 @@ function Rr({
           refid: s,
           module_refid: o,
           sqlOpsUrls: r,
-          field: c,
+          field: u,
           formik: e,
           methods: n,
           setFieldOptions: l,
-          ...i?.[c.name] ? { optionsOverride: i[c.name] } : {}
+          ...i?.[u.name] ? { optionsOverride: i[u.name] } : {}
         },
-        c?.name || u
-      ) }, c.name);
+        u?.name || d
+      ) }, u.name);
     }) }) })
   ] }) });
 }

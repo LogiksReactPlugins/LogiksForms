@@ -41,8 +41,15 @@ export default function PhotoAvatarRenderer({
         }
 
     };
+
+    const files = Array.isArray(formik.values[key])
+        ? formik.values[key]
+        : formik.values[key]
+            ? [formik.values[key]]
+            : [];
+
     return (
-        <div>
+        <div >
 
             <input
                 ref={inputRef}
@@ -54,16 +61,16 @@ export default function PhotoAvatarRenderer({
 
             <div
                 onClick={() => inputRef.current?.click()}
-                className='relative w-42 h-42 p-2 rounded-sm '
+               className='flex flex-wrap gap-2'
 
             >
-                {formik.values[key] ? (
-                    <PhotoRenderer field_name={key} filePath={formik.values[key]} sqlOpsUrls={sqlOpsUrls} />
-                ) : (
+                {files.length > 0 ? files.map(file => (
+                    <PhotoRenderer field_name={file} filePath={file} sqlOpsUrls={sqlOpsUrls} />
+                )) : (
                     <img
                         src="https://cdn-icons-png.flaticon.com/512/266/266033.png"
                         alt="avatar placeholder"
-                        className="w-full h-full object-cover opacity-60"
+                        className="w-42 h-42 p-2 rounded-sm object-cover opacity-60"
                     />
                 )}
             </div>
