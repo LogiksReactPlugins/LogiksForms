@@ -7,8 +7,6 @@ import type { SimpleFormViewProps, SelectOptions, FormField } from "../Form.type
 import CommonInfo from './CommonInfo.js';
 
 
-
-
 export default function NormalFormView({
   title,
   fields,
@@ -75,8 +73,6 @@ export default function NormalFormView({
   
   return (
     <>
-
-
 
       <div className="relative z-10 max-w-full">
         <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">

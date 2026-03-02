@@ -37,7 +37,7 @@ export type AutocompleteConfig = {
 export interface FormField {
     name: string;
     label?: string;
-    parameter?:string;
+    parameter?:string | Record<string, string>;
     width?: number | string;
     options?: Record<string, any>;
     group?: string;

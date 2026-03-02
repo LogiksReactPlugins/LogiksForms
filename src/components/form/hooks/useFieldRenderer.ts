@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
-import { flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import { flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
 import { fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -36,6 +36,39 @@ export default function useFieldRenderer({
     useEffect(() => {
         searchRef.current = search;
     }, [search]);
+
+    useEffect(() => {
+        if (field.type !== "select") return;
+        if (field.multiple) return;
+        if (field["no-option"] !== "false") return;
+
+        const currentValue = formik.values[key];
+        if (currentValue) return;
+
+        if (!options) return;
+
+        let firstValue: string | number | undefined;
+
+        // Array format
+        if (Array.isArray(options)) {
+            firstValue = options[0]?.value;
+        }
+
+        // Flat object format
+        else if (!isGroupedOptions(options)) {
+            firstValue = Object.keys(options)[0];
+        }
+
+        //  Grouped object format
+        else {
+            const firstGroup = Object.values(options)[0] as Record<string, string>;
+            firstValue = firstGroup ? Object.keys(firstGroup)[0] : undefined;
+        }
+
+        if (firstValue !== undefined && firstValue !== null) {
+            formik.setFieldValue(key, String(firstValue), false);
+        }
+    }, [options]);
 
     const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
         if (isDisabled) {
@@ -126,12 +159,14 @@ export default function useFieldRenderer({
                 if (methodFn) {
                     try {
                         const res = await methodFn();
-                        const rawItems = Array.isArray(res?.data?.data)
-                            ? res.data.data
-                            : Array.isArray(res.data.results)
-                                ? res.data.results : Array.isArray(res?.data)
-                                    ? res.data
-                                    : res;
+                        const rawItems = Array.isArray(res.data?.results?.options) ?
+                            res.data?.results?.options : Array.isArray(res?.data?.data)
+                                ? res.data.data
+                                : Array.isArray(res.data?.results)
+                                    ? res.data?.results :
+                                    Array.isArray(res?.data)
+                                        ? res.data
+                                        : res;
 
                         if (
                             typeof rawItems === "object" &&
@@ -446,7 +481,7 @@ export default function useFieldRenderer({
                             curr_field = field.parameter
                         }
 
-                        let params = { [curr_field]: value, refid: value }
+                        const params = { [curr_field]: value, refid: value }
 
                         if (typeof field.parameter === "object" && field.parameter !== null
                             && Object.keys(field.parameter).length > 0

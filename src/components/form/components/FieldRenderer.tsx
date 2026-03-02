@@ -385,13 +385,14 @@ export default function FieldRenderer({
               }}
               disabled={isDisabled}
             >
-              <option value="" disabled>
+              {field?.["no-option"] !== "false" && !formik.values[key] && <option value="" disabled>
                 {field?.["no-option"] || `Please select ${field.label}`}
-              </option>
+              </option>}
 
-              <option value="">
-                Clear Selection
-              </option>
+
+          
+                <option value="" className='text-gray-500'>Clear Selection</option>
+              
               {!isGroupedOptions(options) &&
                 Object.entries(options).map(([val, label]) => (
                   <option key={val} value={val} className="py-2">

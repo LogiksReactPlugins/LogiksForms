@@ -103,7 +103,7 @@ export default function MultiSelect({
                 </summary>
 
                 {/* Dropdown body */}
-                {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+                {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-[1000] max-h-60 overflow-y-auto p-2">
                     {/*  Search input */}
                     {field.search && <div className="sticky top-0 bg-white p-1">
                         <input
