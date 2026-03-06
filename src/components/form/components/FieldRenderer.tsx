@@ -4,6 +4,7 @@ import { getOptionLabel, isGroupedOptions } from '../utils.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
 import PhotoAvatarRenderer from './PhotoAvatarRenderer.js';
+import { DropdownPortal } from './PortalDropdown.js';
 import RichTextEditor from './RichTextArea.js';
 
 
@@ -21,10 +22,10 @@ export default function FieldRenderer({
 
   const {
     setHighlightedIndex, executeFieldMethod, handleFileUpload, handleKeyDown,
-    handleToggle, setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
+    setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
-    options, isDisabled, key, filteredOptions, open, listRef, inputRef, detailsRef, isFocused, exactMatch
+    options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid,
@@ -57,33 +58,35 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <input
-            className={`${baseInputClasses} ${focusClasses}`}
-            value={displayValue}
-            placeholder={field.placeholder || "Type to search..."}
-            onChange={handleInputChange}
-            onBlur={() => { setTimeout(() => setOpen(false), 150); }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                if (exactMatch) {
-                  const [val] = exactMatch;
-                  formik.setFieldValue(key, val);
-                  handlePersist(val, field, module_refid);
-                } else if (search.trim()) {
-                  formik.setFieldValue(key, search.trim());
-                  handlePersist(search.trim(), field, module_refid);
+          <div ref={triggerRef}>
+            <input
+              className={`${baseInputClasses} ${focusClasses}`}
+              value={displayValue}
+              placeholder={field.placeholder || "Type to search..."}
+              onChange={handleInputChange}
+              onBlur={() => { setTimeout(() => setOpen(false), 150); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  if (exactMatch) {
+                    const [val] = exactMatch;
+                    formik.setFieldValue(key, val);
+                    handlePersist(val, field, module_refid);
+                  } else if (search.trim()) {
+                    formik.setFieldValue(key, search.trim());
+                    handlePersist(search.trim(), field, module_refid);
+                  }
+                  setOpen(false);
+                  return;
                 }
-                setOpen(false);
-                return;
-              }
-              // let existing handler handle arrows / escape etc
-              handleKeyDown(e, true);
-            }}
-            disabled={isDisabled}
-          />
+                // let existing handler handle arrows / escape etc
+                handleKeyDown(e, true);
+              }}
+              disabled={isDisabled}
+            />
+          </div>
 
-          {open && !isDisabled && (
+          <DropdownPortal anchorRef={triggerRef} open={open && !isDisabled}>
             <div
               ref={listRef}
               className="absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1"
@@ -110,7 +113,7 @@ export default function FieldRenderer({
                 </div>
               )}
             </div>
-          )}
+          </DropdownPortal>
 
           {formik.touched[key] && formik.errors[key] && (
             <span className="text-xs text-red-500">
@@ -132,8 +135,8 @@ export default function FieldRenderer({
           <MultiSelect
             field={field}
             isDisabled={isDisabled}
-            handleToggle={handleToggle}
-            detailsRef={detailsRef}
+
+
             handleKeyDown={handleKeyDown}
             valueArray={valueArray}
             labelClasses={labelClasses}
@@ -144,14 +147,20 @@ export default function FieldRenderer({
             setSearch={setSearch}
             formik={formik}
             executeFieldMethod={executeFieldMethod}
-            setHighlightedIndex={setHighlightedIndex}
+
             handlePersist={handlePersist}
             module_refid={module_refid}
             options={options}
+            triggerRef={triggerRef}
+            open={open}
+            setOpen={setOpen}
           />
         );
 
       }
+
+      console.log("open", open, key);
+
 
       return (
         <div className="relative">
@@ -159,48 +168,57 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <details
-            className={`relative w-full ${isDisabled ? "opacity-70" : ""}`}
+          <div
 
-            onToggle={handleToggle}
-            ref={detailsRef}
+            className={`
+    relative w-full select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
+    ${isDisabled
+                ? "opacity-70 bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-white border-gray-300 cursor-pointer"
+              }
+  `}
+
+            ref={triggerRef}
+            tabIndex={0}
+            onClick={() => {
+              setOpen(v => !v);
+              setHighlightedIndex(0);
+            }}
+
+
             onKeyDown={(e) => {
               if (isDisabled) return;
               handleKeyDown(e, true)
             }}
 
           >
-            <summary
-              className={`
-    select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
-    ${isDisabled
-                  ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-white border-gray-300 cursor-pointer"
-                }
-  `}
+            <span className="text-sm text-gray-700">
+              {formik.values[key]
+                ? getOptionLabel(options, formik.values[key]) ?? "Select option"
+                : `Select ${field.label}`}
+            </span>
+            <svg
+              className="w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <span className="text-sm text-gray-700">
-                {formik.values[key]
-                  ? getOptionLabel(options, formik.values[key]) ?? "Select option"
-                  : `Select ${field.label}`}
-              </span>
-              <svg
-                className="w-4 h-4 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </summary>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
 
-            {/* Dropdown body */}
-            {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+
+          {/* Dropdown body */}
+          <DropdownPortal anchorRef={triggerRef} open={open}>
+            <div
+              ref={listRef}
+
+              className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
               {/*  Search input */}
               {field.search && <div className="sticky top-0 bg-white p-1">
                 <input
@@ -223,11 +241,11 @@ export default function FieldRenderer({
                   e.preventDefault();
                   e.stopPropagation();
                   formik.setFieldValue(key, "");
+                  setOpen(false);
                   handlePersist("", field, module_refid)
-                  detailsRef.current?.removeAttribute("open");
                   setSearch("");
                 }}
-                className={"px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm hover:bg-gray-50"}
+                className={"px-2 py-1 hover:bg-gray-50 text-gray-500 rounded cursor-pointer text-sm hover:bg-gray-50"}
               >
                 Clear selection
               </div>
@@ -245,7 +263,7 @@ export default function FieldRenderer({
                       e.stopPropagation();
                       formik.setFieldValue(key, val);
                       handlePersist(val, field, module_refid)
-                      detailsRef.current?.removeAttribute("open");
+                      setOpen(false);
                       setSearch("");
                       setHighlightedIndex(0);
                       executeFieldMethod("onChange", field, `${key}-${val}`)
@@ -264,8 +282,9 @@ export default function FieldRenderer({
               ) : (
                 <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
               )}
-            </div>}
-          </details>
+            </div>
+          </DropdownPortal>
+
           {formik.touched[key] && formik.errors[key] && (
             <span className="text-xs text-red-500 ml-2">{String(formik.errors[key])}</span>
           )}
@@ -343,8 +362,7 @@ export default function FieldRenderer({
           <MultiSelect
             field={field}
             isDisabled={isDisabled}
-            handleToggle={handleToggle}
-            detailsRef={detailsRef}
+
             handleKeyDown={handleKeyDown}
             valueArray={valueArray}
             labelClasses={labelClasses}
@@ -355,10 +373,13 @@ export default function FieldRenderer({
             setSearch={setSearch}
             formik={formik}
             executeFieldMethod={executeFieldMethod}
-            setHighlightedIndex={setHighlightedIndex}
+
             handlePersist={handlePersist}
             module_refid={module_refid}
             options={options}
+            triggerRef={triggerRef}
+            open={open}
+            setOpen={setOpen}
           />
         );
 
@@ -390,9 +411,9 @@ export default function FieldRenderer({
               </option>}
 
 
-          
-                <option value="" className='text-gray-500'>Clear Selection</option>
-              
+
+              <option value="" className='text-gray-500'>Clear Selection</option>
+
               {!isGroupedOptions(options) &&
                 Object.entries(options).map(([val, label]) => (
                   <option key={val} value={val} className="py-2">

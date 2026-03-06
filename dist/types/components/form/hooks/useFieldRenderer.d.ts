@@ -5,7 +5,6 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
     handleFileUpload: (files: FileList) => Promise<void>;
     handleKeyDown: (e: React.KeyboardEvent, is_single: boolean) => void;
-    handleToggle: (e: React.SyntheticEvent<HTMLDetailsElement>) => void;
     setSearch: import('react').Dispatch<import('react').SetStateAction<string>>;
     setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>;
     setIsFocused: import('react').Dispatch<import('react').SetStateAction<boolean>>;
@@ -25,9 +24,8 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     filteredOptions: import('../utils.js').FlatEntry[];
     open: boolean;
     listRef: import('react').RefObject<HTMLDivElement | null>;
-    inputRef: import('react').RefObject<HTMLInputElement | null>;
-    detailsRef: import('react').RefObject<HTMLDetailsElement | null>;
     isFocused: boolean;
     exactMatch: import('../utils.js').FlatEntry | null | undefined;
+    triggerRef: import('react').RefObject<HTMLDivElement | null>;
 };
 //# sourceMappingURL=useFieldRenderer.d.ts.map

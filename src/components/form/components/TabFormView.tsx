@@ -207,16 +207,32 @@ export default function TabFormView({
                   ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
                   ${hidden ? "hidden" : ""}
                 `;
-              // if (field.type === "static") {
-              //   return (
-              //     <div
-              //       key={field?.name}
-              //       id={`wrapper-${field.name}`}
-              //       className={wrapperClass}
-              //       dangerouslySetInnerHTML={{ __html: field.content ?? "" }}
-              //     />
-              //   );
-              // }
+              if (field.type === "static" || field.type === "static2") {
+                const isPrimary = field.type === "static";
+
+                return (
+                  <div
+                    key={field?.name}
+                    id={`wrapper-${field.name}`}
+                    className="col-span-12"
+                  >
+                    <div
+                      className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                    >
+                      <div className="flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-3">
+
+                          <h2
+                            className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
+                          >
+                            {field.label}
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
 
               return <div
                 id={`wrapper-${field.name}`}

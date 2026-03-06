@@ -2,16 +2,17 @@ import React from 'react';
 import type { FormikProps } from "formik";
 import { getOptionLabel, type FlatEntry } from '../utils.js';
 import type { FormField, SelectOptions } from '../Form.types.js';
+import { DropdownPortal } from './PortalDropdown.js';
 
 
 type MultiSelectProps = {
     field: FormField;
     isDisabled: boolean;
 
-    handleToggle: (e: React.SyntheticEvent<HTMLDetailsElement>) => void;
+
     handleKeyDown: (e: React.KeyboardEvent, isSingle: boolean) => void;
 
-    detailsRef: React.RefObject<HTMLDetailsElement | null>;
+
     listRef: React.RefObject<HTMLDivElement | null>;
 
     valueArray: string[];
@@ -19,10 +20,11 @@ type MultiSelectProps = {
     options: SelectOptions;
     search: string;
     setSearch: React.Dispatch<React.SetStateAction<string>>;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
     filteredOptions: FlatEntry[];
     highlightedIndex: number;
-    setHighlightedIndex: React.Dispatch<React.SetStateAction<number>>;
+ 
 
     formik: FormikProps<Record<string, any>>;
     executeFieldMethod: (
@@ -32,13 +34,13 @@ type MultiSelectProps = {
     ) => void;
     handlePersist: (value: any, field: FormField, module_refid: string) => void;
     module_refid: string;
+    triggerRef: React.RefObject<HTMLDivElement | null>;
+    open: boolean;
 };
 
 export default function MultiSelect({
     field,
     isDisabled,
-    handleToggle,
-    detailsRef,
     handleKeyDown,
     valueArray,
     labelClasses,
@@ -48,14 +50,17 @@ export default function MultiSelect({
     highlightedIndex,
     setSearch,
     formik,
-    setHighlightedIndex,
+  
     executeFieldMethod,
     handlePersist,
     module_refid,
-    options
+    options,
+    triggerRef,
+    open,
+    setOpen
 
 }: MultiSelectProps) {
- 
+
     const key = field.name;
     return (
         <div className="relative">
@@ -63,53 +68,65 @@ export default function MultiSelect({
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <details
-                className={`relative w-full ${isDisabled ? " opacity-70" : ""}`}
-                onToggle={handleToggle}
-                ref={detailsRef}
+            <div
+
+                className={`
+    relative w-full select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
+    ${isDisabled
+                        ? " opacity-70 bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-white border-gray-300 cursor-pointer"}
+  `}
+                tabIndex={0}
+                ref={triggerRef}
+                onClick={() => {
+                    setOpen(v => !v);
+                }}
                 onKeyDown={(e) => {
                     if (isDisabled) return;
                     handleKeyDown(e, false)
                 }}
+                onBlur={() => {
+                    if (field.multiple) return;
+                    setTimeout(() => {
+                        setOpen(false);
+                        setSearch("");
+                    }, 150);
+                }}
 
             >
-                <summary
-                    className={`
-    select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
-    ${isDisabled
-                            ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
-                            : "bg-white border-gray-300 cursor-pointer"}
-  `}
-                >
-                    <span className="text-sm text-gray-700">
-                        {valueArray?.length > 0
-                            ? valueArray.map(v => getOptionLabel(options, v) ?? v)
-                                .join(", ")
-                            : `Select ${field.label}`}
-                    </span>
-                    <svg
-                        className="w-4 h-4 text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                        />
-                    </svg>
-                </summary>
 
-                {/* Dropdown body */}
-                {!isDisabled && <div ref={listRef} className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-[1000] max-h-60 overflow-y-auto p-2">
+                <span className="text-sm text-gray-700">
+                    {valueArray?.length > 0
+                        ? valueArray.map(v => getOptionLabel(options, v) ?? v)
+                            .join(", ")
+                        : `Select ${field.label}`}
+                </span>
+                <svg
+                    className="w-4 h-4 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                    />
+                </svg>
+
+            </div>
+
+
+            {/* Dropdown body */}
+            <DropdownPortal anchorRef={triggerRef} open={open && !isDisabled}>
+                <div ref={listRef} className=" w-full border border-gray-200 rounded-lg bg-white shadow-md  max-h-60 overflow-y-auto p-2">
                     {/*  Search input */}
                     {field.search && <div className="sticky top-0 bg-white p-1">
                         <input
                             type="text"
                             value={search}
-                            onChange={(e) => { if (isDisabled) return; setSearch(e.target.value); setHighlightedIndex(0); }}
+                            onChange={(e) => { if (isDisabled) return; setSearch(e.target.value); }}
                             placeholder="Search..."
                             className="px-2 py-[5px] rounded w-full border border-gray-200 transition-all duration-300 
                 bg-white/80 backdrop-blur-sm text-gray-800 placeholder-gray-400
@@ -132,10 +149,8 @@ export default function MultiSelect({
                                     }`}
                             >
                                 <input
-
                                     id={`${key}-${val}`}
                                     type="checkbox"
-
                                     checked={valueArray?.includes(val)}
                                     onChange={(e) => {
                                         const next = e.target.checked
@@ -156,8 +171,10 @@ export default function MultiSelect({
                     ) : (
                         <div className="px-2 py-1 text-gray-400 text-sm">No results</div>
                     )}
-                </div>}
-            </details>
+                </div>
+
+            </DropdownPortal>
+
 
             {formik.touched[key] && formik.errors[key] && (
                 <span className="text-xs text-red-500 ml-2">{String(formik.errors[key])}</span>

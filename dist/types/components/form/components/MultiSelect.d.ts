@@ -5,23 +5,23 @@ import { FormField, SelectOptions } from '../Form.types.js';
 type MultiSelectProps = {
     field: FormField;
     isDisabled: boolean;
-    handleToggle: (e: React.SyntheticEvent<HTMLDetailsElement>) => void;
     handleKeyDown: (e: React.KeyboardEvent, isSingle: boolean) => void;
-    detailsRef: React.RefObject<HTMLDetailsElement | null>;
     listRef: React.RefObject<HTMLDivElement | null>;
     valueArray: string[];
     labelClasses: string;
     options: SelectOptions;
     search: string;
     setSearch: React.Dispatch<React.SetStateAction<string>>;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     filteredOptions: FlatEntry[];
     highlightedIndex: number;
-    setHighlightedIndex: React.Dispatch<React.SetStateAction<number>>;
     formik: FormikProps<Record<string, any>>;
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => void;
     handlePersist: (value: any, field: FormField, module_refid: string) => void;
     module_refid: string;
+    triggerRef: React.RefObject<HTMLDivElement | null>;
+    open: boolean;
 };
-export default function MultiSelect({ field, isDisabled, handleToggle, detailsRef, handleKeyDown, valueArray, labelClasses, listRef, search, filteredOptions, highlightedIndex, setSearch, formik, setHighlightedIndex, executeFieldMethod, handlePersist, module_refid, options }: MultiSelectProps): import("react/jsx-runtime").JSX.Element;
+export default function MultiSelect({ field, isDisabled, handleKeyDown, valueArray, labelClasses, listRef, search, filteredOptions, highlightedIndex, setSearch, formik, executeFieldMethod, handlePersist, module_refid, options, triggerRef, open, setOpen }: MultiSelectProps): import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=MultiSelect.d.ts.map

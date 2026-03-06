@@ -70,12 +70,12 @@ export default function NormalFormView({
       onSubmit(filteredValues)
     }
   })
-  
+
   return (
     <>
 
-      <div className="relative z-10 max-w-full">
-        <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
+      <div className="relative max-w-full">
+        <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300 overflow-visible">
           <form onSubmit={formik.handleSubmit} className="p-4  mx-auto">
             {commonFields.length > 0 && (
               <CommonInfo
@@ -94,21 +94,36 @@ export default function NormalFormView({
               {otherFields.map((field) => {
                 const hidden = isHidden(field.hidden) || field.type === "geolocation";
 
-                const wrapperClass = `
-    col-span-12 md:col-span-6
+                const wrapperClass = `col-span-12 md:col-span-6
     ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
     ${hidden ? "hidden" : ""}
   `;
-                // if (field.type === "static") {
-                //   return (
-                //     <div
-                //       key={field?.name}
-                //       id={`wrapper-${field.name}`}
-                //       className={wrapperClass}
-                //       dangerouslySetInnerHTML={{ __html: field.content ?? "" }}
-                //     />
-                //   );
-                // }
+                if (field.type === "static" || field.type === "static2") {
+                  const isPrimary = field.type === "static";
+
+                  return (
+                    <div
+                      key={field?.name}
+                      id={`wrapper-${field.name}`}
+                      className="col-span-12"
+                    >
+                      <div
+                        className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                      >
+                        <div className="flex items-center justify-between px-4 py-3">
+                          <div className="flex items-center gap-3">
+
+                            <h2
+                              className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
+                            >
+                              {field.label}
+                            </h2>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
                 return <div
                   key={field?.name}
                   id={`wrapper-${field.name}`}

@@ -23,11 +23,12 @@ export default function useFieldRenderer({
         optionsOverride ?? field.options ?? {}
     );
 
-    const inputRef = useRef<HTMLInputElement>(null);
+
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
     const listRef = useRef<HTMLDivElement>(null);
-    const detailsRef = useRef<HTMLDetailsElement>(null);
+
+    const triggerRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const searchRef = useRef(search);
 
@@ -70,17 +71,7 @@ export default function useFieldRenderer({
         }
     }, [options]);
 
-    const handleToggle = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
-        if (isDisabled) {
-            e.preventDefault();
-            detailsRef.current?.removeAttribute("open");
-            return;
-        }
-        const detailsEl = e.currentTarget; //  currentTarget is strongly typed
-        if (!detailsEl.open) {
-            setSearch("");
-        }
-    };
+
 
     useEffect(() => {
         if (!optionsOverride) return;
@@ -89,20 +80,30 @@ export default function useFieldRenderer({
         setOptions(optionsOverride);
     }, [optionsOverride]);
 
+
+
     // Close on outside click
     useEffect(() => {
+        if (!open) return;
+
         const handleClickOutside = (e: MouseEvent) => {
-            if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
-                detailsRef.current.open = false;
-                setSearch(""); // reset search if needed
-            }
+            const target = e.target as Node;
+
+            // ignore trigger click
+            if (triggerRef.current?.contains(target)) return;
+
+            // ignore dropdown click
+            if (listRef.current?.contains(target)) return;
+
+            setOpen(false);
+            setSearch("");
         };
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [open]);
 
     const key = field.name;
 
@@ -406,7 +407,7 @@ export default function useFieldRenderer({
     //  Handle keyboard navigation
     const handleKeyDown = (e: React.KeyboardEvent, is_single: boolean) => {
 
-        if (!(detailsRef.current?.open === true || open === true)) return;
+        if (!open) return;
 
         if (e.key === "ArrowDown") {
             e.preventDefault();
@@ -426,12 +427,10 @@ export default function useFieldRenderer({
                 formik.setFieldValue(field.name, value);
                 handlePersist(value, field, module_refid)
             }
-            if (detailsRef.current) {
-                detailsRef.current!.open = false;
-            }
+          
 
         } else if (e.key === "Escape") {
-            detailsRef.current!.open = false;
+          
             setSearch("");
             setOpen(false);
         }
@@ -818,7 +817,6 @@ export default function useFieldRenderer({
         executeFieldMethod,
         handleFileUpload,
         handleKeyDown,
-        handleToggle,
         setSearch,
         setOpen,
         setIsFocused,
@@ -838,10 +836,9 @@ export default function useFieldRenderer({
         filteredOptions,
         open,
         listRef,
-        inputRef,
-        detailsRef,
         isFocused,
-        exactMatch
+        exactMatch,
+        triggerRef
 
     }
 }
