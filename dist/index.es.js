@@ -1740,18 +1740,20 @@ function ps({
   return Wa(() => {
     if (!e || !t.current) return;
     const l = t.current, a = () => {
-      const c = l.getBoundingClientRect(), d = window.innerHeight - c.bottom, f = c.top, m = d < s && f > d ? c.top - Math.min(s, f) - r : c.bottom + r;
+      const u = l.getBoundingClientRect(), f = window.innerHeight - u.bottom, h = u.top, g = f < s && h > f ? u.top - Math.min(s, h) - r : u.bottom + r;
       i({
         position: "fixed",
-        top: m,
-        left: c.left,
-        width: c.width,
+        top: g,
+        left: u.left,
+        width: u.width,
         maxHeight: s,
         zIndex: 9999
       });
     };
-    return a(), window.addEventListener("scroll", a, !0), window.addEventListener("resize", a), () => {
-      window.removeEventListener("scroll", a, !0), window.removeEventListener("resize", a);
+    a();
+    const c = requestAnimationFrame(a);
+    return window.addEventListener("scroll", a, !0), window.addEventListener("resize", a), () => {
+      cancelAnimationFrame(c), window.removeEventListener("scroll", a, !0), window.removeEventListener("resize", a);
     };
   }, [e, t, r, s]), e ? Va(
     /* @__PURE__ */ p.jsx("div", { style: o, children: n }),

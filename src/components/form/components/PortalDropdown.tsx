@@ -47,15 +47,20 @@ export function DropdownPortal({
         };
 
         update();
-
+ // run again after layout settles
+  const raf = requestAnimationFrame(update);
         window.addEventListener("scroll", update, true);
         window.addEventListener("resize", update);
 
         return () => {
+            cancelAnimationFrame(raf);
             window.removeEventListener("scroll", update, true);
             window.removeEventListener("resize", update);
         };
     }, [open, anchorRef, offset, maxHeight]);
+
+
+    
 
     if (!open) return null;
 
@@ -64,3 +69,5 @@ export function DropdownPortal({
         document.body
     );
 }
+
+
