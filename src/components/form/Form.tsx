@@ -13,23 +13,37 @@ type ViewMode = "accordion" | "cards" | "tab" | "simple";
 export default function LogiksForm({
   formJson,
   methods = {},
-  userid = null,
   onCancel = () => { },
   components = {},
   callback = () => { },
-  initialvalues = {}
+  initialvalues
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
-  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues);
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
 
 
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
   }, [formJson.fields]);
+
+
+  React.useEffect(() => {
+    setResolvedData(initialvalues ?? {});
+  }, [initialvalues]);
+
+  const safeSetResolvedData = React.useCallback(
+    (data?: Record<string, any>) => {
+      if (data && Object.keys(data).length > 0) {
+        setResolvedData(data);
+      }
+    },
+    []
+  );
+
 
 
   // ---------- Fetch Initial Data ----------
@@ -47,8 +61,8 @@ export default function LogiksForm({
         const methodFn = methodName ? methods[methodName] : undefined;
         if (methodFn) {
           try {
-            const result = await Promise.resolve(methodFn());
-            if (isMounted) setResolvedData(result ?? {});
+            const result = await methodFn();
+            if (isMounted) safeSetResolvedData(result);
           } catch (err) {
             console.error("Method execution failed:", err);
             if (isMounted) setResolvedData({});
@@ -118,7 +132,7 @@ export default function LogiksForm({
     fetchData();
     return () => { isMounted = false; };
   }, [
-    userid,
+    sqlOpsUrls,
     formJson?.source?.type || "",
     formJson?.source?.method || "",
     formJson?.source?.url || "",
@@ -160,7 +174,7 @@ export default function LogiksForm({
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          const res = await Promise.resolve(methodFn(finalValues));
+          const res = await methodFn(finalValues);
           callback?.(res);
           if (methods?.handleActions) {
             let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
