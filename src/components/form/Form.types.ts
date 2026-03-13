@@ -128,6 +128,16 @@ export interface FormJson {
     module_refid?: string | undefined
 }
 
+
+
+export interface Toast {
+  (message: string): void;
+  success?: (message: string) => void;
+  error?: (message: string) => void;
+  info?: (message: string) => void;
+  warn?: (message: string) => void;
+}
+
 export interface FormProps {
 
     formJson: FormJson;
@@ -137,6 +147,7 @@ export interface FormProps {
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>
     initialvalues?: Record<string, any>;
+    toast?:Toast;
 
 
 }

@@ -110,6 +110,13 @@ export interface FormJson {
     gotolink?: string;
     module_refid?: string | undefined;
 }
+export interface Toast {
+    (message: string): void;
+    success?: (message: string) => void;
+    error?: (message: string) => void;
+    info?: (message: string) => void;
+    warn?: (message: string) => void;
+}
 export interface FormProps {
     formJson: FormJson;
     userid?: string | null;
@@ -118,6 +125,7 @@ export interface FormProps {
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>;
     initialvalues?: Record<string, any>;
+    toast?: Toast;
 }
 export type FlatOptions = Record<string, string>;
 export type GroupedOptions = Record<string, Record<string, string>>;

@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import { determineViewMode, fetchGeolocation, getGeoFieldKeys, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
+import { determineViewMode, fetchGeolocation, getErrorMessage, getGeoFieldKeys, getSuccessMessage, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
@@ -16,7 +16,8 @@ export default function LogiksForm({
   onCancel = () => { },
   components = {},
   callback = () => { },
-  initialvalues
+  initialvalues,
+  toast,
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
@@ -156,7 +157,7 @@ export default function LogiksForm({
         geo = await fetchGeolocation();
 
       } catch (err) {
-        console.error("catch fetchGeolocation", err);
+        toast?.error?.(" Geolocation error");
         geo = null;
       }
     }
@@ -176,6 +177,8 @@ export default function LogiksForm({
         try {
           const res = await methodFn(finalValues);
           callback?.(res);
+          toast?.success?.(getSuccessMessage(res));
+          
           if (methods?.handleActions) {
             let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
             const link = formJson?.gotolink?.replace(
@@ -187,7 +190,8 @@ export default function LogiksForm({
 
           }
         } catch (err) {
-          callback?.(err)
+          callback?.(err);
+          toast?.error?.(getErrorMessage(err));
           console.error("Method execution failed:", err);
         }
       }
@@ -208,6 +212,7 @@ export default function LogiksForm({
           },
         });
         callback?.(res);
+        toast?.success?.(getSuccessMessage(res))
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
           const link = formJson?.gotolink?.replace(
@@ -219,7 +224,8 @@ export default function LogiksForm({
 
         }
       } catch (err) {
-        callback?.(err)
+        callback?.(err);
+        toast?.error?.(getErrorMessage(err));
         console.error("API fetch failed:", err);
       }
     }
@@ -298,7 +304,7 @@ export default function LogiksForm({
           },
         });
 
-
+        toast?.success?.(getSuccessMessage(res))
         callback?.(res);
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
@@ -309,7 +315,8 @@ export default function LogiksForm({
           methods.handleActions(link);
         }
       } catch (err) {
-        callback?.(err)
+        callback?.(err);
+        toast?.error?.(getErrorMessage(err));
         console.error("API fetch failed:", err);
       }
     }

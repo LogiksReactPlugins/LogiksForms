@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import axios from "axios";
 import DOMPurify from "dompurify";
 import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory } from "./Form.types.js";
 import { IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
@@ -730,5 +731,27 @@ export function filterSavableValues(
   return Object.fromEntries(
     Object.entries(values).filter(([key]) => !excluded.has(key))
   );
+}
+
+export function getErrorMessage(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    return err.response?.data?.message || err.message || "Something went wrong";
+  }
+
+  if (err instanceof Error) {
+    return err.message;
+  }
+
+  if (typeof err === "string") {
+    return err;
+  }
+
+  return "Something went wrong";
+}
+
+export function getSuccessMessage(res: any): string {
+  if (res?.data?.message) return res.data.message;
+  if (res?.message) return res.message;
+  return "Operation completed successfully";
 }
 
