@@ -14646,7 +14646,7 @@ function wm({
 }) {
   let l = kc(t);
   const a = t.endPoints, c = t?.source?.refid, u = Ac(t?.fields ?? {}, a?.operation), [d, f] = be.useState(o ?? {}), h = be.useMemo(() => Nc(t.fields), [t.fields]);
-  be.useEffect(() => {
+  console.log("toast", i), be.useEffect(() => {
     f(o ?? {});
   }, [o]);
   const m = be.useCallback(
