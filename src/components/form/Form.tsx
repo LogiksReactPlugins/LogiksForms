@@ -25,17 +25,55 @@ export default function LogiksForm({
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
-
+  const [geoInitialized, setGeoInitialized] = React.useState(false);
 
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
   }, [formJson.fields]);
-  
 
 
   React.useEffect(() => {
-    setResolvedData(initialvalues ?? {});
-  }, [initialvalues]);
+    let isMounted = true;
+
+    const initGeo = async () => {
+      if (geoFieldKeys.length === 0) {
+        setGeoInitialized(true);
+        return;
+      }
+
+      try {
+        const geo = await fetchGeolocation();
+
+        if (isMounted) {
+          setResolvedData(prev => ({
+            ...prev,
+            ...Object.fromEntries(
+              geoFieldKeys.map(key => [key, geo])
+            ),
+          }));
+        }
+      } catch (err) {
+        console.warn("Geo fetch failed", err);
+      } finally {
+        if (isMounted) setGeoInitialized(true);
+      }
+    };
+
+    initGeo();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [geoFieldKeys]);
+
+
+
+ React.useEffect(() => {
+  setResolvedData(prev => ({
+    ...prev,
+    ...(initialvalues ?? {})
+  }));
+}, [initialvalues]);
 
   const safeSetResolvedData = React.useCallback(
     (data?: Record<string, any>) => {
@@ -166,7 +204,7 @@ export default function LogiksForm({
     const finalValues = {
       ...values,
       ...Object.fromEntries(
-        geoFieldKeys.map((key) => [key, geo])
+        geoFieldKeys.map((key) => [key, values[key] || geo])
       ),
     };
 
@@ -179,7 +217,7 @@ export default function LogiksForm({
           const res = await methodFn(finalValues);
           callback?.(res);
           toast?.success?.(getSuccessMessage(res));
-          
+
           if (methods?.handleActions) {
             let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
             const link = formJson?.gotolink?.replace(

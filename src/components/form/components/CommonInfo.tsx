@@ -60,7 +60,7 @@ export default function CommonInfo({
                         {fields?.map((field, index) => {
 
                             if (field.type === "avatar") return null;
-                            const hidden = isHidden(field.hidden) || field.type === "geolocation";
+                            const hidden = isHidden(field.hidden) ;
 
                             return (
                                 <div key={field.name} id={`wrapper-${field.name}`} className={`transition-colors duration-200 col-span-12 md:col-span-6 

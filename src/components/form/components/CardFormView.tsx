@@ -90,7 +90,7 @@ export default function CardFormView({
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
 
-                    const hidden = isHidden(field.hidden) || field.type === "geolocation";
+                    const hidden = isHidden(field.hidden) ;
                     const wrapperClass = `
                                             col-span-12 md:col-span-6
                                             ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
