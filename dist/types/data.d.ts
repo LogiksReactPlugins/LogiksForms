@@ -137,6 +137,7 @@ export declare const example1: {
         location_id: {
             label: string;
             type: string;
+            multiple: boolean;
             search: boolean;
             required: boolean;
             width: number;
