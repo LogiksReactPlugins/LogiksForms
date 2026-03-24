@@ -189,24 +189,7 @@ export default function LogiksForm({
   const handleSubmit = async (values: Record<string, any>) => {
     const source = formJson?.source ?? {};
 
-    let geo: string | null = null;
 
-    if (geoFieldKeys.length > 0) {
-      try {
-        geo = await fetchGeolocation();
-
-      } catch (err) {
-        toast?.error?.(" Geolocation error");
-        geo = null;
-      }
-    }
-
-    const finalValues = {
-      ...values,
-      ...Object.fromEntries(
-        geoFieldKeys.map((key) => [key, values[key] || geo])
-      ),
-    };
 
 
     if (source.type === "method") {
@@ -214,7 +197,7 @@ export default function LogiksForm({
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          const res = await methodFn(finalValues);
+          const res = await methodFn(values);
           callback?.(res);
           toast?.success?.(getSuccessMessage(res));
 
@@ -245,7 +228,7 @@ export default function LogiksForm({
         const res = await axios({
           method: source.method || "POST",
           url: sqlOpsUrls.baseURL + source.endpoint,
-          data: finalValues ?? {},
+          data: values ?? {},
           headers: {
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
@@ -334,7 +317,7 @@ export default function LogiksForm({
           url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             "refid": dbopsId,
-            "fields": finalValues,
+            "fields": values,
             "datahash": resHashId.data.refhash
 
           },
