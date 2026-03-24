@@ -22,8 +22,10 @@ export default function PhotoAvatarRenderer({
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.currentTarget.files;
-        if (!files || files.length === 0) return;
+        const fileList = e.currentTarget.files;
+        if (!fileList?.length) return;
+
+        const files = Array.from(fileList);
 
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
@@ -54,7 +56,7 @@ export default function PhotoAvatarRenderer({
         const updated = existing.filter(f => f.fileId !== file.fileId);
 
         formik.setFieldValue(key, updated);
-      
+
 
         try {
             await deleteFile(sqlOpsUrls, file.fileId);
@@ -111,14 +113,14 @@ export default function PhotoAvatarRenderer({
                     </div>
                 )) : null}
 
-                {(field.multiple || files.length === 0) && (
+               
                     <div
                         onClick={() => inputRef.current?.click()}
                         className="w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
                     >
-                       <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
+                        <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
                     </div>
-                )}
+                
             </div>
             {formik.touched[key] && formik.errors[key] &&
                 <span className="text-xs text-red-500">{String(formik.errors[key])}</span>

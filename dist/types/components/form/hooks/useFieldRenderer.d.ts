@@ -3,7 +3,7 @@ import { handlePersist } from '../utils.js';
 export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
-    handleFileUpload: (files: FileList) => Promise<void>;
+    handleFileUpload: (files: File[]) => Promise<void>;
     handleKeyDown: (e: React.KeyboardEvent, is_single: boolean) => void;
     setSearch: import('react').Dispatch<import('react').SetStateAction<string>>;
     setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>;

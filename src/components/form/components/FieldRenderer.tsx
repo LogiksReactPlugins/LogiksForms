@@ -604,14 +604,18 @@ export default function FieldRenderer({
             )}
             <input
               id={key}
+
               type="file"
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
               name={key}
               multiple={isMultiple}
               onChange={(e) => {
-                const files = e.currentTarget.files;
-                if (files) handleFileUpload(files);
+                const fileList = e.currentTarget.files;
+                if (!fileList?.length) return;
+
+                const files = Array.from(fileList);
+                handleFileUpload(files);
                 executeFieldMethod("onChange", field, key);
                 e.currentTarget.value = "";
               }}

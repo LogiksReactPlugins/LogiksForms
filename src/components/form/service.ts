@@ -200,7 +200,7 @@ export async function getPreviewUrl(
 
 export async function uploadFiles(
     sqlOpsUrls: SqlEndpoints | undefined,
-    files: FileList
+    files: File[]
 ): Promise<UploadResponse[]> {
     if (!sqlOpsUrls?.uploadURL) {
         throw new Error("Upload URL missing");
@@ -209,7 +209,7 @@ export async function uploadFiles(
     const uploadUrl = sqlOpsUrls.baseURL + sqlOpsUrls.uploadURL;
 
     return Promise.all(
-        Array.from(files).map(async (file) => {
+        files.map(async (file) => {
             const formData = new FormData();
             formData.append("file", file);
 
@@ -228,7 +228,7 @@ export async function uploadFiles(
 
 export async function deleteFile(
     sqlOpsUrls: SqlEndpoints | undefined,
-    fileId: number
+    fileId: number | string
 ) {
     if (!sqlOpsUrls?.removeFileURL) {
         throw new Error("remove URL missing");
@@ -237,7 +237,7 @@ export async function deleteFile(
     const url = sqlOpsUrls.baseURL + sqlOpsUrls.removeFileURL;
     const res = await axios.post(
         url,
-        { fileId: fileId },
+        { fileId: String(fileId) },
         {
             headers: {
                 Authorization: `Bearer ${sqlOpsUrls.accessToken}`,

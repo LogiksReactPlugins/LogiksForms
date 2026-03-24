@@ -16,7 +16,7 @@ export default function useFieldRenderer({
     optionsOverride,
     setFieldOptions
 }: FieldRendererProps) {
-
+  
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<SelectOptions>(
@@ -663,7 +663,7 @@ export default function useFieldRenderer({
 
 
     useEffect(() => {
-       if (!isApiSearch) return;
+        if (!isApiSearch) return;
         if (!search.trim()) return;
         if (!sqlOpsUrls) return;
         const searchColumns = getSearchColumns(field.columns ?? "");
@@ -736,7 +736,7 @@ export default function useFieldRenderer({
     }, [isApiSearch, search, refid]);
 
 
-    const handleFileUpload = async (files: FileList) => {
+    const handleFileUpload = async (files: File[]) => {
 
         if (files.length === 0) {
             console.error("No file");
@@ -745,10 +745,6 @@ export default function useFieldRenderer({
 
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
-
-            console.log("uploads",uploads);
-            
-
             const value = buildFileValue({
                 uploads,
                 currentValue: formik.values[key],
@@ -780,7 +776,8 @@ export default function useFieldRenderer({
         try {
             await deleteFile(sqlOpsUrls, file.fileId);
             handlePersist(updated, field, module_refid);
-        } catch {
+        } catch (err) {
+            console.log(err)
             formik.setFieldValue(key, existing);
         }
     };
@@ -833,8 +830,12 @@ export default function useFieldRenderer({
 
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const files = e.currentTarget.files;
-        if (files) handleFileUpload(files);
+        const fileList = e.currentTarget.files;
+        if (!fileList?.length) return;
+
+        const files = Array.from(fileList);
+
+        setTimeout(() => handleFileUpload(files), 0);
     }
 
 
@@ -867,7 +868,7 @@ export default function useFieldRenderer({
         isFocused,
         exactMatch,
         triggerRef,
-        loading,
+        loading
 
 
     }

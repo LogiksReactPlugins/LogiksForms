@@ -62,14 +62,14 @@ function nc() {
           case v:
             return (N._context.displayName || "Context") + ".Consumer";
           case k:
-            var L = N.render;
-            return N = N.displayName, N || (N = L.displayName || L.name || "", N = N !== "" ? "ForwardRef(" + N + ")" : "ForwardRef"), N;
+            var P = N.render;
+            return N = N.displayName, N || (N = P.displayName || P.name || "", N = N !== "" ? "ForwardRef(" + N + ")" : "ForwardRef"), N;
           case j:
-            return L = N.displayName || null, L !== null ? L : t(N.type) || "Memo";
+            return P = N.displayName || null, P !== null ? P : t(N.type) || "Memo";
           case D:
-            L = N._payload, N = N._init;
+            P = N._payload, N = N._init;
             try {
-              return t(N(L));
+              return t(N(P));
             } catch {
             }
         }
@@ -81,15 +81,15 @@ function nc() {
     function n(N) {
       try {
         e(N);
-        var L = !1;
+        var P = !1;
       } catch {
-        L = !0;
+        P = !0;
       }
-      if (L) {
-        L = console;
-        var R = L.error, _ = typeof Symbol == "function" && Symbol.toStringTag && N[Symbol.toStringTag] || N.constructor.name || "Object";
+      if (P) {
+        P = console;
+        var R = P.error, _ = typeof Symbol == "function" && Symbol.toStringTag && N[Symbol.toStringTag] || N.constructor.name || "Object";
         return R.call(
-          L,
+          P,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
           _
         ), e(N);
@@ -100,8 +100,8 @@ function nc() {
       if (typeof N == "object" && N !== null && N.$$typeof === D)
         return "<...>";
       try {
-        var L = t(N);
-        return L ? "<" + L + ">" : "<...>";
+        var P = t(N);
+        return P ? "<" + P + ">" : "<...>";
       } catch {
         return "<...>";
       }
@@ -115,16 +115,16 @@ function nc() {
     }
     function i(N) {
       if (U.call(N, "key")) {
-        var L = Object.getOwnPropertyDescriptor(N, "key").get;
-        if (L && L.isReactWarning) return !1;
+        var P = Object.getOwnPropertyDescriptor(N, "key").get;
+        if (P && P.isReactWarning) return !1;
       }
       return N.key !== void 0;
     }
-    function l(N, L) {
+    function l(N, P) {
       function R() {
         te || (te = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
-          L
+          P
         ));
       }
       R.isReactWarning = !0, Object.defineProperty(N, "key", {
@@ -138,11 +138,11 @@ function nc() {
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
       )), N = this.props.ref, N !== void 0 ? N : null;
     }
-    function c(N, L, R, _, T, O, $, Q) {
+    function c(N, P, R, _, T, O, z, Q) {
       return R = O.ref, N = {
         $$typeof: h,
         type: N,
-        key: L,
+        key: P,
         props: O,
         _owner: T
       }, (R !== void 0 ? R : null) !== null ? Object.defineProperty(N, "ref", {
@@ -162,7 +162,7 @@ function nc() {
         configurable: !1,
         enumerable: !1,
         writable: !0,
-        value: $
+        value: z
       }), Object.defineProperty(N, "_debugTask", {
         configurable: !1,
         enumerable: !1,
@@ -170,25 +170,25 @@ function nc() {
         value: Q
       }), Object.freeze && (Object.freeze(N.props), Object.freeze(N)), N;
     }
-    function u(N, L, R, _, T, O, $, Q) {
-      var z = L.children;
-      if (z !== void 0)
+    function u(N, P, R, _, T, O, z, Q) {
+      var L = P.children;
+      if (L !== void 0)
         if (_)
-          if (re(z)) {
-            for (_ = 0; _ < z.length; _++)
-              d(z[_]);
-            Object.freeze && Object.freeze(z);
+          if (re(L)) {
+            for (_ = 0; _ < L.length; _++)
+              d(L[_]);
+            Object.freeze && Object.freeze(L);
           } else
             console.error(
               "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
             );
-        else d(z);
-      if (U.call(L, "key")) {
-        z = t(N);
-        var F = Object.keys(L).filter(function(K) {
+        else d(L);
+      if (U.call(P, "key")) {
+        L = t(N);
+        var F = Object.keys(P).filter(function(K) {
           return K !== "key";
         });
-        _ = 0 < F.length ? "{key: someKey, " + F.join(": ..., ") + ": ...}" : "{key: someKey}", Qe[z + _] || (F = 0 < F.length ? "{" + F.join(": ..., ") + ": ...}" : "{}", console.error(
+        _ = 0 < F.length ? "{key: someKey, " + F.join(": ..., ") + ": ...}" : "{key: someKey}", Qe[L + _] || (F = 0 < F.length ? "{" + F.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
@@ -196,27 +196,27 @@ React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
           _,
-          z,
+          L,
           F,
-          z
-        ), Qe[z + _] = !0);
+          L
+        ), Qe[L + _] = !0);
       }
-      if (z = null, R !== void 0 && (n(R), z = "" + R), i(L) && (n(L.key), z = "" + L.key), "key" in L) {
+      if (L = null, R !== void 0 && (n(R), L = "" + R), i(P) && (n(P.key), L = "" + P.key), "key" in P) {
         R = {};
-        for (var V in L)
-          V !== "key" && (R[V] = L[V]);
-      } else R = L;
-      return z && l(
+        for (var V in P)
+          V !== "key" && (R[V] = P[V]);
+      } else R = P;
+      return L && l(
         R,
         typeof N == "function" ? N.displayName || N.name || "Unknown" : N
       ), c(
         N,
-        z,
+        L,
         O,
         T,
         s(),
         R,
-        $,
+        z,
         Q
       );
     }
@@ -235,11 +235,11 @@ React keys must be passed directly to JSX without using spread:
       f,
       o
     )(), We = ee(r(o)), Qe = {};
-    ln.Fragment = g, ln.jsx = function(N, L, R, _, T) {
+    ln.Fragment = g, ln.jsx = function(N, P, R, _, T) {
       var O = 1e4 > w.recentlyCreatedOwnerStacks++;
       return u(
         N,
-        L,
+        P,
         R,
         !1,
         _,
@@ -247,11 +247,11 @@ React keys must be passed directly to JSX without using spread:
         O ? Error("react-stack-top-frame") : Xe,
         O ? ee(r(N)) : We
       );
-    }, ln.jsxs = function(N, L, R, _, T) {
+    }, ln.jsxs = function(N, P, R, _, T) {
       var O = 1e4 > w.recentlyCreatedOwnerStacks++;
       return u(
         N,
-        L,
+        P,
         R,
         !0,
         _,
@@ -462,7 +462,7 @@ function Bi() {
   } = Io;
   let {
     IS_ALLOWED_URI: N
-  } = Io, L = null;
+  } = Io, P = null;
   const R = X({}, [...To, ...Wr, ...Vr, ...Ur, ...Mo]);
   let _ = null;
   const T = X({}, [...Ro, ...Kr, ...Oo, ...Wn]);
@@ -485,8 +485,8 @@ function Bi() {
       enumerable: !0,
       value: !1
     }
-  })), $ = null, Q = null;
-  const z = Object.seal(hs(null, {
+  })), z = null, Q = null;
+  const L = Object.seal(hs(null, {
     tagCheck: {
       writable: !0,
       configurable: !1,
@@ -521,7 +521,7 @@ function Bi() {
     let b = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
     if (!(Wt && Wt === b)) {
       if ((!b || typeof b != "object") && (b = {}), b = tt(b), sn = // eslint-disable-next-line unicorn/prefer-includes
-      Ua.indexOf(b.PARSER_MEDIA_TYPE) === -1 ? Ka : b.PARSER_MEDIA_TYPE, pe = sn === "application/xhtml+xml" ? Br : nr, L = Ue(b, "ALLOWED_TAGS") ? X({}, b.ALLOWED_TAGS, pe) : R, _ = Ue(b, "ALLOWED_ATTR") ? X({}, b.ALLOWED_ATTR, pe) : T, Pr = Ue(b, "ALLOWED_NAMESPACES") ? X({}, b.ALLOWED_NAMESPACES, Br) : Wa, zr = Ue(b, "ADD_URI_SAFE_ATTR") ? X(tt(co), b.ADD_URI_SAFE_ATTR, pe) : co, lo = Ue(b, "ADD_DATA_URI_TAGS") ? X(tt(ao), b.ADD_DATA_URI_TAGS, pe) : ao, Ze = Ue(b, "FORBID_CONTENTS") ? X({}, b.FORBID_CONTENTS, pe) : Dr, $ = Ue(b, "FORBID_TAGS") ? X({}, b.FORBID_TAGS, pe) : tt({}), Q = Ue(b, "FORBID_ATTR") ? X({}, b.FORBID_ATTR, pe) : tt({}), Bt = Ue(b, "USE_PROFILES") ? b.USE_PROFILES : !1, F = b.ALLOW_ARIA_ATTR !== !1, V = b.ALLOW_DATA_ATTR !== !1, K = b.ALLOW_UNKNOWN_PROTOCOLS || !1, H = b.ALLOW_SELF_CLOSE_IN_ATTR !== !1, Z = b.SAFE_FOR_TEMPLATES || !1, he = b.SAFE_FOR_XML !== !1, ne = b.WHOLE_DOCUMENT || !1, Pe = b.RETURN_DOM || !1, ht = b.RETURN_DOM_FRAGMENT || !1, _t = b.RETURN_TRUSTED_TYPE || !1, Le = b.FORCE_BODY || !1, nn = b.SANITIZE_DOM !== !1, Ln = b.SANITIZE_NAMED_PROPS || !1, jr = b.KEEP_CONTENT !== !1, rn = b.IN_PLACE || !1, N = b.ALLOWED_URI_REGEXP || Fi, Ht = b.NAMESPACE || it, Fn = b.MATHML_TEXT_INTEGRATION_POINTS || Fn, _n = b.HTML_INTEGRATION_POINTS || _n, O = b.CUSTOM_ELEMENT_HANDLING || {}, b.CUSTOM_ELEMENT_HANDLING && uo(b.CUSTOM_ELEMENT_HANDLING.tagNameCheck) && (O.tagNameCheck = b.CUSTOM_ELEMENT_HANDLING.tagNameCheck), b.CUSTOM_ELEMENT_HANDLING && uo(b.CUSTOM_ELEMENT_HANDLING.attributeNameCheck) && (O.attributeNameCheck = b.CUSTOM_ELEMENT_HANDLING.attributeNameCheck), b.CUSTOM_ELEMENT_HANDLING && typeof b.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements == "boolean" && (O.allowCustomizedBuiltInElements = b.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements), Z && (V = !1), ht && (Pe = !0), Bt && (L = X({}, Mo), _ = [], Bt.html === !0 && (X(L, To), X(_, Ro)), Bt.svg === !0 && (X(L, Wr), X(_, Kr), X(_, Wn)), Bt.svgFilters === !0 && (X(L, Vr), X(_, Kr), X(_, Wn)), Bt.mathMl === !0 && (X(L, Ur), X(_, Oo), X(_, Wn))), b.ADD_TAGS && (typeof b.ADD_TAGS == "function" ? z.tagCheck = b.ADD_TAGS : (L === R && (L = tt(L)), X(L, b.ADD_TAGS, pe))), b.ADD_ATTR && (typeof b.ADD_ATTR == "function" ? z.attributeCheck = b.ADD_ATTR : (_ === T && (_ = tt(_)), X(_, b.ADD_ATTR, pe))), b.ADD_URI_SAFE_ATTR && X(zr, b.ADD_URI_SAFE_ATTR, pe), b.FORBID_CONTENTS && (Ze === Dr && (Ze = tt(Ze)), X(Ze, b.FORBID_CONTENTS, pe)), b.ADD_FORBID_CONTENTS && (Ze === Dr && (Ze = tt(Ze)), X(Ze, b.ADD_FORBID_CONTENTS, pe)), jr && (L["#text"] = !0), ne && X(L, ["html", "head", "body"]), L.table && (X(L, ["tbody"]), delete $.tbody), b.TRUSTED_TYPES_POLICY) {
+      Ua.indexOf(b.PARSER_MEDIA_TYPE) === -1 ? Ka : b.PARSER_MEDIA_TYPE, pe = sn === "application/xhtml+xml" ? Br : nr, P = Ue(b, "ALLOWED_TAGS") ? X({}, b.ALLOWED_TAGS, pe) : R, _ = Ue(b, "ALLOWED_ATTR") ? X({}, b.ALLOWED_ATTR, pe) : T, Pr = Ue(b, "ALLOWED_NAMESPACES") ? X({}, b.ALLOWED_NAMESPACES, Br) : Wa, zr = Ue(b, "ADD_URI_SAFE_ATTR") ? X(tt(co), b.ADD_URI_SAFE_ATTR, pe) : co, lo = Ue(b, "ADD_DATA_URI_TAGS") ? X(tt(ao), b.ADD_DATA_URI_TAGS, pe) : ao, Ze = Ue(b, "FORBID_CONTENTS") ? X({}, b.FORBID_CONTENTS, pe) : Dr, z = Ue(b, "FORBID_TAGS") ? X({}, b.FORBID_TAGS, pe) : tt({}), Q = Ue(b, "FORBID_ATTR") ? X({}, b.FORBID_ATTR, pe) : tt({}), Bt = Ue(b, "USE_PROFILES") ? b.USE_PROFILES : !1, F = b.ALLOW_ARIA_ATTR !== !1, V = b.ALLOW_DATA_ATTR !== !1, K = b.ALLOW_UNKNOWN_PROTOCOLS || !1, H = b.ALLOW_SELF_CLOSE_IN_ATTR !== !1, Z = b.SAFE_FOR_TEMPLATES || !1, he = b.SAFE_FOR_XML !== !1, ne = b.WHOLE_DOCUMENT || !1, Pe = b.RETURN_DOM || !1, ht = b.RETURN_DOM_FRAGMENT || !1, _t = b.RETURN_TRUSTED_TYPE || !1, Le = b.FORCE_BODY || !1, nn = b.SANITIZE_DOM !== !1, Ln = b.SANITIZE_NAMED_PROPS || !1, jr = b.KEEP_CONTENT !== !1, rn = b.IN_PLACE || !1, N = b.ALLOWED_URI_REGEXP || Fi, Ht = b.NAMESPACE || it, Fn = b.MATHML_TEXT_INTEGRATION_POINTS || Fn, _n = b.HTML_INTEGRATION_POINTS || _n, O = b.CUSTOM_ELEMENT_HANDLING || {}, b.CUSTOM_ELEMENT_HANDLING && uo(b.CUSTOM_ELEMENT_HANDLING.tagNameCheck) && (O.tagNameCheck = b.CUSTOM_ELEMENT_HANDLING.tagNameCheck), b.CUSTOM_ELEMENT_HANDLING && uo(b.CUSTOM_ELEMENT_HANDLING.attributeNameCheck) && (O.attributeNameCheck = b.CUSTOM_ELEMENT_HANDLING.attributeNameCheck), b.CUSTOM_ELEMENT_HANDLING && typeof b.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements == "boolean" && (O.allowCustomizedBuiltInElements = b.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements), Z && (V = !1), ht && (Pe = !0), Bt && (P = X({}, Mo), _ = [], Bt.html === !0 && (X(P, To), X(_, Ro)), Bt.svg === !0 && (X(P, Wr), X(_, Kr), X(_, Wn)), Bt.svgFilters === !0 && (X(P, Vr), X(_, Kr), X(_, Wn)), Bt.mathMl === !0 && (X(P, Ur), X(_, Oo), X(_, Wn))), b.ADD_TAGS && (typeof b.ADD_TAGS == "function" ? L.tagCheck = b.ADD_TAGS : (P === R && (P = tt(P)), X(P, b.ADD_TAGS, pe))), b.ADD_ATTR && (typeof b.ADD_ATTR == "function" ? L.attributeCheck = b.ADD_ATTR : (_ === T && (_ = tt(_)), X(_, b.ADD_ATTR, pe))), b.ADD_URI_SAFE_ATTR && X(zr, b.ADD_URI_SAFE_ATTR, pe), b.FORBID_CONTENTS && (Ze === Dr && (Ze = tt(Ze)), X(Ze, b.FORBID_CONTENTS, pe)), b.ADD_FORBID_CONTENTS && (Ze === Dr && (Ze = tt(Ze)), X(Ze, b.ADD_FORBID_CONTENTS, pe)), jr && (P["#text"] = !0), ne && X(P, ["html", "head", "body"]), P.table && (X(P, ["tbody"]), delete z.tbody), b.TRUSTED_TYPES_POLICY) {
         if (typeof b.TRUSTED_TYPES_POLICY.createHTML != "function")
           throw un('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');
         if (typeof b.TRUSTED_TYPES_POLICY.createScriptURL != "function")
@@ -537,8 +537,8 @@ function Bi() {
       namespaceURI: Ht,
       tagName: "template"
     });
-    const P = nr(b.tagName), oe = nr(M.tagName);
-    return Pr[b.namespaceURI] ? b.namespaceURI === $n ? M.namespaceURI === it ? P === "svg" : M.namespaceURI === Pn ? P === "svg" && (oe === "annotation-xml" || Fn[oe]) : !!fo[P] : b.namespaceURI === Pn ? M.namespaceURI === it ? P === "math" : M.namespaceURI === $n ? P === "math" && _n[oe] : !!ho[P] : b.namespaceURI === it ? M.namespaceURI === $n && !_n[oe] || M.namespaceURI === Pn && !Fn[oe] ? !1 : !ho[P] && (Va[P] || !fo[P]) : !!(sn === "application/xhtml+xml" && Pr[b.namespaceURI]) : !1;
+    const $ = nr(b.tagName), oe = nr(M.tagName);
+    return Pr[b.namespaceURI] ? b.namespaceURI === $n ? M.namespaceURI === it ? $ === "svg" : M.namespaceURI === Pn ? $ === "svg" && (oe === "annotation-xml" || Fn[oe]) : !!fo[$] : b.namespaceURI === Pn ? M.namespaceURI === it ? $ === "math" : M.namespaceURI === $n ? $ === "math" && _n[oe] : !!ho[$] : b.namespaceURI === it ? M.namespaceURI === $n && !_n[oe] || M.namespaceURI === Pn && !Fn[oe] ? !1 : !ho[$] && (Va[$] || !fo[$]) : !!(sn === "application/xhtml+xml" && Pr[b.namespaceURI]) : !1;
   }, et = function(b) {
     an(e.removed, {
       element: b
@@ -572,12 +572,12 @@ function Bi() {
         } catch {
         }
   }, po = function(b) {
-    let M = null, P = null;
+    let M = null, $ = null;
     if (Le)
       b = "<remove></remove>" + b;
     else {
       const ce = Hr(b, /^[\r\n\t ]+/);
-      P = ce && ce[0];
+      $ = ce && ce[0];
     }
     sn === "application/xhtml+xml" && Ht === it && (b = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + b + "</body></html>");
     const oe = k ? k.createHTML(b) : b;
@@ -594,7 +594,7 @@ function Bi() {
       }
     }
     const Ce = M.body || M.documentElement;
-    return b && P && Ce.insertBefore(n.createTextNode(P), Ce.childNodes[0] || null), Ht === it ? J.call(M, ne ? "html" : "body")[0] : ne ? M.documentElement : Ce;
+    return b && $ && Ce.insertBefore(n.createTextNode($), Ce.childNodes[0] || null), Ht === it ? J.call(M, ne ? "html" : "body")[0] : ne ? M.documentElement : Ce;
   }, mo = function(b) {
     return j.call(
       b.ownerDocument || b,
@@ -609,24 +609,24 @@ function Bi() {
     return typeof l == "function" && b instanceof l;
   };
   function lt(B, b, M) {
-    Hn(B, (P) => {
-      P.call(e, b, M, Wt);
+    Hn(B, ($) => {
+      $.call(e, b, M, Wt);
     });
   }
   const yo = function(b) {
     let M = null;
     if (lt(w.beforeSanitizeElements, b, null), Fr(b))
       return et(b), !0;
-    const P = pe(b.nodeName);
+    const $ = pe(b.nodeName);
     if (lt(w.uponSanitizeElement, b, {
-      tagName: P,
-      allowedTags: L
+      tagName: $,
+      allowedTags: P
     }), he && b.hasChildNodes() && !go(b.firstElementChild) && Ne(/<[/\w!]/g, b.innerHTML) && Ne(/<[/\w!]/g, b.textContent) || b.nodeType === fn.progressingInstruction || he && b.nodeType === fn.comment && Ne(/<[/\w]/g, b.data))
       return et(b), !0;
-    if (!(z.tagCheck instanceof Function && z.tagCheck(P)) && (!L[P] || $[P])) {
-      if (!$[P] && xo(P) && (O.tagNameCheck instanceof RegExp && Ne(O.tagNameCheck, P) || O.tagNameCheck instanceof Function && O.tagNameCheck(P)))
+    if (!(L.tagCheck instanceof Function && L.tagCheck($)) && (!P[$] || z[$])) {
+      if (!z[$] && xo($) && (O.tagNameCheck instanceof RegExp && Ne(O.tagNameCheck, $) || O.tagNameCheck instanceof Function && O.tagNameCheck($)))
         return !1;
-      if (jr && !Ze[P]) {
+      if (jr && !Ze[$]) {
         const oe = S(b) || b.parentNode, Ce = v(b) || b.childNodes;
         if (Ce && oe) {
           const ce = Ce.length;
@@ -638,17 +638,17 @@ function Bi() {
       }
       return et(b), !0;
     }
-    return b instanceof a && !Ga(b) || (P === "noscript" || P === "noembed" || P === "noframes") && Ne(/<\/no(script|embed|frames)/i, b.innerHTML) ? (et(b), !0) : (Z && b.nodeType === fn.text && (M = b.textContent, Hn([U, re, ee], (oe) => {
+    return b instanceof a && !Ga(b) || ($ === "noscript" || $ === "noembed" || $ === "noframes") && Ne(/<\/no(script|embed|frames)/i, b.innerHTML) ? (et(b), !0) : (Z && b.nodeType === fn.text && (M = b.textContent, Hn([U, re, ee], (oe) => {
       M = cn(M, oe, " ");
     }), b.textContent !== M && (an(e.removed, {
       element: b.cloneNode()
     }), b.textContent = M)), lt(w.afterSanitizeElements, b, null), !1);
-  }, bo = function(b, M, P) {
-    if (nn && (M === "id" || M === "name") && (P in n || P in qa))
+  }, bo = function(b, M, $) {
+    if (nn && (M === "id" || M === "name") && ($ in n || $ in qa))
       return !1;
     if (!(V && !Q[M] && Ne(te, M))) {
       if (!(F && Ne(ae, M))) {
-        if (!(z.attributeCheck instanceof Function && z.attributeCheck(M, b))) {
+        if (!(L.attributeCheck instanceof Function && L.attributeCheck(M, b))) {
           if (!_[M] || Q[M]) {
             if (
               // First condition does a very basic check if a) it's basically a valid custom element tagname AND
@@ -656,13 +656,13 @@ function Bi() {
               // and c) if the attribute name passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.attributeNameCheck
               !(xo(b) && (O.tagNameCheck instanceof RegExp && Ne(O.tagNameCheck, b) || O.tagNameCheck instanceof Function && O.tagNameCheck(b)) && (O.attributeNameCheck instanceof RegExp && Ne(O.attributeNameCheck, M) || O.attributeNameCheck instanceof Function && O.attributeNameCheck(M, b)) || // Alternative, second condition checks if it's an `is`-attribute, AND
               // the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
-              M === "is" && O.allowCustomizedBuiltInElements && (O.tagNameCheck instanceof RegExp && Ne(O.tagNameCheck, P) || O.tagNameCheck instanceof Function && O.tagNameCheck(P)))
+              M === "is" && O.allowCustomizedBuiltInElements && (O.tagNameCheck instanceof RegExp && Ne(O.tagNameCheck, $) || O.tagNameCheck instanceof Function && O.tagNameCheck($)))
             ) return !1;
           } else if (!zr[M]) {
-            if (!Ne(N, cn(P, We, ""))) {
-              if (!((M === "src" || M === "xlink:href" || M === "href") && b !== "script" && cc(P, "data:") === 0 && lo[b])) {
-                if (!(K && !Ne(Xe, cn(P, We, "")))) {
-                  if (P)
+            if (!Ne(N, cn($, We, ""))) {
+              if (!((M === "src" || M === "xlink:href" || M === "href") && b !== "script" && cc($, "data:") === 0 && lo[b])) {
+                if (!(K && !Ne(Xe, cn($, We, "")))) {
+                  if ($)
                     return !1;
                 }
               }
@@ -681,7 +681,7 @@ function Bi() {
     } = b;
     if (!M || Fr(b))
       return;
-    const P = {
+    const $ = {
       attrName: "",
       attrValue: "",
       keepAttr: !0,
@@ -696,7 +696,7 @@ function Bi() {
         value: at
       } = Ce, Vt = pe(ce), _r = at;
       let xe = ce === "value" ? _r : uc(_r);
-      if (P.attrName = Vt, P.attrValue = xe, P.keepAttr = !0, P.forceKeepAttr = void 0, lt(w.uponSanitizeAttribute, b, P), xe = P.attrValue, Ln && (Vt === "id" || Vt === "name") && (Ct(ce, b), xe = Ha + xe), he && Ne(/((--!?|])>)|<\/(style|title|textarea)/i, xe)) {
+      if ($.attrName = Vt, $.attrValue = xe, $.keepAttr = !0, $.forceKeepAttr = void 0, lt(w.uponSanitizeAttribute, b, $), xe = $.attrValue, Ln && (Vt === "id" || Vt === "name") && (Ct(ce, b), xe = Ha + xe), he && Ne(/((--!?|])>)|<\/(style|title|textarea)/i, xe)) {
         Ct(ce, b);
         continue;
       }
@@ -704,9 +704,9 @@ function Bi() {
         Ct(ce, b);
         continue;
       }
-      if (P.forceKeepAttr)
+      if ($.forceKeepAttr)
         continue;
-      if (!P.keepAttr) {
+      if (!$.keepAttr) {
         Ct(ce, b);
         continue;
       }
@@ -743,13 +743,13 @@ function Bi() {
     lt(w.afterSanitizeAttributes, b, null);
   }, Ja = function B(b) {
     let M = null;
-    const P = mo(b);
-    for (lt(w.beforeSanitizeShadowDOM, b, null); M = P.nextNode(); )
+    const $ = mo(b);
+    for (lt(w.beforeSanitizeShadowDOM, b, null); M = $.nextNode(); )
       lt(w.uponSanitizeShadowNode, M, null), yo(M), wo(M), M.content instanceof o && B(M.content);
     lt(w.afterSanitizeShadowDOM, b, null);
   };
   return e.sanitize = function(B) {
-    let b = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, M = null, P = null, oe = null, Ce = null;
+    let b = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, M = null, $ = null, oe = null, Ce = null;
     if (Lr = !B, Lr && (B = "<!-->"), typeof B != "string" && !go(B))
       if (typeof B.toString == "function") {
         if (B = B.toString(), typeof B != "string")
@@ -761,11 +761,11 @@ function Bi() {
     if (Ve || $r(b), e.removed = [], typeof B == "string" && (rn = !1), rn) {
       if (B.nodeName) {
         const at = pe(B.nodeName);
-        if (!L[at] || $[at])
+        if (!P[at] || z[at])
           throw un("root node is forbidden and cannot be sanitized in-place");
       }
     } else if (B instanceof l)
-      M = po("<!---->"), P = M.ownerDocument.importNode(B, !0), P.nodeType === fn.element && P.nodeName === "BODY" || P.nodeName === "HTML" ? M = P : M.appendChild(P);
+      M = po("<!---->"), $ = M.ownerDocument.importNode(B, !0), $.nodeType === fn.element && $.nodeName === "BODY" || $.nodeName === "HTML" ? M = $ : M.appendChild($);
     else {
       if (!Pe && !Z && !ne && // eslint-disable-next-line unicorn/prefer-includes
       B.indexOf("<") === -1)
@@ -788,7 +788,7 @@ function Bi() {
       return (_.shadowroot || _.shadowrootmode) && (Ce = G.call(r, Ce, !0)), Ce;
     }
     let Oe = ne ? M.outerHTML : M.innerHTML;
-    return ne && L["!doctype"] && M.ownerDocument && M.ownerDocument.doctype && M.ownerDocument.doctype.name && Ne(_i, M.ownerDocument.doctype.name) && (Oe = "<!DOCTYPE " + M.ownerDocument.doctype.name + `>
+    return ne && P["!doctype"] && M.ownerDocument && M.ownerDocument.doctype && M.ownerDocument.doctype.name && Ne(_i, M.ownerDocument.doctype.name) && (Oe = "<!DOCTYPE " + M.ownerDocument.doctype.name + `>
 ` + Oe), Z && Hn([U, re, ee], (at) => {
       Oe = cn(Oe, at, " ");
     }), k && _t ? k.createHTML(Oe) : Oe;
@@ -799,8 +799,8 @@ function Bi() {
     Wt = null, Ve = !1;
   }, e.isValidAttribute = function(B, b, M) {
     Wt || $r({});
-    const P = pe(B), oe = pe(b);
-    return bo(P, oe, M);
+    const $ = pe(B), oe = pe(b);
+    return bo($, oe, M);
   }, e.addHook = function(B, b) {
     typeof b == "function" && an(w[B], b);
   }, e.removeHook = function(B, b) {
@@ -1281,7 +1281,7 @@ async function qi(t, e) {
     throw new Error("Upload URL missing");
   const n = t.baseURL + t.uploadURL;
   return Promise.all(
-    Array.from(e).map(async (r) => {
+    e.map(async (r) => {
       const s = new FormData();
       return s.append("file", r), (await de.post(n, s, {
         headers: {
@@ -1298,7 +1298,7 @@ async function Gi(t, e) {
   const n = t.baseURL + t.removeFileURL;
   return (await de.post(
     n,
-    { fileId: e },
+    { fileId: String(e) },
     {
       headers: {
         Authorization: `Bearer ${t.accessToken}`,
@@ -1330,8 +1330,8 @@ function Wc({
     else if (!gs(f))
       O = Object.keys(f)[0];
     else {
-      const $ = Object.values(f)[0];
-      O = $ ? Object.keys($)[0] : void 0;
+      const z = Object.values(f)[0];
+      O = z ? Object.keys(z)[0] : void 0;
     }
     O != null && e.setFieldValue(D, String(O), !1);
   }, [f]), $e(() => {
@@ -1339,8 +1339,8 @@ function Wc({
   }, [i]), $e(() => {
     if (!k) return;
     const T = (O) => {
-      const $ = O.target;
-      S.current?.contains($) || v.current?.contains($) || (C(!1), g(""));
+      const z = O.target;
+      S.current?.contains(z) || v.current?.contains(z) || (C(!1), g(""));
     };
     return document.addEventListener("mousedown", T), () => {
       document.removeEventListener("mousedown", T);
@@ -1350,8 +1350,8 @@ function Wc({
   $e(() => {
     let T = !0;
     return (async () => {
-      let $ = t.valueKey ?? "value", Q = t.labelKey ?? "title", z = t?.options;
-      if (z && (Array.isArray(z) && z.length > 0 || !Array.isArray(z) && Object.keys(z).length > 0)) {
+      let z = t.valueKey ?? "value", Q = t.labelKey ?? "title", L = t?.options;
+      if (L && (Array.isArray(L) && L.length > 0 || !Array.isArray(L) && Object.keys(L).length > 0)) {
         if (typeof t.options == "object" && !Array.isArray(t.options)) {
           const Z = Object.values(t.options);
           if (Z.length && typeof Z[0] == "string") {
@@ -1360,7 +1360,7 @@ function Wc({
           }
         }
         const K = (Array.isArray(t.options) ? t.options : [t.options]).map(kt), H = Ut(
-          $,
+          z,
           Q,
           K,
           t.groupKey
@@ -1382,7 +1382,7 @@ function Wc({
                 return;
               }
             }
-            const he = Array.isArray(Z) ? Z.map(kt) : [], ne = Ut($, Q, he, t.groupKey);
+            const he = Array.isArray(Z) ? Z.map(kt) : [], ne = Ut(z, Q, he, t.groupKey);
             T && h(ne);
             return;
           } catch (H) {
@@ -1411,7 +1411,7 @@ function Wc({
               return;
             }
           }
-          const Z = Array.isArray(H) ? H.map(kt) : [], he = Ut($, Q, Z, t.groupKey);
+          const Z = Array.isArray(H) ? H.map(kt) : [], he = Ut(z, Q, Z, t.groupKey);
           T && h(he);
           return;
         } catch (V) {
@@ -1452,7 +1452,7 @@ function Wc({
               return;
             }
           }
-          const Z = Array.isArray(H) ? H.map(kt) : [], he = Ut($, Q, Z, t.groupKey);
+          const Z = Array.isArray(H) ? H.map(kt) : [], he = Ut(z, Q, Z, t.groupKey);
           T && h(he);
         } catch (V) {
           console.error("API fetch failed:", V);
@@ -1497,17 +1497,17 @@ function Wc({
     if (k)
       if (T.key === "ArrowDown")
         T.preventDefault(), x(
-          ($) => $ + 1 < ae.length ? $ + 1 : 0
+          (z) => z + 1 < ae.length ? z + 1 : 0
         );
       else if (T.key === "ArrowUp")
         T.preventDefault(), x(
-          ($) => $ - 1 >= 0 ? $ - 1 : ae.length - 1
+          (z) => z - 1 >= 0 ? z - 1 : ae.length - 1
         );
       else if (T.key === "Enter") {
         T.preventDefault();
-        const [$] = ae[y] || [];
-        if ($) {
-          let Q = O ? $ : [...e.values[t.name], $];
+        const [z] = ae[y] || [];
+        if (z) {
+          let Q = O ? z : [...e.values[t.name], z];
           e.setFieldValue(t.name, Q), At(Q, t, o);
         }
         C(!1);
@@ -1522,8 +1522,8 @@ function Wc({
   }, [ae, y]), $e(() => {
     const T = t.autocomplete, O = t.ajaxchain;
     if (!T && !O) return;
-    const $ = e.values[t.name];
-    if (!$) return;
+    const z = e.values[t.name];
+    if (!z) return;
     const Q = Array.isArray(O) ? O : O ? [O] : [];
     (async () => {
       try {
@@ -1534,10 +1534,10 @@ function Wc({
           if ("type" in F && F.type === "api") {
             let H = t.name;
             typeof t.parameter == "string" && t.parameter && (H = t.parameter);
-            const Z = { [H]: $, refid: $ };
+            const Z = { [H]: z, refid: z };
             if (typeof t.parameter == "object" && t.parameter !== null && Object.keys(t.parameter).length > 0)
               for (const [Ve, Le] of Object.entries(t.parameter))
-                Z[Ve] = Ve === H ? $ : e.values?.[Le];
+                Z[Ve] = Ve === H ? z : e.values?.[Le];
             const he = {
               method: F.method || "GET",
               url: r?.baseURL + F.endpoint,
@@ -1553,7 +1553,7 @@ function Wc({
               if (!F.table || !F.columns)
                 throw new Error("SQL query requires field.table");
               const he = ut(F?.where ?? {}, {
-                refid: $
+                refid: z
               });
               H = {
                 ...F,
@@ -1562,7 +1562,7 @@ function Wc({
                 where: he
               };
             }
-            const { data: Z } = await Vn(r, H, F?.queryid, $, o);
+            const { data: Z } = await Vn(r, H, F?.queryid, z, o);
             V = Array.isArray(Z?.data?.data) ? Z.data.data[0] : Array.isArray(Z?.data) ? Z.data[0] : Z?.data;
           }
           let K = kt(V);
@@ -1577,10 +1577,10 @@ function Wc({
           if ("type" in V && V.type === "api") {
             let Le = t.name;
             typeof t.parameter == "string" && t.parameter && (Le = t.parameter);
-            let Pe = { [Le]: $, refid: $ };
+            let Pe = { [Le]: z, refid: z };
             if (typeof t.parameter == "object" && t.parameter !== null && Object.keys(t.parameter).length > 0)
               for (const [nn, Ln] of Object.entries(t.parameter))
-                Pe[nn] = nn === Le ? $ : e.values?.[Ln];
+                Pe[nn] = nn === Le ? z : e.values?.[Ln];
             const ht = {
               method: V.method || "GET",
               url: r?.baseURL + V.endpoint,
@@ -1596,7 +1596,7 @@ function Wc({
               if (!V.table || !V.columns)
                 throw new Error("SQL query requires field.table");
               const ht = ut(V?.where ?? {}, {
-                refid: $
+                refid: z
               });
               Le = {
                 ...V,
@@ -1605,7 +1605,7 @@ function Wc({
                 where: ht
               };
             }
-            const { data: Pe } = await Vn(r, Le, V?.queryid, $, o);
+            const { data: Pe } = await Vn(r, Le, V?.queryid, z, o);
             K = Pe;
           }
           let H = t.valueKey ?? "value", Z = t.labelKey ?? "title";
@@ -1623,7 +1623,7 @@ function Wc({
     })();
   }, [e.values[t.name]]), $e(() => {
     if (!te || !m.trim() || !r) return;
-    const T = zc(t.columns ?? ""), O = new AbortController(), $ = setTimeout(async () => {
+    const T = zc(t.columns ?? ""), O = new AbortController(), z = setTimeout(async () => {
       try {
         let Q;
         if (!t.queryid) {
@@ -1639,12 +1639,12 @@ function Wc({
             where: ne
           };
         }
-        let z = {};
+        let L = {};
         Array.isArray(T) && T.forEach((ne) => {
-          z[ne] = [m, "LIKE"];
+          L[ne] = [m, "LIKE"];
         });
         let F = t.valueKey ?? "value", V = t.labelKey ?? "title";
-        const { data: K } = await Vn(r, Q, t?.queryid, void 0, o, z), H = Array.isArray(K?.data?.data) ? K.data.data : Array.isArray(K?.data) ? K.data : K, Z = Array.isArray(H) ? H.map(kt) : [], he = Ut(
+        const { data: K } = await Vn(r, Q, t?.queryid, void 0, o, L), H = Array.isArray(K?.data?.data) ? K.data.data : Array.isArray(K?.data) ? K.data : K, Z = Array.isArray(H) ? H.map(kt) : [], he = Ut(
           F,
           V,
           Z,
@@ -1657,7 +1657,7 @@ function Wc({
       }
     }, 500);
     return () => {
-      clearTimeout($), O.abort();
+      clearTimeout(z), O.abort();
     };
   }, [te, m, s]);
   const We = async (T) => {
@@ -1666,42 +1666,40 @@ function Wc({
       return;
     }
     try {
-      const O = await qi(r, T);
-      console.log("uploads", O);
-      const $ = Ui({
+      const O = await qi(r, T), z = Ui({
         uploads: O,
         currentValue: e.values[D],
         multiple: t.multiple ?? !1
       });
       e.setFieldValue(
         D,
-        $
-      ), At($, t, o);
+        z
+      ), At(z, t, o);
     } catch (O) {
       console.error("File upload failed", O), e.setFieldError(D, "File upload failed");
     }
   }, Qe = async (T) => {
-    const O = Array.isArray(e.values[D]) ? e.values[D] : [], $ = O.filter((Q) => Q.fileId !== T.fileId);
-    e.setFieldValue(D, $);
+    const O = Array.isArray(e.values[D]) ? e.values[D] : [], z = O.filter((Q) => Q.fileId !== T.fileId);
+    e.setFieldValue(D, z);
     try {
-      await Gi(r, T.fileId), At($, t, o);
-    } catch {
-      e.setFieldValue(D, O);
+      await Gi(r, T.fileId), At(z, t, o);
+    } catch (Q) {
+      console.log(Q), e.setFieldValue(D, O);
     }
-  }, N = async (T, O, $) => {
+  }, N = async (T, O, z) => {
     const Q = O[T];
     if (!Q) return;
-    const z = n?.[Q];
-    if (typeof z != "function") {
+    const L = n?.[Q];
+    if (typeof L != "function") {
       console.error(`Method "${String(Q)}" not found`);
       return;
     }
     try {
-      await Promise.resolve(z($));
+      await Promise.resolve(L(z));
     } catch (F) {
       console.error(`Method "${String(Q)}" failed`, F);
     }
-  }, L = (T) => {
+  }, P = (T) => {
     if (j) return;
     const O = T.target.value;
     g(O), x(0), O.trim() ? C(!0) : (C(!1), e.setFieldValue(D, ""));
@@ -1710,7 +1708,9 @@ function Wc({
   };
   function _(T) {
     const O = T.currentTarget.files;
-    O && We(O);
+    if (!O?.length) return;
+    const z = Array.from(O);
+    setTimeout(() => We(z), 0);
   }
   return {
     setHighlightedIndex: x,
@@ -1720,7 +1720,7 @@ function Wc({
     setSearch: g,
     setOpen: C,
     setIsFocused: c,
-    handleInputChange: L,
+    handleInputChange: P,
     handleSelect: R,
     handlePersist: At,
     handleFileChange: _,
@@ -2091,20 +2091,21 @@ function Ji({
   let s = e?.name;
   const o = er(null), i = async (d) => {
     const f = d.currentTarget.files;
-    if (!(!f || f.length === 0))
-      try {
-        const h = await qi(n, f), m = Ui({
-          uploads: h,
-          currentValue: t.values[s],
-          multiple: e.multiple ?? !1
-        });
-        t.setFieldValue(
-          s,
-          m
-        ), At(m, e, r);
-      } catch (h) {
-        console.error("File upload failed", h), t.setFieldError(s, "File upload failed");
-      }
+    if (!f?.length) return;
+    const h = Array.from(f);
+    try {
+      const m = await qi(n, h), g = Ui({
+        uploads: m,
+        currentValue: t.values[s],
+        multiple: e.multiple ?? !1
+      });
+      t.setFieldValue(
+        s,
+        g
+      ), At(g, e, r);
+    } catch (m) {
+      console.error("File upload failed", m), t.setFieldError(s, "File upload failed");
+    }
   }, l = async (d) => {
     const f = Array.isArray(t.values[s]) ? t.values[s] : [], h = f.filter((m) => m.fileId !== d.fileId);
     t.setFieldValue(s, h);
@@ -2156,7 +2157,7 @@ function Ji({
               }
             )
           ] }, d)) : null,
-          (e.multiple || a.length === 0) && /* @__PURE__ */ p.jsx(
+          /* @__PURE__ */ p.jsx(
             "div",
             {
               onClick: () => o.current?.click(),
@@ -13631,13 +13632,13 @@ function zn({
           {
             ref: ee,
             className: "absolute z-20 w-full bg-white border rounded shadow max-h-52 overflow-y-auto mt-1",
-            children: U.length > 0 && Xe ? U.map(([T, O], $) => /* @__PURE__ */ p.jsx(
+            children: U.length > 0 && Xe ? U.map(([T, O], z) => /* @__PURE__ */ p.jsx(
               "div",
               {
                 id: `${w}-${T}`,
-                "data-index": $,
+                "data-index": z,
                 className: `px-3 py-2 cursor-pointer text-sm
-                  ${D === $ ? "bg-gray-100" : "hover:bg-gray-100"}`,
+                  ${D === z ? "bg-gray-100" : "hover:bg-gray-100"}`,
                 onMouseDown: () => g(T),
                 children: O
               },
@@ -13880,7 +13881,7 @@ function zn({
           t.required && /* @__PURE__ */ p.jsx("span", { className: "text-red-500 ml-1", children: "*" })
         ] }),
         /* @__PURE__ */ p.jsx("div", { className: "flex flex-col gap-2 ml-1", children: Object.entries(J || {}).map(([T, O]) => {
-          const $ = R ? Array.isArray(_) && _.includes(T) : _ === T;
+          const z = R ? Array.isArray(_) && _.includes(T) : _ === T;
           return /* @__PURE__ */ p.jsxs(
             "label",
             {
@@ -13891,15 +13892,15 @@ function zn({
                   {
                     id: `${w}-${T}`,
                     type: "checkbox",
-                    checked: $,
+                    checked: z,
                     onChange: (Q) => {
-                      let z;
+                      let L;
                       if (R) {
                         const F = Array.isArray(_) ? _ : [];
-                        z = Q.target.checked ? [...F, T] : F.filter((V) => V !== T);
+                        L = Q.target.checked ? [...F, T] : F.filter((V) => V !== T);
                       } else
-                        z = Q.target.checked ? T : "false";
-                      e.setFieldValue(w, z), y(z, t, o), a("onChange", t, `${w}-${T}`);
+                        L = Q.target.checked ? T : "false";
+                      e.setFieldValue(w, L), y(L, t, o), a("onChange", t, `${w}-${T}`);
                     },
                     onBlur: e.handleBlur,
                     disabled: G,
@@ -13918,18 +13919,18 @@ function zn({
       ] });
     }
     case "tags": {
-      const R = e.values[w], _ = j.trim(), T = Array.isArray(J) ? J : Object.entries(J || {}).map(([z, F]) => ({ value: z, label: F })), O = (z) => {
-        if (!G && z && !R.includes(z)) {
-          let F = [...R, z];
+      const R = e.values[w], _ = j.trim(), T = Array.isArray(J) ? J : Object.entries(J || {}).map(([L, F]) => ({ value: L, label: F })), O = (L) => {
+        if (!G && L && !R.includes(L)) {
+          let F = [...R, L];
           e.setFieldValue(w, F), y(F, t, o), d("");
         }
-      }, $ = (z) => {
-        let F = R.filter((V) => V !== z);
+      }, z = (L) => {
+        let F = R.filter((V) => V !== L);
         e.setFieldValue(
           w,
           F
         ), y(F, t, o);
-      }, Q = (z) => T.find((F) => F.value === z)?.label ?? z;
+      }, Q = (L) => T.find((F) => F.value === L)?.label ?? L;
       return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ p.jsxs("label", { className: E, children: [
           t.label,
@@ -13944,18 +13945,18 @@ function zn({
             `,
             onClick: () => !G && document.getElementById(`${w}-input`)?.focus(),
             children: [
-              R.map((z) => /* @__PURE__ */ p.jsxs(
+              R.map((L) => /* @__PURE__ */ p.jsxs(
                 "span",
                 {
                   className: "flex items-center gap-2 px-2 py-1 rounded-full text-sm bg-indigo-50 border border-indigo-100",
                   children: [
-                    /* @__PURE__ */ p.jsx("span", { className: "text-indigo-700", children: Q(z) }),
+                    /* @__PURE__ */ p.jsx("span", { className: "text-indigo-700", children: Q(L) }),
                     /* @__PURE__ */ p.jsx(
                       "button",
                       {
                         type: "button",
                         onClick: (F) => {
-                          F.stopPropagation(), G || $(z);
+                          F.stopPropagation(), G || z(L);
                         },
                         onMouseDown: (F) => F.preventDefault(),
                         className: "ml-1 text-indigo-500 hover:text-red-500 focus:outline-none",
@@ -13964,7 +13965,7 @@ function zn({
                     )
                   ]
                 },
-                z
+                L
               )),
               /* @__PURE__ */ p.jsx(
                 "input",
@@ -13972,9 +13973,9 @@ function zn({
                   id: `${w}-input`,
                   type: "text",
                   value: j,
-                  onChange: (z) => d(z.target.value),
-                  onKeyDown: (z) => {
-                    (z.key === "Enter" || z.key === ",") && (z.preventDefault(), O(_));
+                  onChange: (L) => d(L.target.value),
+                  onKeyDown: (L) => {
+                    (L.key === "Enter" || L.key === ",") && (L.preventDefault(), O(_));
                   },
                   placeholder: R.length === 0 ? t.placeholder || "Type and press Enter" : "",
                   className: "flex-1 min-w-[120px] border-none outline-none text-sm bg-transparent p-1",
@@ -14002,7 +14003,7 @@ function zn({
       );
     case "attachment":
     case "file":
-      const N = t.multiple === !0, L = Array.isArray(e.values[w]) ? e.values[w] : e.values[w] ? [e.values[w]] : [];
+      const N = t.multiple === !0, P = Array.isArray(e.values[w]) ? e.values[w] : e.values[w] ? [e.values[w]] : [];
       return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ p.jsxs("label", { className: E, children: [
           t.label,
@@ -14021,7 +14022,9 @@ function zn({
               multiple: N,
               onChange: (R) => {
                 const _ = R.currentTarget.files;
-                _ && c(_), a("onChange", t, w), R.currentTarget.value = "";
+                if (!_?.length) return;
+                const T = Array.from(_);
+                c(T), a("onChange", t, w), R.currentTarget.value = "";
               },
               onBlur: e.handleBlur,
               placeholder: t.placeholder,
@@ -14030,7 +14033,7 @@ function zn({
           ),
           /* @__PURE__ */ p.jsx("div", { className: `absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 transition-opacity duration-300 pointer-events-none ${ae ? "opacity-20" : ""}`, style: { zIndex: -1, filter: "blur(8px)" } })
         ] }),
-        /* @__PURE__ */ p.jsx("div", { className: "flex flex-wrap gap-2", children: L.map((R) => /* @__PURE__ */ p.jsxs("div", { className: "relative group", children: [
+        /* @__PURE__ */ p.jsx("div", { className: "flex flex-wrap gap-2", children: P.map((R) => /* @__PURE__ */ p.jsxs("div", { className: "relative group", children: [
           /* @__PURE__ */ p.jsx(
             Kc,
             {
