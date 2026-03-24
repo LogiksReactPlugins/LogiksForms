@@ -16,7 +16,7 @@ export default function useFieldRenderer({
     optionsOverride,
     setFieldOptions
 }: FieldRendererProps) {
-  
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<SelectOptions>(
@@ -736,7 +736,7 @@ export default function useFieldRenderer({
     }, [isApiSearch, search, refid]);
 
 
-    const handleFileUpload = async (files: File[]) => {
+    const handleFileUpload = async (files: FileList) => {
 
         if (files.length === 0) {
             console.error("No file");
@@ -745,6 +745,8 @@ export default function useFieldRenderer({
 
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
+
+
             const value = buildFileValue({
                 uploads,
                 currentValue: formik.values[key],
@@ -763,18 +765,21 @@ export default function useFieldRenderer({
     };
 
 
-    const removeFile = async (file: FileItem) => {
-        const existing: FileItem[] = Array.isArray(formik.values[key])
+    const removeFile = async (file: string) => {
+        const existing: string[] = Array.isArray(formik.values[key])
             ? formik.values[key]
             : [];
 
-        const updated = existing.filter(f => f.fileId !== file.fileId);
+        const fileId = file.split("&")[0];
+        if (!fileId) return;
+
+        const updated = existing.filter((f) => f.split("&")[0] !== fileId);
 
         formik.setFieldValue(key, updated);
 
 
         try {
-            await deleteFile(sqlOpsUrls, file.fileId);
+            await deleteFile(sqlOpsUrls, fileId);
             handlePersist(updated, field, module_refid);
         } catch (err) {
             console.log(err)
@@ -830,12 +835,8 @@ export default function useFieldRenderer({
 
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const fileList = e.currentTarget.files;
-        if (!fileList?.length) return;
-
-        const files = Array.from(fileList);
-
-        setTimeout(() => handleFileUpload(files), 0);
+        const files = e.currentTarget.files;
+        if (files) handleFileUpload(files);
     }
 
 
@@ -868,7 +869,8 @@ export default function useFieldRenderer({
         isFocused,
         exactMatch,
         triggerRef,
-        loading
+        loading,
+        fileInputRef
 
 
     }

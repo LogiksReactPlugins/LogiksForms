@@ -22,10 +22,8 @@ export default function PhotoAvatarRenderer({
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fileList = e.currentTarget.files;
-        if (!fileList?.length) return;
-
-        const files = Array.from(fileList);
+        const files = e.currentTarget.files;
+        if (!files?.length) return;
 
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
@@ -39,7 +37,8 @@ export default function PhotoAvatarRenderer({
                 key,
                 value
             );
-            handlePersist(value, field, module_refid)
+            handlePersist(value, field, module_refid);
+            e.target.value = "";
         } catch (err) {
             console.error("File upload failed", err);
             formik.setFieldError(key, "File upload failed");
@@ -48,18 +47,22 @@ export default function PhotoAvatarRenderer({
     };
 
 
-    const removeFile = async (file: FileItem) => {
-        const existing: FileItem[] = Array.isArray(formik.values[key])
+    const removeFile = async (file: string) => {
+        const existing: string[] = Array.isArray(formik.values[key])
             ? formik.values[key]
             : [];
 
-        const updated = existing.filter(f => f.fileId !== file.fileId);
+        const fileId = file.split("&")[0];
+        if (!fileId) return;
+
+        const updated = existing.filter((f) => f.split("&")[0] !== fileId);
 
         formik.setFieldValue(key, updated);
 
 
         try {
-            await deleteFile(sqlOpsUrls, file.fileId);
+            if (!file.split("&")[0]) return
+            await deleteFile(sqlOpsUrls, fileId);
             handlePersist(updated, field, module_refid);
         } catch (err) {
             formik.setFieldValue(key, existing);
@@ -95,8 +98,8 @@ export default function PhotoAvatarRenderer({
                 {files.length > 0 ? files.map(file => (
                     <div key={file} className="relative group">
                         <PhotoRenderer
-                            field_name={file.name}
-                            filePath={file.path}
+                            field_name={file}
+                            filePath={file}
                             sqlOpsUrls={sqlOpsUrls}
                         />
 
@@ -113,14 +116,14 @@ export default function PhotoAvatarRenderer({
                     </div>
                 )) : null}
 
-               
-                    <div
-                        onClick={() => inputRef.current?.click()}
-                        className="w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
-                    >
-                        <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
-                    </div>
-                
+
+                <div
+                    onClick={() => inputRef.current?.click()}
+                    className="w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                >
+                    <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
+                </div>
+
             </div>
             {formik.touched[key] && formik.errors[key] &&
                 <span className="text-xs text-red-500">{String(formik.errors[key])}</span>

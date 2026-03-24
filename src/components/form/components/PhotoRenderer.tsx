@@ -8,6 +8,7 @@ type FilePreviewTriggerProps = {
 };
 
 export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: FilePreviewTriggerProps) {
+    let cleanPath = filePath.split("&")[1] ?? ""
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     useEffect(() => {
 
@@ -15,7 +16,7 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
         let active = true;
         let objectUrl: string | null = null;
 
-        getPreviewUrl(filePath, sqlOpsUrls).then((url) => {
+        getPreviewUrl(cleanPath, sqlOpsUrls).then((url) => {
 
             if (!active) return;
             objectUrl = url;
@@ -26,7 +27,7 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
             active = false;
             if (objectUrl) URL.revokeObjectURL(objectUrl);
         };
-    }, [open, filePath, sqlOpsUrls]);
+    }, [open, cleanPath, sqlOpsUrls]);
 
     if (!previewUrl) return null;
 

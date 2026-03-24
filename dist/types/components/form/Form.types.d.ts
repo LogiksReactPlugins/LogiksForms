@@ -94,6 +94,7 @@ export type FileItem = {
     name?: string;
     mime?: string;
     size?: number;
+    status: string;
 };
 export type UploadResponse = FileItem & {
     status: string;

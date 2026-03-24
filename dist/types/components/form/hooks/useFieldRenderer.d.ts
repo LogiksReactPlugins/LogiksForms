@@ -1,9 +1,9 @@
-import { FieldRendererProps, FileItem, FormField, SelectOptions } from '../Form.types.js';
+import { FieldRendererProps, FormField, SelectOptions } from '../Form.types.js';
 import { handlePersist } from '../utils.js';
 export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
-    handleFileUpload: (files: File[]) => Promise<void>;
+    handleFileUpload: (files: FileList) => Promise<void>;
     handleKeyDown: (e: React.KeyboardEvent, is_single: boolean) => void;
     setSearch: import('react').Dispatch<import('react').SetStateAction<string>>;
     setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>;
@@ -13,7 +13,7 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     handlePersist: typeof handlePersist;
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setLoading: import('react').Dispatch<import('react').SetStateAction<boolean>>;
-    removeFile: (file: FileItem) => Promise<void>;
+    removeFile: (file: string) => Promise<void>;
     optionCount: number;
     baseInputClasses: string;
     focusClasses: string;
@@ -30,5 +30,6 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     exactMatch: import('../utils.js').FlatEntry | null | undefined;
     triggerRef: import('react').RefObject<HTMLDivElement | null>;
     loading: boolean;
+    fileInputRef: import('react').RefObject<HTMLInputElement | null>;
 };
 //# sourceMappingURL=useFieldRenderer.d.ts.map

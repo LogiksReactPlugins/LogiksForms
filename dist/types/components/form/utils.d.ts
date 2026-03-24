@@ -44,8 +44,8 @@ export declare const getInputConfig: (field: FormField) => {
 export declare const getIcon: (field: FormField) => "fa-camera" | "fa-camera-retro" | "fa-image";
 export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     uploads: FileItem[];
-    currentValue: FileItem | FileItem[] | undefined;
+    currentValue: string | string[] | undefined;
     multiple?: boolean;
-}) => (FileItem | undefined)[];
+}) => string[];
 export {};
 //# sourceMappingURL=utils.d.ts.map

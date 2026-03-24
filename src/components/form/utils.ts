@@ -170,10 +170,7 @@ export const intializeForm = (
 
     if (FILE_TYPES.includes(field.type ?? "")) {
       const arrValidator = Yup.array().of(
-        Yup.object({
-          fileId: Yup.number().required(),
-          path: Yup.string().required(),
-        })
+        Yup.string()
       );
 
       validator = field.required
@@ -815,7 +812,7 @@ export const buildFileValue = ({
   multiple,
 }: {
   uploads: FileItem[];
-  currentValue: FileItem | FileItem[] | undefined;
+  currentValue: string | string[] | undefined;
   multiple?: boolean;
 }) => {
 
@@ -825,11 +822,13 @@ export const buildFileValue = ({
       ? [currentValue]
       : [];
 
+  const newPaths = uploads.map((f) => `${f.fileId}&${f.path}`)
+
   if (multiple) {
-    return [...existing, ...uploads];
+    return [...existing, ...newPaths];
   }
 
   // always return array (single item inside)
-  return uploads.length ? [uploads[0]] : [];
+  return newPaths ?? [];
 };
 

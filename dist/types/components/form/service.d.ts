@@ -30,7 +30,7 @@ export declare const sqlClient: {
 };
 export declare function fetchDataByquery(sqlOpsUrls: Record<string, any>, query: Record<string, any> | undefined, querid: string | undefined, refid?: string | undefined, module_refid?: string | undefined, filter?: Record<string, any>): Promise<AxiosResponse<any>>;
 export declare function getPreviewUrl(fileUrl: string, sqlOpsUrls: Record<string, any>): Promise<string>;
-export declare function uploadFiles(sqlOpsUrls: SqlEndpoints | undefined, files: File[]): Promise<UploadResponse[]>;
+export declare function uploadFiles(sqlOpsUrls: SqlEndpoints | undefined, files: FileList): Promise<UploadResponse[]>;
 export declare function deleteFile(sqlOpsUrls: SqlEndpoints | undefined, fileId: number | string): Promise<any>;
 export {};
 //# sourceMappingURL=service.d.ts.map
