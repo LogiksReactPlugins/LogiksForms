@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory } from "./Form.types.js";
-import { IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
+import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory, FileItem } from "./Form.types.js";
+import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
   if (json.template === 'simple') return 'simple';
@@ -118,8 +118,11 @@ export const intializeForm = (
 
     // ---------- Initial Values (NORMALIZED) ----------
 
+    if (FILE_TYPES.includes(field.type ?? "")) {
+      initialValues[name] = Array.isArray(value) ? value : [];
 
-    if (field.multiple === true || field.type === "tags") {
+    }
+    else if (field.multiple === true || field.type === "tags") {
       initialValues[name] =
         Array.isArray(value)
           ? value
@@ -165,14 +168,26 @@ export const intializeForm = (
     // ---------- Validation ----------
     let validator: Yup.AnySchema;
 
-    if (field.type === "file") {
-      validator = field.multiple
-        ? Yup.array().of(Yup.mixed<File>())
-        : Yup.mixed<File>();
+    if (FILE_TYPES.includes(field.type ?? "")) {
+      const arrValidator = Yup.array().of(
+        Yup.object({
+          fileId: Yup.number().required(),
+          path: Yup.string().required(),
+        })
+      );
+
+      validator = field.required
+        ? arrValidator.min(1, field.error_message || `${field.label} is required`)
+        : arrValidator;
     }
 
     else if (field.multiple === true || field.type === "tags") {
-      validator = Yup.array().of(Yup.string());
+
+      const arrValidator = Yup.array().of(Yup.string());
+
+      validator = field.required
+        ? arrValidator.min(1, field.error_message || `${field.label} is required`)
+        : arrValidator;
     }
     else if (field.type === "email") {
       validator = Yup.string().email("Invalid email");
@@ -767,7 +782,7 @@ export const getInputConfig = (field: FormField): {
     case "camera2":
       return {
         accept: "image/*",
-        capture: "environment", 
+        capture: "environment",
       };
 
     case "camera":
@@ -791,5 +806,27 @@ export const getIcon = (field: FormField) => {
     default:
       return "fa-image";
   }
+};
+
+
+export const buildFileValue = ({
+  uploads,
+  currentValue,
+  multiple,
+}: {
+  uploads: FileItem[];
+  currentValue: FileItem | FileItem[] | undefined;
+  multiple?: boolean;
+}) => {
+
+  const existing = Array.isArray(currentValue)
+    ? currentValue
+    : currentValue
+      ? [currentValue]
+      : [];
+
+  return multiple
+    ? [...existing, ...uploads] //  store full object
+    : uploads[0] ?? null;
 };
 

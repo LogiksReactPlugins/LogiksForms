@@ -1,4 +1,4 @@
-import { FieldRendererProps, FormField, SelectOptions } from '../Form.types.js';
+import { FieldRendererProps, FileItem, FormField, SelectOptions } from '../Form.types.js';
 import { handlePersist } from '../utils.js';
 export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
@@ -13,6 +13,7 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     handlePersist: typeof handlePersist;
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setLoading: import('react').Dispatch<import('react').SetStateAction<boolean>>;
+    removeFile: (file: FileItem) => Promise<void>;
     optionCount: number;
     baseInputClasses: string;
     focusClasses: string;

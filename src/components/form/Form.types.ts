@@ -37,7 +37,7 @@ export type AutocompleteConfig = {
 export interface FormField {
     name: string;
     label?: string;
-    parameter?:string | Record<string, string>;
+    parameter?: string | Record<string, string>;
     width?: number | string;
     options?: Record<string, any>;
     group?: string;
@@ -83,7 +83,7 @@ export interface FormField {
     onClick?: string;
     step?: string | number;
     persistent?: string | boolean;
-    content?:string;
+    content?: string;
 
 }
 
@@ -104,6 +104,19 @@ export interface CommonInfoProps {
     ) => void;
 }
 
+export type FileItem = {
+  fileId: number;
+  path: string;
+  name?: string;
+  mime?: string;
+  size?: number;
+};
+
+export type UploadResponse = FileItem & {
+  status: string;
+};
+
+
 export interface SqlEndpoints {
     baseURL: string;
     dbopsGetRefId: string;
@@ -114,6 +127,7 @@ export interface SqlEndpoints {
     dbopsUpdate?: string;
     dbopsCreate?: string;
     uploadURL?: string;
+    removeFileURL?: string;
 };
 
 export interface FormJson {
@@ -131,11 +145,11 @@ export interface FormJson {
 
 
 export interface Toast {
-  (message: string): void;
-  success?: (message: string) => void;
-  error?: (message: string) => void;
-  info?: (message: string) => void;
-  warn?: (message: string) => void;
+    (message: string): void;
+    success?: (message: string) => void;
+    error?: (message: string) => void;
+    info?: (message: string) => void;
+    warn?: (message: string) => void;
 }
 
 export interface FormProps {
@@ -147,7 +161,7 @@ export interface FormProps {
     callback?: (res: any) => void;
     components?: Record<string, ReactNode>
     initialvalues?: Record<string, any>;
-    toast?:Toast;
+    toast?: Toast;
 
 
 }

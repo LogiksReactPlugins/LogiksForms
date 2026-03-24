@@ -1,6 +1,6 @@
 // sqlClient.ts
 import axios, { type AxiosResponse } from "axios";
-import type { SqlEndpoints } from "./Form.types.js";
+import type { SqlEndpoints, UploadResponse } from "./Form.types.js";
 
 
 
@@ -196,10 +196,7 @@ export async function getPreviewUrl(
 }
 
 
-type UploadResponse = {
-    path: string;
-    [key: string]: any;
-};
+
 
 export async function uploadFiles(
     sqlOpsUrls: SqlEndpoints | undefined,
@@ -226,4 +223,28 @@ export async function uploadFiles(
             return res.data;
         })
     );
+}
+
+
+export async function deleteFile(
+    sqlOpsUrls: SqlEndpoints | undefined,
+    fileId: number
+) {
+    if (!sqlOpsUrls?.removeFileURL) {
+        throw new Error("remove URL missing");
+    }
+
+    const url = sqlOpsUrls.baseURL + sqlOpsUrls.removeFileURL;
+    const res = await axios.post(
+        url,
+        { fileId: fileId },
+        {
+            headers: {
+                Authorization: `Bearer ${sqlOpsUrls.accessToken}`,
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    return res.data;
 }

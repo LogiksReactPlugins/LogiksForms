@@ -24,7 +24,7 @@ export default function FieldRenderer({
   const {
     setHighlightedIndex, executeFieldMethod, handleFileUpload, handleKeyDown,
     setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
-    handlePersist, setLoading,
+    handlePersist, setLoading, removeFile,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
     options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch, loading
   } = useFieldRenderer({
@@ -625,9 +625,24 @@ export default function FieldRenderer({
           </div>
           <div className='flex flex-wrap gap-2'>
             {files.map((file) => {
-              const name = file?.split("/").pop();
+
               return (
-                <FilePreviewTrigger key={name} sqlOpsUrls={sqlOpsUrls} filePath={file} />
+
+                <div key={file.fileId} className="relative group">
+                  <FilePreviewTrigger
+                    sqlOpsUrls={sqlOpsUrls}
+                    filePath={file.path}
+                  />
+
+                  {/* Remove button */}
+                  <button
+                    type="button"
+                    onClick={() => removeFile(file)}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                  >
+                    ×
+                  </button>
+                </div>
               );
             })}
           </div>
@@ -759,18 +774,18 @@ export default function FieldRenderer({
               placeholder="Click to fetch location"
             />
 
-             <button
-          type="button"
-          onClick={handleFetchLocation}
-          disabled={loading}
-          className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
-        >
-          {loading ? (
-            <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
-          ) : (
-            <i className="fa-solid fa-location-dot text-red-600 hover:text-red-700"></i>
-          )}
-        </button>
+            <button
+              type="button"
+              onClick={handleFetchLocation}
+              disabled={loading}
+              className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+            >
+              {loading ? (
+                <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
+              ) : (
+                <i className="fa-solid fa-location-dot text-red-600 hover:text-red-700"></i>
+              )}
+            </button>
           </div>
 
           {formik.touched[key] && formik.errors[key] && (

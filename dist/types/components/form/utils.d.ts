@@ -1,4 +1,4 @@
-import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig, FileCategory } from './Form.types.js';
+import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig, FileCategory, FileItem } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
@@ -42,5 +42,10 @@ export declare const getInputConfig: (field: FormField) => {
     capture?: "user" | "environment";
 };
 export declare const getIcon: (field: FormField) => "fa-camera" | "fa-camera-retro" | "fa-image";
+export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
+    uploads: FileItem[];
+    currentValue: FileItem | FileItem[] | undefined;
+    multiple?: boolean;
+}) => FileItem | FileItem[] | null;
 export {};
 //# sourceMappingURL=utils.d.ts.map

@@ -11,7 +11,7 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     useEffect(() => {
 
-        if (!open || !sqlOpsUrls) return;
+        if (!sqlOpsUrls) return;
         let active = true;
         let objectUrl: string | null = null;
 
@@ -33,8 +33,8 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
     return (
         <img alt={field_name}
             title={field_name}
-            src={previewUrl} 
-            className="h-24 w-24 object-cover rounded border border-dashed  cursor-pointer hover:opacity-90"
-            />
+            src={previewUrl}
+            className="h-24 w-24 object-cover rounded border border-dashed   hover:opacity-90"
+        />
     )
 }

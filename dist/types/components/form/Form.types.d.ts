@@ -88,6 +88,16 @@ export interface CommonInfoProps {
     fieldOptions: Record<string, SelectOptions>;
     setFieldOptions: (fieldName: string, options: SelectOptions) => void;
 }
+export type FileItem = {
+    fileId: number;
+    path: string;
+    name?: string;
+    mime?: string;
+    size?: number;
+};
+export type UploadResponse = FileItem & {
+    status: string;
+};
 export interface SqlEndpoints {
     baseURL: string;
     dbopsGetRefId: string;
@@ -98,6 +108,7 @@ export interface SqlEndpoints {
     dbopsUpdate?: string;
     dbopsCreate?: string;
     uploadURL?: string;
+    removeFileURL?: string;
 }
 export interface FormJson {
     title?: string | undefined;

@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
-import type { FieldRendererProps, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
-import { flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
-import { fetchDataByquery, uploadFiles } from "../service.js";
+import type { FieldRendererProps, FileItem, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
+import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
 
@@ -390,17 +390,18 @@ export default function useFieldRenderer({
 
 
     const optionCount = flatOptions.length;
+    const isApiSearch = Boolean(field.search && (field.queryid || field.table));
 
     const filteredOptions = useMemo(() => {
         // API search mode → backend already filtered
-        if (field.search) {
+        if (isApiSearch) {
             return flatOptions;
         }
         if (!search) return flatOptions;
         return flatOptions.filter(([, label]) =>
             label.toLowerCase().includes(search.toLowerCase())
         );
-    }, [field.search, search, flatOptions]);
+    }, [isApiSearch, search, flatOptions]);
 
 
     //  Handle keyboard navigation
@@ -662,7 +663,7 @@ export default function useFieldRenderer({
 
 
     useEffect(() => {
-        if (!field.search) return;
+       if (!isApiSearch) return;
         if (!search.trim()) return;
         if (!sqlOpsUrls) return;
         const searchColumns = getSearchColumns(field.columns ?? "");
@@ -732,7 +733,7 @@ export default function useFieldRenderer({
             clearTimeout(timer);
             controller.abort();
         };
-    }, [search, refid]);
+    }, [isApiSearch, search, refid]);
 
 
     const handleFileUpload = async (files: FileList) => {
@@ -744,18 +745,40 @@ export default function useFieldRenderer({
 
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
-            const value = field.multiple
-                ? uploads.map(f => f.path)
-                : uploads[0]?.path;
 
+            const value = buildFileValue({
+                uploads,
+                currentValue: formik.values[key],
+                multiple: field.multiple ?? false,
+            });
             formik.setFieldValue(
                 key,
                 value
             );
+
             handlePersist(value, field, module_refid)
         } catch (err) {
             console.error("File upload failed", err);
             formik.setFieldError(key, "File upload failed");
+        }
+    };
+
+
+    const removeFile = async (file: FileItem) => {
+        const existing: FileItem[] = Array.isArray(formik.values[key])
+            ? formik.values[key]
+            : [];
+
+        const updated = existing.filter(f => f.fileId !== file.fileId);
+
+        formik.setFieldValue(key, updated);
+
+
+        try {
+            await deleteFile(sqlOpsUrls, file.fileId);
+            handlePersist(updated, field, module_refid);
+        } catch {
+            formik.setFieldValue(key, existing);
         }
     };
 
@@ -825,6 +848,7 @@ export default function useFieldRenderer({
         handlePersist,
         handleFileChange,
         setLoading,
+        removeFile,
         optionCount,
         baseInputClasses,
         focusClasses,
@@ -840,8 +864,8 @@ export default function useFieldRenderer({
         isFocused,
         exactMatch,
         triggerRef,
-        loading, 
-        
+        loading,
+
 
     }
 }
