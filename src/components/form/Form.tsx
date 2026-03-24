@@ -68,12 +68,12 @@ export default function LogiksForm({
 
 
 
- React.useEffect(() => {
-  setResolvedData(prev => ({
-    ...prev,
-    ...(initialvalues ?? {})
-  }));
-}, [initialvalues]);
+  React.useEffect(() => {
+    setResolvedData(prev => ({
+      ...prev,
+      ...(initialvalues ?? {})
+    }));
+  }, [initialvalues]);
 
   const safeSetResolvedData = React.useCallback(
     (data?: Record<string, any>) => {
@@ -189,7 +189,26 @@ export default function LogiksForm({
   const handleSubmit = async (values: Record<string, any>) => {
     const source = formJson?.source ?? {};
 
+    let finalValues = { ...values };
 
+    if (geoFieldKeys.length > 0) {
+      const missingKeys = geoFieldKeys.filter(k => !values[k]);
+
+      if (missingKeys.length > 0) {
+        try {
+          const geo = await fetchGeolocation();
+
+          finalValues = {
+            ...values,
+            ...Object.fromEntries(
+              missingKeys.map(k => [k, geo])
+            ),
+          };
+        } catch (err) {
+          console.warn("Geo fetch failed");
+        }
+      }
+    }
 
 
     if (source.type === "method") {
@@ -197,7 +216,7 @@ export default function LogiksForm({
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          const res = await methodFn(values);
+          const res = await methodFn(finalValues);
           callback?.(res);
           toast?.success?.(getSuccessMessage(res));
 
@@ -228,7 +247,7 @@ export default function LogiksForm({
         const res = await axios({
           method: source.method || "POST",
           url: sqlOpsUrls.baseURL + source.endpoint,
-          data: values ?? {},
+          data: finalValues ?? {},
           headers: {
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
@@ -317,7 +336,7 @@ export default function LogiksForm({
           url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
           data: {
             "refid": dbopsId,
-            "fields": values,
+            "fields": finalValues,
             "datahash": resHashId.data.refhash
 
           },

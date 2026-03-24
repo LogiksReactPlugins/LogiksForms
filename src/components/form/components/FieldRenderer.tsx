@@ -1,6 +1,6 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
-import { getOptionLabel, isGroupedOptions } from '../utils.js';
+import { fetchGeolocation, getOptionLabel, isGroupedOptions } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
@@ -24,9 +24,9 @@ export default function FieldRenderer({
   const {
     setHighlightedIndex, executeFieldMethod, handleFileUpload, handleKeyDown,
     setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
-    handlePersist,
+    handlePersist, setLoading,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
-    options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch
+    options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch, loading
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid,
@@ -567,6 +567,8 @@ export default function FieldRenderer({
       );
     }
 
+    case "camera":
+    case "camera2":
     case "photo":
     case "avatar": {
 
@@ -714,6 +716,63 @@ export default function FieldRenderer({
               style={{ zIndex: -1, filter: "blur(8px)" }}
             />
           </div>
+          {formik.touched[key] && formik.errors[key] && (
+            <span className="text-xs text-red-500">
+              {String(formik.errors[key])}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    case "geolocation": {
+      const value = formik.values[key] || "";
+
+      const handleFetchLocation = async () => {
+        try {
+
+          const geo = await fetchGeolocation();
+
+          formik.setFieldValue(key, geo);
+          handlePersist(geo, field, module_refid);
+        } catch (err) {
+          console.error(err);
+          formik.setFieldError(key, "Failed to fetch location");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="relative">
+          <label className={labelClasses}>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+
+          <div className="relative">
+            <input
+              type="text"
+              value={value}
+              readOnly
+              className={`${baseInputClasses} ${focusClasses}`}
+              placeholder="Click to fetch location"
+            />
+
+             <button
+          type="button"
+          onClick={handleFetchLocation}
+          disabled={loading}
+          className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+        >
+          {loading ? (
+            <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
+          ) : (
+            <i className="fa-solid fa-location-dot text-red-600 hover:text-red-700"></i>
+          )}
+        </button>
+          </div>
+
           {formik.touched[key] && formik.errors[key] && (
             <span className="text-xs text-red-500">
               {String(formik.errors[key])}

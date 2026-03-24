@@ -755,3 +755,41 @@ export function getSuccessMessage(res: any): string {
   return "Operation completed successfully";
 }
 
+
+
+
+
+export const getInputConfig = (field: FormField): {
+  accept?: string;
+  capture?: "user" | "environment";
+} => {
+  switch (field.type) {
+    case "camera2":
+      return {
+        accept: "image/*",
+        capture: "environment", 
+      };
+
+    case "camera":
+    case "photo":
+    case "avatar":
+    default:
+      return {
+        accept: "image/*",
+      };
+  }
+};
+
+export const getIcon = (field: FormField) => {
+  switch (field.type) {
+    case "camera2":
+      return "fa-camera"; // strict camera
+    case "camera":
+      return "fa-camera-retro"; // optional variation
+    case "photo":
+    case "avatar":
+    default:
+      return "fa-image";
+  }
+};
+

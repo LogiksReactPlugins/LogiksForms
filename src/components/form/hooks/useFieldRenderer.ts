@@ -18,7 +18,7 @@ export default function useFieldRenderer({
 }: FieldRendererProps) {
 
     const [isFocused, setIsFocused] = useState(false);
-
+    const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<SelectOptions>(
         optionsOverride ?? field.options ?? {}
     );
@@ -824,6 +824,7 @@ export default function useFieldRenderer({
         handleSelect,
         handlePersist,
         handleFileChange,
+        setLoading,
         optionCount,
         baseInputClasses,
         focusClasses,
@@ -838,7 +839,9 @@ export default function useFieldRenderer({
         listRef,
         isFocused,
         exactMatch,
-        triggerRef
+        triggerRef,
+        loading, 
+        
 
     }
 }

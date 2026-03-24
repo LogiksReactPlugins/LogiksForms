@@ -37,5 +37,10 @@ export declare function sanitizeHtml(html: string): string;
 export declare function filterSavableValues(values: Record<string, any>, flatFields: FormField[]): Record<string, any>;
 export declare function getErrorMessage(err: unknown): string;
 export declare function getSuccessMessage(res: any): string;
+export declare const getInputConfig: (field: FormField) => {
+    accept?: string;
+    capture?: "user" | "environment";
+};
+export declare const getIcon: (field: FormField) => "fa-camera" | "fa-camera-retro" | "fa-image";
 export {};
 //# sourceMappingURL=utils.d.ts.map
