@@ -426,6 +426,7 @@ export default function useFieldRenderer({
                 formik.setFieldValue(field.name, value);
                 handlePersist(value, field, module_refid)
             }
+            setOpen(false);
 
 
         } else if (e.key === "Escape") {
@@ -637,18 +638,18 @@ export default function useFieldRenderer({
                                 ? responseData.results
                                 : responseData
 
-                
+
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
                         : [];
-                   
+
                     const mapped = formatOptions(
                         valueKey,
                         labelKey,
                         normalizedItems,
                         field.groupKey
                     );
-                  
+
                     setFieldOptions?.(chain.target, mapped);
                 }
             } catch (err) {

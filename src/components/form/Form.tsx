@@ -30,7 +30,7 @@ export default function LogiksForm({
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
   }, [formJson.fields]);
-console.log("toast",toast);
+  
 
 
   React.useEffect(() => {
