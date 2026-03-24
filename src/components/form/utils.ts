@@ -825,8 +825,11 @@ export const buildFileValue = ({
       ? [currentValue]
       : [];
 
-  return multiple
-    ? [...existing, ...uploads] //  store full object
-    : uploads[0] ?? null;
+  if (multiple) {
+    return [...existing, ...uploads];
+  }
+
+  // always return array (single item inside)
+  return uploads.length ? [uploads[0]] : [];
 };
 

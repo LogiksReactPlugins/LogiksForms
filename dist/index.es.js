@@ -1178,7 +1178,7 @@ const _c = (t) => t.type === "camera2" ? {
   multiple: n
 }) => {
   const r = Array.isArray(e) ? e : e ? [e] : [];
-  return n ? [...r, ...t] : t[0] ?? null;
+  return n ? [...r, ...t] : t.length ? [t[0]] : [];
 }, gn = (t) => ({
   Authorization: `Bearer ${t.accessToken}`
 }), Jr = async (t) => (await de.get(
@@ -1666,7 +1666,9 @@ function Wc({
       return;
     }
     try {
-      const O = await qi(r, T), $ = Ui({
+      const O = await qi(r, T);
+      console.log("uploads", O);
+      const $ = Ui({
         uploads: O,
         currentValue: e.values[D],
         multiple: t.multiple ?? !1
@@ -14019,7 +14021,7 @@ function zn({
               multiple: N,
               onChange: (R) => {
                 const _ = R.currentTarget.files;
-                _ && c(_), a("onChange", t, w);
+                _ && c(_), a("onChange", t, w), R.currentTarget.value = "";
               },
               onBlur: e.handleBlur,
               placeholder: t.placeholder,
@@ -14650,7 +14652,7 @@ function ym({
       r(S);
     }
   });
-  return /* @__PURE__ */ p.jsx(p.Fragment, { children: /* @__PURE__ */ p.jsx("div", { className: "relative max-w-full", children: /* @__PURE__ */ p.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300 overflow-visible", children: /* @__PURE__ */ p.jsxs("form", { onSubmit: x.handleSubmit, className: "p-4  mx-auto", children: [
+  return console.log("formik.values", x.values), console.log("formik.errors", x.errors), /* @__PURE__ */ p.jsx(p.Fragment, { children: /* @__PURE__ */ p.jsx("div", { className: "relative max-w-full", children: /* @__PURE__ */ p.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300 overflow-visible", children: /* @__PURE__ */ p.jsxs("form", { onSubmit: x.handleSubmit, className: "p-4  mx-auto", children: [
     h.length > 0 && /* @__PURE__ */ p.jsx(
       Ir,
       {

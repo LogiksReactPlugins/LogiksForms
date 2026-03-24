@@ -746,6 +746,9 @@ export default function useFieldRenderer({
         try {
             const uploads = await uploadFiles(sqlOpsUrls, files);
 
+            console.log("uploads",uploads);
+            
+
             const value = buildFileValue({
                 uploads,
                 currentValue: formik.values[key],

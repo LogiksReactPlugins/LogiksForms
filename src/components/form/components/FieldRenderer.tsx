@@ -612,7 +612,8 @@ export default function FieldRenderer({
               onChange={(e) => {
                 const files = e.currentTarget.files;
                 if (files) handleFileUpload(files);
-                executeFieldMethod("onChange", field, key)
+                executeFieldMethod("onChange", field, key);
+                e.currentTarget.value = "";
               }}
               onBlur={formik.handleBlur}
               placeholder={field.placeholder}

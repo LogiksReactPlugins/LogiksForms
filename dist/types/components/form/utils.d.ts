@@ -46,6 +46,6 @@ export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     uploads: FileItem[];
     currentValue: FileItem | FileItem[] | undefined;
     multiple?: boolean;
-}) => FileItem | FileItem[] | null;
+}) => (FileItem | undefined)[];
 export {};
 //# sourceMappingURL=utils.d.ts.map
