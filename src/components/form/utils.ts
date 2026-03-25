@@ -119,7 +119,11 @@ export const intializeForm = (
     // ---------- Initial Values (NORMALIZED) ----------
 
     if (FILE_TYPES.includes(field.type ?? "")) {
-      initialValues[name] = Array.isArray(value) ? value : [];
+      initialValues[name] = Array.isArray(value)
+        ? value
+        : typeof value === "string" && value.length > 0
+          ? value.split(",").map(v => v.trim()).filter(Boolean)
+          : [];
 
     }
     else if (field.multiple === true || field.type === "tags") {
@@ -824,11 +828,10 @@ export const buildFileValue = ({
 
   const newPaths = uploads.map((f) => `${f.fileId}&${f.path}`)
 
-  if (multiple) {
-    return [...existing, ...newPaths];
-  }
 
-  // always return array (single item inside)
-  return newPaths ?? [];
+  return [...existing, ...newPaths];
+
+
+
 };
 
