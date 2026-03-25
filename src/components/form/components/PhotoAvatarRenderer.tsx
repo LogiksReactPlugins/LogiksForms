@@ -66,6 +66,7 @@ export default function PhotoAvatarRenderer({
             handlePersist(updated, field, module_refid);
         } catch (err) {
             formik.setFieldValue(key, existing);
+            window.alert("Failed to delete file due to a technical issue. Please try again.")
         }
     };
 
@@ -109,9 +110,9 @@ export default function PhotoAvatarRenderer({
                             onClick={() => {
                                 removeFile(file)
                             }}
-                            className="absolute -top-2 -right-2 cursor-pointer bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                            className="absolute -top-2 -right-2 cursor-pointer bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xl cursor-pointer transition"
                         >
-                            ×
+                          ×
                         </button>
                     </div>
                 )) : null}

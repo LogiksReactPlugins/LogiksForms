@@ -647,7 +647,7 @@ export default function FieldRenderer({
                   <button
                     type="button"
                     onClick={() => removeFile(file)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                    className="absolute -top-2 -right-2 bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xl cursor-pointer transition"
                   >
                     ×
                   </button>

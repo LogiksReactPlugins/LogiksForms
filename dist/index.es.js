@@ -1681,7 +1681,7 @@ function Vc({
     try {
       await Gi(r, L), At(Y, t, o);
     } catch (U) {
-      console.log(U), e.setFieldValue(D, T);
+      console.log(U), e.setFieldValue(D, T), window.alert("Failed to delete file due to a technical issue. Please try again.");
     }
   }, N = async (O, T, L) => {
     const Y = T[O];
@@ -2109,7 +2109,7 @@ function Ji({
       if (!d.split("&")[0]) return;
       await Gi(n, h), At(m, e, r);
     } catch {
-      t.setFieldValue(s, f);
+      t.setFieldValue(s, f), window.alert("Failed to delete file due to a technical issue. Please try again.");
     }
   }, a = Array.isArray(t.values[s]) ? t.values[s] : t.values[s] ? [t.values[s]] : [], c = _c(e), u = e.multiple === !0;
   return /* @__PURE__ */ p.jsxs("div", { children: [
@@ -2149,7 +2149,7 @@ function Ji({
                 onClick: () => {
                   l(d);
                 },
-                className: "absolute -top-2 -right-2 cursor-pointer bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition",
+                className: "absolute -top-2 -right-2 cursor-pointer bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xl cursor-pointer transition",
                 children: "×"
               }
             )
@@ -14045,7 +14045,7 @@ function zn({
             {
               type: "button",
               onClick: () => v(M),
-              className: "absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition",
+              className: "absolute -top-2 -right-2 bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xl cursor-pointer transition",
               children: "×"
             }
           )

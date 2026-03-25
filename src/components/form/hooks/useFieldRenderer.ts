@@ -784,6 +784,7 @@ export default function useFieldRenderer({
         } catch (err) {
             console.log(err)
             formik.setFieldValue(key, existing);
+              window.alert("Failed to delete file due to a technical issue. Please try again.")
         }
     };
 
