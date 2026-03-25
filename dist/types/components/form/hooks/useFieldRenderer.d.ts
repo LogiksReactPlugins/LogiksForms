@@ -30,6 +30,5 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     exactMatch: import('../utils.js').FlatEntry | null | undefined;
     triggerRef: import('react').RefObject<HTMLDivElement | null>;
     loading: boolean;
-    fileInputRef: import('react').RefObject<HTMLInputElement | null>;
 };
 //# sourceMappingURL=useFieldRenderer.d.ts.map
