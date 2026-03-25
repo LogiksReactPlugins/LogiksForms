@@ -233,7 +233,7 @@ export async function deleteFile(
 
     let removeFileURL = sqlOpsUrls?.removeFileURL ?? "/api/files/delete"
     const res = await axios.post(
-        removeFileURL,
+        `${sqlOpsUrls?.baseURL}${removeFileURL}`,
         { fileId: String(fileId) },
         {
             headers: {

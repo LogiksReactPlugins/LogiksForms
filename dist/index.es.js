@@ -1292,7 +1292,7 @@ async function qi(t, e) {
 async function Gi(t, e) {
   let n = t?.removeFileURL ?? "/api/files/delete";
   return (await de.post(
-    n,
+    `${t?.baseURL}${n}`,
     { fileId: String(e) },
     {
       headers: {
