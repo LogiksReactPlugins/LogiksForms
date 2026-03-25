@@ -47,5 +47,6 @@ export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     currentValue: string | string[] | undefined;
     multiple?: boolean;
 }) => string[];
+export declare const getMaxDate: (max?: string | number) => string | number | undefined;
 export {};
 //# sourceMappingURL=utils.d.ts.map

@@ -835,3 +835,10 @@ export const buildFileValue = ({
 
 };
 
+export const getMaxDate = (max?: string | number) => {
+  if (max === "today") {
+    return new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+  }
+  return max;
+};
+

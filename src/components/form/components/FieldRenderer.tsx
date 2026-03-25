@@ -1,6 +1,6 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
-import { fetchGeolocation, getOptionLabel, isGroupedOptions } from '../utils.js';
+import { fetchGeolocation, getMaxDate, getOptionLabel, isGroupedOptions } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
@@ -585,6 +585,7 @@ export default function FieldRenderer({
     case "attachment":
     case "file":
       const isMultiple = field.multiple === true;
+      const max = field.max !== undefined ? Number(field.max) : Infinity;
       const files = Array.isArray(formik.values[key])
         ? formik.values[key]
         : formik.values[key]
@@ -610,8 +611,15 @@ export default function FieldRenderer({
               name={key}
               multiple={isMultiple}
               onChange={(e) => {
-                const files = e.currentTarget.files;
-                if (files) handleFileUpload(files);
+                const selectedFiles = e.currentTarget.files;
+                const fileArray = Array.from(e.currentTarget.files || [])
+                const total = files.length + fileArray.length;
+                if (total > max) {
+                  alert(`You can upload maximum ${max} file(s)`);
+                  e.currentTarget.value = "";
+                  return;
+                }
+                if (selectedFiles) handleFileUpload(selectedFiles);
                 executeFieldMethod("onChange", field, key);
                 e.currentTarget.value = "";
               }}
@@ -695,6 +703,7 @@ export default function FieldRenderer({
     }
 
     case "date": {
+      const maxDate = getMaxDate(field.max);
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -714,7 +723,7 @@ export default function FieldRenderer({
               type="date"
               name={key}
               min={field.min}
-              max={field.max}
+              max={maxDate}
               value={formik.values[key] ?? ""}
               onChange={(e) => {
                 formik.setFieldValue(key, e.target.value);
