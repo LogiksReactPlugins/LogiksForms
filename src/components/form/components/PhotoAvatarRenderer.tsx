@@ -20,13 +20,28 @@ export default function PhotoAvatarRenderer({
 }: PhotoAvatarRendererProps) {
     let key = field?.name;
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const max = field.max !== undefined ? Number(field.max) : Infinity;
+
+    const files = Array.isArray(formik.values[key])
+        ? formik.values[key]
+        : formik.values[key]
+            ? [formik.values[key]]
+            : [];
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.currentTarget.files;
-        if (!files?.length) return;
+        const selectedFiles = e.currentTarget.files;
+        if (!selectedFiles?.length) return;
+
+        const fileArray = Array.from(e.currentTarget.files || [])
+        const total = files.length + fileArray.length;
+        if (total > max) {
+            alert(`You can upload maximum ${max} file(s)`);
+            e.currentTarget.value = "";
+            return;
+        }
 
         try {
-            const uploads = await uploadFiles(sqlOpsUrls, files);
+            const uploads = await uploadFiles(sqlOpsUrls, selectedFiles);
             const value = buildFileValue({
                 uploads,
                 currentValue: formik.values[key],
@@ -70,11 +85,7 @@ export default function PhotoAvatarRenderer({
         }
     };
 
-    const files = Array.isArray(formik.values[key])
-        ? formik.values[key]
-        : formik.values[key]
-            ? [formik.values[key]]
-            : [];
+
 
     const inputConfig = getInputConfig(field);
     const isMultiple = field.multiple === true;
@@ -112,7 +123,7 @@ export default function PhotoAvatarRenderer({
                             }}
                             className="absolute -top-2 -right-2 cursor-pointer bg-white text-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xl cursor-pointer transition"
                         >
-                          ×
+                            ×
                         </button>
                     </div>
                 )) : null}

@@ -25,7 +25,7 @@ export default function LogiksForm({
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
-  const [geoInitialized, setGeoInitialized] = React.useState(false);
+
 
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
@@ -36,10 +36,6 @@ export default function LogiksForm({
     let isMounted = true;
 
     const initGeo = async () => {
-      if (geoFieldKeys.length === 0) {
-        setGeoInitialized(true);
-        return;
-      }
 
       try {
         const geo = await fetchGeolocation();
@@ -54,8 +50,6 @@ export default function LogiksForm({
         }
       } catch (err) {
         console.warn("Geo fetch failed", err);
-      } finally {
-        if (isMounted) setGeoInitialized(true);
       }
     };
 
