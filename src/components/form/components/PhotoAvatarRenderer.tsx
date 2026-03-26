@@ -3,7 +3,7 @@ import PhotoRenderer from './PhotoRenderer.js';
 import type { FormikProps } from "formik";
 import type { FileItem, FormField, SqlEndpoints } from '../Form.types.js';
 import { deleteFile, uploadFiles } from '../service.js';
-import { buildFileValue, getIcon, getInputConfig, handlePersist } from '../utils.js';
+import { buildFileValue, getIcon, getInputConfig, handlePersist, validateFiles } from '../utils.js';
 
 type PhotoAvatarRendererProps = {
     field: FormField;
@@ -29,19 +29,16 @@ export default function PhotoAvatarRenderer({
             : [];
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = e.currentTarget.files;
-        if (!selectedFiles?.length) return;
-
-        const fileArray = Array.from(e.currentTarget.files || [])
-        const total = files.length + fileArray.length;
-        if (total > max) {
-            alert(`You can upload maximum ${max} file(s)`);
-            e.currentTarget.value = "";
-            return;
-        }
+        const validFiles = validateFiles({
+            e,
+            existingFiles: files,
+            maxFiles: max,
+            maxFileSize: field.file_size,
+        });
+        if (!validFiles) return;
 
         try {
-            const uploads = await uploadFiles(sqlOpsUrls, selectedFiles);
+            const uploads = await uploadFiles(sqlOpsUrls, validFiles);
             const value = buildFileValue({
                 uploads,
                 currentValue: formik.values[key],

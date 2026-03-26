@@ -1,6 +1,6 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
-import { fetchGeolocation, getMaxDate, getOptionLabel, isGroupedOptions } from '../utils.js';
+import { fetchGeolocation, getMaxDate, getOptionLabel, isGroupedOptions, validateFiles } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
@@ -22,7 +22,7 @@ export default function FieldRenderer({
 }: FieldRendererProps) {
 
   const {
-    setHighlightedIndex, executeFieldMethod, handleFileUpload, handleKeyDown,
+    executeFieldMethod, handleFileUpload, handleKeyDown,
     setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist, setLoading, removeFile,
     optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
@@ -612,15 +612,14 @@ export default function FieldRenderer({
               name={key}
               multiple={isMultiple}
               onChange={(e) => {
-                const selectedFiles = e.currentTarget.files;
-                const fileArray = Array.from(e.currentTarget.files || [])
-                const total = files.length + fileArray.length;
-                if (total > max) {
-                  alert(`You can upload maximum ${max} file(s)`);
-                  e.currentTarget.value = "";
-                  return;
-                }
-                if (selectedFiles) handleFileUpload(selectedFiles);
+                const validFiles = validateFiles({
+                  e,
+                  existingFiles: files,
+                  maxFiles: max,
+                  maxFileSize: field.file_size,
+                });
+                if (!validFiles) return;
+                if (validFiles) handleFileUpload(validFiles);
                 executeFieldMethod("onChange", field, key);
                 e.currentTarget.value = "";
               }}

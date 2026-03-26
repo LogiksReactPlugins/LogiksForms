@@ -48,5 +48,12 @@ export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     multiple?: boolean;
 }) => string[];
 export declare const getMaxDate: (max?: string | number) => string | number | undefined;
+type ValidateFileInputParams = {
+    e: React.ChangeEvent<HTMLInputElement>;
+    existingFiles: string[];
+    maxFiles: number;
+    maxFileSize?: number | undefined;
+};
+export declare const validateFiles: ({ e, existingFiles, maxFiles, maxFileSize }: ValidateFileInputParams) => FileList | null;
 export {};
 //# sourceMappingURL=utils.d.ts.map

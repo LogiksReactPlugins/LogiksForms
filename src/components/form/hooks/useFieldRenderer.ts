@@ -835,12 +835,6 @@ export default function useFieldRenderer({
 
 
 
-    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const files = e.currentTarget.files;
-        if (files) handleFileUpload(files);
-    }
-
-
     return {
         setHighlightedIndex,
         executeFieldMethod,
@@ -852,7 +846,6 @@ export default function useFieldRenderer({
         handleInputChange,
         handleSelect,
         handlePersist,
-        handleFileChange,
         setLoading,
         removeFile,
         optionCount,

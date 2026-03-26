@@ -84,7 +84,8 @@ export interface FormField {
     step?: string | number;
     persistent?: string | boolean;
     content?: string;
-    accept?:string;
+    accept?: string;
+    file_size?: number;
 
 }
 
@@ -106,16 +107,16 @@ export interface CommonInfoProps {
 }
 
 export type FileItem = {
-  fileId: number;
-  path: string;
-  name?: string;
-  mime?: string;
-  size?: number;
-  status: string;
+    fileId: number;
+    path: string;
+    name?: string;
+    mime?: string;
+    size?: number;
+    status: string;
 };
 
 export type UploadResponse = FileItem & {
-  status: string;
+    status: string;
 };
 
 

@@ -842,3 +842,50 @@ export const getMaxDate = (max?: string | number) => {
   return max;
 };
 
+type ValidateFileInputParams = {
+  e: React.ChangeEvent<HTMLInputElement>;
+  existingFiles: string[];
+  maxFiles: number;
+  maxFileSize?: number | undefined; // bytes
+};
+
+const formatSize = (bytes: number) => {
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  }
+  return `${(bytes / 1024).toFixed(0)} KB`;
+};
+export const validateFiles = ({
+  e,
+  existingFiles,
+  maxFiles,
+  maxFileSize
+}: ValidateFileInputParams) => {
+  const selectedFiles = e.currentTarget.files;
+  if (!selectedFiles) return null;
+  const fileArray = Array.from(selectedFiles);
+  const total = existingFiles.length + fileArray.length;
+  if (total > maxFiles) {
+    alert(`You can upload maximum ${maxFiles} file(s)`);
+    e.currentTarget.value = "";
+    return null;
+
+  }
+  // file size validation
+  if (maxFileSize) {
+    const maxSize = Number(maxFileSize); // assume bytes
+    const invalidFile = fileArray.find((f) => f.size > maxSize);
+
+    if (invalidFile) {
+      alert(
+       `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`
+        
+      );
+      e.currentTarget.value = "";
+      return null;
+    }
+  }
+
+  return selectedFiles
+}
+

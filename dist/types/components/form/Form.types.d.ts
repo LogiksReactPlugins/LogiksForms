@@ -77,6 +77,7 @@ export interface FormField {
     persistent?: string | boolean;
     content?: string;
     accept?: string;
+    file_size?: number;
 }
 export interface CommonInfoProps {
     fields: FormField[];

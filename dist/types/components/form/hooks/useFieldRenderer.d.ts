@@ -11,7 +11,6 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelect: (val: string) => void;
     handlePersist: typeof handlePersist;
-    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setLoading: import('react').Dispatch<import('react').SetStateAction<boolean>>;
     removeFile: (file: string) => Promise<void>;
     optionCount: number;
