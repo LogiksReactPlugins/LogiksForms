@@ -84,6 +84,7 @@ export interface FormField {
     step?: string | number;
     persistent?: string | boolean;
     content?: string;
+    accept?:string;
 
 }
 

@@ -14013,6 +14013,7 @@ function zn({
             {
               id: w,
               type: "file",
+              accept: t.accept,
               className: `${k} ${C} ${t.icon ? "pl-9" : ""} `,
               onFocus: () => h(!0),
               name: w,
@@ -15015,7 +15016,7 @@ function Nm({
             e.handleActions(q);
           }
         } catch (D) {
-          s?.(D), i?.error?.(qr(D)), console.error("Method execution failed:", D);
+          i?.error?.(qr(D)), console.error("Method execution failed:", D);
         }
     }
     if (k.type === "api") {
@@ -15041,7 +15042,7 @@ function Nm({
           e.handleActions(D);
         }
       } catch (E) {
-        s?.(E), i?.error?.(qr(E)), console.error("API fetch failed:", E);
+        i?.error?.(qr(E)), console.error("API fetch failed:", E);
       }
     }
     if (k.type === "sql") {
@@ -15106,7 +15107,7 @@ function Nm({
           e.handleActions(V);
         }
       } catch (j) {
-        s?.(j), i?.error?.(qr(j)), console.error("API fetch failed:", j);
+        i?.error?.(qr(j)), console.error("API fetch failed:", j);
       }
     }
   }, v = {

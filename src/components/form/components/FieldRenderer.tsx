@@ -606,6 +606,7 @@ export default function FieldRenderer({
             <input
               id={key}
               type="file"
+              accept={field.accept}
               className={`${baseInputClasses} ${focusClasses} ${field.icon ? "pl-9" : ""} `}
               onFocus={() => setIsFocused(true)}
               name={key}

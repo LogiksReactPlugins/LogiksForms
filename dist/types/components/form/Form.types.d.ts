@@ -76,6 +76,7 @@ export interface FormField {
     step?: string | number;
     persistent?: string | boolean;
     content?: string;
+    accept?: string;
 }
 export interface CommonInfoProps {
     fields: FormField[];
