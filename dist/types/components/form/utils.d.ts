@@ -55,5 +55,10 @@ type ValidateFileInputParams = {
     maxFileSize?: number | undefined;
 };
 export declare const validateFiles: ({ e, existingFiles, maxFiles, maxFileSize }: ValidateFileInputParams) => FileList | null;
+export declare const mergeOptions: (field: {
+    options?: SelectOptions;
+    options_top?: SelectOptions;
+    options_bottom?: SelectOptions;
+}, dynamicOpts?: SelectOptions) => SelectOptions;
 export {};
 //# sourceMappingURL=utils.d.ts.map

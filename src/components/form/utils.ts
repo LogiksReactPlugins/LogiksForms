@@ -884,3 +884,38 @@ export const validateFiles = ({
   return selectedFiles
 }
 
+export const mergeOptions = (
+  field: {
+    options?: SelectOptions;
+    options_top?: SelectOptions;
+    options_bottom?: SelectOptions;
+  },
+  dynamicOpts?: SelectOptions
+): SelectOptions => {
+  const top = flattenOptions(field.options_top || {});
+  const middleStatic = flattenOptions(field.options || {});
+  const dynamic = flattenOptions(dynamicOpts || {});
+  const bottom = flattenOptions(field.options_bottom || {});
+
+  const map = new Map<string, string>();
+
+  // merge with priority
+  [...top, ...middleStatic, ...dynamic, ...bottom].forEach(([v, l]) => {
+    map.set(v, l);
+  });
+
+  // preserve order + remove duplicates
+  const seen = new Set<string>();
+  const result: Record<string, string> = {};
+
+  for (const [v] of [...top, ...middleStatic, ...dynamic, ...bottom]) {
+    if (seen.has(v)) continue;
+    if (map.has(v)) {
+      result[v] = map.get(v)!;
+      seen.add(v);
+    }
+  }
+
+  return result;
+};
+

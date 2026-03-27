@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FileItem, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
-import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, mergeOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -127,7 +127,10 @@ export default function useFieldRenderer({
                 ) {
                     const values = Object.values(field.options);
                     if (values.length && typeof values[0] === "string") {
-                        setOptions(field.options as SelectOptions);
+
+                        setOptions(() =>
+                            mergeOptions(field, field.options as SelectOptions)
+                        );
                         return;
                     }
                 }
@@ -146,8 +149,8 @@ export default function useFieldRenderer({
                     field.groupKey // auto-uses `category` if present
                 );
 
-                setOptions(mapped);
-                return;
+                setOptions(() => mergeOptions(field, mapped));
+
             }
 
             const source = field?.source ?? {};
@@ -174,7 +177,11 @@ export default function useFieldRenderer({
                         ) {
                             const values = Object.values(rawItems);
                             if (values.length && typeof values[0] === "string") {
-                                setOptions(rawItems as SelectOptions);
+
+
+                                setOptions(() =>
+                                    mergeOptions(field, rawItems as SelectOptions)
+                                );
                                 return;
                             }
                         }
@@ -185,15 +192,15 @@ export default function useFieldRenderer({
 
                         const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                        if (isMounted) setOptions(mapped);
+                        if (isMounted) setOptions(() => mergeOptions(field, mapped));
                         return;
                     } catch (err) {
                         console.error("Method execution failed:", err);
-                        if (isMounted) setOptions({});
+                        if (isMounted) setOptions(() => mergeOptions(field, {}));;
                         return;
                     }
                 } else {
-                    if (isMounted) setOptions({});
+                    if (isMounted) setOptions(() => mergeOptions(field, {}));;
                     return;
                 }
             }
@@ -230,7 +237,10 @@ export default function useFieldRenderer({
                     ) {
                         const values = Object.values(rawItems);
                         if (values.length && typeof values[0] === "string") {
-                            setOptions(rawItems as SelectOptions);
+
+                            setOptions(() =>
+                                mergeOptions(field, rawItems as SelectOptions)
+                            );
                             return;
                         }
                     }
@@ -240,12 +250,12 @@ export default function useFieldRenderer({
                         : [];
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
-                    if (isMounted) setOptions(mapped);
+                    if (isMounted) setOptions(() => mergeOptions(field, mapped));;
                     return;
 
                 } catch (err) {
                     console.error("API execution failed:", err);
-                    if (isMounted) setOptions({});
+                    if (isMounted) setOptions(() => mergeOptions(field, {}));;
                     return;
                 }
             }
@@ -307,7 +317,8 @@ export default function useFieldRenderer({
                     ) {
                         const values = Object.values(rawItems);
                         if (values.length && typeof values[0] === "string") {
-                            setOptions(rawItems as SelectOptions);
+
+                            setOptions(() => mergeOptions(field, rawItems as SelectOptions));
                             return;
                         }
                     }
@@ -318,7 +329,7 @@ export default function useFieldRenderer({
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                    if (isMounted) setOptions(mapped);
+                    if (isMounted) setOptions(() => mergeOptions(field, mapped));
 
                 } catch (err) {
                     console.error("API fetch failed:", err);
@@ -663,7 +674,7 @@ export default function useFieldRenderer({
         run();
     }, [formik.values[field.name]]);
 
-  
+
 
     useEffect(() => {
         if (!isApiSearch) return;
@@ -725,7 +736,7 @@ export default function useFieldRenderer({
                     field.groupKey
                 );
 
-                setOptions(mapped);
+                setOptions(() => mergeOptions(field, mapped));
             } catch (err) {
                 if (axios.isCancel(err)) return;
                 console.error("Search fetch failed", err);

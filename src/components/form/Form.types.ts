@@ -40,6 +40,8 @@ export interface FormField {
     parameter?: string | Record<string, string>;
     width?: number | string;
     options?: Record<string, any>;
+    options_top?: Record<string, any>;
+    options_bottom?: Record<string, any>;
     group?: string;
     type?: string;
     regex?: string;
