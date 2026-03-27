@@ -3,6 +3,7 @@ import axios from "axios";
 import DOMPurify from "dompurify";
 import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory, FileItem } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
+
 export function determineViewMode(json: FormJson) {
   if (json.template === 'accordion') return 'accordion';
   if (json.template === 'simple') return 'simple';
@@ -828,11 +829,7 @@ export const buildFileValue = ({
 
   const newPaths = uploads.map((f) => `${f.fileId}&${f.path}`)
 
-
   return [...existing, ...newPaths];
-
-
-
 };
 
 export const getMaxDate = (max?: string | number) => {
@@ -878,9 +875,7 @@ export const validateFiles = ({
 
     if (invalidFile) {
       alert(
-       `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`
-        
-      );
+       `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`);
       e.currentTarget.value = "";
       return null;
     }

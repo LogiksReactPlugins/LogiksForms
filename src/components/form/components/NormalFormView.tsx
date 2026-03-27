@@ -71,8 +71,7 @@ export default function NormalFormView({
     }
   })
 
-  console.log("formik.values",formik.values);
-    console.log("formik.errors",formik.errors);
+
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { FormikProps } from "formik";
-import { getOptionLabel, type FlatEntry } from '../utils.js';
+import { flattenOptions, getOptionLabel, type FlatEntry } from '../utils.js';
 import type { FormField, SelectOptions } from '../Form.types.js';
 import { DropdownPortal } from './PortalDropdown.js';
 
@@ -24,7 +24,7 @@ type MultiSelectProps = {
 
     filteredOptions: FlatEntry[];
     highlightedIndex: number;
- 
+
 
     formik: FormikProps<Record<string, any>>;
     executeFieldMethod: (
@@ -50,7 +50,7 @@ export default function MultiSelect({
     highlightedIndex,
     setSearch,
     formik,
-  
+
     executeFieldMethod,
     handlePersist,
     module_refid,
@@ -62,6 +62,13 @@ export default function MultiSelect({
 }: MultiSelectProps) {
 
     const key = field.name;
+
+
+
+    const allValues = flattenOptions(options).map(([val]) => val);
+
+
+    const isAllSelected = allValues.every(v => valueArray.includes(v));
     return (
         <div className="relative">
             <label className={labelClasses}>
@@ -133,6 +140,27 @@ export default function MultiSelect({
                 focus:outline-none focus:ring-0"
                         />
                     </div>}
+                    <label
+                        className="flex items-center gap-x-2 px-2 py-1 hover:bg-gray-50 rounded cursor-pointer text-sm font-medium border-b mb-1"
+                    >
+                        <input
+                            type="checkbox"
+                            checked={isAllSelected}
+                            onChange={(e) => {
+                                const next = e.target.checked
+                                    ? allValues  
+                                    : [];         
+
+                                formik.setFieldValue(key, next);
+                                handlePersist(next, field, module_refid);
+                                executeFieldMethod("onChange", field, key);
+                               
+                            }}
+                            disabled={isDisabled}
+                            className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                        Select All
+                    </label>
 
                     {/* Filtered options */}
                     {filteredOptions.length > 0 ? (

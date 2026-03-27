@@ -16,7 +16,7 @@ export default function useFieldRenderer({
     optionsOverride,
     setFieldOptions
 }: FieldRendererProps) {
-   
+
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<SelectOptions>(
@@ -651,6 +651,8 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
+                    formik.setFieldValue(chain.target, formik.initialValues[chain.target])
+
                     setFieldOptions?.(chain.target, mapped);
                 }
             } catch (err) {
@@ -661,6 +663,7 @@ export default function useFieldRenderer({
         run();
     }, [formik.values[field.name]]);
 
+  
 
     useEffect(() => {
         if (!isApiSearch) return;
@@ -784,7 +787,7 @@ export default function useFieldRenderer({
         } catch (err) {
             console.log(err)
             formik.setFieldValue(key, existing);
-              window.alert("Failed to delete file due to a technical issue. Please try again.")
+            window.alert("Failed to delete file due to a technical issue. Please try again.")
         }
     };
 
