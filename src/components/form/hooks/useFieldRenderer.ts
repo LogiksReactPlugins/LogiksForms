@@ -76,9 +76,7 @@ export default function useFieldRenderer({
     useEffect(() => {
         if (!optionsOverride) return;
 
-        setOptions(() =>
-            mergeOptions(field, optionsOverride)
-        );
+        setOptions(optionsOverride);
     }, [optionsOverride]);
 
 
@@ -130,9 +128,7 @@ export default function useFieldRenderer({
                     const values = Object.values(field.options);
                     if (values.length && typeof values[0] === "string") {
 
-                        setOptions(() =>
-                            mergeOptions(field, field.options as SelectOptions)
-                        );
+                        setOptions(field.options);
                         return;
                     }
                 }
@@ -151,7 +147,7 @@ export default function useFieldRenderer({
                     field.groupKey // auto-uses `category` if present
                 );
 
-                setOptions(() => mergeOptions(field, mapped));
+                setOptions(mapped);
 
             }
 
@@ -180,10 +176,7 @@ export default function useFieldRenderer({
                             const values = Object.values(rawItems);
                             if (values.length && typeof values[0] === "string") {
 
-
-                                setOptions(() =>
-                                    mergeOptions(field, rawItems as SelectOptions)
-                                );
+                                setOptions(rawItems as SelectOptions);
                                 return;
                             }
                         }
@@ -194,15 +187,15 @@ export default function useFieldRenderer({
 
                         const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                        if (isMounted) setOptions(() => mergeOptions(field, mapped));
+                        if (isMounted) setOptions(mapped);
                         return;
                     } catch (err) {
                         console.error("Method execution failed:", err);
-                        if (isMounted) setOptions(() => mergeOptions(field, {}));;
+                        if (isMounted) setOptions({});;
                         return;
                     }
                 } else {
-                    if (isMounted) setOptions(() => mergeOptions(field, {}));;
+                    if (isMounted) setOptions({});;
                     return;
                 }
             }
@@ -240,8 +233,7 @@ export default function useFieldRenderer({
                         const values = Object.values(rawItems);
                         if (values.length && typeof values[0] === "string") {
 
-                            setOptions(() =>
-                                mergeOptions(field, rawItems as SelectOptions)
+                            setOptions(rawItems as SelectOptions
                             );
                             return;
                         }
@@ -255,12 +247,12 @@ export default function useFieldRenderer({
                     console.log("mapped", mapped);
                     console.log("mergeOptions(field, mapped)", mergeOptions(field, mapped))
 
-                    if (isMounted) setOptions(() => mergeOptions(field, mapped));;
+                    if (isMounted) setOptions(mapped);;
                     return;
 
                 } catch (err) {
                     console.error("API execution failed:", err);
-                    if (isMounted) setOptions(() => mergeOptions(field, {}));;
+                    if (isMounted) setOptions({});;
                     return;
                 }
             }
@@ -323,7 +315,7 @@ export default function useFieldRenderer({
                         const values = Object.values(rawItems);
                         if (values.length && typeof values[0] === "string") {
 
-                            setOptions(() => mergeOptions(field, rawItems as SelectOptions));
+                            setOptions(rawItems as SelectOptions);
                             return;
                         }
                     }
@@ -334,7 +326,7 @@ export default function useFieldRenderer({
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                    if (isMounted) setOptions(() => mergeOptions(field, mapped));
+                    if (isMounted) setOptions(mapped);
 
                 } catch (err) {
                     console.error("API fetch failed:", err);
@@ -732,9 +724,7 @@ export default function useFieldRenderer({
                 if (typeof rawItems === "object" && !Array.isArray(rawItems)) {
                     const values = Object.values(rawItems);
                     if (values.length && typeof values[0] === "string") {
-                        setOptions(() =>
-                            mergeOptions(field, rawItems as SelectOptions)
-                        );
+                        setOptions(rawItems as SelectOptions);
                         return;
                     }
                 }
@@ -750,7 +740,7 @@ export default function useFieldRenderer({
                     field.groupKey
                 );
 
-                setOptions(() => mergeOptions(field, mapped));
+                setOptions(mapped);
             } catch (err) {
                 if (axios.isCancel(err)) return;
                 console.error("Search fetch failed", err);
