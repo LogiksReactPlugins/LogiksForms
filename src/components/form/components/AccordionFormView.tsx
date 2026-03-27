@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
-import type { GroupedFormViewPrps, SelectOptions } from "../Form.types.js";
+import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
 
@@ -22,10 +22,10 @@ export default function AccordionFormView({
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
-    Record<string, SelectOptions>
+    Record<string, OptionItem[]>
   >({});
 
-  const setOptionsForField = (name: string, options: SelectOptions) => {
+  const setOptionsForField = (name: string, options: OptionItem[]) => {
     setFieldOptions(prev => ({
       ...prev,
       [name]: options,

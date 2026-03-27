@@ -1,4 +1,4 @@
-import { FormJson, FormField, SelectOptions, GroupedOptions, AutocompleteConfig, FileCategory, FileItem } from './Form.types.js';
+import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
@@ -14,11 +14,12 @@ export declare function toColWidth(width: number | undefined): ColWidth;
 export declare function toGrid(width: number | undefined): ColWidth;
 export declare const isHidden: (hidden?: boolean | string) => boolean;
 export declare const replacePlaceholders: (input: any, vars: Record<string, string | number>) => any;
-export declare const formatOptions: (valueKey: string, labelKey: string, items: any[], groupKey?: string) => SelectOptions;
-export declare const getOptionLabel: (options: SelectOptions, value: string) => string | undefined;
+export declare const normalizeOptions: (opts?: any) => OptionItem[];
+export declare const formatOptions: (valueKey: string, labelKey: string, items: any[], groupKey?: string) => OptionItem[];
+export declare const getOptionLabel: (options: OptionItem[], value: string) => string | undefined;
+export declare const groupOptions: (options: OptionItem[]) => Record<string, OptionItem[]>;
 export type FlatEntry = [string, string];
-export declare const flattenOptions: (options: SelectOptions) => FlatEntry[];
-export declare const isGroupedOptions: (options: SelectOptions) => options is GroupedOptions;
+export declare const flattenOptions: (options: OptionItem[]) => FlatEntry[];
 export declare function fetchGeolocation(): Promise<string | null>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export declare function flatFields(fields: Record<string, Omit<FormField, "name">>, operation?: string): FormField[];
@@ -56,12 +57,9 @@ type ValidateFileInputParams = {
 };
 export declare const validateFiles: ({ e, existingFiles, maxFiles, maxFileSize }: ValidateFileInputParams) => FileList | null;
 export declare const mergeOptions: (field: {
-    options?: SelectOptions;
-    options_top?: SelectOptions;
-    options_bottom?: SelectOptions;
-}, dynamicOpts?: SelectOptions) => {
-    value: string;
-    label: string;
-}[];
+    options?: any;
+    options_top?: any;
+    options_bottom?: any;
+}, dynamicOpts?: OptionItem[]) => OptionItem[];
 export {};
 //# sourceMappingURL=utils.d.ts.map

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
-import type { FieldRendererProps, FileItem, FormField, SelectOptions, sqlQueryProps } from "../Form.types.js";
-import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, isGroupedOptions, mergeOptions, normalizeRowSafe, replacePlaceholders, writePersistedValue } from "../utils.js";
+import type { FieldRendererProps, FormField, OptionItem, sqlQueryProps } from "../Form.types.js";
+import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -19,10 +19,9 @@ export default function useFieldRenderer({
 
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [options, setOptions] = useState<SelectOptions>(
-        optionsOverride ?? field.options ?? {}
+    const [options, setOptions] = useState<OptionItem[]>(
+        optionsOverride ?? normalizeOptions(field.options)
     );
-
 
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -46,28 +45,12 @@ export default function useFieldRenderer({
         const currentValue = formik.values[key];
         if (currentValue) return;
 
-        if (!options) return;
+        if (options.length === 0) return;
 
-        let firstValue: string | number | undefined;
-
-        // Array format
-        if (Array.isArray(options)) {
-            firstValue = options[0]?.value;
-        }
-
-        // Flat object format
-        else if (!isGroupedOptions(options)) {
-            firstValue = Object.keys(options)[0];
-        }
-
-        //  Grouped object format
-        else {
-            const firstGroup = Object.values(options)[0] as Record<string, string>;
-            firstValue = firstGroup ? Object.keys(firstGroup)[0] : undefined;
-        }
+        const firstValue = options[0]?.value;
 
         if (firstValue !== undefined && firstValue !== null) {
-            formik.setFieldValue(key, String(firstValue), false);
+            formik.setFieldValue(key, firstValue, false);
         }
     }, [options]);
 
@@ -112,44 +95,6 @@ export default function useFieldRenderer({
         const fetchData = async () => {
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
-            let opts = field?.options;
-
-            if (opts && (
-                (Array.isArray(opts) && opts.length > 0) ||
-                (!Array.isArray(opts) && Object.keys(opts).length > 0)
-            )) {
-
-                //  CASE 1: flat or grouped object
-                // { "1": "WEL" } OR { quarter1: { "1": "January" } }
-                if (
-                    typeof field.options === "object" &&
-                    !Array.isArray(field.options)
-                ) {
-                    const values = Object.values(field.options);
-                    if (values.length && typeof values[0] === "string") {
-
-                        setOptions(field.options);
-                        return;
-                    }
-                }
-
-                // CASE 2 / 3: array of rows (flat or grouped via `category`)
-                const rawItems = Array.isArray(field.options)
-                    ? field.options
-                    : [field.options];
-
-                const normalizedItems = rawItems.map(normalizeRowSafe);
-
-                const mapped = formatOptions(
-                    valueKey,
-                    labelKey,
-                    normalizedItems,
-                    field.groupKey // auto-uses `category` if present
-                );
-
-                setOptions(mapped);
-
-            }
 
             const source = field?.source ?? {};
 
@@ -169,17 +114,6 @@ export default function useFieldRenderer({
                                         ? res.data
                                         : res;
 
-                        if (
-                            typeof rawItems === "object" &&
-                            !Array.isArray(rawItems)
-                        ) {
-                            const values = Object.values(rawItems);
-                            if (values.length && typeof values[0] === "string") {
-
-                                setOptions(rawItems as SelectOptions);
-                                return;
-                            }
-                        }
 
                         const normalizedItems = Array.isArray(rawItems)
                             ? rawItems.map(normalizeRowSafe)
@@ -187,15 +121,15 @@ export default function useFieldRenderer({
 
                         const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                        if (isMounted) setOptions(mapped);
+                        if (isMounted) setOptions(mergeOptions(field, mapped));;
                         return;
                     } catch (err) {
                         console.error("Method execution failed:", err);
-                        if (isMounted) setOptions({});;
+                        if (isMounted) setOptions([]);;
                         return;
                     }
                 } else {
-                    if (isMounted) setOptions({});;
+                    if (isMounted) setOptions([]);
                     return;
                 }
             }
@@ -226,33 +160,21 @@ export default function useFieldRenderer({
                                     ? res.data
                                     : res;
 
-                    if (
-                        typeof rawItems === "object" &&
-                        !Array.isArray(rawItems)
-                    ) {
-                        const values = Object.values(rawItems);
-                        if (values.length && typeof values[0] === "string") {
 
-                            setOptions(rawItems as SelectOptions
-                            );
-                            return;
-                        }
-                    }
 
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
-                    console.log("mapped", mapped);
-                    console.log("mergeOptions(field, mapped)", mergeOptions(field, mapped))
 
-                    if (isMounted) setOptions(mapped);;
+
+                    if (isMounted) setOptions(mergeOptions(field, mapped));
                     return;
 
                 } catch (err) {
                     console.error("API execution failed:", err);
-                    if (isMounted) setOptions({});;
+                    if (isMounted) setOptions([]);
                     return;
                 }
             }
@@ -307,26 +229,13 @@ export default function useFieldRenderer({
                             ? res.data
                             : res;
 
-
-                    if (
-                        typeof rawItems === "object" &&
-                        !Array.isArray(rawItems)
-                    ) {
-                        const values = Object.values(rawItems);
-                        if (values.length && typeof values[0] === "string") {
-
-                            setOptions(rawItems as SelectOptions);
-                            return;
-                        }
-                    }
-
                     const normalizedItems = Array.isArray(rawItems)
                         ? rawItems.map(normalizeRowSafe)
                         : [];
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey);
 
-                    if (isMounted) setOptions(mapped);
+                    if (isMounted) setOptions(mergeOptions(field, mapped));
 
                 } catch (err) {
                     console.error("API fetch failed:", err);
@@ -721,13 +630,7 @@ export default function useFieldRenderer({
                         ? res.data
                         : res;
 
-                if (typeof rawItems === "object" && !Array.isArray(rawItems)) {
-                    const values = Object.values(rawItems);
-                    if (values.length && typeof values[0] === "string") {
-                        setOptions(rawItems as SelectOptions);
-                        return;
-                    }
-                }
+
 
                 const normalizedItems = Array.isArray(rawItems)
                     ? rawItems.map(normalizeRowSafe)
@@ -740,7 +643,7 @@ export default function useFieldRenderer({
                     field.groupKey
                 );
 
-                setOptions(mapped);
+               setOptions(mergeOptions(field, mapped));
             } catch (err) {
                 if (axios.isCancel(err)) return;
                 console.error("Search fetch failed", err);

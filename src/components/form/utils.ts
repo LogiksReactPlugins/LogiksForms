@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import type { FormJson, FormField, SelectOptions, GroupedOptions, FlatOptions, AutocompleteConfig, FileCategory, FileItem } from "./Form.types.js";
+import type { FormJson, FormField,  AutocompleteConfig, FileCategory, FileItem, OptionItem } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 
 export function determineViewMode(json: FormJson) {
@@ -426,14 +426,40 @@ export const replacePlaceholders = (
   return input;
 };
 
+export const normalizeOptions = (opts?: any): OptionItem[] => {
+  if (!opts) return [];
+
+  // array input
+  if (Array.isArray(opts)) {
+    return opts.map((o) => ({
+      value: String(o.value),
+      label: String(o.label ?? o.title ?? o.value),
+      group:
+        o.group ??
+        o.category ?? // 👈 support category if present
+        undefined,
+    }));
+  }
+
+  // flat object: { "1": "Apple" }
+  if (typeof opts === "object") {
+    return Object.entries(opts).map(([value, label]) => ({
+      value: String(value),
+      label: String(label),
+    }));
+  }
+
+  return [];
+};
+
 
 export const formatOptions = (
   valueKey: string,
   labelKey: string,
   items: any[],
   groupKey?: string
-): SelectOptions => {
-  if (!Array.isArray(items) || items.length === 0) return {};
+): OptionItem[] => {
+  if (!Array.isArray(items) || items.length === 0) return [];
 
   const resolvedGroupKey =
     groupKey ??
@@ -441,123 +467,52 @@ export const formatOptions = (
       ? "category"
       : undefined);
 
-  // ---- flat options ----
-  if (!resolvedGroupKey) {
-    const mapped: FlatOptions = {};
-    items.forEach(item => {
+  return items
+    .map((item) => {
       const value = item[valueKey];
       const label = item[labelKey];
-      if (value != null && label != null) {
-        mapped[String(value)] = String(label);
-      }
-    });
-    return mapped;
-  }
 
-  // ---- grouped options ----
-  const grouped: GroupedOptions = {};
+      if (value == null || label == null) return null;
 
-  items.forEach(item => {
-    const group = item[resolvedGroupKey] ?? "Others";
-    const value = item[valueKey];
-    const label = item[labelKey];
-
-    if (value == null || label == null) return;
-
-    if (!grouped[group]) grouped[group] = {};
-    grouped[group][String(value)] = String(label);
-  });
-
-  return grouped;
+      return {
+        value: String(value),
+        label: String(label),
+        group:
+          resolvedGroupKey && item[resolvedGroupKey]
+            ? String(item[resolvedGroupKey])
+            : undefined,
+      };
+    })
+    .filter(Boolean) as OptionItem[];
 };
+
 
 
 export const getOptionLabel = (
-  options: SelectOptions,
+  options: OptionItem[],
   value: string
 ): string | undefined => {
   if (!options || value == null) return;
-
-  const key = String(value);
-  if (Array.isArray(options)) {
-    const found = options.find(o => String(o.value) === key);
-    return found?.label ?? found?.title;
-  }
-
-  const values = Object.values(options);
-  if (!values.length) return;
-
-  const first = values[0];
-
-
-  // flat
-  if (typeof first === "string") {
-    return (options as FlatOptions)[key];
-  }
-
-  // grouped
-  for (const group of Object.values(options as GroupedOptions)) {
-    if (key in group) {
-      return group[key];
-    }
-  }
-
-  return;
+  return options.find((o) => o.value === value)?.label;
 };
 
+export const groupOptions = (options: OptionItem[]) => {
+  return options.reduce<Record<string, OptionItem[]>>((acc, opt) => {
+    const key = opt.group || "__ungrouped__";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(opt);
+    return acc;
+  }, {});
+};
 
 
 export type FlatEntry = [string, string];
 
-export const flattenOptions = (options: SelectOptions): FlatEntry[] => {
-  if (!options) return [];
 
-  //  array options: [{ value, title/label }]
-  if (Array.isArray(options)) {
-    return options.map(
-      (o): FlatEntry => [
-        String(o.value),
-        String(o.title ?? o.label ?? o.value),
-      ]
-    );
-  }
 
-  const values = Object.values(options);
-  if (!values.length) return [];
-
-  const first = values[0];
-
-  //  flat object: { value: label }
-  if (typeof first === "string") {
-    return Object.entries(options as Record<string, string>)
-      .map(([v, l]): FlatEntry => [String(v), l]);
-  }
-
-  // grouped object: { group: { value: label } }
-  return Object.values(options as Record<string, Record<string, string>>)
-    .flatMap(group =>
-      Object.entries(group).map(
-        ([v, l]): FlatEntry => [String(v), l]
-      )
-    );
+export const flattenOptions = (options: OptionItem[]): FlatEntry[] => {
+  return options.map((o) => [o.value, o.label]);
 };
-
-
-export const isGroupedOptions = (
-  options: SelectOptions
-): options is GroupedOptions => {
-  if (!options || typeof options !== "object") return false;
-
-  const first = Object.values(options)[0];
-
-  // grouped options = object whose values are option maps
-  return (
-    typeof first === "object" &&
-    first !== null &&
-    !Array.isArray(first)
-  );
-};
-
 
 export async function fetchGeolocation(): Promise<string | null> {
   if (!("geolocation" in navigator)) {
@@ -895,34 +850,30 @@ export const validateFiles = ({
 
 export const mergeOptions = (
   field: {
-    options?: SelectOptions;
-    options_top?: SelectOptions;
-    options_bottom?: SelectOptions;
+    options?: any;
+    options_top?: any;
+    options_bottom?: any;
   },
-  dynamicOpts?: SelectOptions
-): { value: string; label: string }[] => {
-  const top = flattenOptions(field.options_top || {});
-  const middleStatic = flattenOptions(field.options || {});
-  const dynamic = flattenOptions(dynamicOpts || {});
-  const bottom = flattenOptions(field.options_bottom || {});
-
-  const ordered = [
-    ...top,
-    ...middleStatic,
-    ...dynamic,
-    ...bottom,
-  ];
+  dynamicOpts?: OptionItem[]
+): OptionItem[] => {
+  const top = normalizeOptions(field.options_top);
+  const base = normalizeOptions(field.options);
+  const dynamic = dynamicOpts ?? [];
+  const bottom = normalizeOptions(field.options_bottom);
 
   const seen = new Set<string>();
 
-  return ordered
-    .filter(([value]) => {
-      if (seen.has(value)) return false;
-      seen.add(value);
+  const dedupe = (arr: OptionItem[]) =>
+    arr.filter((o) => {
+      if (seen.has(o.value)) return false;
+      seen.add(o.value);
       return true;
-    })
-    .map(([value, label]) => ({
-      value,
-      label,
-    }));
+    });
+
+  return [
+    ...dedupe(top),
+    ...dedupe(base),
+    ...dedupe(dynamic),
+    ...dedupe(bottom),
+  ];
 };

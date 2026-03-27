@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
 import { filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { SimpleFormViewProps, SelectOptions, FormField } from "../Form.types.js";
+import type { SimpleFormViewProps, FormField, OptionItem } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
 
@@ -21,16 +21,16 @@ export default function NormalFormView({
   const flatfields = flatFields(fields, sqlOpsUrls?.operation);
 
 
-  const [fieldOptions, setFieldOptions] = React.useState<
-    Record<string, SelectOptions>
-  >({});
+const [fieldOptions, setFieldOptions] = React.useState<
+  Record<string, OptionItem[]>
+>({});
 
-  const setOptionsForField = (name: string, options: SelectOptions) => {
-    setFieldOptions(prev => ({
-      ...prev,
-      [name]: options,
-    }));
-  };
+const setOptionsForField = (name: string, options: OptionItem[]) => {
+  setFieldOptions(prev => ({
+    ...prev,
+    [name]: options,
+  }));
+};
 
 
   const { commonFields, otherFields } = React.useMemo(() => {

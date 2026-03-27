@@ -1,6 +1,6 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
-import { fetchGeolocation, getMaxDate, getOptionLabel, isGroupedOptions, validateFiles } from '../utils.js';
+import { fetchGeolocation, getMaxDate, getOptionLabel, groupOptions, validateFiles } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
@@ -25,7 +25,7 @@ export default function FieldRenderer({
     executeFieldMethod, handleFileUpload, handleKeyDown,
     setSearch, setOpen, setIsFocused, handleInputChange, handleSelect,
     handlePersist, setLoading, removeFile,
-    optionCount, baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
+    baseInputClasses, focusClasses, labelClasses, search, highlightedIndex,
     options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch, loading
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
@@ -300,6 +300,8 @@ export default function FieldRenderer({
         )
       }
 
+      const grouped = groupOptions(options);
+
       return (
         <div className="relative">
           <label className={labelClasses}>
@@ -326,24 +328,23 @@ export default function FieldRenderer({
               </option>}
 
               <option value="" className='text-gray-500'>Clear Selection</option>
-
-              {!isGroupedOptions(options) &&
-                Object.entries(options).map(([val, label]) => (
-                  <option key={val} value={val} className="py-2">
-                    {label}
-                  </option>
-                ))}
-
-              {isGroupedOptions(options) &&
-                Object.entries(options).map(([group, opts]) => (
+              {Object.entries(grouped).map(([group, opts]) =>
+                group === "__ungrouped__" ? (
+                  opts.map((o) => (
+                    <option key={o.value} value={o.value} className="py-2">
+                      {o.label}
+                    </option>
+                  ))
+                ) : (
                   <optgroup key={group} label={group}>
-                    {Object.entries(opts).map(([val, label]) => (
-                      <option key={val} value={val}>
-                        {label}
+                    {opts.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
                       </option>
                     ))}
                   </optgroup>
-                ))}
+                )
+              )}
             </select>
             {/* Custom dropdown arrow */}
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -372,23 +373,23 @@ export default function FieldRenderer({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
-          <div className={`flex ${optionCount > 3 ? "flex-col" : ""} gap-2 ml-1`}>
-            {Object.entries(options || {}).map(([val, label]) => (
+          <div className={`flex ${options.length > 3 ? "flex-col" : ""} gap-2 ml-1`}>
+            {options.map((opt) => (
               <label
-                key={val}
-                htmlFor={`${key}-${val}`}
+                key={opt.value}
+                htmlFor={`${key}-${opt.value}`}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
-                  id={`${key}-${val}`}
+                  id={`${key}-${opt.value}`}
                   type="radio"
                   name={key}
-                  checked={formik.values[key] === val}
-                  value={val}
+                  checked={formik.values[key] === opt.value}
+                  value={opt.value}
                   onChange={(e) => {
                     formik.setFieldValue(key, e.target.value);
                     handlePersist(e.target.value, field, module_refid)
-                    executeFieldMethod("onChange", field, `${key}-${val}`)
+                    executeFieldMethod("onChange", field, `${key}-${opt.value}`)
                   }
                   }
                   onBlur={formik.handleBlur}
@@ -397,7 +398,7 @@ export default function FieldRenderer({
                     ${isDisabled ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" : ""}
                     `}
                 />
-                {label}
+                {opt.label}
               </label>
             ))}
           </div>
@@ -418,16 +419,18 @@ export default function FieldRenderer({
           </label>
 
           <div className="flex flex-col gap-2 ml-1">
-            {Object.entries(options || {}).map(([val, label]) => {
+            {options.map((opt) => {
               const checked = isMultiple
-                ? Array.isArray(value) && value.includes(val)
-                : value === val;
+                ? Array.isArray(value) && value.includes(opt.value)
+                : value === opt.value;
+
+
               return <label
-                key={val}
+                key={opt.value}
                 className="flex items-center gap-x-2 text-sm font-medium text-gray-700 cursor-pointer"
               >
                 <input
-                  id={`${key}-${val}`}
+                  id={`${key}-${opt.value}`}
                   type="checkbox"
                   checked={checked}
                   onChange={(e) => {
@@ -436,16 +439,16 @@ export default function FieldRenderer({
                     if (isMultiple) {
                       const current = Array.isArray(value) ? value : [];
                       nextValue = e.target.checked
-                        ? [...current, val]
-                        : current.filter(v => v !== val);
+                        ? [...current, opt.value]
+                        : current.filter(v => v !== opt.value);
                     } else {
-                      nextValue = e.target.checked ? val : "false";
+                      nextValue = e.target.checked ? opt.value : "false";
                     }
 
 
                     formik.setFieldValue(key, nextValue);
                     handlePersist(nextValue, field, module_refid)
-                    executeFieldMethod("onChange", field, `${key}-${val}`)
+                    executeFieldMethod("onChange", field, `${key}-${opt.value}`)
                   }}
                   onBlur={formik.handleBlur}
                   disabled={isDisabled}
@@ -453,7 +456,7 @@ export default function FieldRenderer({
                     ${isDisabled ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" : ""}
                     `}
                 />
-                {label}
+                {opt.label}
               </label>
             })}
           </div>
@@ -468,11 +471,9 @@ export default function FieldRenderer({
     }
 
     case "tags": {
-      const values: string[] = formik.values[key];
+     const values: string[] = formik.values[key] ?? [];
       const searchValue = search.trim();
-      const normalizedOptions = Array.isArray(options)
-        ? options
-        : Object.entries(options || {}).map(([value, label]) => ({ value, label }));
+
 
       const addTag = (val: string) => {
         if (isDisabled) return;
@@ -494,7 +495,7 @@ export default function FieldRenderer({
       };
 
       const getLabel = (val: string) =>
-        normalizedOptions.find((o) => o.value === val)?.label ?? val;
+        getOptionLabel(options, val) ?? val;
 
       return (
         <div className="relative">

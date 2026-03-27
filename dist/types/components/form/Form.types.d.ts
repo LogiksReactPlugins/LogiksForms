@@ -89,8 +89,8 @@ export interface CommonInfoProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
-    fieldOptions: Record<string, SelectOptions>;
-    setFieldOptions: (fieldName: string, options: SelectOptions) => void;
+    fieldOptions: Record<string, OptionItem[]>;
+    setFieldOptions: (fieldName: string, options: OptionItem[]) => void;
 }
 export type FileItem = {
     fileId: number;
@@ -145,7 +145,8 @@ export interface FormProps {
 }
 export type OptionItem = {
     value: string;
-    label?: string;
+    label: string;
+    group?: string;
     title?: string;
 };
 export type FlatOptions = Record<string, string>;
@@ -177,8 +178,8 @@ export interface FieldRendererProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
-    optionsOverride?: SelectOptions;
-    setFieldOptions?: (fieldName: string, options: SelectOptions) => void;
+    optionsOverride?: OptionItem[];
+    setFieldOptions?: (fieldName: string, options: OptionItem[]) => void;
 }
 export interface sqlQueryProps {
     table: string;

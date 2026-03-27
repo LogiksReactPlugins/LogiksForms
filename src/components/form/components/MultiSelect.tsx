@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FormikProps } from "formik";
 import { flattenOptions, getOptionLabel, type FlatEntry } from '../utils.js';
-import type { FormField, SelectOptions } from '../Form.types.js';
+import type { FormField, OptionItem, SelectOptions } from '../Form.types.js';
 import { DropdownPortal } from './PortalDropdown.js';
 
 
@@ -17,7 +17,7 @@ type MultiSelectProps = {
 
     valueArray: string[];
     labelClasses: string;
-    options: SelectOptions;
+    options: OptionItem[];
     search: string;
     setSearch: React.Dispatch<React.SetStateAction<string>>;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -65,7 +65,7 @@ export default function MultiSelect({
 
 
 
-    const allValues = flattenOptions(options).map(([val]) => val);
+    const allValues = options.map(o => o.value);
 
 
     const isAllSelected = allValues.every(v => valueArray.includes(v));
@@ -86,7 +86,8 @@ export default function MultiSelect({
                 tabIndex={0}
                 ref={triggerRef}
                 onClick={() => {
-                    setOpen(v => !v);
+                    if (isDisabled) return;
+                    setOpen(true);
                 }}
                 onKeyDown={(e) => {
                     if (isDisabled) return;
@@ -148,13 +149,13 @@ export default function MultiSelect({
                             checked={isAllSelected}
                             onChange={(e) => {
                                 const next = e.target.checked
-                                    ? allValues  
-                                    : [];         
+                                    ? allValues
+                                    : [];
 
                                 formik.setFieldValue(key, next);
                                 handlePersist(next, field, module_refid);
                                 executeFieldMethod("onChange", field, key);
-                               
+
                             }}
                             disabled={isDisabled}
                             className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -182,7 +183,7 @@ export default function MultiSelect({
                                     checked={valueArray?.includes(val)}
                                     onChange={(e) => {
                                         const next = e.target.checked
-                                            ? [...valueArray, val]
+                                            ? Array.from(new Set([...valueArray, val]))
                                             : valueArray?.filter(v => v !== val);
 
                                         formik.setFieldValue(key, next);

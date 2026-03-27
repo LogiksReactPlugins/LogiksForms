@@ -100,11 +100,11 @@ export interface CommonInfoProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined
-    fieldOptions: Record<string, SelectOptions>;
+    fieldOptions: Record<string, OptionItem[]>;
 
     setFieldOptions: (
         fieldName: string,
-        options: SelectOptions
+        options: OptionItem[]
     ) => void;
 }
 
@@ -172,8 +172,9 @@ export interface FormProps {
 }
 export type OptionItem = {
   value: string;
-  label?: string;
-  title?: string;
+  label: string;
+  group?: string;
+  title?:string
 };
 export type FlatOptions = Record<string, string>;
 export type GroupedOptions = Record<string, Record<string, string>>;
@@ -209,10 +210,10 @@ export interface FieldRendererProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined
-    optionsOverride?: SelectOptions;
+    optionsOverride?: OptionItem[];
     setFieldOptions?: (
         fieldName: string,
-        options: SelectOptions
+        options: OptionItem[]
     ) => void;
 }
 

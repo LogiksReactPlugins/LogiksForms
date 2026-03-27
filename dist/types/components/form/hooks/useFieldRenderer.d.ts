@@ -1,4 +1,4 @@
-import { FieldRendererProps, FormField, SelectOptions } from '../Form.types.js';
+import { FieldRendererProps, FormField, OptionItem } from '../Form.types.js';
 import { handlePersist } from '../utils.js';
 export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
@@ -19,7 +19,7 @@ export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, r
     labelClasses: string;
     search: string;
     highlightedIndex: number;
-    options: SelectOptions;
+    options: OptionItem[];
     isDisabled: boolean;
     key: string;
     filteredOptions: import('../utils.js').FlatEntry[];

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FormikProps } from "formik";
 import { getOptionLabel, type FlatEntry } from '../utils.js';
-import type { FormField, SelectOptions } from '../Form.types.js';
+import type { FormField, OptionItem, SelectOptions } from '../Form.types.js';
 import { DropdownPortal } from './PortalDropdown.js';
 
 
@@ -16,7 +16,7 @@ type MultiSelectProps = {
     listRef: React.RefObject<HTMLDivElement | null>;
 
     labelClasses: string;
-    options: SelectOptions;
+    options: OptionItem[];
     search: string;
     setSearch: React.Dispatch<React.SetStateAction<string>>;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,8 +60,7 @@ export default function CustomSelect({
 }: MultiSelectProps) {
     const key = field.name;
 
-    console.log("options",options);
-    
+    console.log("options", options);
 
     return <div className="relative">
         <label className={labelClasses}>
@@ -81,8 +80,8 @@ export default function CustomSelect({
             ref={triggerRef}
             tabIndex={0}
             onClick={() => {
-                setOpen(v => !v);
-                //setHighlightedIndex(0);
+                if (isDisabled) return;
+                setOpen(true);
             }}
 
 
