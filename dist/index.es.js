@@ -1013,11 +1013,17 @@ const In = (t) => t === !0 || t === "true", dt = (t, e) => typeof t == "string" 
 }, Ps = (t, e) => {
   if (!t || e == null) return;
   const n = String(e);
-  if (typeof Object.values(t)[0] == "string")
+  if (Array.isArray(t)) {
+    const o = t.find((i) => String(i.value) === n);
+    return o?.label ?? o?.title;
+  }
+  const r = Object.values(t);
+  if (!r.length) return;
+  if (typeof r[0] == "string")
     return t[n];
-  for (const s of Object.values(t))
-    if (n in s)
-      return s[n];
+  for (const o of Object.values(t))
+    if (n in o)
+      return o[n];
 }, Yt = (t) => {
   if (!t) return [];
   if (Array.isArray(t))
@@ -1832,7 +1838,7 @@ function Fo({
   setOpen: y
 }) {
   const x = t.name;
-  return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
+  return console.log("options", h), /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
     /* @__PURE__ */ p.jsxs("label", { className: r, children: [
       t.label,
       t.required && /* @__PURE__ */ p.jsx("span", { className: "text-red-500 ml-1", children: "*" })

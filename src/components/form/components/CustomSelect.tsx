@@ -60,6 +60,9 @@ export default function CustomSelect({
 }: MultiSelectProps) {
     const key = field.name;
 
+    console.log("options",options);
+    
+
     return <div className="relative">
         <label className={labelClasses}>
             {field.label}

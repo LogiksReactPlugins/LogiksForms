@@ -479,7 +479,16 @@ export const getOptionLabel = (
   if (!options || value == null) return;
 
   const key = String(value);
-  const first = Object.values(options)[0];
+  if (Array.isArray(options)) {
+    const found = options.find(o => String(o.value) === key);
+    return found?.label ?? found?.title;
+  }
+
+  const values = Object.values(options);
+  if (!values.length) return;
+
+  const first = values[0];
+
 
   // flat
   if (typeof first === "string") {

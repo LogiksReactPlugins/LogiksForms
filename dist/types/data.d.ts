@@ -10,22 +10,36 @@ export declare const example10: {
         registerQuery: string;
         runQuery: string;
         uploadURL: string;
-        removeFileURL: string;
         operation: string;
     };
     source: {
         type: string;
-        dbopsid: string;
+        cols: string;
+        endpoint: string;
+        method: string;
+        table: string;
+        where: {
+            id: string;
+        };
     };
-    forcefill: {
-        guid: string;
-        raised_by: string;
-    };
-    gotolink: string;
     fields: {
-        company_code_id: {
+        userid: {
+            label: string;
+            required: boolean;
+            search: boolean;
+            type: string;
+            multiple: boolean;
+            orderby: string;
+            width: number;
+            options: {
+                value: string;
+                title: string;
+            }[];
+        };
+        company_spv_id: {
             label: string;
             type: string;
+            search: boolean;
             parameter: string;
             required: boolean;
             source: {
@@ -41,6 +55,10 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
+            options_top: {
+                label: string;
+                value: string;
+            }[];
             "no-option": string;
             width: number;
             options: never[];
@@ -49,6 +67,7 @@ export declare const example10: {
             label: string;
             "no-option": string;
             type: string;
+            search: boolean;
             parameter: {
                 sector_id: string;
                 company_id: string;
@@ -61,6 +80,10 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
+            options_top: {
+                label: string;
+                value: string;
+            }[];
             required: boolean;
             width: number;
             options: never[];
@@ -69,198 +92,50 @@ export declare const example10: {
             label: string;
             type: string;
             required: boolean;
+            search: boolean;
+            multiple: boolean;
+            parameter: string;
+            options_top: {
+                label: string;
+                value: string;
+            }[];
+            ajaxchain: {
+                target: string;
+                src: {
+                    type: string;
+                    method: string;
+                    endpoint: string;
+                };
+            }[];
             width: number;
             "no-option": string;
             options: never[];
         };
-        location: {
+        location_id: {
             label: string;
             type: string;
-            required: boolean;
-            width: number;
-        };
-        location_type: {
-            label: string;
-            type: string;
-            groupid: string;
-            "no-option": string;
-            onChange: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        chainage_from: {
-            label: string;
-            disabled: boolean;
-            type: string;
-            width: number;
-        };
-        chainage_to: {
-            label: string;
-            disabled: boolean;
-            type: string;
-            width: number;
-        };
-        location_other: {
-            label: string;
-            disabled: boolean;
-            type: string;
-            width: number;
-        };
-        raised_date: {
-            label: string;
-            type: string;
-            onChange: string;
-            required: boolean;
-            width: number;
-        };
-        ageing_days: {
-            label: string;
-            type: string;
-            required: boolean;
-            readonly: boolean;
-            width: number;
-        };
-        structure_part: {
-            label: string;
-            type: string;
-            "no-option": string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        section: {
-            label: string;
-            type: string;
-            "no-option": string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        department_id: {
-            label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
             search: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        sub_contractor: {
-            label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
-            search: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        status: {
-            label: string;
-            type: string;
-            onChange: string;
-            default: string;
-            groupid: string;
-            disabled: boolean;
             required: boolean;
             width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        assigned_to: {
-            label: string;
-            type: string;
-            "no-option": string;
-            required: boolean;
-            search: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-            }[];
-        };
-        probable_root_cause: {
-            label: string;
-            type: string;
-            "no-option": string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        closure_date: {
-            label: string;
-            type: string;
-            disabled: boolean;
-            onChange: string;
-            required: boolean;
-            width: number;
-        };
-        severity_level: {
-            label: string;
-            type: string;
-            groupid: string;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: string;
-                class: null;
-                privilege: string;
-            }[];
-        };
-        observation_photograph: {
-            label: string;
-            type: string;
-            required: boolean;
             multiple: boolean;
-            width: number;
+            options: never[];
         };
-        compliance_photograph: {
+        category_id: {
             label: string;
             type: string;
-            vmode: string;
+            orderby: string;
+            search: boolean;
             required: boolean;
             width: number;
+            options: {
+                title: string;
+                value: number;
+            }[];
         };
-        rework_cost_borne_by: {
+        operation: {
             label: string;
             type: string;
             groupid: string;
-            vmode: string;
-            required: boolean;
             width: number;
             options: {
                 title: string;
@@ -269,45 +144,7 @@ export declare const example10: {
                 privilege: string;
             }[];
         };
-        description: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
-        "suggestion ": {
-            label: string;
-            type: string;
-            vmode: string;
-            required: boolean;
-            width: number;
-        };
-        forward_remarks: {
-            label: string;
-            type: string;
-            required: boolean;
-            width: number;
-        };
-        reopen_remarks: {
-            label: string;
-            type: string;
-            disabled: boolean;
-            placeholder: string;
-            required: boolean;
-            width: number;
-        };
-        compliance_from_execution_engineer: {
-            label: string;
-            type: string;
-            vmode: string;
-            required: boolean;
-            width: number;
-        };
     };
-    infoview: {
-        template: string;
-    };
-    script: string;
     module_refid: string;
     module_type: string;
 };
