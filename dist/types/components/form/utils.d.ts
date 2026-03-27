@@ -59,6 +59,9 @@ export declare const mergeOptions: (field: {
     options?: SelectOptions;
     options_top?: SelectOptions;
     options_bottom?: SelectOptions;
-}, dynamicOpts?: SelectOptions) => SelectOptions;
+}, dynamicOpts?: SelectOptions) => {
+    value: string;
+    label: string;
+}[];
 export {};
 //# sourceMappingURL=utils.d.ts.map

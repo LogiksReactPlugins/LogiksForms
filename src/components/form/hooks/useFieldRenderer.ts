@@ -76,7 +76,9 @@ export default function useFieldRenderer({
     useEffect(() => {
         if (!optionsOverride) return;
 
-        setOptions(optionsOverride);
+        setOptions(() =>
+            mergeOptions(field, optionsOverride)
+        );
     }, [optionsOverride]);
 
 
@@ -250,6 +252,9 @@ export default function useFieldRenderer({
                         : [];
 
                     const mapped = formatOptions(valueKey, labelKey, normalizedItems, field.groupKey)
+                    console.log("mapped", mapped);
+                    console.log("mergeOptions(field, mapped)", mergeOptions(field, mapped))
+
                     if (isMounted) setOptions(() => mergeOptions(field, mapped));;
                     return;
 
@@ -707,7 +712,6 @@ export default function useFieldRenderer({
                     };
                 }
 
-
                 let filter: Record<string, [string, string]> = {};
 
                 if (Array.isArray(searchColumns)) {
@@ -724,6 +728,16 @@ export default function useFieldRenderer({
                     : Array.isArray(res?.data)
                         ? res.data
                         : res;
+
+                if (typeof rawItems === "object" && !Array.isArray(rawItems)) {
+                    const values = Object.values(rawItems);
+                    if (values.length && typeof values[0] === "string") {
+                        setOptions(() =>
+                            mergeOptions(field, rawItems as SelectOptions)
+                        );
+                        return;
+                    }
+                }
 
                 const normalizedItems = Array.isArray(rawItems)
                     ? rawItems.map(normalizeRowSafe)

@@ -170,9 +170,14 @@ export interface FormProps {
 
 
 }
+export type OptionItem = {
+  value: string;
+  label?: string;
+  title?: string;
+};
 export type FlatOptions = Record<string, string>;
 export type GroupedOptions = Record<string, Record<string, string>>;
-export type SelectOptions = FlatOptions | GroupedOptions;
+export type SelectOptions = FlatOptions | GroupedOptions | OptionItem[];
 
 export interface BaseFormViewProps {
     title?: string | undefined;

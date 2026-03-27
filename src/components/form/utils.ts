@@ -875,7 +875,7 @@ export const validateFiles = ({
 
     if (invalidFile) {
       alert(
-       `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`);
+        `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`);
       e.currentTarget.value = "";
       return null;
     }
@@ -891,31 +891,29 @@ export const mergeOptions = (
     options_bottom?: SelectOptions;
   },
   dynamicOpts?: SelectOptions
-): SelectOptions => {
+): { value: string; label: string }[] => {
   const top = flattenOptions(field.options_top || {});
   const middleStatic = flattenOptions(field.options || {});
   const dynamic = flattenOptions(dynamicOpts || {});
   const bottom = flattenOptions(field.options_bottom || {});
 
-  const map = new Map<string, string>();
+  const ordered = [
+    ...top,
+    ...middleStatic,
+    ...dynamic,
+    ...bottom,
+  ];
 
-  // merge with priority
-  [...top, ...middleStatic, ...dynamic, ...bottom].forEach(([v, l]) => {
-    map.set(v, l);
-  });
-
-  // preserve order + remove duplicates
   const seen = new Set<string>();
-  const result: Record<string, string> = {};
 
-  for (const [v] of [...top, ...middleStatic, ...dynamic, ...bottom]) {
-    if (seen.has(v)) continue;
-    if (map.has(v)) {
-      result[v] = map.get(v)!;
-      seen.add(v);
-    }
-  }
-
-  return result;
+  return ordered
+    .filter(([value]) => {
+      if (seen.has(value)) return false;
+      seen.add(value);
+      return true;
+    })
+    .map(([value, label]) => ({
+      value,
+      label,
+    }));
 };
-
