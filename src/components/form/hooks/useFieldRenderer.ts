@@ -20,8 +20,11 @@ export default function useFieldRenderer({
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<OptionItem[]>(
-        optionsOverride ?? normalizeOptions(field.options)
+       mergeOptions(field, optionsOverride ?? [])
     );
+
+    console.log("optionsOverride",optionsOverride);
+    
 
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -54,13 +57,16 @@ export default function useFieldRenderer({
         }
     }, [options]);
 
+    console.log("options",options);
+    
 
 
-    useEffect(() => {
-        if (!optionsOverride) return;
 
-        setOptions(optionsOverride);
-    }, [optionsOverride]);
+ useEffect(() => {
+  if (!optionsOverride) return;
+
+  setOptions(mergeOptions(field, optionsOverride));
+}, [optionsOverride]);
 
 
 
@@ -93,6 +99,8 @@ export default function useFieldRenderer({
         let isMounted = true;
 
         const fetchData = async () => {
+            console.log("calling fetchdata");
+            
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
 
