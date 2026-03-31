@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import type { FormJson, FormField,  AutocompleteConfig, FileCategory, FileItem, OptionItem } from "./Form.types.js";
+import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 
 export function determineViewMode(json: FormJson) {
@@ -493,7 +493,9 @@ export const getOptionLabel = (
   value: string
 ): string | undefined => {
   if (!options || value == null) return;
-  return options.find((o) => o.value === value)?.label;
+
+
+  return options.find((o) => String(o.value) === String(value))?.label;
 };
 
 export const groupOptions = (options: OptionItem[]) => {

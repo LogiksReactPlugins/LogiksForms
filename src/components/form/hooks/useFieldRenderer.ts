@@ -23,7 +23,7 @@ export default function useFieldRenderer({
        mergeOptions(field, optionsOverride ?? [])
     );
 
-    console.log("optionsOverride",optionsOverride);
+ 
     
 
     const [search, setSearch] = useState("");
@@ -57,7 +57,7 @@ export default function useFieldRenderer({
         }
     }, [options]);
 
-    console.log("options",options);
+  
     
 
 
@@ -99,7 +99,7 @@ export default function useFieldRenderer({
         let isMounted = true;
 
         const fetchData = async () => {
-            console.log("calling fetchdata");
+         
             
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
