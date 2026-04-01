@@ -87,7 +87,7 @@ export default function MultiSelect({
                 ref={triggerRef}
                 onClick={() => {
                     if (isDisabled) return;
-                    setOpen(true);
+                    setOpen((prev) => !prev);
                 }}
                 onKeyDown={(e) => {
                     if (isDisabled) return;

@@ -1755,7 +1755,7 @@ function $i({
   setOpen: y
 }) {
   const x = t.name;
-  return console.log("options", h), /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
+  return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
     /* @__PURE__ */ p.jsxs("label", { className: r, children: [
       t.label,
       t.required && /* @__PURE__ */ p.jsx("span", { className: "text-red-500 ml-1", children: "*" })
@@ -1770,7 +1770,12 @@ function $i({
         ref: m,
         tabIndex: 0,
         onClick: () => {
-          e || y(!0);
+          e || y((v) => !v);
+        },
+        onBlur: () => {
+          setTimeout(() => {
+            y(!1), a("");
+          }, 150);
         },
         onKeyDown: (v) => {
           e || n(v, !0);
@@ -1802,7 +1807,7 @@ function $i({
       "div",
       {
         ref: s,
-        className: "absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2",
+        className: " w-full border border-gray-200 rounded-lg bg-white shadow-md  max-h-60 overflow-y-auto p-2",
         children: [
           t.search && /* @__PURE__ */ p.jsx("div", { className: "sticky top-0 bg-white p-1", children: /* @__PURE__ */ p.jsx(
             "input",
@@ -1943,7 +1948,7 @@ function Fi({
         tabIndex: 0,
         ref: g,
         onClick: () => {
-          e || x(!0);
+          e || x((w) => !w);
         },
         onKeyDown: (w) => {
           e || n(w, !1);

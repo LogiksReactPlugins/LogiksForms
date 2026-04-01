@@ -60,7 +60,6 @@ export default function CustomSelect({
 }: MultiSelectProps) {
     const key = field.name;
 
-    console.log("options", options);
 
     return <div className="relative">
         <label className={labelClasses}>
@@ -81,7 +80,13 @@ export default function CustomSelect({
             tabIndex={0}
             onClick={() => {
                 if (isDisabled) return;
-                setOpen(true);
+                setOpen((prev) => !prev);
+            }}
+            onBlur={() => {
+                setTimeout(() => {
+                    setOpen(false);
+                    setSearch("");
+                }, 150);
             }}
 
 
@@ -89,6 +94,7 @@ export default function CustomSelect({
                 if (isDisabled) return;
                 handleKeyDown(e, true)
             }}
+
 
         >
             <span className="text-sm text-gray-700">
@@ -117,7 +123,7 @@ export default function CustomSelect({
             <div
                 ref={listRef}
 
-                className="absolute mt-1 w-full border border-gray-200 rounded-lg bg-white shadow-md z-10 max-h-60 overflow-y-auto p-2">
+                className=" w-full border border-gray-200 rounded-lg bg-white shadow-md  max-h-60 overflow-y-auto p-2">
                 {/*  Search input */}
                 {field.search && <div className="sticky top-0 bg-white p-1">
                     <input
