@@ -1705,18 +1705,20 @@ function Ps({
   return Ci(() => {
     if (!e || !t.current) return;
     const l = t.current, a = () => {
-      const c = l.getBoundingClientRect();
+      const u = l.getBoundingClientRect();
       o({
         position: "fixed",
-        top: c.bottom + r,
-        left: c.left,
-        width: c.width,
+        top: u.bottom + r,
+        left: u.left,
+        width: u.width,
         maxHeight: s,
         zIndex: 9999
       });
     };
-    return a(), window.addEventListener("scroll", a, !0), window.addEventListener("resize", a), () => {
-      window.removeEventListener("scroll", a, !0), window.removeEventListener("resize", a);
+    a();
+    const c = requestAnimationFrame(a);
+    return window.addEventListener("scroll", a, !0), window.addEventListener("resize", a), () => {
+      cancelAnimationFrame(c), window.removeEventListener("scroll", a, !0), window.removeEventListener("resize", a);
     };
   }, [e, t, r, s]), Ci(() => {
     if (!e || !t.current) return;
