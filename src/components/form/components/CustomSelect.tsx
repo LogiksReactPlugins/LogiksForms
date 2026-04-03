@@ -62,6 +62,11 @@ export default function CustomSelect({
 
 
     return <div className="relative">
+        <input
+            type="hidden"
+            name={key}
+            value={formik.values[key] ?? ""}
+        />
         <label className={labelClasses}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -82,7 +87,7 @@ export default function CustomSelect({
                 if (isDisabled) return;
                 setOpen((prev) => !prev);
             }}
-           
+
 
 
             onKeyDown={(e) => {

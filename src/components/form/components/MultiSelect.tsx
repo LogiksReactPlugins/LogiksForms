@@ -71,6 +71,11 @@ export default function MultiSelect({
     const isAllSelected = allValues.every(v => valueArray.includes(v));
     return (
         <div className="relative">
+            <input
+                type="hidden"
+                name={key}
+                value={formik.values[key] ?? ""}
+            />
             <label className={labelClasses}>
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -93,7 +98,7 @@ export default function MultiSelect({
                     if (isDisabled) return;
                     handleKeyDown(e, false)
                 }}
-               
+
 
             >
 
