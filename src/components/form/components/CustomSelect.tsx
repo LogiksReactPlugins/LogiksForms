@@ -82,12 +82,7 @@ export default function CustomSelect({
                 if (isDisabled) return;
                 setOpen((prev) => !prev);
             }}
-            onBlur={() => {
-                setTimeout(() => {
-                    setOpen(false);
-                    setSearch("");
-                }, 150);
-            }}
+           
 
 
             onKeyDown={(e) => {

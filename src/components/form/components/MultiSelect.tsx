@@ -93,13 +93,7 @@ export default function MultiSelect({
                     if (isDisabled) return;
                     handleKeyDown(e, false)
                 }}
-                onBlur={() => {
-                    if (field.multiple) return;
-                    setTimeout(() => {
-                        setOpen(false);
-                        setSearch("");
-                    }, 150);
-                }}
+               
 
             >
 

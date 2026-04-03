@@ -1774,11 +1774,6 @@ function $i({
         onClick: () => {
           e || y((v) => !v);
         },
-        onBlur: () => {
-          setTimeout(() => {
-            y(!1), a("");
-          }, 150);
-        },
         onKeyDown: (v) => {
           e || n(v, !0);
         },
@@ -1954,11 +1949,6 @@ function Fi({
         },
         onKeyDown: (w) => {
           e || n(w, !1);
-        },
-        onBlur: () => {
-          t.multiple || setTimeout(() => {
-            x(!1), c("");
-          }, 150);
         },
         children: [
           /* @__PURE__ */ p.jsx("span", { className: "text-sm text-gray-700", children: r?.length > 0 ? r.map((w) => ar(m, w) ?? w).join(", ") : `Select ${t.label}` }),
