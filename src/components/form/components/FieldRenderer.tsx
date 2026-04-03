@@ -185,7 +185,12 @@ export default function FieldRenderer({
     }
     case "richtextarea": {
       return (
-        <div className="relative">
+        <div id={key} className="relative">
+          <input
+            type="hidden"
+            name={key}
+            value={formik.values[key] ?? ""}
+          />
           <label className={labelClasses}>
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -471,7 +476,7 @@ export default function FieldRenderer({
     }
 
     case "tags": {
-     const values: string[] = formik.values[key] ?? [];
+      const values: string[] = formik.values[key] ?? [];
       const searchValue = search.trim();
 
 

@@ -13705,7 +13705,15 @@ function zn({
       );
     }
     case "richtextarea":
-      return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
+      return /* @__PURE__ */ p.jsxs("div", { id: A, className: "relative", children: [
+        /* @__PURE__ */ p.jsx(
+          "input",
+          {
+            type: "hidden",
+            name: A,
+            value: e.values[A] ?? ""
+          }
+        ),
         /* @__PURE__ */ p.jsxs("label", { className: w, children: [
           t.label,
           t.required && /* @__PURE__ */ p.jsx("span", { className: "text-red-500 ml-1", children: "*" })
