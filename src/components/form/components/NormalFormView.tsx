@@ -21,16 +21,16 @@ export default function NormalFormView({
   const flatfields = flatFields(fields, sqlOpsUrls?.operation);
 
 
-const [fieldOptions, setFieldOptions] = React.useState<
-  Record<string, OptionItem[]>
->({});
+  const [fieldOptions, setFieldOptions] = React.useState<
+    Record<string, OptionItem[]>
+  >({});
 
-const setOptionsForField = (name: string, options: OptionItem[]) => {
-  setFieldOptions(prev => ({
-    ...prev,
-    [name]: options,
-  }));
-};
+  const setOptionsForField = (name: string, options: OptionItem[]) => {
+    setFieldOptions(prev => ({
+      ...prev,
+      [name]: options,
+    }));
+  };
 
 
   const { commonFields, otherFields } = React.useMemo(() => {
@@ -94,7 +94,7 @@ const setOptionsForField = (name: string, options: OptionItem[]) => {
             )}
             <div className='grid grid-cols-12 gap-4'>
               {otherFields.map((field) => {
-                const hidden = isHidden(field.hidden) ;
+                const hidden = isHidden(field.hidden);
 
                 const wrapperClass = `col-span-12 md:col-span-6
     ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}

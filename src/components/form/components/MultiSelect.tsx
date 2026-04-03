@@ -81,6 +81,7 @@ export default function MultiSelect({
                 {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
             <div
+            id={key}
 
                 className={`
     relative w-full select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
