@@ -79,6 +79,9 @@ export function transformedObject(originalObject: Record<string, any>, operation
   return fields
 }
 
+const isEmpty = (v: any) =>
+  v === undefined || v === null || v === "";
+
 export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,
@@ -108,12 +111,13 @@ export const intializeForm = (
       operation === "create" &&
       persistentKey &&
       persisted[persistentKey] !== undefined &&
-      (value === undefined || value === null)
+      isEmpty(value)
     ) {
       value = persisted[persistentKey];
     }
+   
 
-    if (value === undefined || value === null) {
+    if (isEmpty(value) && field.default) {
       value = field.default;
     }
 
