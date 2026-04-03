@@ -13489,9 +13489,10 @@ function bm({ editor: t }) {
 function wm({
   value: t,
   onChange: e,
-  disabled: n
+  disabled: n,
+  field_name: r
 }) {
-  const r = tc({
+  const s = tc({
     extensions: [
       rc.configure({
         link: {
@@ -13514,31 +13515,32 @@ function wm({
         class: "tiptap focus:outline-none min-h-[120px]"
       }
     },
-    onUpdate: ({ editor: s }) => {
-      e(s.getHTML());
+    onUpdate: ({ editor: i }) => {
+      e(i.getHTML());
     }
   });
   return Pe(() => {
-    if (!r) return;
-    const s = r.getHTML();
-    t !== void 0 && t !== s && r.commands.setContent(t, {
+    if (!s) return;
+    const i = s.getHTML();
+    t !== void 0 && t !== i && s.commands.setContent(t, {
       emitUpdate: !1
     });
-  }, [t, r]), r ? /* @__PURE__ */ p.jsxs(
+  }, [t, s]), s ? /* @__PURE__ */ p.jsxs(
     "div",
     {
+      id: r,
       className: `
         w-full rounded-lg border border-gray-200 transition-all duration-300
         backdrop-blur-sm text-gray-800
         ${n ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed opacity-60" : "bg-white border-gray-300 hover:border-gray-400 focus-within:ring-1 focus-within:ring-indigo-500"}
       `,
       children: [
-        !n && /* @__PURE__ */ p.jsx(bm, { editor: r }),
+        !n && /* @__PURE__ */ p.jsx(bm, { editor: s }),
         /* @__PURE__ */ p.jsxs("div", { className: "resize-y overflow-auto min-h-[200px] max-h-[500px]", children: [
           /* @__PURE__ */ p.jsx(
             nc,
             {
-              editor: r,
+              editor: s,
               className: "tiptap p-3 focus:outline-none min-h-[200px] "
             }
           ),
@@ -13705,7 +13707,7 @@ function zn({
       );
     }
     case "richtextarea":
-      return /* @__PURE__ */ p.jsxs("div", { id: A, className: "relative", children: [
+      return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
         /* @__PURE__ */ p.jsx(
           "input",
           {
@@ -13723,6 +13725,7 @@ function zn({
           {
             value: e.values[A] ?? "",
             disabled: F,
+            field_name: A,
             onChange: (S) => {
               e.setFieldValue(A, S), y(S, t, i), a("onChange", t, A);
             }

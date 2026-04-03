@@ -14,12 +14,14 @@ type RichTextEditorProps = {
   value: string
   onChange: (html: string) => void
   disabled?: boolean
+  field_name: string
 }
 
 export default function RichTextEditor({
   value,
   onChange,
-  disabled
+  disabled,
+  field_name
 }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
@@ -72,6 +74,7 @@ export default function RichTextEditor({
   return (
 
     <div
+      id={field_name}
       className={`
         w-full rounded-lg border border-gray-200 transition-all duration-300
         backdrop-blur-sm text-gray-800

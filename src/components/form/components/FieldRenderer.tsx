@@ -185,7 +185,7 @@ export default function FieldRenderer({
     }
     case "richtextarea": {
       return (
-        <div id={key} className="relative">
+        <div  className="relative">
           <input
             type="hidden"
             name={key}
@@ -199,6 +199,7 @@ export default function FieldRenderer({
           <RichTextEditor
             value={formik.values[key] ?? ''}
             disabled={isDisabled}
+            field_name={key}
             onChange={(html) => {
               formik.setFieldValue(key, html)
               handlePersist(html, field, module_refid)
