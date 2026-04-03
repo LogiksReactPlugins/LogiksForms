@@ -64,6 +64,7 @@ export default function CustomSelect({
     return <div className="relative">
         <input
             type="hidden"
+            id={key}
             name={key}
             value={formik.values[key] ?? ""}
         />

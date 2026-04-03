@@ -73,8 +73,8 @@ export default function MultiSelect({
         <div className="relative">
             <input
                 type="hidden"
-                name={key}
-                value={formik.values[key] ?? ""}
+                id={key}
+                value={valueArray.join(",")}
             />
             <label className={labelClasses}>
                 {field.label}
