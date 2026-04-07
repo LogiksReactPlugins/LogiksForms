@@ -58,7 +58,7 @@ export default function NormalFormView({
     };
   }, [flatfields, data]);
 
-  console.log("fields", fields);
+  //console.log("fields", fields);
 
   const chainMap = React.useMemo(
     () => buildChainMap(flatfields), 

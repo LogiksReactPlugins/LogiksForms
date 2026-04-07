@@ -378,7 +378,7 @@ export default function useFieldRenderer({
         }
     }, [filteredOptions, highlightedIndex]);
 
-
+ console.log("chainMap",chainMap);
 
     useEffect(() => {
         const ac = field.autocomplete;          // always single
@@ -577,8 +577,14 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
-                    //  formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
-                    resetChain(field.name, chainMap, formik, setFieldOptions);
+                    console.log("mapped",mapped);
+
+                   
+                    
+                    
+
+                     formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+                   // resetChain(field.name, chainMap, formik, setFieldOptions);
 
                     setFieldOptions?.(chain.target, mapped);
                 }
