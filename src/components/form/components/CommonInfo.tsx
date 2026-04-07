@@ -17,7 +17,8 @@ export default function CommonInfo({
     refid,
     module_refid,
     fieldOptions,
-    setFieldOptions
+    setFieldOptions,
+    chainMap
 
 }: CommonInfoProps) {
 
@@ -80,6 +81,7 @@ export default function CommonInfo({
                                         {...(fieldOptions?.[field.name]
                                             ? { optionsOverride: fieldOptions[field.name] }
                                             : {})}
+                                            chainMap={chainMap}
                                     />
                                 </div>
                             );

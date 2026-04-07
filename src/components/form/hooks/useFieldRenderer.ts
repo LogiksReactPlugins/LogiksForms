@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, OptionItem, sqlQueryProps } from "../Form.types.js";
-import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders } from "../utils.js";
+import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -14,17 +14,18 @@ export default function useFieldRenderer({
     refid,
     module_refid = "menuManager.main",
     optionsOverride,
-    setFieldOptions
+    setFieldOptions,
+    chainMap
 }: FieldRendererProps) {
 
     const [isFocused, setIsFocused] = useState(false);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<OptionItem[]>(
-       mergeOptions(field, optionsOverride ?? [])
+        mergeOptions(field, optionsOverride ?? [])
     );
 
- 
-    
+
+
 
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -57,16 +58,16 @@ export default function useFieldRenderer({
         }
     }, [options]);
 
-  
-    
 
 
 
- useEffect(() => {
-  if (!optionsOverride) return;
 
-  setOptions(mergeOptions(field, optionsOverride));
-}, [optionsOverride]);
+
+    useEffect(() => {
+        if (!optionsOverride) return;
+
+        setOptions(mergeOptions(field, optionsOverride));
+    }, [optionsOverride]);
 
 
 
@@ -99,8 +100,8 @@ export default function useFieldRenderer({
         let isMounted = true;
 
         const fetchData = async () => {
-         
-            
+
+
             let valueKey = field.valueKey ?? "value";
             let labelKey = field.labelKey ?? "title";
 
@@ -576,7 +577,8 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
-                    formik.setFieldValue(chain.target, formik.initialValues[chain.target])
+                    //  formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+                    resetChain(field.name, chainMap, formik, setFieldOptions);
 
                     setFieldOptions?.(chain.target, mapped);
                 }
@@ -651,7 +653,7 @@ export default function useFieldRenderer({
                     field.groupKey
                 );
 
-               setOptions(mergeOptions(field, mapped));
+                setOptions(mergeOptions(field, mapped));
             } catch (err) {
                 if (axios.isCancel(err)) return;
                 console.error("Search fetch failed", err);

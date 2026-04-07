@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { buildChainMap, filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Accordion from './Accordion.js'
 import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
@@ -32,6 +32,11 @@ export default function AccordionFormView({
     }));
   };
 
+  const flatFields = React.useMemo(
+      () => Object.values(groupedFields).flat(),
+      [groupedFields]
+    );
+
   const { initialValues, validationSchema } = React.useMemo(() => {
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
@@ -50,13 +55,18 @@ export default function AccordionFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: (values) => {
-      let flatfields = Object.values(groupedFields).flat();
-      let filteredValues = filterSavableValues(values, flatfields);
+     
+      let filteredValues = filterSavableValues(values, flatFields);
 
       onSubmit(filteredValues)
 
     }
   })
+
+   const chainMap = React.useMemo(
+      () => buildChainMap(flatFields),
+      [flatFields]
+    );
 
   return (
 
@@ -77,6 +87,7 @@ export default function AccordionFormView({
                   methods={methods}
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
+                  chainMap={chainMap}
 
                 />
               </Accordion>
@@ -136,6 +147,7 @@ export default function AccordionFormView({
                         {...(fieldOptions[field.name]
                           ? { optionsOverride: fieldOptions[field.name] }
                           : {})}
+                          chainMap={chainMap}
                       />
                     </div>
                   })}

@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { buildChainMap, filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { SimpleFormViewProps, FormField, OptionItem } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
@@ -58,6 +58,12 @@ export default function NormalFormView({
     };
   }, [flatfields, data]);
 
+  console.log("fields", fields);
+
+  const chainMap = React.useMemo(
+    () => buildChainMap(flatfields), 
+    [flatfields]
+  );
 
 
 
@@ -89,6 +95,7 @@ export default function NormalFormView({
                 methods={methods}
                 setFieldOptions={setOptionsForField}
                 fieldOptions={fieldOptions}
+                chainMap={chainMap}
 
               />
             )}
@@ -138,6 +145,7 @@ export default function NormalFormView({
                     field={field}
                     formik={formik}
                     methods={methods}
+                    chainMap={chainMap}
                     setFieldOptions={setOptionsForField}
                     {...(fieldOptions[field.name]
                       ? { optionsOverride: fieldOptions[field.name] }

@@ -2,7 +2,7 @@ import React from 'react'
 import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { buildChainMap, filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
@@ -67,7 +67,10 @@ export default function TabFormView({
 
 
 
-
+  const flatFields = React.useMemo(
+    () => Object.values(groupedFields).flat(),
+    [groupedFields]
+  );
 
   const currentStepKey = groupNames[activeTabIndex] ?? null;
 
@@ -83,8 +86,8 @@ export default function TabFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(currentStepSchema),
     onSubmit: (values) => {
-      let flatfields = Object.values(groupedFields).flat();
-      let filteredValues = filterSavableValues(values, flatfields);
+
+      let filteredValues = filterSavableValues(values, flatFields);
 
       if (widget) {
         if (activeTabIndex < groupNames.length - 1) {
@@ -105,7 +108,7 @@ export default function TabFormView({
     }
   })
 
-
+  console.log("Object.values(groupedFields).flat()", Object.values(groupedFields).flat());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -135,7 +138,13 @@ export default function TabFormView({
       return pre
     })
   }
+  const chainMap = React.useMemo(
+    () => buildChainMap(flatFields),
+    [flatFields]
+  );
 
+  console.log("flatFields",flatFields);
+  
 
   return (
     <div className=" max-w-full  m-4">
@@ -158,6 +167,7 @@ export default function TabFormView({
                   methods={methods}
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
+                  chainMap={chainMap}
 
                 />
               </div>
@@ -201,7 +211,7 @@ export default function TabFormView({
           <div className='grid grid-cols-12 gap-4'>
             {currentStepKey && tabGroups[currentStepKey]?.map((field, index) => {
 
-              const hidden = isHidden(field.hidden) ;
+              const hidden = isHidden(field.hidden);
               const wrapperClass = `
                   col-span-12 md:col-span-6
                   ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
@@ -252,6 +262,7 @@ export default function TabFormView({
                   {...(fieldOptions[field.name]
                     ? { optionsOverride: fieldOptions[field.name] }
                     : {})}
+                  chainMap={chainMap}
                 />
               </div>
             })}

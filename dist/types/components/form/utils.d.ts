@@ -1,4 +1,5 @@
-import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem } from './Form.types.js';
+import { FormikProps } from 'formik';
+import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
@@ -61,5 +62,7 @@ export declare const mergeOptions: (field: {
     options_top?: any;
     options_bottom?: any;
 }, dynamicOpts?: OptionItem[]) => OptionItem[];
+export declare const buildChainMap: (fields: FormField[]) => ChainMap;
+export declare const resetChain: (sourceKey: keyof ChainMap, chainMap: ChainMap, formik: FormikProps<Record<string, any>>, setFieldOptions?: (fieldName: keyof ChainMap, options: OptionItem[]) => void, visited?: Set<keyof ChainMap>) => void;
 export {};
 //# sourceMappingURL=utils.d.ts.map

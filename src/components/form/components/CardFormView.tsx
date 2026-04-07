@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import FieldRenderer from './FieldRenderer.js';
-import { filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { buildChainMap, filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import Card from './Card.js'
 import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
@@ -32,6 +32,11 @@ export default function CardFormView({
     }));
   };
 
+  const flatFields = React.useMemo(
+    () => Object.values(groupedFields).flat(),
+    [groupedFields]
+  );
+
   const { initialValues, validationSchema } = React.useMemo(() => {
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
@@ -55,12 +60,17 @@ export default function CardFormView({
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: (values) => {
-      let flatfields = Object.values(groupedFields).flat();
-      let filteredValues = filterSavableValues(values, flatfields);
+
+      let filteredValues = filterSavableValues(values, flatFields);
       onSubmit(filteredValues)
 
     }
   })
+
+  const chainMap = React.useMemo(
+    () => buildChainMap(flatFields),
+    [flatFields]
+  );
 
   return (
 
@@ -81,6 +91,7 @@ export default function CardFormView({
                   methods={methods}
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
+                  chainMap={chainMap}
 
                 />
               </Card>
@@ -90,38 +101,38 @@ export default function CardFormView({
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
 
-                    const hidden = isHidden(field.hidden) ;
+                    const hidden = isHidden(field.hidden);
                     const wrapperClass = `
                                             col-span-12 md:col-span-6
                                             ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
                                             ${hidden ? "hidden" : ""}
                                           `;
                     if (field.type === "static" || field.type === "static2") {
-                  const isPrimary = field.type === "static";
+                      const isPrimary = field.type === "static";
 
-                  return (
-                    <div
-                      key={field?.name}
-                      id={`wrapper-${field.name}`}
-                      className="col-span-12"
-                    >
-                      <div
-                        className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
-                      >
-                        <div className="flex items-center justify-between px-4 py-3">
-                          <div className="flex items-center gap-3">
+                      return (
+                        <div
+                          key={field?.name}
+                          id={`wrapper-${field.name}`}
+                          className="col-span-12"
+                        >
+                          <div
+                            className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                          >
+                            <div className="flex items-center justify-between px-4 py-3">
+                              <div className="flex items-center gap-3">
 
-                            <h2
-                              className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
-                            >
-                              {field.label}
-                            </h2>
+                                <h2
+                                  className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
+                                >
+                                  {field.label}
+                                </h2>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                }
+                      );
+                    }
                     return <div
                       id={`wrapper-${field.name}`}
                       key={field?.name ?? `field-${index}`}
@@ -140,6 +151,7 @@ export default function CardFormView({
                         {...(fieldOptions[field.name]
                           ? { optionsOverride: fieldOptions[field.name] }
                           : {})}
+                        chainMap={chainMap}
                       />
                     </div>
                   })}

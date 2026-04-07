@@ -1,7 +1,8 @@
 import * as Yup from "yup";
 import axios from "axios";
+import type { FormikProps } from "formik";
 import DOMPurify from "dompurify";
-import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem } from "./Form.types.js";
+import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap, FormikLike } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 
 export function determineViewMode(json: FormJson) {
@@ -115,7 +116,7 @@ export const intializeForm = (
     ) {
       value = persisted[persistentKey];
     }
-   
+
 
     if (isEmpty(value) && field.default) {
       value = field.default;
@@ -882,4 +883,59 @@ export const mergeOptions = (
     ...dedupe(dynamic),
     ...dedupe(bottom),
   ];
+};
+
+export const buildChainMap = (fields: FormField[]): ChainMap => {
+  const map: ChainMap = {};
+
+  for (const field of fields) {
+    const source = field.name;
+    if (!source) continue;
+
+    const chains = field.ajaxchain;
+    if (!chains) continue;
+
+    const arr = Array.isArray(chains) ? chains : [chains];
+
+    for (const c of arr) {
+      if (!c?.target) continue;
+
+      if (!map[source]) map[source] = [];
+      map[source].push(c.target);
+    }
+  }
+
+  return map;
+};
+
+
+export const resetChain = (
+  sourceKey: keyof ChainMap,
+  chainMap: ChainMap,
+  formik: FormikProps<Record<string, any>>,
+  setFieldOptions?: (
+    fieldName: keyof ChainMap,
+    options: OptionItem[]
+  ) => void,
+  visited: Set<keyof ChainMap> = new Set()
+): void => {
+  if (visited.has(sourceKey)) return;
+  visited.add(sourceKey);
+
+  
+
+  const targets = chainMap[sourceKey] ?? [];
+ 
+
+  for (const target of targets) {
+    formik.setFieldValue(
+      target,
+      formik.initialValues[target],
+      false
+    );
+
+    setFieldOptions?.(target, []);
+
+    resetChain(target, chainMap, formik, setFieldOptions, visited);
+  }
 };

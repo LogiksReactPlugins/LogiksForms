@@ -32,6 +32,9 @@ export type AutocompleteConfig = {
     target: string;
     src: AutocompleteSrc;
 };
+type FieldName = string; // or FormField["name"] if strict
+
+export type ChainMap = Record<FieldName, FieldName[]>;
 
 
 export interface FormField {
@@ -91,7 +94,16 @@ export interface FormField {
 
 }
 
+export type ChainConfig = NonNullable<FormField["ajaxchain"]> extends infer T
+    ? T extends (infer U)[]
+    ? U
+    : T
+    : never;
 
+export type FormikLike = {
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+    initialValues: Record<string, any>;
+};
 export interface CommonInfoProps {
     fields: FormField[];
     formik: FormikProps<Record<string, any>>;
@@ -106,6 +118,7 @@ export interface CommonInfoProps {
         fieldName: string,
         options: OptionItem[]
     ) => void;
+    chainMap: ChainMap;
 }
 
 export type FileItem = {
@@ -171,10 +184,10 @@ export interface FormProps {
 
 }
 export type OptionItem = {
-  value: string;
-  label: string;
-  group?: string;
-  title?:string
+    value: string;
+    label: string;
+    group?: string;
+    title?: string
 };
 export type FlatOptions = Record<string, string>;
 export type GroupedOptions = Record<string, Record<string, string>>;
@@ -215,6 +228,7 @@ export interface FieldRendererProps {
         fieldName: string,
         options: OptionItem[]
     ) => void;
+    chainMap: ChainMap;
 }
 
 export interface sqlQueryProps {

@@ -18,7 +18,8 @@ export default function FieldRenderer({
   refid,
   module_refid = "menuManager.main",
   optionsOverride,
-  setFieldOptions
+  setFieldOptions,
+  chainMap
 }: FieldRendererProps) {
 
   const {
@@ -29,7 +30,7 @@ export default function FieldRenderer({
     options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch, loading
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
-    refid, module_refid,
+    refid, module_refid, chainMap,
     ...(optionsOverride && { optionsOverride }),
     ...(setFieldOptions && { setFieldOptions }),
   })
@@ -185,7 +186,7 @@ export default function FieldRenderer({
     }
     case "richtextarea": {
       return (
-        <div  className="relative">
+        <div className="relative">
           <input
             type="hidden"
             name={key}
