@@ -63,6 +63,7 @@ export declare const mergeOptions: (field: {
     options_bottom?: any;
 }, dynamicOpts?: OptionItem[]) => OptionItem[];
 export declare const buildChainMap: (fields: FormField[]) => ChainMap;
-export declare const resetChain: (sourceKey: keyof ChainMap, chainMap: ChainMap, formik: FormikProps<Record<string, any>>, setFieldOptions?: (fieldName: keyof ChainMap, options: OptionItem[]) => void, visited?: Set<keyof ChainMap>) => void;
+export declare const resetChain: (sourceKey: keyof ChainMap, chainMap: ChainMap, formik: FormikProps<Record<string, any>>, visited?: Set<keyof ChainMap>) => void;
+export declare const getFirstRow: (res: any) => any;
 export {};
 //# sourceMappingURL=utils.d.ts.map

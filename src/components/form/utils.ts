@@ -913,29 +913,35 @@ export const resetChain = (
   sourceKey: keyof ChainMap,
   chainMap: ChainMap,
   formik: FormikProps<Record<string, any>>,
-  setFieldOptions?: (
-    fieldName: keyof ChainMap,
-    options: OptionItem[]
-  ) => void,
   visited: Set<keyof ChainMap> = new Set()
 ): void => {
   if (visited.has(sourceKey)) return;
   visited.add(sourceKey);
 
-  
 
   const targets = chainMap[sourceKey] ?? [];
+
  
 
   for (const target of targets) {
     formik.setFieldValue(
       target,
-      formik.initialValues[target],
-      false
+      formik.initialValues[target]
     );
 
-    setFieldOptions?.(target, []);
+   
 
-    resetChain(target, chainMap, formik, setFieldOptions, visited);
+    resetChain(target, chainMap, formik, visited);
   }
+};
+
+export const  getFirstRow = (res: any) => {
+  const data = res?.data;
+
+  if (Array.isArray(data?.results?.options)) return data.results.options[0];
+  if (Array.isArray(data?.data)) return data.data[0];
+  if (Array.isArray(data?.results)) return data.results[0];
+  if (Array.isArray(data)) return data[0];
+
+  return data?.results ?? data;
 };

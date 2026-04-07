@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, OptionItem, sqlQueryProps } from "../Form.types.js";
-import { buildFileValue, flattenOptions, formatOptions, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
+import { buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -435,18 +435,7 @@ export default function useFieldRenderer({
                         }
 
                         const res = await axios(config);
-                        row = Array.isArray(res?.data?.results?.options) ? res?.data?.results?.options[0] :
-                            Array.isArray(res?.data?.data)
-                                ? res.data.data[0]
-                                : Array.isArray(res?.data?.results)
-                                    ? res.data.results[0]
-                                    : Array.isArray(res?.data)
-                                        ? res.data[0]
-                                        : Array.isArray(res?.data.results)
-                                            ? res?.data.results[0]
-                                            : res.data.results
-                                                ? res.data.results
-                                                : res.data;
+                        row = getFirstRow(res)
                     } else {
 
                         let query: sqlQueryProps | undefined;
@@ -581,15 +570,8 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
-                    console.log("mapped", mapped);
-
-
-
-
-
-                    formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
-                    // resetChain(field.name, chainMap, formik, setFieldOptions);
-
+                    //formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+                    resetChain(field.name, chainMap, formik);                                        
                     setFieldOptions?.(chain.target, mapped);
                 }
             } catch (err) {
