@@ -378,7 +378,7 @@ export default function useFieldRenderer({
         }
     }, [filteredOptions, highlightedIndex]);
 
- console.log("chainMap",chainMap);
+
 
     useEffect(() => {
         const ac = field.autocomplete;          // always single
@@ -434,7 +434,7 @@ export default function useFieldRenderer({
                                 : { data: params }),
                         }
 
-                        const { data: res } = await axios(config);
+                        const res = await axios(config);
                         row = Array.isArray(res?.data?.results?.options) ? res?.data?.results?.options[0] :
                             Array.isArray(res?.data?.data)
                                 ? res.data.data[0]
@@ -442,7 +442,11 @@ export default function useFieldRenderer({
                                     ? res.data.results[0]
                                     : Array.isArray(res?.data)
                                         ? res.data[0]
-                                        : res?.data;
+                                        : Array.isArray(res?.data.results)
+                                            ? res?.data.results[0]
+                                            : res.data.results
+                                                ? res.data.results
+                                                : res.data;
                     } else {
 
                         let query: sqlQueryProps | undefined;
@@ -577,14 +581,14 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
-                    console.log("mapped",mapped);
+                    console.log("mapped", mapped);
 
-                   
-                    
-                    
 
-                     formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
-                   // resetChain(field.name, chainMap, formik, setFieldOptions);
+
+
+
+                    formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+                    // resetChain(field.name, chainMap, formik, setFieldOptions);
 
                     setFieldOptions?.(chain.target, mapped);
                 }

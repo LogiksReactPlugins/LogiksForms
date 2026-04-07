@@ -14,32 +14,16 @@ export declare const example10: {
     };
     source: {
         type: string;
-        cols: string;
-        endpoint: string;
-        method: string;
-        table: string;
-        where: {
-            id: string;
-        };
+        dbopsid: string;
     };
+    forcefill: {
+        guid: string;
+    };
+    gotolink: string;
     fields: {
-        userid: {
-            label: string;
-            required: boolean;
-            search: boolean;
-            type: string;
-            multiple: boolean;
-            orderby: string;
-            width: number;
-            options: {
-                value: string;
-                title: string;
-            }[];
-        };
-        company_spv_id: {
+        company_code_id: {
             label: string;
             type: string;
-            search: boolean;
             parameter: string;
             required: boolean;
             source: {
@@ -55,10 +39,6 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
-            options_top: {
-                label: string;
-                value: string;
-            }[];
             "no-option": string;
             width: number;
             options: never[];
@@ -67,7 +47,6 @@ export declare const example10: {
             label: string;
             "no-option": string;
             type: string;
-            search: boolean;
             parameter: {
                 sector_id: string;
                 company_id: string;
@@ -80,10 +59,6 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
-            options_top: {
-                label: string;
-                value: string;
-            }[];
             required: boolean;
             width: number;
             options: never[];
@@ -92,50 +67,110 @@ export declare const example10: {
             label: string;
             type: string;
             required: boolean;
-            search: boolean;
-            multiple: boolean;
-            parameter: string;
-            options_top: {
-                label: string;
-                value: string;
-            }[];
+            width: number;
+            "no-option": string;
             ajaxchain: {
                 target: string;
                 src: {
                     type: string;
-                    method: string;
-                    endpoint: string;
+                    queryid: string;
                 };
             }[];
-            width: number;
-            "no-option": string;
             options: never[];
         };
-        location_id: {
+        sub_contractor: {
             label: string;
             type: string;
-            search: boolean;
             required: boolean;
+            searchable: boolean;
             width: number;
-            multiple: boolean;
             options: never[];
         };
-        category_id: {
+        section_name: {
             label: string;
             type: string;
-            orderby: string;
-            search: boolean;
             required: boolean;
             width: number;
-            options: {
-                title: string;
-                value: number;
-            }[];
+            options: never[];
         };
-        operation: {
+        make: {
             label: string;
             type: string;
+            required: boolean;
+            width: number;
+        };
+        capacity: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        quantity: {
+            label: string;
+            type: string;
+            default: string;
+            required: boolean;
+            width: number;
+        };
+        least_count: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        serial_no: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        calibration_agency: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        certificate_no: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        date_of_calibration: {
+            label: string;
+            type: string;
+            required: boolean;
+            onChange: string;
+            width: number;
+        };
+        frequency: {
+            label: string;
+            type: string;
+            required: boolean;
+            onChange: string;
+            width: number;
+            options: never[];
+        };
+        due_date_of_calibration: {
+            label: string;
+            onChange: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        next_calibration_due_days: {
+            label: string;
+            type: string;
+            required: boolean;
+            disabled: boolean;
+            width: number;
+        };
+        status: {
+            label: string;
+            type: string;
+            default: string;
             groupid: string;
+            required: boolean;
             width: number;
             options: {
                 title: string;
@@ -144,7 +179,30 @@ export declare const example10: {
                 privilege: string;
             }[];
         };
+        attachments: {
+            label: string;
+            type: string;
+            multiple: boolean;
+            required: boolean;
+            width: number;
+        };
+        description: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        remarks: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
     };
+    infoview: {
+        template: string;
+    };
+    script: string;
     module_refid: string;
     module_type: string;
 };
