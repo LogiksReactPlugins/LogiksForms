@@ -108,7 +108,7 @@ export default function TabFormView({
     }
   })
 
-  console.log("Object.values(groupedFields).flat()", Object.values(groupedFields).flat());
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

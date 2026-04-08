@@ -570,8 +570,8 @@ export default function useFieldRenderer({
                         field.groupKey
                     );
 
-                    //formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
-                    resetChain(field.name, chainMap, formik);                                        
+                    formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+                   // resetChain(field.name, chainMap, formik);                                        
                     setFieldOptions?.(chain.target, mapped);
                 }
             } catch (err) {
