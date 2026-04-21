@@ -53,10 +53,16 @@ export default function LogiksForm({
       }
     };
 
-    initGeo();
+   const timer = setTimeout(() => {
+    if (geoFieldKeys.length > 0) {
+      initGeo();
+      
+    }
+  }, 0);
 
     return () => {
       isMounted = false;
+      clearTimeout(timer);
     };
   }, [geoFieldKeys]);
 
@@ -69,14 +75,24 @@ export default function LogiksForm({
     }));
   }, [initialvalues]);
 
-  const safeSetResolvedData = React.useCallback(
-    (data?: Record<string, any>) => {
-      if (data && Object.keys(data).length > 0) {
-        setResolvedData(data);
+const safeSetResolvedData = React.useCallback(
+  (data?: Record<string, any>) => {
+    if (!data) return;
+
+    setResolvedData(prev => {
+      const merged = { ...prev };
+
+      for (const key in data) {
+        if (data[key] !== null && data[key] !== undefined) {
+          merged[key] = data[key];
+        }
       }
-    },
-    []
-  );
+
+      return merged;
+    });
+  },
+  []
+);
 
 
 
