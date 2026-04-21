@@ -73,7 +73,7 @@ export default function MultiSelect({
         <div className="relative">
             <input
                 type="hidden"
-               
+               name={key}
                 value={valueArray.join(",")}
             />
             <label className={labelClasses}>

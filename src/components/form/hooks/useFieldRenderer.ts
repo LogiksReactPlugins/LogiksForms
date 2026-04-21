@@ -5,6 +5,11 @@ import { buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchCo
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
+declare global {
+  interface Window {
+    setFieldValue: (name: string, value: any) => void;
+  }
+}
 
 export default function useFieldRenderer({
     field,
@@ -68,6 +73,50 @@ export default function useFieldRenderer({
 
         setOptions(mergeOptions(field, optionsOverride));
     }, [optionsOverride]);
+
+   window.setFieldValue = (name, value) => {
+  const input = document.querySelector(`[name="${name}"]`)as HTMLInputElement | null;;
+  if (!input) return;
+
+  // handle array (multiselect)
+  if (Array.isArray(value)) {
+    input.value = JSON.stringify(value);
+  } else {
+    input.value = value ?? "";
+  }
+
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+    
+
+    useEffect(() => {
+  const input = document.querySelector(
+    `[name="${key}"]`
+  ) as HTMLInputElement | null;
+
+  if (!input) return;
+
+  const handler = () => {
+    let val: any = input.value;
+
+    // detect array (multiselect)
+    if (val?.startsWith("[") && val?.endsWith("]")) {
+      try {
+        val = JSON.parse(val);
+      } catch {}
+    }
+
+    formik.setFieldValue(key, val);
+   
+  };
+
+  input.addEventListener("change", handler);
+
+  return () => {
+    input.removeEventListener("change", handler);
+  };
+}, []);
 
 
 
