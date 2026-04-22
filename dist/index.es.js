@@ -15014,7 +15014,7 @@ function Dm({
     return (async () => {
       const k = t?.source ?? {};
       if (!k?.type) {
-        y && f({});
+        y && f((w) => w);
         return;
       }
       if (k.type === "method" && a?.operation !== "create") {
@@ -15024,10 +15024,10 @@ function Dm({
             const N = await v();
             y && m(N);
           } catch (N) {
-            console.error("Method execution failed:", N), y && f({});
+            console.error("Method execution failed:", N), y && f((O) => O);
           }
         else
-          y && f({});
+          y && f((N) => N);
       }
       if (k.type === "api" && a?.operation !== "create")
         try {
@@ -15039,9 +15039,9 @@ function Dm({
             },
             ...k.method === "GET" ? { params: { refid: k.refid } } : { data: { refid: k.refid } }
           }, v = await fe(w);
-          y && f(v.data ?? {});
+          y && m(v.data ?? {});
         } catch (w) {
-          console.error("API fetch failed:", w), y && f({});
+          console.error("API fetch failed:", w), y && f((v) => v);
         }
       if (k.type === "sql" && k.refid && k.refid !== "0" && a?.operation !== "create" || a?.operation !== "create" && k.dbopsid) {
         if (!a) {
@@ -15060,7 +15060,7 @@ function Dm({
             },
             fields: Pi(t.fields, a.operation)
           }, k?.dbopsid, t?.module_refid);
-          y && f(w);
+          y && m(w);
         } catch (w) {
           console.error("API fetch failed:", w);
         }

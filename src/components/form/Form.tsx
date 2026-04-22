@@ -102,7 +102,7 @@ const safeSetResolvedData = React.useCallback(
     const fetchData = async () => {
       const source = formJson?.source ?? {};
       if (!source?.type) {
-        if (isMounted) setResolvedData({});
+        if (isMounted) setResolvedData(prev => prev);
         return;
       }
 
@@ -115,10 +115,10 @@ const safeSetResolvedData = React.useCallback(
             if (isMounted) safeSetResolvedData(result);
           } catch (err) {
             console.error("Method execution failed:", err);
-            if (isMounted) setResolvedData({});
+            if (isMounted) setResolvedData(prev => prev);
           }
         } else {
-          if (isMounted) setResolvedData({});
+          if (isMounted) setResolvedData(prev => prev);
         }
       }
 
@@ -139,10 +139,10 @@ const safeSetResolvedData = React.useCallback(
 
 
           const response = await axios(config);
-          if (isMounted) setResolvedData(response.data ?? {});
+          if (isMounted) safeSetResolvedData(response.data ?? {});
         } catch (err) {
           console.error("API fetch failed:", err);
-          if (isMounted) setResolvedData({});
+          if (isMounted) setResolvedData(prev => prev);
         }
       }
 
@@ -172,7 +172,7 @@ const safeSetResolvedData = React.useCallback(
 
           }, source?.dbopsid, formJson?.module_refid);
 
-          if (isMounted) setResolvedData(data);
+          if (isMounted) safeSetResolvedData(data);
         } catch (err) {
           console.error("API fetch failed:", err);
         }
