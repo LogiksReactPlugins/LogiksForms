@@ -44,6 +44,7 @@ export declare const getInputConfig: (field: FormField) => {
     capture?: "user" | "environment";
 };
 export declare const getIcon: (field: FormField) => "fa-camera" | "fa-camera-retro" | "fa-image";
+export declare const isValidPath: (val: string) => boolean | "";
 export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     uploads: FileItem[];
     currentValue: string | string[] | undefined;

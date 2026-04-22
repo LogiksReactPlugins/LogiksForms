@@ -781,7 +781,8 @@ export const getIcon = (field: FormField) => {
   }
 };
 
-
+export const isValidPath = (val: string) =>
+  val && !val.includes("fakepath");
 export const buildFileValue = ({
   uploads,
   currentValue,
@@ -792,11 +793,13 @@ export const buildFileValue = ({
   multiple?: boolean;
 }) => {
 
-  const existing = Array.isArray(currentValue)
-    ? currentValue
-    : currentValue
-      ? [currentValue]
-      : [];
+  const existing = (
+    Array.isArray(currentValue)
+      ? currentValue
+      : currentValue
+        ? [currentValue]
+        : []
+  ).filter(isValidPath);
 
   const newPaths = uploads.map((f) => `${f.fileId}&${f.path}`)
 

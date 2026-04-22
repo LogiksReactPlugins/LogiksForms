@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { SqlEndpoints } from '../Form.types.js';
 import { getPreviewUrl } from '../service.js';
+import { isValidPath } from '../utils.js';
 type FilePreviewTriggerProps = {
     filePath: string;
     field_name: string;
@@ -8,13 +9,18 @@ type FilePreviewTriggerProps = {
 };
 
 export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: FilePreviewTriggerProps) {
-   const cleanPath = filePath.replace(/^[^&]*&/, "");
+    const cleanPath = filePath.replace(/^[^&]*&/, "");
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     useEffect(() => {
 
         if (!sqlOpsUrls) return;
         let active = true;
         let objectUrl: string | null = null;
+
+            if (!isValidPath(filePath)) {
+            console.log("skipping preview:", filePath);
+            return;
+          }
 
         getPreviewUrl(cleanPath, sqlOpsUrls).then((url) => {
 

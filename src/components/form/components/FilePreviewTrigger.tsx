@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from "react";
-import { fileIconClassMap, getFileExtension, getMimeCategory } from "../utils.js";
+import { fileIconClassMap, getFileExtension, getMimeCategory, isValidPath } from "../utils.js";
 import type { FileCategory, SqlEndpoints } from "../Form.types.js";
 import FilePreview from "./FilePreview.js";
 import { getPreviewUrl } from "../service.js";
@@ -23,6 +23,11 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
   useEffect(() => {
 
     if (!sqlOpsUrls) return;
+
+     if (!isValidPath(filePath)) {
+    console.log("skipping preview:", filePath);
+    return;
+  }
 
   // load immediately for images (thumbnail)
   if (category !== "image" && !open) return;
