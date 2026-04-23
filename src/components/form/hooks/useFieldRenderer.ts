@@ -90,7 +90,7 @@ export default function useFieldRenderer({
 
     
 
-    useEffect(() => {
+useEffect(() => {
   const input = document.querySelector(
     `[name="${key}"]`
   ) as HTMLInputElement | null;
@@ -98,6 +98,9 @@ export default function useFieldRenderer({
   if (!input) return;
 
   const handler = () => {
+    // IGNORE file input native value
+    if (input.type === "file") return;
+
     let val: any = input.value;
 
     // detect array (multiselect)
@@ -108,7 +111,6 @@ export default function useFieldRenderer({
     }
 
     formik.setFieldValue(key, val);
-   
   };
 
   input.addEventListener("change", handler);

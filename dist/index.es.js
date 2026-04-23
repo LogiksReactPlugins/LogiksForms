@@ -1358,6 +1358,7 @@ function Qc({
     );
     if (!A) return;
     const M = () => {
+      if (A.type === "file") return;
       let R = A.value;
       if (R?.startsWith("[") && R?.endsWith("]"))
         try {
