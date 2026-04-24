@@ -16,6 +16,8 @@ export function determineViewMode(json: FormJson) {
   return hasGroup ? 'tab' : 'simple';
 }
 
+export const isAbsoluteUrl = (path: string) => /^https?:\/\//i.test(path);
+
 export function groupFields(
   fields: Record<string, Omit<FormField, "name">>,
   operation: string = "create",

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { SqlEndpoints } from '../Form.types.js';
 import { getPreviewUrl } from '../service.js';
-import { isValidPath } from '../utils.js';
+import { isAbsoluteUrl, isValidPath } from '../utils.js';
 type FilePreviewTriggerProps = {
     filePath: string;
     field_name: string;
@@ -12,6 +12,11 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
     const cleanPath = filePath.replace(/^[^&]*&/, "");
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     useEffect(() => {
+
+         if (isAbsoluteUrl(cleanPath)) {
+              setPreviewUrl(cleanPath);
+              return;
+            }
 
         if (!sqlOpsUrls) return;
         let active = true;

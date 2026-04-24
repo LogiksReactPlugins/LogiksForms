@@ -2,6 +2,7 @@ import { FormikProps } from 'formik';
 import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
+export declare const isAbsoluteUrl: (path: string) => boolean;
 export declare function groupFields(fields: Record<string, Omit<FormField, "name">>, operation?: string, fallbackGroup?: string): Record<string, FormField[]>;
 export declare function transformedObject(originalObject: Record<string, any>, operation?: string): Record<string, {
     label: string;

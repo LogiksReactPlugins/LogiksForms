@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from "react";
-import { fileIconClassMap, getFileExtension, getMimeCategory, isValidPath } from "../utils.js";
+import { fileIconClassMap, getFileExtension, getMimeCategory, isAbsoluteUrl, isValidPath } from "../utils.js";
 import type { FileCategory, SqlEndpoints } from "../Form.types.js";
 import FilePreview from "./FilePreview.js";
 import { getPreviewUrl } from "../service.js";
@@ -21,6 +21,11 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
   const category = getMimeCategory(ext);
 
   useEffect(() => {
+
+     if (isAbsoluteUrl(cleanPath)) {
+      setPreviewUrl(cleanPath);
+      return;
+    }
 
     if (!sqlOpsUrls) return;
 
