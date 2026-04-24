@@ -74,7 +74,7 @@ export default function MultiSelect({
             <input
                 type="hidden"
                name={key}
-                value={valueArray.join(",")}
+                value={JSON.stringify(valueArray ?? [])}
             />
             <label className={labelClasses}>
                 {field.label}

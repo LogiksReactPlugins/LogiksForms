@@ -66,7 +66,7 @@ export default function CustomSelect({
             type="hidden"
            
             name={key}
-            value={formik.values[key] ?? ""}
+            value={JSON.stringify(formik.values[key] ?? "")}
         />
         <label className={labelClasses}>
             {field.label}

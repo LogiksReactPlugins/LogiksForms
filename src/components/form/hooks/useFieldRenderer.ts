@@ -6,9 +6,17 @@ import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
 declare global {
-  interface Window {
-    setFieldValue: (name: string, value: any) => void;
-  }
+    interface Window {
+        formAPI: {
+            setValue: (name: string, value: any) => void;
+            getValue: (name: string) => any;
+            setValues: (values: Record<string, any>) => void;
+            getValues: () => Record<string, any>;
+        };
+
+        // optional: backward compatibility
+        setFieldValue: (name: string, value: any) => void;
+    }
 }
 
 export default function useFieldRenderer({
@@ -65,60 +73,38 @@ export default function useFieldRenderer({
 
 
 
-
-
-
     useEffect(() => {
         if (!optionsOverride) return;
 
         setOptions(mergeOptions(field, optionsOverride));
     }, [optionsOverride]);
 
-   window.setFieldValue = (name, value) => {
-  const input = document.querySelector(`[name="${name}"]`)as HTMLInputElement | null;;
-  if (!input) return;
 
-  // handle array (multiselect)
-  if (Array.isArray(value)) {
-    input.value = JSON.stringify(value);
-  } else {
-    input.value = value ?? "";
-  }
 
-  input.dispatchEvent(new Event("change", { bubbles: true }));
-};
 
-    
+    useEffect(() => {
+        window.formAPI = {
+            setValue: (name, value) => {
+                formik.setFieldValue(name, value);
+            },
+            getValue: (name) => {
+                return formik.values[name];
+            },
+            setValues: (values) => {
+                Object.entries(values).forEach(([k, v]) => {
+                    formik.setFieldValue(k, v);
+                });
+            },
+            getValues: () => {
+                return formik.values;
+            }
+        };
 
-useEffect(() => {
-  const input = document.querySelector(
-    `[name="${key}"]`
-  ) as HTMLInputElement | null;
-
-  if (!input) return;
-
-  const handler = () => {
-    // IGNORE file input native value
-    if (input.type === "file") return;
-
-    let val: any = input.value;
-
-    // detect array (multiselect)
-    if (val?.startsWith("[") && val?.endsWith("]")) {
-      try {
-        val = JSON.parse(val);
-      } catch {}
-    }
-
-    formik.setFieldValue(key, val);
-  };
-
-  input.addEventListener("change", handler);
-
-  return () => {
-    input.removeEventListener("change", handler);
-  };
-}, []);
+        // backward compatibility
+        window.setFieldValue = (name, value) => {
+            formik.setFieldValue(name, value);
+        };
+    }, [formik]);
 
 
 
@@ -622,7 +608,7 @@ useEffect(() => {
                     );
 
                     formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
-                   // resetChain(field.name, chainMap, formik);                                        
+                    // resetChain(field.name, chainMap, formik);                                        
                     setFieldOptions?.(chain.target, mapped);
                 }
             } catch (err) {

@@ -2,6 +2,12 @@ import { FieldRendererProps, FormField, OptionItem } from '../Form.types.js';
 import { handlePersist } from '../utils.js';
 declare global {
     interface Window {
+        formAPI: {
+            setValue: (name: string, value: any) => void;
+            getValue: (name: string) => any;
+            setValues: (values: Record<string, any>) => void;
+            getValues: () => Record<string, any>;
+        };
         setFieldValue: (name: string, value: any) => void;
     }
 }
