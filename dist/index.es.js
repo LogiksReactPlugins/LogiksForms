@@ -14413,8 +14413,7 @@ function Am({
   title: t,
   groupedFields: e,
   data: n,
-  onSubmit: r = (u) => {
-  },
+  onSubmit: r = async (u) => Promise,
   onCancel: s = () => {
   },
   methods: i = {},
@@ -14443,9 +14442,9 @@ function Am({
     initialValues: x,
     enableReinitialize: !0,
     validationSchema: Te.object().shape(y),
-    onSubmit: (w) => {
+    onSubmit: async (w) => {
       let v = Ar(w, g);
-      r(v);
+      await r(v), C.resetForm();
     }
   }), k = se.useMemo(
     () => Er(g),
@@ -14536,7 +14535,7 @@ function Em({
   title: t,
   groupedFields: e,
   data: n,
-  onSubmit: r = (d) => {
+  onSubmit: r = async (d) => {
   },
   onCancel: s = () => {
   },
@@ -14571,9 +14570,9 @@ function Em({
     initialValues: k,
     enableReinitialize: !0,
     validationSchema: Te.object().shape(U),
-    onSubmit: (F) => {
+    onSubmit: async (F) => {
       let q = Ar(F, N);
-      a ? (m < h.length - 1 && g((Q) => Q + 1), m === h.length - 1 && r(q)) : r(q);
+      a ? (m < h.length - 1 && g((Q) => Q + 1), m === h.length - 1 && await r(q)) : await r(q), $.resetForm();
     }
   }), W = async (F) => {
     if (F.preventDefault(), !a) {
@@ -14714,7 +14713,7 @@ function Nm({
   title: t,
   fields: e,
   data: n,
-  onSubmit: r = (c) => {
+  onSubmit: r = async (c) => {
   },
   onCancel: s = () => {
   },
@@ -14746,9 +14745,9 @@ function Nm({
     initialValues: g,
     enableReinitialize: !0,
     validationSchema: Te.object().shape(x),
-    onSubmit: (k) => {
+    onSubmit: async (k) => {
       let w = Ar(k, c);
-      r(w);
+      await r(w), C.resetForm();
     }
   });
   return /* @__PURE__ */ p.jsx(p.Fragment, { children: /* @__PURE__ */ p.jsx("div", { className: "relative max-w-full", children: /* @__PURE__ */ p.jsx("div", { className: "bg-white border border-gray-100 rounded-md animate-in fade-in duration-300 overflow-visible", children: /* @__PURE__ */ p.jsxs("form", { onSubmit: C.handleSubmit, className: "p-4  mx-auto", children: [
@@ -14853,7 +14852,7 @@ function Tm({
   title: t,
   groupedFields: e,
   data: n,
-  onSubmit: r = (u) => {
+  onSubmit: r = async (u) => {
   },
   onCancel: s = () => {
   },
@@ -14863,7 +14862,9 @@ function Tm({
   refid: a,
   module_refid: c
 }) {
-  const { common: u = [], ...d } = e, [f, h] = se.useState({}), m = (w, v) => {
+  const { common: u = [], ...d } = e, [f, h] = se.useState({});
+  console.log("ccccccccccccc", e);
+  const m = (w, v) => {
     h((N) => ({
       ...N,
       [w]: v
@@ -14883,9 +14884,9 @@ function Tm({
     initialValues: x,
     enableReinitialize: !0,
     validationSchema: Te.object().shape(y),
-    onSubmit: (w) => {
+    onSubmit: async (w) => {
       let v = Ar(w, g);
-      r(v);
+      await r(v), C.resetForm();
     }
   }), k = se.useMemo(
     () => Er(g),

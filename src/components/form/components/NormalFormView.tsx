@@ -11,7 +11,7 @@ export default function NormalFormView({
   title,
   fields,
   data,
-  onSubmit = (values) => { },
+  onSubmit = async  (values) => { },
   onCancel = () => { },
   methods = {},
   sqlOpsUrls,
@@ -71,9 +71,10 @@ export default function NormalFormView({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       let filteredValues = filterSavableValues(values, flatfields)
-      onSubmit(filteredValues)
+      await onSubmit(filteredValues);
+      formik.resetForm()
     }
   })
 

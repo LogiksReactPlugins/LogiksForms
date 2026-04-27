@@ -12,7 +12,7 @@ export default function AccordionFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { },
+  onSubmit = async (values) => Promise<any>,
   onCancel = () => { },
   methods = {},
   components = {},
@@ -54,11 +54,12 @@ export default function AccordionFormView({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
      
       let filteredValues = filterSavableValues(values, flatFields);
 
-      onSubmit(filteredValues)
+      await onSubmit(filteredValues);
+      formik.resetForm();
 
     }
   })

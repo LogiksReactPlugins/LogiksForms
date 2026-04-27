@@ -11,7 +11,7 @@ export default function TabFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { },
+  onSubmit = async (values) => { },
   onCancel = () => { },
   methods = {},
   components = {},
@@ -85,7 +85,7 @@ export default function TabFormView({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(currentStepSchema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
 
       let filteredValues = filterSavableValues(values, flatFields);
 
@@ -96,14 +96,14 @@ export default function TabFormView({
 
         if (activeTabIndex === groupNames.length - 1) {
 
-          onSubmit(filteredValues)
+          await onSubmit(filteredValues)
         }
       } else {
 
-        onSubmit(filteredValues);
+        await onSubmit(filteredValues);
       }
 
-
+formik.resetForm()
 
     }
   })

@@ -196,7 +196,7 @@ export type SelectOptions = FlatOptions | GroupedOptions | OptionItem[];
 export interface BaseFormViewProps {
     title?: string | undefined;
     data?: Record<string, any>;
-    onSubmit: (data: Record<string, any>) => void;
+    onSubmit:  (values: Record<string, any>) => Promise<any>;
     onCancel: () => void;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;

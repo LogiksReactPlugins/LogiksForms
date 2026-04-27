@@ -12,7 +12,7 @@ export default function CardFormView({
   title,
   groupedFields,
   data,
-  onSubmit = (values) => { },
+  onSubmit = async (values) => { },
   onCancel = () => { },
   methods = {},
   components = {},
@@ -24,6 +24,9 @@ export default function CardFormView({
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, OptionItem[]>
   >({});
+
+  console.log("ccccccccccccc",groupedFields);
+  
 
   const setOptionsForField = (name: string, options: OptionItem[]) => {
     setFieldOptions(prev => ({
@@ -59,10 +62,11 @@ export default function CardFormView({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(validationSchema),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
 
       let filteredValues = filterSavableValues(values, flatFields);
-      onSubmit(filteredValues)
+      await onSubmit(filteredValues);
+      formik.resetForm()
 
     }
   })
