@@ -1159,7 +1159,7 @@ const qc = (t) => t.type === "camera2" ? {
   multiple: n
 }) => {
   const r = (Array.isArray(e) ? e : e ? [e] : []).filter(Fs), s = t.map((o) => `${o.fileId}&${o.path}`);
-  return [...r, ...s];
+  return n ? [...r, ...s] : s;
 }, Gc = (t) => t === "today" ? (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : t, Yc = (t) => t >= 1024 * 1024 ? `${(t / (1024 * 1024)).toFixed(2)} MB` : `${(t / 1024).toFixed(0)} KB`, Xi = ({
   e: t,
   existingFiles: e,

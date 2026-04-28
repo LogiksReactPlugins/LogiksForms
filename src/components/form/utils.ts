@@ -805,7 +805,7 @@ export const buildFileValue = ({
 
   const newPaths = uploads.map((f) => `${f.fileId}&${f.path}`)
 
-  return [...existing, ...newPaths];
+  return multiple ? [...existing, ...newPaths] : newPaths;
 };
 
 export const getMaxDate = (max?: string | number) => {
