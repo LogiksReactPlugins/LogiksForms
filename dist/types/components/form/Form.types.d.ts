@@ -133,6 +133,7 @@ export interface FormJson {
     widget?: boolean;
     gotolink?: string;
     module_refid?: string | undefined;
+    buttons?: Record<string, any>;
 }
 export interface Toast {
     (message: string): void;
@@ -171,6 +172,7 @@ export interface BaseFormViewProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
+    buttons?: Record<string, any> | undefined;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;

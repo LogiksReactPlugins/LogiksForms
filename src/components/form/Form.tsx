@@ -75,6 +75,10 @@ export default function LogiksForm({
     }));
   }, [initialvalues]);
 
+  console.log("initialvaluesddddddddddd",initialvalues);
+  console.log("resolvedsddddddddddd",initialvalues);
+  
+
 const safeSetResolvedData = React.useCallback(
   (data?: Record<string, any>) => {
     if (!data) return;
