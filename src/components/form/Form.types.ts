@@ -157,7 +157,8 @@ export interface FormJson {
     source: Record<string, any>;
     widget?: boolean;
     gotolink?: string;
-    module_refid?: string | undefined
+    module_refid?: string | undefined;
+    buttons?: Record<string, any>;
 }
 
 
@@ -203,7 +204,8 @@ export interface BaseFormViewProps {
     widget?: boolean | undefined;
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
-    module_refid?: string | undefined
+    module_refid?: string | undefined;
+    buttons?: Record<string, any> | undefined;
 
 }
 

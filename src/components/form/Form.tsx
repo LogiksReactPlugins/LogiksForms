@@ -385,6 +385,7 @@ const safeSetResolvedData = React.useCallback(
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
       module_refid={formJson?.module_refid}
+      buttons={formJson?.buttons}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -397,6 +398,7 @@ const safeSetResolvedData = React.useCallback(
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
       module_refid={formJson?.module_refid}
+      buttons={formJson?.buttons}
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -410,6 +412,7 @@ const safeSetResolvedData = React.useCallback(
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
       module_refid={formJson?.module_refid}
+      buttons={formJson?.buttons}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -422,6 +425,7 @@ const safeSetResolvedData = React.useCallback(
       sqlOpsUrls={sqlOpsUrls}
       refid={refid}
       module_refid={formJson?.module_refid}
+      buttons={formJson?.buttons}
     />
   };
 
