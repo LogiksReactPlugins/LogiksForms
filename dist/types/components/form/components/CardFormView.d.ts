@@ -1,3 +1,3 @@
 import { GroupedFormViewPrps } from '../Form.types.js';
-export default function CardFormView({ title, groupedFields, data, onSubmit, onCancel, methods, components, sqlOpsUrls, refid, module_refid }: GroupedFormViewPrps): import("react/jsx-runtime").JSX.Element;
+export default function CardFormView({ title, groupedFields, data, onSubmit, onCancel, methods, components, sqlOpsUrls, refid, module_refid, buttons }: GroupedFormViewPrps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=CardFormView.d.ts.map

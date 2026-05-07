@@ -82,6 +82,7 @@ export interface FormField {
     content?: string;
     accept?: string;
     file_size?: number;
+    buttons?: Record<string, any> | undefined;
 }
 export type ChainConfig = NonNullable<FormField["ajaxchain"]> extends infer T ? T extends (infer U)[] ? U : T : never;
 export type FormikLike = {
@@ -133,6 +134,7 @@ export interface FormJson {
     widget?: boolean;
     gotolink?: string;
     module_refid?: string | undefined;
+    buttons?: Record<string, any>;
 }
 export interface Toast {
     (message: string): void;
@@ -150,6 +152,7 @@ export interface FormProps {
     components?: Record<string, ReactNode>;
     initialvalues?: Record<string, any>;
     toast?: Toast;
+    location_required?: boolean;
 }
 export type OptionItem = {
     value: string;
@@ -171,6 +174,7 @@ export interface BaseFormViewProps {
     sqlOpsUrls?: SqlEndpoints | undefined;
     refid?: string | undefined;
     module_refid?: string | undefined;
+    buttons?: Record<string, any> | undefined;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;

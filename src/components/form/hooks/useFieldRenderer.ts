@@ -36,7 +36,7 @@ export default function useFieldRenderer({
     const [options, setOptions] = useState<OptionItem[]>(
         mergeOptions(field, optionsOverride ?? [])
     );
-
+const [refreshTrigger, setRefreshTrigger] = useState(0);
 
 
 
@@ -303,7 +303,8 @@ export default function useFieldRenderer({
         field.queryid,
         field.groupKey,
         field.valueKey,
-        field.labelKey
+        field.labelKey,
+        refreshTrigger
     ]);
 
 
@@ -823,7 +824,8 @@ export default function useFieldRenderer({
         isFocused,
         exactMatch,
         triggerRef,
-        loading
+        loading,
+        refreshOptions: () => setRefreshTrigger(c => c + 1),
 
 
     }

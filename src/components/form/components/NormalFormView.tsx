@@ -11,12 +11,13 @@ export default function NormalFormView({
   title,
   fields,
   data,
-  onSubmit = async  (values) => { },
+  onSubmit = async (values) => { },
   onCancel = () => { },
   methods = {},
   sqlOpsUrls,
   refid,
-  module_refid
+  module_refid,
+  buttons
 }: SimpleFormViewProps) {
   const flatfields = flatFields(fields, sqlOpsUrls?.operation);
 
@@ -61,7 +62,7 @@ export default function NormalFormView({
   //console.log("fields", fields);
 
   const chainMap = React.useMemo(
-    () => buildChainMap(flatfields), 
+    () => buildChainMap(flatfields),
     [flatfields]
   );
 
@@ -77,6 +78,31 @@ export default function NormalFormView({
       formik.resetForm()
     }
   })
+
+  let visibleButtons = buttons ? Object.entries(buttons) : []
+
+
+  async function handleClick(method: string, val: Record<string, any>) {
+
+    const methodFn = methods?.[method as keyof typeof methods];
+
+    if (methodFn) {
+      try {
+        await methodFn();
+
+      } catch (err) {
+        console.error("Method execution failed:", err);
+
+      }
+      return
+    }
+    methods?.handleAction?.({ [method]: val }, formik.values)
+
+  }
+
+  const resetForm = () => {
+    formik.resetForm();
+  }
 
 
 
@@ -162,12 +188,29 @@ export default function NormalFormView({
                 <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                   Cancel
                 </button>
+                <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                  Reset
+                </button>
+
                 <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                   Save
                 </button>
               </div>
             </div>
           </form>
+
+          <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+            {visibleButtons &&
+              visibleButtons.map(([key, val]) => (
+                <button
+                  key={key}
+                  onClick={() => handleClick(key, val)}
+                  className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                >
+                  {val.label}
+                </button>
+              ))}
+          </div>
         </div>
 
       </div>

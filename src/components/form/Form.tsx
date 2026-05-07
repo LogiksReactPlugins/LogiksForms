@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 import { determineViewMode, fetchGeolocation, getErrorMessage, getGeoFieldKeys, getSuccessMessage, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
@@ -18,6 +18,7 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
+  location_required = true
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
@@ -53,12 +54,12 @@ export default function LogiksForm({
       }
     };
 
-   const timer = setTimeout(() => {
-    if (geoFieldKeys.length > 0) {
-      initGeo();
-      
-    }
-  }, 0);
+    const timer = setTimeout(() => {
+      if (geoFieldKeys.length > 0) {
+        initGeo();
+
+      }
+    }, 0);
 
     return () => {
       isMounted = false;
@@ -75,24 +76,24 @@ export default function LogiksForm({
     }));
   }, [initialvalues]);
 
-const safeSetResolvedData = React.useCallback(
-  (data?: Record<string, any>) => {
-    if (!data) return;
+  const safeSetResolvedData = React.useCallback(
+    (data?: Record<string, any>) => {
+      if (!data) return;
 
-    setResolvedData(prev => {
-      const merged = { ...prev };
+      setResolvedData(prev => {
+        const merged = { ...prev };
 
-      for (const key in data) {
-        if (data[key] !== null && data[key] !== undefined) {
-          merged[key] = data[key];
+        for (const key in data) {
+          if (data[key] !== null && data[key] !== undefined) {
+            merged[key] = data[key];
+          }
         }
-      }
 
-      return merged;
-    });
-  },
-  []
-);
+        return merged;
+      });
+    },
+    []
+  );
 
 
 
@@ -197,24 +198,45 @@ const safeSetResolvedData = React.useCallback(
   const handleSubmit = async (values: Record<string, any>) => {
     const source = formJson?.source ?? {};
 
+    let finalGeo = "0,0";
     let finalValues = { ...values };
 
     if (geoFieldKeys.length > 0) {
       const missingKeys = geoFieldKeys.filter(k => !values[k]);
+      const geoKey = geoFieldKeys[0]!;
+      const geoValue = values[geoKey];
+
+      if (location_required && (!geoValue || geoValue === "0,0")) {
+        toast?.error?.("Location permission is required");
+        return;
+      }
+
+      finalGeo = geoValue || "0,0";
 
       if (missingKeys.length > 0) {
-        try {
-          const geo = await fetchGeolocation();
 
-          finalValues = {
-            ...values,
-            ...Object.fromEntries(
-              missingKeys.map(k => [k, geo])
-            ),
-          };
-        } catch (err) {
-          console.warn("Geo fetch failed");
+        finalValues = {
+          ...values,
+          ...Object.fromEntries(
+            missingKeys.map(k => [k, finalGeo])
+          ),
+        };
+
+      }
+    }
+
+    else if (location_required) {
+      try {
+        const geo = await fetchGeolocation();
+
+        if (!geo) {
+          toast?.error?.("Location permission is required");
+          return;
         }
+        finalGeo = geo;
+      } catch (err) {
+        toast?.error?.("Location permission is required");
+        return;
       }
     }
 
@@ -224,7 +246,8 @@ const safeSetResolvedData = React.useCallback(
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          const res = await methodFn(finalValues);
+          let values = finalValues ? { ...finalValues, geolocation: finalGeo } : {}
+          const res = await methodFn(values);
           callback?.(res);
           toast?.success?.(getSuccessMessage(res));
 
@@ -255,7 +278,7 @@ const safeSetResolvedData = React.useCallback(
         const res = await axios({
           method: source.method || "POST",
           url: sqlOpsUrls.baseURL + source.endpoint,
-          data: finalValues ?? {},
+          data: finalValues ? { ...finalValues, geolocation: finalGeo } : {},
           headers: {
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
@@ -329,7 +352,8 @@ const safeSetResolvedData = React.useCallback(
               "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
               "forcefill": formJson.forcefill,
               "datahash": resHashId.data.refhash,
-              srcid: formJson?.module_refid
+              srcid: formJson?.module_refid,
+              "geolocation": finalGeo
             },
 
             headers: {

@@ -91,6 +91,7 @@ export interface FormField {
     content?: string;
     accept?: string;
     file_size?: number;
+    buttons?: Record<string, any> | undefined;
 
 }
 
@@ -181,6 +182,7 @@ export interface FormProps {
     components?: Record<string, ReactNode>
     initialvalues?: Record<string, any>;
     toast?: Toast;
+    location_required?: boolean;
 
 
 }
@@ -197,7 +199,7 @@ export type SelectOptions = FlatOptions | GroupedOptions | OptionItem[];
 export interface BaseFormViewProps {
     title?: string | undefined;
     data?: Record<string, any>;
-    onSubmit:  (values: Record<string, any>) => Promise<any>;
+    onSubmit: (values: Record<string, any>) => Promise<any>;
     onCancel: () => void;
     methods?: Record<string, Function>;
     components?: Record<string, ReactNode>;

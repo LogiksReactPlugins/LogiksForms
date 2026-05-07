@@ -18,7 +18,8 @@ export default function TabFormView({
   sqlOpsUrls,
   widget,
   refid,
-  module_refid
+  module_refid,
+  buttons
 
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
@@ -103,12 +104,12 @@ export default function TabFormView({
         await onSubmit(filteredValues);
       }
 
-formik.resetForm()
+      formik.resetForm()
 
     }
   })
 
-  
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -143,8 +144,36 @@ formik.resetForm()
     [flatFields]
   );
 
-  console.log("flatFields",flatFields);
-  
+  const resetForm = () => {
+    formik.resetForm();
+  }
+
+
+  let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+    if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
+    return true;
+  }) : []
+
+
+  async function handleClick(method: string, val: Record<string, any>) {
+
+    const methodFn = methods?.[method as keyof typeof methods];
+
+    if (methodFn) {
+      try {
+        await methodFn();
+
+      } catch (err) {
+        console.error("Method execution failed:", err);
+
+      }
+      return
+    }
+    methods?.handleAction?.({ [method]: val }, formik.values)
+
+  }
+
+
 
   return (
     <div className=" max-w-full  m-4">
@@ -276,6 +305,9 @@ formik.resetForm()
               <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                 Cancel
               </button>
+              <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                Reset
+              </button>
               <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                 {widget ? "Next" : "Save"}
               </button>
@@ -305,6 +337,19 @@ formik.resetForm()
           </div>
         </div>
       </form>
+
+      <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+        {visibleButtons &&
+          visibleButtons.map(([key, val]) => (
+            <button
+              key={key}
+              onClick={() => handleClick(key, val)}
+              className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
+              {val.label}
+            </button>
+          ))}
+      </div>
 
     </div>
   );
