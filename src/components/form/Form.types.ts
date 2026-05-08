@@ -53,7 +53,6 @@ export interface FormField {
     error_message?: string;      // error message if regex fails
     placeholder?: string;        // input placeholder
     field_error?: string;
-    axiosObject?: AxiosRequestConfig,
     valueKey?: string;
     labelKey?: string;
     groupKey?: string;
@@ -92,6 +91,7 @@ export interface FormField {
     accept?: string;
     file_size?: number;
     buttons?: Record<string, any> | undefined;
+    capture?: "user" | "environment";
 
 }
 

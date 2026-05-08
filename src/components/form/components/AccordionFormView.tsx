@@ -57,10 +57,18 @@ export default function AccordionFormView({
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: async (values) => {
 
+      try {
+        
+     
+
       let filteredValues = filterSavableValues(values, flatFields);
 
-      await onSubmit(filteredValues);
+      const res = await onSubmit(filteredValues);
+     console.log("res",res)
       formik.resetForm();
+       } catch (error) {
+        console.log("error",error)
+      }
 
     }
   })

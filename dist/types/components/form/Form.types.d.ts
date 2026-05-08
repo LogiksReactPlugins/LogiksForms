@@ -1,5 +1,4 @@
 import { FormikProps } from 'formik';
-import { AxiosRequestConfig } from 'axios';
 import { ReactNode } from 'react';
 type ApiSrc = {
     type: string;
@@ -44,7 +43,6 @@ export interface FormField {
     error_message?: string;
     placeholder?: string;
     field_error?: string;
-    axiosObject?: AxiosRequestConfig;
     valueKey?: string;
     labelKey?: string;
     groupKey?: string;
@@ -83,6 +81,7 @@ export interface FormField {
     accept?: string;
     file_size?: number;
     buttons?: Record<string, any> | undefined;
+    capture?: "user" | "environment";
 }
 export type ChainConfig = NonNullable<FormField["ajaxchain"]> extends infer T ? T extends (infer U)[] ? U : T : never;
 export type FormikLike = {

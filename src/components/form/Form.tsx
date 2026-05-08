@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { determineViewMode, fetchGeolocation, getErrorMessage, getGeoFieldKeys, getSuccessMessage, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
+import { determineViewMode, fetchGeolocation, getAltitudeFieldKeys, getErrorMessage, getGeoFieldKeys, getSuccessMessage, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
@@ -33,20 +33,34 @@ export default function LogiksForm({
   }, [formJson.fields]);
 
 
+  const altitudeFieldKeys = React.useMemo(() => {
+    return getAltitudeFieldKeys(formJson.fields);
+  }, [formJson.fields]);
+
+
   React.useEffect(() => {
     let isMounted = true;
 
     const initGeo = async () => {
 
       try {
-        const geo = await fetchGeolocation();
+        const { latitude, longitude, altitude } = await fetchGeolocation();
+
+        const geo = `${latitude},${longitude}`;
+        const resolvedValues: Record<string, any> = {};
+
+        geoFieldKeys.forEach((key) => {
+          resolvedValues[key] = geo;
+        });
+
+        altitudeFieldKeys.forEach((key) => {
+          resolvedValues[key] = altitude ?? "";
+        });
 
         if (isMounted) {
           setResolvedData(prev => ({
             ...prev,
-            ...Object.fromEntries(
-              geoFieldKeys.map(key => [key, geo])
-            ),
+            ...resolvedValues
           }));
         }
       } catch (err) {
@@ -55,7 +69,8 @@ export default function LogiksForm({
     };
 
     const timer = setTimeout(() => {
-      if (geoFieldKeys.length > 0) {
+      if (geoFieldKeys.length > 0 ||
+        altitudeFieldKeys.length > 0) {
         initGeo();
 
       }
@@ -65,7 +80,7 @@ export default function LogiksForm({
       isMounted = false;
       clearTimeout(timer);
     };
-  }, [geoFieldKeys]);
+  }, [geoFieldKeys, altitudeFieldKeys]);
 
 
 
@@ -139,8 +154,16 @@ export default function LogiksForm({
           }
 
 
-          const response = await axios(config);
-          if (isMounted) safeSetResolvedData(response.data ?? {});
+          const { data } = await axios(config);
+
+          const value = data?.results?.options ?
+            data?.results?.options : data.data
+              ? data.data
+              : data.results
+                ? data.results
+                : data
+
+          if (isMounted) safeSetResolvedData(value ?? {});
         } catch (err) {
           console.error("API fetch failed:", err);
           if (isMounted) setResolvedData(prev => prev);
@@ -201,24 +224,43 @@ export default function LogiksForm({
     let finalGeo = "0,0";
     let finalValues = { ...values };
 
-    if (geoFieldKeys.length > 0) {
-      const missingKeys = geoFieldKeys.filter(k => !values[k]);
-      const geoKey = geoFieldKeys[0]!;
-      const geoValue = values[geoKey];
+    if (geoFieldKeys.length > 0 ||
+      altitudeFieldKeys.length > 0) {
+      const geoMissingKeys = geoFieldKeys.filter(
+        (k) => !values[k]
+      );
+
+      const altitudeMissingKeys = altitudeFieldKeys.filter(
+        (k) => values[k] === undefined || values[k] === null || values[k] === ""
+      );
+
+
+      const geoKey = geoFieldKeys[0];
+      const altitudeKey = altitudeFieldKeys[0]
+      const geoValue = geoKey ? values[geoKey] : null;
+      const altitudeValue = altitudeKey ? values[altitudeKey] : null;
 
       if (location_required && (!geoValue || geoValue === "0,0")) {
         toast?.error?.("Location permission is required");
-        return;
+        throw new Error("Location permission is required");
+
       }
 
       finalGeo = geoValue || "0,0";
 
-      if (missingKeys.length > 0) {
+      if (geoMissingKeys.length > 0 ||
+        altitudeMissingKeys.length > 0) {
 
         finalValues = {
           ...values,
           ...Object.fromEntries(
-            missingKeys.map(k => [k, finalGeo])
+            geoMissingKeys.map(k => [k, finalGeo])
+          ),
+          ...Object.fromEntries(
+            altitudeMissingKeys.map((k) => [
+              k,
+              altitudeValue,
+            ])
           ),
         };
 
@@ -227,16 +269,18 @@ export default function LogiksForm({
 
     else if (location_required) {
       try {
-        const geo = await fetchGeolocation();
+        const { latitude, longitude } = await fetchGeolocation();
+
+        const geo = `${latitude},${longitude}`
 
         if (!geo) {
           toast?.error?.("Location permission is required");
-          return;
+          throw new Error("Location permission is required");
         }
         finalGeo = geo;
       } catch (err) {
         toast?.error?.("Location permission is required");
-        return;
+        throw new Error("Location permission is required");
       }
     }
 
@@ -272,7 +316,8 @@ export default function LogiksForm({
     if (source.type === "api") {
       if (!sqlOpsUrls) {
         console.error("SQL source requires formJson.endPoints but it is missing");
-        return;
+        throw new Error("Something went wrong");
+
       }
       try {
         const res = await axios({
@@ -298,7 +343,8 @@ export default function LogiksForm({
       } catch (err) {
         // callback?.(err);
         toast?.error?.(getErrorMessage(err));
-        console.error("API fetch failed:", err);
+        throw new Error("API submit failed");
+
       }
     }
 
@@ -308,7 +354,8 @@ export default function LogiksForm({
 
       if (!sqlOpsUrls) {
         console.error("SQL source requires formJson.endPoints but it is missing");
-        return;
+        throw new Error("SQL source requires formJson.endPoints but it is missing");
+
       }
 
       try {
@@ -390,7 +437,8 @@ export default function LogiksForm({
       } catch (err) {
         // callback?.(err);
         toast?.error?.(getErrorMessage(err));
-        console.error("API fetch failed:", err);
+
+        throw new Error("API submit failed");
       }
     }
   };

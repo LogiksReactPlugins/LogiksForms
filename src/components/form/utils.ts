@@ -85,6 +85,9 @@ export function transformedObject(originalObject: Record<string, any>, operation
 const isEmpty = (v: any) =>
   v === undefined || v === null || v === "";
 
+const isStringValidator = (schema: Yup.AnySchema): schema is Yup.StringSchema =>
+  schema.type === "string";
+
 export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,
@@ -230,17 +233,22 @@ export const intializeForm = (
             break;
 
           case "mobile":
-            validator = (validator as Yup.StringSchema).matches(
-              /^[1-9][0-9]*$/,
-              "Invalid mobile number format"
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                /^[1-9][0-9]*$/,
+                "Invalid mobile number format"
+              );
+            }
+
             break;
 
           case "regex":
-            validator = (validator as Yup.StringSchema).matches(
-              new RegExp(val as string),
-              field?.error_message || `Must match pattern: ${val}`
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                new RegExp(val as string),
+                field?.error_message || `Must match pattern: ${val}`
+              );
+            }
             break;
 
           case "date":
@@ -264,17 +272,21 @@ export const intializeForm = (
 
 
           case "time":
-            validator = (validator as Yup.StringSchema).matches(
-              /^([0-1][0-9]|2[0-3])[:\-]([0-5][0-9])$/,
-              "Invalid time format (HH:MM)"
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                /^([0-1][0-9]|2[0-3])[:\-]([0-5][0-9])$/,
+                "Invalid time format (HH:MM)"
+              );
+            }
             break;
 
           case "timesec":
-            validator = (validator as Yup.StringSchema).matches(
-              /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/,
-              "Invalid time format (HH:MM:SS)"
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                /^([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/,
+                "Invalid time format (HH:MM:SS)"
+              );
+            }
             break;
 
           case "number":
@@ -300,17 +312,21 @@ export const intializeForm = (
             break;
 
           case "alphanumeric":
-            validator = (validator as Yup.StringSchema).matches(
-              /^[a-z0-9]+$/i,
-              "Must be alphanumeric"
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                /^[a-z0-9]+$/i,
+                "Must be alphanumeric"
+              );
+            }
             break;
 
           case "alpha":
-            validator = (validator as Yup.StringSchema).matches(
-              /^[a-zA-Z]+$/,
-              "Must contain only letters"
-            );
+            if (isStringValidator(validator)) {
+              validator = (validator as Yup.StringSchema).matches(
+                /^[a-zA-Z]+$/,
+                "Must contain only letters"
+              );
+            }
             break;
 
           case "upper":
@@ -523,7 +539,14 @@ export const flattenOptions = (options: OptionItem[]): FlatEntry[] => {
   return options.map((o) => [o.value, o.label]);
 };
 
-export async function fetchGeolocation(): Promise<string | null> {
+export type GeolocationData = {
+  latitude: number;
+  longitude: number;
+  altitude: number | null;
+  accuracy: number;
+};
+
+export async function fetchGeolocation(): Promise<GeolocationData> {
   if (!("geolocation" in navigator)) {
     throw new Error(
       "Geolocation is not supported by this browser. You cannot access this portal."
@@ -534,15 +557,27 @@ export async function fetchGeolocation(): Promise<string | null> {
     const position = await new Promise<GeolocationPosition>(
       (resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: false,
+          enableHighAccuracy: true,
           timeout: 30000,
-          maximumAge: 120000,
+          maximumAge: 0,
         });
       }
     );
 
-    const { latitude, longitude } = position.coords;
-    return `${latitude},${longitude}`;
+    const {
+      latitude,
+      longitude,
+      altitude,
+      accuracy,
+    } = position.coords;
+
+    return {
+      latitude,
+      longitude,
+      altitude,
+      accuracy,
+    };
+
   } catch (error) {
     if (!(error instanceof GeolocationPositionError)) {
       throw new Error("Failed to get your location.");
@@ -566,6 +601,14 @@ export async function fetchGeolocation(): Promise<string | null> {
 export const getGeoFieldKeys = (fields: Record<string, Omit<FormField, "name">>) => {
   return Object.entries(fields ?? {})
     .filter(([, field]: any) => field.type === "geolocation")
+    .map(([key]) => key);
+};
+
+export const getAltitudeFieldKeys = (
+  fields: Record<string, Omit<FormField, "name">>
+) => {
+  return Object.entries(fields ?? {})
+    .filter(([, field]: any) => field.type === "altitude")
     .map(([key]) => key);
 };
 
@@ -914,6 +957,44 @@ export const buildChainMap = (fields: FormField[]): ChainMap => {
 };
 
 
+export const buildApiParams = ({
+  field,
+  formValues,
+}: {
+  field: FormField;
+  formValues: Record<string, any>;
+}) => {
+
+  const params: Record<string, any> = {
+
+  };
+
+  if (typeof field.parameter === "string" && field.parameter) {
+    params[field.parameter] =
+      formValues[field.parameter];
+    return params;
+
+  }
+
+
+
+  if (
+    typeof field.parameter === "object" &&
+    field.parameter !== null &&
+    Object.keys(field.parameter).length > 0
+  ) {
+    for (const [key, val] of Object.entries(field.parameter)) {
+      params[key] = formValues?.[val as string];
+    }
+  }
+
+  console.log("ddddddddparams", params);
+
+
+  return params;
+};
+
+
 export const resetChain = (
   sourceKey: keyof ChainMap,
   chainMap: ChainMap,
@@ -926,7 +1007,7 @@ export const resetChain = (
 
   const targets = chainMap[sourceKey] ?? [];
 
- 
+
 
   for (const target of targets) {
     formik.setFieldValue(
@@ -934,13 +1015,13 @@ export const resetChain = (
       formik.initialValues[target]
     );
 
-   
+
 
     resetChain(target, chainMap, formik, visited);
   }
 };
 
-export const  getFirstRow = (res: any) => {
+export const getFirstRow = (res: any) => {
   const data = res?.data;
 
   if (Array.isArray(data?.results?.options)) return data.results.options[0];

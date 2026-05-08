@@ -766,7 +766,8 @@ export default function FieldRenderer({
         const handleFetchLocation = async () => {
           try {
 
-            const geo = await fetchGeolocation();
+            const { latitude, longitude } = await fetchGeolocation();
+            const geo = `${latitude},${longitude}`
 
             formik.setFieldValue(key, geo);
             handlePersist(geo, field, module_refid);
@@ -804,6 +805,72 @@ export default function FieldRenderer({
                   <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
                 ) : (
                   <i className="fa-solid fa-location-dot text-red-600 hover:text-red-700"></i>
+                )}
+              </button>
+            </div>
+
+            {formik.touched[key] && formik.errors[key] && (
+              <span className="text-xs text-red-500">
+                {String(formik.errors[key])}
+              </span>
+            )}
+          </div>
+        );
+      }
+
+      case "altitude": {
+        const value = formik.values[key] || "";
+
+        const handleFetchAltitude = async () => {
+          try {
+            setLoading(true);
+
+            const { altitude } = await fetchGeolocation();
+            formik.setFieldValue(key, altitude);
+            handlePersist(altitude, field, module_refid);
+
+          } catch (err) {
+            console.error(err);
+
+            formik.setFieldError(
+              key,
+              "Failed to fetch altitude"
+            );
+
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        return (
+          <div className="relative">
+            <label className={labelClasses}>
+              {field.label}
+
+              {field.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
+            </label>
+
+            <div className="relative">
+              <input
+                type="text"
+                value={value}
+                readOnly
+                className={`${baseInputClasses} ${focusClasses}`}
+                placeholder="Click to fetch altitude"
+              />
+
+              <button
+                type="button"
+                onClick={handleFetchAltitude}
+                disabled={loading}
+                className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+              >
+                {loading ? (
+                  <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
+                ) : (
+                  <i className="fa-solid fa-mountain text-blue-600 hover:text-blue-700"></i>
                 )}
               </button>
             </div>

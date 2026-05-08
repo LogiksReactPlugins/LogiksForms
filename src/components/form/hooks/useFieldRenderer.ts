@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, OptionItem, sqlQueryProps } from "../Form.types.js";
-import { buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
+import { buildApiParams, buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -36,7 +36,7 @@ export default function useFieldRenderer({
     const [options, setOptions] = useState<OptionItem[]>(
         mergeOptions(field, optionsOverride ?? [])
     );
-const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
 
 
@@ -183,6 +183,19 @@ const [refreshTrigger, setRefreshTrigger] = useState(0);
             // Case 2: API source
             if (source.type === "api" && source.endpoint) {
                 try {
+                    let payload: Record<string, any> = {};
+                    if (source.refid) {
+                        payload.refid = source.refid;
+                    }
+                    if (field.parameter) {
+                        const params = buildApiParams({ field, formValues: formik.values });
+                        console.log("paramsssssss",field.name, params);
+                        console.log("payload", payload);
+
+
+                        payload = { ...payload, ...params }
+                    }
+
                     const config = {
                         method: source.method || "GET",
                         url: sqlOpsUrls?.baseURL + source.endpoint,
@@ -192,7 +205,7 @@ const [refreshTrigger, setRefreshTrigger] = useState(0);
                         },
                         ...(source.method === "GET"
                             ? { params: { refid: source.refid } }
-                            : { data: { refid: source.refid } }),
+                            : { data: payload }),
                     }
 
                     const res = await axios(config);

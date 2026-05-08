@@ -96,18 +96,26 @@ export default function TabFormView({
         }
 
         if (activeTabIndex === groupNames.length - 1) {
-
-          await onSubmit(filteredValues)
+          submitValues(filteredValues)
         }
       } else {
 
-        await onSubmit(filteredValues);
+        submitValues(filteredValues)
       }
-
-      formik.resetForm()
 
     }
   })
+
+  const submitValues = async (values: Record<string, any>) => {
+    try {
+      const res = await onSubmit(values);
+      console.log("res", res);
+      formik.resetForm()
+
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
 
 

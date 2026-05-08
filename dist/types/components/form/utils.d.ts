@@ -22,8 +22,15 @@ export declare const getOptionLabel: (options: OptionItem[], value: string) => s
 export declare const groupOptions: (options: OptionItem[]) => Record<string, OptionItem[]>;
 export type FlatEntry = [string, string];
 export declare const flattenOptions: (options: OptionItem[]) => FlatEntry[];
-export declare function fetchGeolocation(): Promise<string | null>;
+export type GeolocationData = {
+    latitude: number;
+    longitude: number;
+    altitude: number | null;
+    accuracy: number;
+};
+export declare function fetchGeolocation(): Promise<GeolocationData>;
 export declare const getGeoFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
+export declare const getAltitudeFieldKeys: (fields: Record<string, Omit<FormField, "name">>) => string[];
 export declare function flatFields(fields: Record<string, Omit<FormField, "name">>, operation?: string): FormField[];
 export declare function handlePersist(value: any, field: FormField, module_refid: string | undefined): void;
 export declare function isAutocompleteConfig(ac: unknown): ac is AutocompleteConfig;
@@ -65,6 +72,10 @@ export declare const mergeOptions: (field: {
     options_bottom?: any;
 }, dynamicOpts?: OptionItem[]) => OptionItem[];
 export declare const buildChainMap: (fields: FormField[]) => ChainMap;
+export declare const buildApiParams: ({ field, formValues, }: {
+    field: FormField;
+    formValues: Record<string, any>;
+}) => Record<string, any>;
 export declare const resetChain: (sourceKey: keyof ChainMap, chainMap: ChainMap, formik: FormikProps<Record<string, any>>, visited?: Set<keyof ChainMap>) => void;
 export declare const getFirstRow: (res: any) => any;
 export {};

@@ -86,6 +86,9 @@ export default function PhotoAvatarRenderer({
 
     const inputConfig = getInputConfig(field);
     const isMultiple = field.multiple === true;
+
+    console.log("inputConfig",inputConfig);
+    
     return (
         <div >
             <label className="block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700">
