@@ -18,14 +18,14 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
-  location_required = false
+  location_required = true
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
-  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {}); 
 
   const isLocationRequired =
     location_required && formJson.location_required !== false;
