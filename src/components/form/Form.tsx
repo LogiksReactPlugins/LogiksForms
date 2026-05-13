@@ -18,7 +18,7 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
-  location_required = true
+  location_required = false
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
@@ -27,6 +27,11 @@ export default function LogiksForm({
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
 
+  const isLocationRequired =
+    location_required && formJson.location_required !== false;
+
+    console.log("isLocationRequired",isLocationRequired);
+    
 
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
@@ -226,6 +231,31 @@ export default function LogiksForm({
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
+
+      const geoKey = geoFieldKeys[0];
+      const geoValue = geoKey ? values[geoKey] : null;
+      finalGeo = geoValue || "0,0";
+
+      if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
+
+        try {
+
+
+          const { latitude, longitude } = await fetchGeolocation();
+          const geo = `${latitude},${longitude}`
+          if (!geo) {
+            toast?.error?.("Location permission is required");
+             throw new Error("Location permission is required");
+          }
+
+          finalGeo = geo;
+        } catch (error) {
+          toast?.error?.("Location permission is required");
+           throw new Error("Location permission is required");
+        }
+
+      }
+
       const geoMissingKeys = geoFieldKeys.filter(
         (k) => !values[k]
       );
@@ -234,19 +264,8 @@ export default function LogiksForm({
         (k) => values[k] === undefined || values[k] === null || values[k] === ""
       );
 
-
-      const geoKey = geoFieldKeys[0];
       const altitudeKey = altitudeFieldKeys[0]
-      const geoValue = geoKey ? values[geoKey] : null;
       const altitudeValue = altitudeKey ? values[altitudeKey] : null;
-
-      if (location_required && (!geoValue || geoValue === "0,0")) {
-        toast?.error?.("Location permission is required");
-        throw new Error("Location permission is required");
-
-      }
-
-      finalGeo = geoValue || "0,0";
 
       if (geoMissingKeys.length > 0 ||
         altitudeMissingKeys.length > 0) {
@@ -267,7 +286,9 @@ export default function LogiksForm({
       }
     }
 
-    else if (location_required) {
+    else if (isLocationRequired) {
+
+      console.log("insdide isLocationRequired",isLocationRequired);
       try {
         const { latitude, longitude } = await fetchGeolocation();
 
@@ -280,9 +301,11 @@ export default function LogiksForm({
         finalGeo = geo;
       } catch (err) {
         toast?.error?.("Location permission is required");
-        throw new Error("Location permission is required");
+         throw new Error("Location permission is required");
+      
       }
     }
+
 
 
     if (source.type === "method") {
@@ -308,7 +331,8 @@ export default function LogiksForm({
         } catch (err) {
           // callback?.(err);
           toast?.error?.(getErrorMessage(err));
-          console.error("Method execution failed:", err);
+          throw new Error(getErrorMessage(err));
+        
         }
       }
     }
@@ -343,7 +367,7 @@ export default function LogiksForm({
       } catch (err) {
         // callback?.(err);
         toast?.error?.(getErrorMessage(err));
-        throw new Error("API submit failed");
+        throw new Error(getErrorMessage(err));
 
       }
     }
@@ -438,7 +462,7 @@ export default function LogiksForm({
         // callback?.(err);
         toast?.error?.(getErrorMessage(err));
 
-        throw new Error("API submit failed");
+        throw new Error(getErrorMessage(err));
       }
     }
   };

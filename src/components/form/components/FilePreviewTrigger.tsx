@@ -14,7 +14,7 @@ function getFileIcon(category: FileCategory): JSX.Element {
 }
 
 const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) => {
-  const cleanPath = filePath.replace(/^[^&]*&/, "");
+  const cleanPath = filePath?.replace(/^[^&]*&/, "");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
  const ext = getFileExtension(cleanPath);

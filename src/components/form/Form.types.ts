@@ -151,6 +151,7 @@ export interface SqlEndpoints {
 
 export interface FormJson {
     title?: string | undefined;
+    location_required?: boolean;
     template?: string;
     endPoints?: SqlEndpoints;
     forcefill?: Record<string, string>;

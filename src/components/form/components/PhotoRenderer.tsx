@@ -9,7 +9,7 @@ type FilePreviewTriggerProps = {
 };
 
 export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: FilePreviewTriggerProps) {
-    const cleanPath = filePath.replace(/^[^&]*&/, "");
+    const cleanPath = filePath?.replace(/^[^&]*&/, "");
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     useEffect(() => {
 
