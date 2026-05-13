@@ -15282,9 +15282,7 @@ function Pm({
   location_required: l = !1
 }) {
   let a = Lc(t);
-  const c = t.endPoints, u = t?.source?.refid, d = Fc(t?.fields ?? {}, c?.operation), [f, h] = fe.useState(o ?? {}), m = l && t.location_required !== !1;
-  console.log("isLocationRequired", m);
-  const g = fe.useMemo(() => _c(t.fields), [t.fields]), y = fe.useMemo(() => Bc(t.fields), [t.fields]);
+  const c = t.endPoints, u = t?.source?.refid, d = Fc(t?.fields ?? {}, c?.operation), [f, h] = fe.useState(o ?? {}), m = l && t.location_required !== !1, g = fe.useMemo(() => _c(t.fields), [t.fields]), y = fe.useMemo(() => Bc(t.fields), [t.fields]);
   fe.useEffect(() => {
     let E = !0;
     const C = async () => {

@@ -30,9 +30,6 @@ export default function LogiksForm({
   const isLocationRequired =
     location_required && formJson.location_required !== false;
 
-    console.log("isLocationRequired",isLocationRequired);
-    
-
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
   }, [formJson.fields]);
