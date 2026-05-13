@@ -18,7 +18,7 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
-  location_required = false
+  location_required = true
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
