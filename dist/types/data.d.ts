@@ -14,32 +14,18 @@ export declare const example10: {
     };
     source: {
         type: string;
-        cols: string;
-        endpoint: string;
-        method: string;
-        table: string;
-        where: {
-            id: string;
-        };
+        dbopsid: string;
     };
+    gotolink: string;
     fields: {
-        userid: {
+        id: {
             label: string;
-            required: boolean;
-            search: boolean;
             type: string;
-            multiple: boolean;
-            orderby: string;
-            width: number;
-            options: {
-                value: string;
-                title: string;
-            }[];
+            hidden: boolean;
         };
-        company_spv_id: {
+        company_code_id: {
             label: string;
             type: string;
-            search: boolean;
             parameter: string;
             required: boolean;
             source: {
@@ -55,10 +41,6 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
-            options_top: {
-                label: string;
-                value: string;
-            }[];
             "no-option": string;
             width: number;
             options: never[];
@@ -67,7 +49,6 @@ export declare const example10: {
             label: string;
             "no-option": string;
             type: string;
-            search: boolean;
             parameter: {
                 sector_id: string;
                 company_id: string;
@@ -80,10 +61,6 @@ export declare const example10: {
                     endpoint: string;
                 };
             }[];
-            options_top: {
-                label: string;
-                value: string;
-            }[];
             required: boolean;
             width: number;
             options: never[];
@@ -91,51 +68,30 @@ export declare const example10: {
         project_function_id: {
             label: string;
             type: string;
-            required: boolean;
-            search: boolean;
-            multiple: boolean;
-            parameter: string;
-            options_top: {
-                label: string;
-                value: string;
-            }[];
-            ajaxchain: {
-                target: string;
-                src: {
-                    type: string;
-                    method: string;
-                    endpoint: string;
-                };
-            }[];
             width: number;
             "no-option": string;
             options: never[];
         };
-        location_id: {
+        date: {
+            label: string;
+            type: string;
+            required: boolean;
+            max: string;
+            width: number;
+        };
+        category: {
             label: string;
             type: string;
             search: boolean;
             required: boolean;
             width: number;
-            multiple: boolean;
-            options: never[];
         };
-        category_id: {
-            label: string;
-            type: string;
-            orderby: string;
-            search: boolean;
-            required: boolean;
-            width: number;
-            options: {
-                title: string;
-                value: number;
-            }[];
-        };
-        operation: {
+        priority: {
             label: string;
             type: string;
             groupid: string;
+            search: boolean;
+            required: boolean;
             width: number;
             options: {
                 title: string;
@@ -144,7 +100,119 @@ export declare const example10: {
                 privilege: string;
             }[];
         };
+        management_review: {
+            label: string;
+            type: string;
+            default: string;
+            groupid: string;
+            required: boolean;
+            multiple: boolean;
+            search: boolean;
+            width: number;
+            options: {
+                title: string;
+                value: string;
+                class: null;
+                privilege: string;
+            }[];
+        };
+        sub_contractor: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        assignee: {
+            label: string;
+            type: string;
+            required: boolean;
+            search: boolean;
+            width: number;
+            options: {
+                title: string;
+                value: string;
+            }[];
+        };
+        mail_cc_user: {
+            label: string;
+            type: string;
+            orderby: string;
+            required: boolean;
+            multiple: boolean;
+            search: boolean;
+            width: number;
+            options: {
+                title: string;
+                value: string;
+            }[];
+        };
+        attachment: {
+            label: string;
+            type: string;
+            required: boolean;
+            multiple: boolean;
+            width: number;
+        };
+        observation_photograph: {
+            label: string;
+            type: string;
+            required: boolean;
+            multiple: boolean;
+            width: number;
+        };
+        compliance_photograph: {
+            label: string;
+            type: string;
+            vmode: string;
+            multiple: boolean;
+            required: boolean;
+            width: number;
+        };
+        reference: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        target_date: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
+        status: {
+            label: string;
+            type: string;
+            parameter: string;
+            onChange: string;
+            required: boolean;
+            source: {
+                type: string;
+                method: string;
+                endpoint: string;
+            };
+            "no-option": string;
+            width: number;
+            options: never[];
+        };
+        closure_date: {
+            label: string;
+            type: string;
+            disabled: boolean;
+            required: boolean;
+            width: number;
+        };
+        description: {
+            label: string;
+            type: string;
+            required: boolean;
+            width: number;
+        };
     };
+    infoview: {
+        template: string;
+    };
+    script: string;
     module_refid: string;
     module_type: string;
 };

@@ -18,7 +18,7 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
-  location_required = true
+  location_required = false
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
@@ -234,32 +234,32 @@ console.log("isLocationRequired",isLocationRequired);
       const geoValue = geoKey ? values[geoKey] : null;
       finalGeo = geoValue || "0,0";
 
-      if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
+      // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
-        try {
+      //   try {
 
 
-          const { latitude, longitude } = await fetchGeolocation();
-          const geo = `${latitude},${longitude}`
-          if (!geo) {
-            toast?.error?.("Location permission is required");
-             throw new Error("Location permission is required");
-          }
+      //     const { latitude, longitude } = await fetchGeolocation();
+      //     const geo = `${latitude},${longitude}`
+      //     if (!geo) {
+      //       toast?.error?.("Location permission is required");
+      //        throw new Error("Location permission is required");
+      //     }
 
-          finalGeo = geo;
-        } catch (error) {
-          toast?.error?.("Location permission is required");
-           throw new Error("Location permission is required");
-        }
+      //     finalGeo = geo;
+      //   } catch (error) {
+      //     toast?.error?.("Location permission is required");
+      //      throw new Error("Location permission is required");
+      //   }
 
-      }
+      // }
 
       const geoMissingKeys = geoFieldKeys.filter(
         (k) => !values[k]
       );
 
       const altitudeMissingKeys = altitudeFieldKeys.filter(
-        (k) => values[k] === undefined || values[k] === null || values[k] === ""
+        (k) => !values[k]
       );
 
       const altitudeKey = altitudeFieldKeys[0]
@@ -284,25 +284,25 @@ console.log("isLocationRequired",isLocationRequired);
       }
     }
 
-    else if (isLocationRequired) {
+    // else if (isLocationRequired) {
 
-      console.log("insdide isLocationRequired",isLocationRequired);
-      try {
-        const { latitude, longitude } = await fetchGeolocation();
+    //   console.log("insdide isLocationRequired",isLocationRequired);
+    //   try {
+    //     const { latitude, longitude } = await fetchGeolocation();
 
-        const geo = `${latitude},${longitude}`
+    //     const geo = `${latitude},${longitude}`
 
-        if (!geo) {
-          toast?.error?.("Location permission is required");
-          throw new Error("Location permission is required");
-        }
-        finalGeo = geo;
-      } catch (err) {
-        toast?.error?.("Location permission is required");
-         throw new Error("Location permission is required");
+    //     if (!geo) {
+    //       toast?.error?.("Location permission is required");
+    //       throw new Error("Location permission is required");
+    //     }
+    //     finalGeo = geo;
+    //   } catch (err) {
+    //     toast?.error?.("Location permission is required");
+    //      throw new Error("Location permission is required");
       
-      }
-    }
+    //   }
+    // }
 
 
 
@@ -421,8 +421,7 @@ console.log("isLocationRequired",isLocationRequired);
               "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
               "forcefill": formJson.forcefill,
               "datahash": resHashId.data.refhash,
-              srcid: formJson?.module_refid,
-              "geolocation": finalGeo
+              srcid: formJson?.module_refid
             },
 
             headers: {
@@ -438,6 +437,7 @@ console.log("isLocationRequired",isLocationRequired);
           data: {
             "refid": dbopsId,
             "fields": finalValues,
+            "geolocation": finalGeo,
             "datahash": resHashId.data.refhash
 
           },
