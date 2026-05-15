@@ -88,6 +88,83 @@ const isEmpty = (v: any) =>
 const isStringValidator = (schema: Yup.AnySchema): schema is Yup.StringSchema =>
   schema.type === "string";
 
+export const resolveDateValue = (
+  value?: string | number
+): string | number | undefined => {
+  if (value == null) return undefined;
+
+  if (typeof value === "number") {
+    return value;
+  }
+
+  const trimmed = value.trim();
+
+  // already valid yyyy-mm-dd
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return trimmed;
+  }
+
+  const date = new Date();
+
+  switch (trimmed.toLowerCase()) {
+    case "today":
+      break;
+
+    case "tomorrow":
+      date.setDate(date.getDate() + 1);
+      break;
+
+    case "yesterday":
+      date.setDate(date.getDate() - 1);
+      break;
+
+    case "startofmonth":
+      date.setDate(1);
+      break;
+
+    case "endofmonth":
+      date.setMonth(date.getMonth() + 1, 0);
+      break;
+
+    case "startofyear":
+      date.setMonth(0, 1);
+      break;
+
+    case "endofyear":
+      date.setMonth(11, 31);
+      break;
+
+    default: {
+      const match = trimmed.match(/^([+-]\d+)([dmy])$/i);
+
+      if (match) {
+        const [, amountStr, unitStr] = match;
+
+        if (!amountStr || !unitStr) {
+          return trimmed;
+        }
+        const amount = Number(amountStr);
+        const unit = unitStr.toLowerCase();
+
+        if (unit === "d") {
+          date.setDate(date.getDate() + amount);
+        } else if (unit === "m") {
+          date.setMonth(date.getMonth() + amount);
+        } else if (unit === "y") {
+          date.setFullYear(date.getFullYear() + amount);
+        }
+
+        return date.toISOString().split("T")[0];
+      }
+
+      // unknown value -> return as-is
+      return trimmed;
+    }
+  }
+
+  return date.toISOString().split("T")[0];
+};
+
 export const intializeForm = (
   formFields: FormField[],
   initialValues: Record<string, any>,
@@ -154,8 +231,12 @@ export const intializeForm = (
     }
 
     else if (field.type === "date") {
+      const resolvedValue = resolveDateValue(value);
+
       initialValues[name] =
-        typeof value === "string" && value.trim() ? value.slice(0, 10) : null;
+        typeof resolvedValue === "string" && resolvedValue.trim()
+          ? resolvedValue.slice(0, 10)
+          : null;
     }
 
     else if (field.type === "time") {
@@ -826,6 +907,19 @@ export const getIcon = (field: FormField) => {
   }
 };
 
+export const sanitizeAlphaNumeric = (
+  value: string,
+  allowedSpecialChars: string[] = [" ", "-", "_", ".", ",", "@", "/"]
+) => {
+  const escapedChars = allowedSpecialChars
+    .map((char) => char.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"))
+    .join("");
+
+  const regex = new RegExp(`[^a-zA-Z0-9${escapedChars}]`, "g");
+
+  return value.replace(regex, "");
+};
+
 export const isValidPath = (val: string) =>
   val && !val.includes("fakepath");
 export const buildFileValue = ({
@@ -857,6 +951,9 @@ export const getMaxDate = (max?: string | number) => {
   }
   return max;
 };
+
+
+
 
 type ValidateFileInputParams = {
   e: React.ChangeEvent<HTMLInputElement>;
@@ -987,8 +1084,6 @@ export const buildApiParams = ({
       params[key] = formValues?.[val as string];
     }
   }
-
-  console.log("ddddddddparams", params);
 
 
   return params;

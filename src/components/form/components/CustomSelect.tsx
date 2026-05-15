@@ -64,7 +64,7 @@ export default function CustomSelect({
     return <div className="relative">
         <input
             type="hidden"
-           
+
             name={key}
             value={JSON.stringify(formik.values[key] ?? "")}
         />
@@ -73,7 +73,7 @@ export default function CustomSelect({
             {field.required && <span className="text-red-500 ml-1">*</span>}
         </label>
         <div
-        id={key}
+            id={key}
 
             className={`
         relative w-full select-none border rounded-lg px-4 py-2.5 flex justify-between items-center
@@ -104,6 +104,24 @@ export default function CustomSelect({
                     ? getOptionLabel(options, formik.values[key]) ?? "Select option"
                     : `Select ${field.label}`}
             </span>
+
+            {formik.values[key] && (
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        formik.setFieldValue(key, "");
+                        setOpen(false);
+                        handlePersist("", field, module_refid);
+                        setSearch("");
+                    }}
+                    className="absolute right-10 text-red-500 transition-colors"
+                >
+                    <i className="fa-solid fa-xmark text-sm"></i>
+                </button>
+            )}
             <svg
                 className="w-4 h-4 text-gray-500"
                 fill="none"
@@ -143,20 +161,7 @@ export default function CustomSelect({
                     />
                 </div>}
 
-                {filteredOptions.length > 0 && <div
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        formik.setFieldValue(key, "");
-                        setOpen(false);
-                        handlePersist("", field, module_refid)
-                        setSearch("");
-                    }}
-                    className={"px-2 py-1 hover:bg-gray-50 text-gray-500 rounded cursor-pointer text-sm hover:bg-gray-50"}
-                >
-                    Clear selection
-                </div>
-                }
+
 
                 {/* Filtered options */}
                 {filteredOptions.length > 0 ? (

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
-import { fetchGeolocation, getMaxDate, getOptionLabel, groupOptions, validateFiles } from '../utils.js';
+import { fetchGeolocation, getMaxDate, getOptionLabel, groupOptions, resolveDateValue, sanitizeAlphaNumeric, validateFiles } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import MultiSelect from './MultiSelect.js';
@@ -236,8 +236,14 @@ export default function FieldRenderer({
                   value={formik.values[key]}
                   onBlur={formik.handleBlur}
                   onChange={(e) => {
-                    formik.setFieldValue(key, e.target.value);
-                    handlePersist(e.target.value, field, module_refid)
+
+                    let value = e.target.value;
+
+                    if (field.alphanumeric !== false) {
+                      value = sanitizeAlphaNumeric(value);
+                    }
+                    formik.setFieldValue(key, value);
+                    handlePersist(value, field, module_refid)
                     executeFieldMethod("onChange", field, `${key}`)
                   }}
                   placeholder={field.placeholder}
@@ -332,11 +338,11 @@ export default function FieldRenderer({
                 }}
                 disabled={isDisabled}
               >
-                {field?.["no-option"] !== "false" && !formik.values[key] && <option value="" disabled>
+                {field?.["no-option"] !== "false" && !formik.values[key] && <option value="" >
                   {field?.["no-option"] || `Please select ${field.label}`}
                 </option>}
 
-                <option value="" className='text-gray-500'>Clear Selection</option>
+                {formik.values[key] && <option value="" className='text-gray-500'>Clear Selection</option>}
                 {Object.entries(grouped).map(([group, opts]) =>
                   group === "__ungrouped__" ? (
                     opts.map((o) => (
@@ -713,7 +719,9 @@ export default function FieldRenderer({
       }
 
       case "date": {
-        const maxDate = getMaxDate(field.max);
+
+        const minDate = resolveDateValue(field.min);
+        const maxDate = resolveDateValue(field.max);
         return (
           <div className="relative">
             <label className={labelClasses}>
@@ -732,7 +740,7 @@ export default function FieldRenderer({
                 id={key}
                 type="date"
                 name={key}
-                min={field.min}
+                min={minDate}
                 max={maxDate}
                 value={formik.values[key] ?? ""}
                 onChange={(e) => {
@@ -949,8 +957,13 @@ export default function FieldRenderer({
                 value={formik.values[key]}
                 onBlur={formik.handleBlur}
                 onChange={(e) => {
-                  formik.setFieldValue(key, e.target.value);
-                  handlePersist(e.target.value, field, module_refid)
+                  let value = e.target.value;
+
+                  if (field.alphanumeric !== false) {
+                    value = sanitizeAlphaNumeric(value);
+                  }
+                  formik.setFieldValue(key, value);
+                  handlePersist(value, field, module_refid)
                   executeFieldMethod("onChange", field, `${key}`)
                 }}
                 step={field.step}

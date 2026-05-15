@@ -8,6 +8,7 @@ export declare function transformedObject(originalObject: Record<string, any>, o
     label: string;
     required: boolean;
 }>;
+export declare const resolveDateValue: (value?: string | number) => string | number | undefined;
 export declare const intializeForm: (formFields: FormField[], initialValues: Record<string, any>, validationSchema: Record<string, Yup.AnySchema>, data?: Record<string, any>, module_refid?: string, operation?: string) => void;
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export declare const tailwindGrid: Record<ColWidth, string>;
@@ -52,6 +53,7 @@ export declare const getInputConfig: (field: FormField) => {
     capture?: "user" | "environment";
 };
 export declare const getIcon: (field: FormField) => "fa-camera" | "fa-camera-retro" | "fa-image";
+export declare const sanitizeAlphaNumeric: (value: string, allowedSpecialChars?: string[]) => string;
 export declare const isValidPath: (val: string) => boolean | "";
 export declare const buildFileValue: ({ uploads, currentValue, multiple, }: {
     uploads: FileItem[];

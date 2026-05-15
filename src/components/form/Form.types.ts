@@ -91,7 +91,7 @@ export interface FormField {
     accept?: string;
     file_size?: number;
     buttons?: Record<string, any> | undefined;
-    capture?: "user" | "environment";
+    alphanumeric?:boolean
 
 }
 
