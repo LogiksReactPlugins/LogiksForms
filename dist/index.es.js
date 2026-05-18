@@ -1862,7 +1862,7 @@ function Uo({
   setOpen: y
 }) {
   const b = t.name;
-  return /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
+  return console.log("formik.values[key]", c.values[b]), /* @__PURE__ */ p.jsxs("div", { className: "relative", children: [
     /* @__PURE__ */ p.jsx(
       "input",
       {
@@ -1900,7 +1900,7 @@ function Uo({
               onClick: (A) => {
                 A.preventDefault(), A.stopPropagation(), c.setFieldValue(b, ""), y(!1), d("", t, f), a("");
               },
-              className: "absolute right-10 text-red-500 transition-colors",
+              className: "absolute right-10 text-gray-500 hover:text-red-500 transition-colors",
               children: /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-xmark text-sm" })
             }
           ),

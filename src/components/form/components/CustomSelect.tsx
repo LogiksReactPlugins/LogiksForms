@@ -60,6 +60,9 @@ export default function CustomSelect({
 }: MultiSelectProps) {
     const key = field.name;
 
+    console.log("formik.values[key]",formik.values[key]);
+    
+
 
     return <div className="relative">
         <input
@@ -117,7 +120,7 @@ export default function CustomSelect({
                         handlePersist("", field, module_refid);
                         setSearch("");
                     }}
-                    className="absolute right-10 text-red-500 transition-colors"
+                    className="absolute right-10 text-gray-500 hover:text-red-500 transition-colors"
                 >
                     <i className="fa-solid fa-xmark text-sm"></i>
                 </button>
