@@ -80,6 +80,7 @@ export default function FieldRenderer({
                       formik.setFieldValue(key, search.trim());
                       handlePersist(search.trim(), field, module_refid);
                     }
+                    setSearch("");
                     setOpen(false);
                     return;
                   }

@@ -13750,7 +13750,7 @@ function _n({
                     const [le] = H;
                     e.setFieldValue(w, le), b(le, t, o);
                   } else C.trim() && (e.setFieldValue(w, C.trim()), b(C.trim(), t, o));
-                  h(!1);
+                  f(""), h(!1);
                   return;
                 }
                 d(_, !0);
