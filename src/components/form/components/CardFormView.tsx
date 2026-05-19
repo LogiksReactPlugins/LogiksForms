@@ -82,29 +82,29 @@ export default function CardFormView({
     [flatFields]
   );
 
-  let commonButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-    if (val.groups && val.groups.length > 0) return false
-    return true;
-  }) : [];
+  // let commonButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+  //   if (val.groups && val.groups.length > 0) return false
+  //   return true;
+  // }) : [];
 
 
-  async function handleClick(method: string, val: Record<string, any>) {
+  // async function handleClick(method: string, val: Record<string, any>) {
 
-    const methodFn = methods?.[method as keyof typeof methods];
+  //   const methodFn = methods?.[method as keyof typeof methods];
 
-    if (methodFn) {
-      try {
-        await methodFn();
+  //   if (methodFn) {
+  //     try {
+  //       await methodFn();
 
-      } catch (err) {
-        console.error("Method execution failed:", err);
+  //     } catch (err) {
+  //       console.error("Method execution failed:", err);
 
-      }
-      return
-    }
-    methods?.handleAction?.({ [method]: val }, formik.values)
+  //     }
+  //     return
+  //   }
+  //   methods?.handleAction?.({ [method]: val }, formik.values)
 
-  }
+  // }
 
   const resetForm = () => {
     formik.resetForm();
@@ -136,10 +136,10 @@ export default function CardFormView({
             )}
             {tabGroups && Object.entries(tabGroups).map(([group, fields], index) => {
 
-              let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-                if (val.groups) return val.groups.includes(group)
-                return false;
-              }) : [];
+              // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+              //   if (val.groups) return val.groups.includes(group)
+              //   return false;
+              // }) : [];
 
               return <Card key={group} title={group}>
                 <div className='grid grid-cols-12 gap-4'>
@@ -201,7 +201,7 @@ export default function CardFormView({
                   })}
                 </div>
 
-                <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+                {/* <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
                   {visibleButtons &&
                     visibleButtons.map(([key, val]) => (
                       <button
@@ -212,7 +212,7 @@ export default function CardFormView({
                         {val.label}
                       </button>
                     ))}
-                </div>
+                </div> */}
               </Card>
             })}
           </div>
@@ -237,7 +237,7 @@ export default function CardFormView({
           </div>
         </form>
 
-        <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+        {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
           {commonButtons &&
             commonButtons.map(([key, val]) => (
               <button
@@ -248,7 +248,7 @@ export default function CardFormView({
                 {val.label}
               </button>
             ))}
-        </div>
+        </div> */}
       </div>
     </div>
   )

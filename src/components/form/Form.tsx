@@ -25,13 +25,13 @@ export default function LogiksForm({
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
-  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {}); 
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
 
-  const isLocationRequired =
-    location_required && formJson.location_required !== false;
+  // const isLocationRequired =
+  //   location_required && formJson.location_required !== false;
 
-    console.log("isLocationRequired",isLocationRequired);
-    
+  // console.log("isLocationRequired", isLocationRequired);
+
 
   const geoFieldKeys = React.useMemo(() => {
     return getGeoFieldKeys(formJson.fields)
@@ -236,25 +236,25 @@ export default function LogiksForm({
       const geoValue = geoKey ? values[geoKey] : null;
       finalGeo = geoValue || "0,0";
 
-      if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
+      // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
-        try {
+      //   try {
 
 
-          const { latitude, longitude } = await fetchGeolocation();
-          const geo = `${latitude},${longitude}`
-          if (!geo) {
-            toast?.error?.("Location permission is required");
-             throw new Error("Location permission is required");
-          }
+      //     const { latitude, longitude } = await fetchGeolocation();
+      //     const geo = `${latitude},${longitude}`
+      //     if (!geo) {
+      //       toast?.error?.("Location permission is required");
+      //        throw new Error("Location permission is required");
+      //     }
 
-          finalGeo = geo;
-        } catch (error) {
-          toast?.error?.("Location permission is required");
-           throw new Error("Location permission is required");
-        }
+      //     finalGeo = geo;
+      //   } catch (error) {
+      //     toast?.error?.("Location permission is required");
+      //      throw new Error("Location permission is required");
+      //   }
 
-      }
+      // }
 
       const geoMissingKeys = geoFieldKeys.filter(
         (k) => !values[k]
@@ -286,25 +286,25 @@ export default function LogiksForm({
       }
     }
 
-    else if (isLocationRequired) {
+    // else if (isLocationRequired) {
 
-      console.log("insdide isLocationRequired",isLocationRequired);
-      try {
-        const { latitude, longitude } = await fetchGeolocation();
+    //   console.log("insdide isLocationRequired", isLocationRequired);
+    //   try {
+    //     const { latitude, longitude } = await fetchGeolocation();
 
-        const geo = `${latitude},${longitude}`
+    //     const geo = `${latitude},${longitude}`
 
-        if (!geo) {
-          toast?.error?.("Location permission is required");
-          throw new Error("Location permission is required");
-        }
-        finalGeo = geo;
-      } catch (err) {
-        toast?.error?.("Location permission is required");
-         throw new Error("Location permission is required");
-      
-      }
-    }
+    //     if (!geo) {
+    //       toast?.error?.("Location permission is required");
+    //       throw new Error("Location permission is required");
+    //     }
+    //     finalGeo = geo;
+    //   } catch (err) {
+    //     toast?.error?.("Location permission is required");
+    //     throw new Error("Location permission is required");
+
+    //   }
+    // }
 
 
 
@@ -332,7 +332,7 @@ export default function LogiksForm({
           // callback?.(err);
           toast?.error?.(getErrorMessage(err));
           throw new Error(getErrorMessage(err));
-        
+
         }
       }
     }
@@ -423,8 +423,7 @@ export default function LogiksForm({
               "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
               "forcefill": formJson.forcefill,
               "datahash": resHashId.data.refhash,
-              srcid: formJson?.module_refid,
-              "geolocation": finalGeo
+              srcid: formJson?.module_refid
             },
 
             headers: {
@@ -440,7 +439,8 @@ export default function LogiksForm({
           data: {
             "refid": dbopsId,
             "fields": finalValues,
-            "datahash": resHashId.data.refhash
+            "datahash": resHashId.data.refhash,
+            "geolocation": finalGeo
 
           },
           headers: {

@@ -87,26 +87,26 @@ export default function NormalFormView({
     }
   })
 
-  let visibleButtons = buttons ? Object.entries(buttons) : []
+  //let visibleButtons = buttons ? Object.entries(buttons) : []
 
 
-  async function handleClick(method: string, val: Record<string, any>) {
+  // async function handleClick(method: string, val: Record<string, any>) {
 
-    const methodFn = methods?.[method as keyof typeof methods];
+  //   const methodFn = methods?.[method as keyof typeof methods];
 
-    if (methodFn) {
-      try {
-        await methodFn();
+  //   if (methodFn) {
+  //     try {
+  //       await methodFn();
 
-      } catch (err) {
-        console.error("Method execution failed:", err);
+  //     } catch (err) {
+  //       console.error("Method execution failed:", err);
 
-      }
-      return
-    }
-    methods?.handleAction?.({ [method]: val }, formik.values)
+  //     }
+  //     return
+  //   }
+  //   methods?.handleAction?.({ [method]: val }, formik.values)
 
-  }
+  // }
 
   const resetForm = () => {
     formik.resetForm();
@@ -207,7 +207,7 @@ export default function NormalFormView({
             </div>
           </form>
 
-          <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+          {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
             {visibleButtons &&
               visibleButtons.map(([key, val]) => (
                 <button
@@ -218,7 +218,7 @@ export default function NormalFormView({
                   {val.label}
                 </button>
               ))}
-          </div>
+          </div> */}
         </div>
 
       </div>
