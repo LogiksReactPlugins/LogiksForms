@@ -797,6 +797,7 @@ export const getInputConfig = (field: FormField): {
   capture?: "user" | "environment";
 } => {
   switch (field.type) {
+    case "camera_gallery":
     case "camera2":
       return {
         accept: "image/*",

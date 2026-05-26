@@ -577,7 +577,7 @@ export default function FieldRenderer({
           </div>
         );
       }
-
+      case "camera_gallery":
       case "camera":
       case "camera2":
       case "photo":

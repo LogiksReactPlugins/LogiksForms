@@ -81,7 +81,6 @@ export interface FormField {
     accept?: string;
     file_size?: number;
     buttons?: Record<string, any> | undefined;
-    capture?: "user" | "environment";
 }
 export type ChainConfig = NonNullable<FormField["ajaxchain"]> extends infer T ? T extends (infer U)[] ? U : T : never;
 export type FormikLike = {
