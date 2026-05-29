@@ -20,7 +20,9 @@ export default function FieldRenderer({
   module_refid = "menuManager.main",
   optionsOverride,
   setFieldOptions,
-  chainMap
+  chainMap,
+  fieldLoading,
+  setFieldLoading
 }: FieldRendererProps) {
 
   const {
@@ -32,8 +34,10 @@ export default function FieldRenderer({
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
     refid, module_refid, chainMap,
+    ...(setFieldLoading && { setFieldLoading }),
     ...(optionsOverride && { optionsOverride }),
     ...(setFieldOptions && { setFieldOptions }),
+
   })
 
   const renderIcon = (field: FormField) => {
@@ -89,7 +93,7 @@ export default function FieldRenderer({
                 }}
                 disabled={isDisabled}
               />
-              {loading && (
+              {(loading || fieldLoading)  && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   <i className="fa-solid fa-spinner fa-spin text-gray-400" />
                 </div>
@@ -164,7 +168,7 @@ export default function FieldRenderer({
               triggerRef={triggerRef}
               open={open}
               setOpen={setOpen}
-              loading={loading}
+              loading={loading || !!fieldLoading }
             />
           );
 
@@ -189,7 +193,7 @@ export default function FieldRenderer({
             triggerRef={triggerRef}
             open={open}
             setOpen={setOpen}
-            loading={loading}
+            loading={loading || !!fieldLoading}
 
           />
         );
@@ -287,7 +291,7 @@ export default function FieldRenderer({
               triggerRef={triggerRef}
               open={open}
               setOpen={setOpen}
-              loading={loading}
+              loading={loading || !!fieldLoading}
             />
           );
 
@@ -313,7 +317,7 @@ export default function FieldRenderer({
               triggerRef={triggerRef}
               open={open}
               setOpen={setOpen}
-              loading={loading}
+              loading={loading || !!fieldLoading}
 
             />
           )
@@ -368,7 +372,7 @@ export default function FieldRenderer({
               </select>
               {/* Custom dropdown arrow */}
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                {loading ? (
+                {(loading || fieldLoading) ? (
                   <i className="fa-solid fa-spinner fa-spin text-gray-400"></i>
                 ) : (
                   <svg

@@ -120,6 +120,12 @@ export interface CommonInfoProps {
         options: OptionItem[]
     ) => void;
     chainMap: ChainMap;
+      setFieldLoading?: (
+        fieldName: string,
+        loading: boolean
+    ) => void;
+
+    fieldLoading?: boolean;
 }
 
 export type FileItem = {
@@ -234,6 +240,12 @@ export interface FieldRendererProps {
         options: OptionItem[]
     ) => void;
     chainMap: ChainMap;
+    setFieldLoading?: (
+        fieldName: string,
+        loading: boolean
+    ) => void;
+
+    fieldLoading?: boolean;
 }
 
 export interface sqlQueryProps {

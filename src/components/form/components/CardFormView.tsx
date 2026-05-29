@@ -34,6 +34,18 @@ export default function CardFormView({
     }));
   };
 
+
+  const [fieldLoading, setFieldLoading] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  const updateFieldLoading = (fieldName: string, loading: boolean) => {
+    setFieldLoading(prev => ({
+      ...prev,
+      [fieldName]: loading,
+    }));
+  };
+
   const flatFields = React.useMemo(
     () => Object.values(groupedFields).flat(),
     [groupedFields]
@@ -63,15 +75,15 @@ export default function CardFormView({
     validationSchema: Yup.object().shape(validationSchema),
     onSubmit: async (values) => {
       try {
-        
-      
 
-      let filteredValues = filterSavableValues(values, flatFields);
-      const res = await onSubmit(filteredValues);
-      console.log("res",res)
-      formik.resetForm();
+
+
+        let filteredValues = filterSavableValues(values, flatFields);
+        const res = await onSubmit(filteredValues);
+        console.log("res", res)
+        formik.resetForm();
       } catch (error) {
-        console.log("error",error)
+        console.log("error", error)
       }
 
     }
@@ -196,6 +208,8 @@ export default function CardFormView({
                           ? { optionsOverride: fieldOptions[field.name] }
                           : {})}
                         chainMap={chainMap}
+                        fieldLoading={fieldLoading[field.name] ?? false}
+                        setFieldLoading={updateFieldLoading}
                       />
                     </div>
                   })}

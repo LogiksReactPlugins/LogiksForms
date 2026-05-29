@@ -33,6 +33,17 @@ export default function AccordionFormView({
     }));
   };
 
+  const [fieldLoading, setFieldLoading] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  const updateFieldLoading = (fieldName: string, loading: boolean) => {
+    setFieldLoading(prev => ({
+      ...prev,
+      [fieldName]: loading,
+    }));
+  };
+
   const flatFields = React.useMemo(
     () => Object.values(groupedFields).flat(),
     [groupedFields]
@@ -58,16 +69,16 @@ export default function AccordionFormView({
     onSubmit: async (values) => {
 
       try {
-        
-     
 
-      let filteredValues = filterSavableValues(values, flatFields);
 
-      const res = await onSubmit(filteredValues);
-     console.log("res",res)
-      formik.resetForm();
-       } catch (error) {
-        console.log("error",error)
+
+        let filteredValues = filterSavableValues(values, flatFields);
+
+        const res = await onSubmit(filteredValues);
+        console.log("res", res)
+        formik.resetForm();
+      } catch (error) {
+        console.log("error", error)
       }
 
     }
@@ -102,7 +113,7 @@ export default function AccordionFormView({
 
   // }
 
-   const resetForm = () => {
+  const resetForm = () => {
     formik.resetForm();
   }
 
@@ -131,15 +142,15 @@ export default function AccordionFormView({
               </Accordion>
             )}
             {tabGroups && Object.entries(tabGroups).map(([group, fields], index) => {
-           
+
 
               // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
               //   if (val.groups) return val.groups.includes(group)
               //   return false;
               // }) : [];
 
-         
-              
+
+
               return <Accordion key={group} title={group} isFirst={index === 0 && commonFields.length === 0}>
                 <div className='grid grid-cols-12 gap-4'>
                   {fields.map((field, index) => {
@@ -195,6 +206,8 @@ export default function AccordionFormView({
                           ? { optionsOverride: fieldOptions[field.name] }
                           : {})}
                         chainMap={chainMap}
+                        fieldLoading={fieldLoading[field.name] ?? false}
+                        setFieldLoading={updateFieldLoading}
                       />
                     </div>
                   })}
@@ -213,7 +226,7 @@ export default function AccordionFormView({
                     ))}
                 </div> */}
 
-              
+
               </Accordion>
             })}
 

@@ -181,6 +181,17 @@ export default function TabFormView({
 
   }
 
+  const [fieldLoading, setFieldLoading] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  const updateFieldLoading = (fieldName: string, loading: boolean) => {
+    setFieldLoading(prev => ({
+      ...prev,
+      [fieldName]: loading,
+    }));
+  };
+
 
 
   return (
@@ -300,6 +311,8 @@ export default function TabFormView({
                     ? { optionsOverride: fieldOptions[field.name] }
                     : {})}
                   chainMap={chainMap}
+                  fieldLoading={fieldLoading[field.name] ?? false}
+                  setFieldLoading={updateFieldLoading}
                 />
               </div>
             })}

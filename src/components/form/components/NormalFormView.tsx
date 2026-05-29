@@ -34,6 +34,18 @@ export default function NormalFormView({
   };
 
 
+  const [fieldLoading, setFieldLoading] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  const updateFieldLoading = (fieldName: string, loading: boolean) => {
+    setFieldLoading(prev => ({
+      ...prev,
+      [fieldName]: loading,
+    }));
+  };
+
+
   const { commonFields, otherFields } = React.useMemo(() => {
     return flatfields.reduce(
       (acc, field) => {
@@ -131,6 +143,7 @@ export default function NormalFormView({
                 setFieldOptions={setOptionsForField}
                 fieldOptions={fieldOptions}
                 chainMap={chainMap}
+             
 
               />
             )}
@@ -185,6 +198,9 @@ export default function NormalFormView({
                     {...(fieldOptions[field.name]
                       ? { optionsOverride: fieldOptions[field.name] }
                       : {})}
+
+                    fieldLoading={fieldLoading[field.name] ?? false}
+                    setFieldLoading={updateFieldLoading}
                   />
                 </div>
               })}

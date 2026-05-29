@@ -99,6 +99,8 @@ export interface CommonInfoProps {
     fieldOptions: Record<string, OptionItem[]>;
     setFieldOptions: (fieldName: string, options: OptionItem[]) => void;
     chainMap: ChainMap;
+    setFieldLoading?: (fieldName: string, loading: boolean) => void;
+    fieldLoading?: boolean;
 }
 export type FileItem = {
     fileId: number;
@@ -193,6 +195,8 @@ export interface FieldRendererProps {
     optionsOverride?: OptionItem[];
     setFieldOptions?: (fieldName: string, options: OptionItem[]) => void;
     chainMap: ChainMap;
+    setFieldLoading?: (fieldName: string, loading: boolean) => void;
+    fieldLoading?: boolean;
 }
 export interface sqlQueryProps {
     table: string;

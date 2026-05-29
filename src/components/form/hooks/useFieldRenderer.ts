@@ -28,7 +28,8 @@ export default function useFieldRenderer({
     module_refid = "menuManager.main",
     optionsOverride,
     setFieldOptions,
-    chainMap
+    chainMap,
+    setFieldLoading
 }: FieldRendererProps) {
 
     const isOptionField = [
@@ -462,7 +463,7 @@ export default function useFieldRenderer({
 
         const run = async () => {
             try {
-                setLoading(true)
+
                 // ---------- AUTOCOMPLETE ----------
                 if (isAutocompleteConfig(ac)) {
                     const src = ac.src;
@@ -551,6 +552,7 @@ export default function useFieldRenderer({
 
                 // ---------- AJAX CHAIN (ARRAY SAFE) ----------
                 for (const chain of ajaxChains) {
+                    setFieldLoading?.(chain.target, true);
                     const src = chain.src;
                     if (!chain || typeof chain !== "object") continue;
                     if (!src || typeof src !== "object") continue;
@@ -592,8 +594,15 @@ export default function useFieldRenderer({
                                 ? { params }
                                 : { data: params }),
                         }
-                        const { data: res } = await axios(config);
-                        responseData = res;
+                        try {
+                            const { data: res } = await axios(config);
+                            responseData = res;
+                        } catch (error) {
+
+                        } finally {
+                            setFieldLoading?.(chain.target, false);
+                        }
+
                     } else {
 
                         let query: sqlQueryProps | undefined;
@@ -613,9 +622,15 @@ export default function useFieldRenderer({
                             };
                         }
 
+                        try {
+                            const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+                            responseData = res;
+                        } catch (error) {
+                             
+                        } finally {
+                            setFieldLoading?.(chain.target, false);
+                        }
 
-                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
-                        responseData = res;
                     }
 
                     let valueKey = field.valueKey ?? "value";
@@ -646,8 +661,6 @@ export default function useFieldRenderer({
                 }
             } catch (err) {
                 console.error("Autocomplete / AjaxChain fetch failed", err);
-            } finally {
-                setLoading(false)
             }
         };
 

@@ -11,7 +11,7 @@ declare global {
         setFieldValue: (name: string, value: any) => void;
     }
 }
-export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions, chainMap }: FieldRendererProps): {
+export default function useFieldRenderer({ field, formik, methods, sqlOpsUrls, refid, module_refid, optionsOverride, setFieldOptions, chainMap, setFieldLoading }: FieldRendererProps): {
     setHighlightedIndex: import('react').Dispatch<import('react').SetStateAction<number>>;
     executeFieldMethod: (trigger: "onChange" | "onBlur" | "onFocus" | "onClick", field: FormField, value?: any) => Promise<void>;
     handleFileUpload: (files: FileList) => Promise<void>;
