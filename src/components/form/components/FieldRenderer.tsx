@@ -93,7 +93,7 @@ export default function FieldRenderer({
                 }}
                 disabled={isDisabled}
               />
-              {(loading || fieldLoading)  && (
+              {(loading || fieldLoading) && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   <i className="fa-solid fa-spinner fa-spin text-gray-400" />
                 </div>
@@ -168,7 +168,7 @@ export default function FieldRenderer({
               triggerRef={triggerRef}
               open={open}
               setOpen={setOpen}
-              loading={loading || !!fieldLoading }
+              loading={loading || !!fieldLoading}
             />
           );
 
@@ -635,6 +635,11 @@ export default function FieldRenderer({
               {field.icon && (
                 <div className="absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   {renderIcon(field)}
+                </div>
+              )}
+              {loading && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10">
+                  <i className="fa-solid fa-spinner fa-spin text-gray-400" />
                 </div>
               )}
               <input

@@ -17,25 +17,25 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
   const cleanPath = filePath?.replace(/^[^&]*&/, "");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
- const ext = getFileExtension(cleanPath);
+  const ext = getFileExtension(cleanPath);
   const category = getMimeCategory(ext);
 
   useEffect(() => {
 
-     if (isAbsoluteUrl(cleanPath)) {
+    if (isAbsoluteUrl(cleanPath)) {
       setPreviewUrl(cleanPath);
       return;
     }
 
     if (!sqlOpsUrls) return;
 
-     if (!isValidPath(filePath)) {
-    console.log("skipping preview:", filePath);
-    return;
-  }
+    if (!isValidPath(filePath)) {
+      console.log("skipping preview:", filePath);
+      return;
+    }
 
-  // load immediately for images (thumbnail)
-  if (category !== "image" && !open) return;
+    // load immediately for images (thumbnail)
+    if (category !== "image" && !open) return;
     let active = true;
     let objectUrl: string | null = null;
 
@@ -50,23 +50,36 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
       active = false;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [category,open, cleanPath, sqlOpsUrls]);
+  }, [category, open, cleanPath, sqlOpsUrls]);
 
 
- 
+
   let fileName = cleanPath.split("/").pop();
 
   return (
     <>
 
-     {category === "image" && previewUrl ? (
-        <img
-          src={previewUrl}
-          alt={fileName}
-          title="Click to preview"
+      {category === "image" ? (
+        <div
+          role="button"
+          tabIndex={0}
           onClick={() => setOpen(true)}
-          className="h-16 w-16 object-cover rounded  cursor-pointer hover:opacity-90"
-        />
+          onKeyDown={(e) => e.key === "Enter" && setOpen(true)}
+          className="h-16 w-16 rounded overflow-hidden cursor-pointer"
+          title="Click to preview"
+        >
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt={fileName}
+              className="h-full w-full object-cover hover:opacity-90"
+            />
+          ) : (
+            <div className="h-full w-full bg-gray-100 flex items-center justify-center">
+              <i className="fa-regular fa-image text-gray-400" />
+            </div>
+          )}
+        </div>
       ) : (
         <div
           role="button"
@@ -81,7 +94,6 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
         </div>
       )}
 
-
       {open && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-4 max-w-5xl w-full">
@@ -95,7 +107,10 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
             {previewUrl ? (
               <FilePreview fileUrl={previewUrl} category={category} />
             ) : (
-              <div className="text-center p-8">Loading preview…</div>
+              <div className="flex flex-col items-center justify-center py-12">
+                <i className="fa-solid fa-spinner fa-spin text-3xl text-gray-500 mb-3" />
+                <span className="text-gray-600">Loading preview...</span>
+              </div>
             )}
           </div>
         </div>

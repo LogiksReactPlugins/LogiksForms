@@ -4,6 +4,6 @@ type FilePreviewTriggerProps = {
     field_name: string;
     sqlOpsUrls?: SqlEndpoints | undefined;
 };
-export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: FilePreviewTriggerProps): import("react/jsx-runtime").JSX.Element | null;
+export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: FilePreviewTriggerProps): import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=PhotoRenderer.d.ts.map

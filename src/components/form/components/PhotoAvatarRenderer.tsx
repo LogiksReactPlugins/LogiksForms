@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PhotoRenderer from './PhotoRenderer.js';
 import type { FormikProps } from "formik";
 import type { FileItem, FormField, SqlEndpoints } from '../Form.types.js';
@@ -21,6 +21,7 @@ export default function PhotoAvatarRenderer({
     let key = field?.name;
     const inputRef = useRef<HTMLInputElement | null>(null);
     const max = field.max !== undefined ? Number(field.max) : Infinity;
+    const [loading, setLoading] = useState(false);
 
     const files = Array.isArray(formik.values[key])
         ? formik.values[key]
@@ -38,6 +39,7 @@ export default function PhotoAvatarRenderer({
         if (!validFiles) return;
 
         try {
+            setLoading(true);
             const uploads = await uploadFiles(sqlOpsUrls, validFiles);
             const value = buildFileValue({
                 uploads,
@@ -54,6 +56,8 @@ export default function PhotoAvatarRenderer({
         } catch (err) {
             console.error("File upload failed", err);
             formik.setFieldError(key, "File upload failed");
+        } finally {
+            setLoading(false);
         }
 
     };
@@ -87,8 +91,8 @@ export default function PhotoAvatarRenderer({
     const inputConfig = getInputConfig(field);
     const isMultiple = field.multiple === true;
 
-    console.log("inputConfig",inputConfig);
-    
+    console.log("inputConfig", inputConfig);
+
     return (
         <div >
             <label className="block text-sm font-semibold mb-1  transition-all duration-300 text-gray-700">
@@ -129,11 +133,21 @@ export default function PhotoAvatarRenderer({
                 )) : null}
 
 
+
+
                 <div
-                    onClick={() => inputRef.current?.click()}
+                    onClick={() => {
+                        if (!loading) {
+                            inputRef.current?.click();
+                        }
+                    }}
                     className="w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
                 >
-                    <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
+                    {loading ? (
+                        <i className="fa-solid fa-spinner fa-spin text-2xl text-gray-400" />
+                    ) : (
+                        <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
+                    )}
                 </div>
 
             </div>

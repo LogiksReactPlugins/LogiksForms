@@ -40,13 +40,20 @@ export default function PhotoRenderer({ filePath, field_name, sqlOpsUrls }: File
         };
     }, [open, cleanPath, sqlOpsUrls]);
 
-    if (!previewUrl) return null;
+
 
     return (
-        <img alt={field_name}
-            title={field_name}
-            src={previewUrl}
-            className="h-24 w-24 object-cover rounded border border-dashed   hover:opacity-90"
-        />
+   <div className="h-24 w-24 rounded border border-dashed bg-gray-50 flex items-center justify-center">
+        {previewUrl ? (
+            <img
+                alt={field_name}
+                title={field_name}
+                src={previewUrl}
+                className="h-24 w-24 object-cover rounded"
+            />
+        ) : (
+            <i className="fa-regular fa-image text-gray-400 text-2xl" />
+        )}
+    </div>
     )
 }
