@@ -125,6 +125,11 @@ export interface SqlEndpoints {
     uploadURL?: string;
     removeFileURL?: string;
 }
+export interface FormButtonLabels {
+    submit?: string;
+    reset?: string;
+    cancel?: string;
+}
 export interface FormJson {
     title?: string | undefined;
     location_required?: boolean;
@@ -137,6 +142,7 @@ export interface FormJson {
     gotolink?: string;
     module_refid?: string | undefined;
     buttons?: Record<string, any>;
+    button_labels?: FormButtonLabels | undefined;
 }
 export interface Toast {
     (message: string): void;
@@ -177,6 +183,7 @@ export interface BaseFormViewProps {
     refid?: string | undefined;
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
+    button_labels?: FormButtonLabels | undefined;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;

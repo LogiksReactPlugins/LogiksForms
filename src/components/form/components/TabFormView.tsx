@@ -19,7 +19,8 @@ export default function TabFormView({
   widget,
   refid,
   module_refid,
-  buttons
+  buttons,
+  button_labels
 
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
@@ -157,10 +158,10 @@ export default function TabFormView({
   }
 
 
-  let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-    if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
-    return true;
-  }) : []
+  // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+  //   if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
+  //   return true;
+  // }) : []
 
 
   async function handleClick(method: string, val: Record<string, any>) {
@@ -324,13 +325,13 @@ export default function TabFormView({
 
             <div className='space-x-3'>
               <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                Cancel
+                {button_labels?.cancel || "Cancel"}
               </button>
               <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                Reset
+                {button_labels?.reset || "Reset"}
               </button>
               <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {widget ? "Next" : "Save"}
+                {button_labels?.submit ? button_labels?.submit : widget ? "Next" : "Save"}
               </button>
             </div>
           </div>
@@ -359,7 +360,7 @@ export default function TabFormView({
         </div>
       </form>
 
-      <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+      {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
         {visibleButtons &&
           visibleButtons.map(([key, val]) => (
             <button
@@ -370,7 +371,7 @@ export default function TabFormView({
               {val.label}
             </button>
           ))}
-      </div>
+      </div> */}
 
     </div>
   );

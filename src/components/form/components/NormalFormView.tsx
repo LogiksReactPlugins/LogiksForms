@@ -17,7 +17,8 @@ export default function NormalFormView({
   sqlOpsUrls,
   refid,
   module_refid,
-  buttons
+  buttons,
+  button_labels
 }: SimpleFormViewProps) {
   const flatfields = flatFields(fields, sqlOpsUrls?.operation);
 
@@ -210,14 +211,14 @@ export default function NormalFormView({
               <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
               <div className='space-x-3'>
                 <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                  Cancel
+                  {button_labels?.cancel || "Cancel"} 
                 </button>
                 <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                  Reset
+                 {button_labels?.reset || "Reset"}
                 </button>
 
                 <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                  Save
+                 {button_labels?.submit || "Save"}
                 </button>
               </div>
             </div>

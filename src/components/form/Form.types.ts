@@ -120,7 +120,7 @@ export interface CommonInfoProps {
         options: OptionItem[]
     ) => void;
     chainMap: ChainMap;
-      setFieldLoading?: (
+    setFieldLoading?: (
         fieldName: string,
         loading: boolean
     ) => void;
@@ -155,6 +155,12 @@ export interface SqlEndpoints {
     removeFileURL?: string;
 };
 
+export interface FormButtonLabels {
+    submit?: string;
+    reset?: string;
+    cancel?: string;
+}
+
 export interface FormJson {
     title?: string | undefined;
     location_required?: boolean;
@@ -167,6 +173,7 @@ export interface FormJson {
     gotolink?: string;
     module_refid?: string | undefined;
     buttons?: Record<string, any>;
+    button_labels?: FormButtonLabels | undefined;
 }
 
 
@@ -215,6 +222,7 @@ export interface BaseFormViewProps {
     refid?: string | undefined;
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
+    button_labels?: FormButtonLabels | undefined ;
 
 }
 

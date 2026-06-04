@@ -482,6 +482,7 @@ export default function LogiksForm({
       refid={refid}
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
+      button_labels={formJson.button_labels}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -495,6 +496,8 @@ export default function LogiksForm({
       refid={refid}
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
+      button_labels={formJson.button_labels}
+   
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}
@@ -509,6 +512,7 @@ export default function LogiksForm({
       refid={refid}
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
+      button_labels={formJson.button_labels}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -522,6 +526,7 @@ export default function LogiksForm({
       refid={refid}
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
+      button_labels={formJson.button_labels}
     />
   };
 
