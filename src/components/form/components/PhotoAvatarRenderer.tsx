@@ -144,7 +144,7 @@ export default function PhotoAvatarRenderer({
                     className="w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
                 >
                     {loading ? (
-                        <i className="fa-solid fa-spinner fa-spin text-2xl text-gray-400" />
+                        <i className="fa-solid fa-spinner fa-spin text-2xl text-gray-900" />
                     ) : (
                         <i className={`fa-solid ${getIcon(field)} text-2xl text-gray-400`} />
                     )}

@@ -1872,7 +1872,7 @@ function Wo({
         },
         children: [
           /* @__PURE__ */ p.jsx("span", { className: "text-sm text-gray-700", children: c.values[M] ? fr(h, c.values[M]) ?? "Select option" : `Select ${t.label}` }),
-          w ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-500" }) : /* @__PURE__ */ p.jsx(
+          w ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-900" }) : /* @__PURE__ */ p.jsx(
             "svg",
             {
               className: "w-4 h-4 text-gray-500",
@@ -2017,7 +2017,7 @@ const ou = ({ filePath: t, sqlOpsUrls: e }) => {
         }
       ),
       r ? /* @__PURE__ */ p.jsx(ru, { fileUrl: r, category: a }) : /* @__PURE__ */ p.jsxs("div", { className: "flex flex-col items-center justify-center py-12", children: [
-        /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-3xl text-gray-500 mb-3" }),
+        /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-3xl text-gray-900 mb-3" }),
         /* @__PURE__ */ p.jsx("span", { className: "text-gray-600", children: "Loading preview..." })
       ] })
     ] }) })
@@ -2076,7 +2076,7 @@ function Vo({
         },
         children: [
           /* @__PURE__ */ p.jsx("span", { className: "text-sm text-gray-700", children: r?.length > 0 ? r.map((C) => fr(m, C) ?? C).join(", ") : `Select ${t.label}` }),
-          M ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-500" }) : /* @__PURE__ */ p.jsx(
+          M ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-900" }) : /* @__PURE__ */ p.jsx(
             "svg",
             {
               className: "w-4 h-4 text-gray-500",
@@ -2285,7 +2285,7 @@ function rl({
                 l || o.current?.click();
               },
               className: "w-24 h-24 flex items-center justify-center border border-dashed rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer",
-              children: l ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-2xl text-gray-400" }) : /* @__PURE__ */ p.jsx("i", { className: `fa-solid ${Yc(e)} text-2xl text-gray-400` })
+              children: l ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-2xl text-gray-900" }) : /* @__PURE__ */ p.jsx("i", { className: `fa-solid ${Yc(e)} text-2xl text-gray-400` })
             }
           )
         ]
@@ -13758,7 +13758,7 @@ function Bn({
                 disabled: P
               }
             ),
-            (S || c) && /* @__PURE__ */ p.jsx("div", { className: "absolute right-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-400" }) })
+            (S || c) && /* @__PURE__ */ p.jsx("div", { className: "absolute right-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-900" }) })
           ] }),
           /* @__PURE__ */ p.jsx(Hs, { anchorRef: oe, open: ne && !P, children: /* @__PURE__ */ p.jsx(
             "div",
@@ -13972,7 +13972,7 @@ function Bn({
                 ]
               }
             ),
-            /* @__PURE__ */ p.jsx("div", { className: "absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none", children: S || c ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-400" }) : /* @__PURE__ */ p.jsx(
+            /* @__PURE__ */ p.jsx("div", { className: "absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none", children: S || c ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-900" }) : /* @__PURE__ */ p.jsx(
               "svg",
               {
                 className: "w-5 h-5 transition-colors duration-300 text-gray-400",
@@ -14169,7 +14169,7 @@ function Bn({
           ] }),
           /* @__PURE__ */ p.jsxs("div", { className: "relative mb-1", children: [
             t.icon && /* @__PURE__ */ p.jsx("div", { className: "absolute z-10 left-3 top-1/2 -translate-y-1/2 pointer-events-none", children: j(t) }),
-            S && /* @__PURE__ */ p.jsx("div", { className: "absolute right-3 top-1/2 -translate-y-1/2 z-10", children: /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-400" }) }),
+            S && /* @__PURE__ */ p.jsx("div", { className: "absolute right-3 top-1/2 -translate-y-1/2 z-10", children: /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-gray-900" }) }),
             /* @__PURE__ */ p.jsx(
               "input",
               {
@@ -14326,7 +14326,7 @@ function Bn({
                 onClick: N,
                 disabled: S,
                 className: "absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50",
-                children: S ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-red-500" }) : /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-location-dot text-red-600 hover:text-red-700" })
+                children: S ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-red-900" }) : /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-location-dot text-red-600 hover:text-red-700" })
               }
             )
           ] }),
@@ -14371,7 +14371,7 @@ function Bn({
                 onClick: N,
                 disabled: S,
                 className: "absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50",
-                children: S ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-red-500" }) : /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-mountain text-blue-600 hover:text-blue-700" })
+                children: S ? /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-spinner fa-spin text-red-900" }) : /* @__PURE__ */ p.jsx("i", { className: "fa-solid fa-mountain text-blue-600 hover:text-blue-700" })
               }
             )
           ] }),
@@ -15293,10 +15293,7 @@ function $m({
     c,
     t?.source?.type || "",
     t?.source?.method || "",
-    t?.source?.url || "",
-    JSON.stringify(t?.source?.params ?? {}),
-    JSON.stringify(t?.source?.body ?? {}),
-    JSON.stringify(t?.source?.headers ?? {})
+    t?.source?.endpoint || ""
   ]);
   const w = async (v) => {
     const T = t?.source ?? {};

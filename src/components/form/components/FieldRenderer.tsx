@@ -95,7 +95,7 @@ export default function FieldRenderer({
               />
               {(loading || fieldLoading) && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <i className="fa-solid fa-spinner fa-spin text-gray-400" />
+                  <i className="fa-solid fa-spinner fa-spin text-gray-900" />
                 </div>
               )}
             </div>
@@ -373,7 +373,7 @@ export default function FieldRenderer({
               {/* Custom dropdown arrow */}
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 {(loading || fieldLoading) ? (
-                  <i className="fa-solid fa-spinner fa-spin text-gray-400"></i>
+                  <i className="fa-solid fa-spinner fa-spin text-gray-900"></i>
                 ) : (
                   <svg
                     className="w-5 h-5 transition-colors duration-300 text-gray-400"
@@ -639,7 +639,7 @@ export default function FieldRenderer({
               )}
               {loading && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10">
-                  <i className="fa-solid fa-spinner fa-spin text-gray-400" />
+                  <i className="fa-solid fa-spinner fa-spin text-gray-900" />
                 </div>
               )}
               <input
@@ -831,7 +831,7 @@ export default function FieldRenderer({
                 className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
               >
                 {loading ? (
-                  <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
+                  <i className="fa-solid fa-spinner fa-spin text-red-900"></i>
                 ) : (
                   <i className="fa-solid fa-location-dot text-red-600 hover:text-red-700"></i>
                 )}
@@ -897,7 +897,7 @@ export default function FieldRenderer({
                 className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
               >
                 {loading ? (
-                  <i className="fa-solid fa-spinner fa-spin text-red-500"></i>
+                  <i className="fa-solid fa-spinner fa-spin text-red-900"></i>
                 ) : (
                   <i className="fa-solid fa-mountain text-blue-600 hover:text-blue-700"></i>
                 )}

@@ -108,7 +108,7 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
               <FilePreview fileUrl={previewUrl} category={category} />
             ) : (
               <div className="flex flex-col items-center justify-center py-12">
-                <i className="fa-solid fa-spinner fa-spin text-3xl text-gray-500 mb-3" />
+                <i className="fa-solid fa-spinner fa-spin text-3xl text-gray-900 mb-3" />
                 <span className="text-gray-600">Loading preview...</span>
               </div>
             )}

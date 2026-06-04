@@ -106,7 +106,7 @@ export default function CustomSelect({
                     : `Select ${field.label}`}
             </span>
             {loading ? (
-                <i className="fa-solid fa-spinner fa-spin text-gray-500" />
+                <i className="fa-solid fa-spinner fa-spin text-gray-900" />
             ) : (
                 <svg
                     className="w-4 h-4 text-gray-500"

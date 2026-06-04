@@ -214,10 +214,7 @@ export default function LogiksForm({
     sqlOpsUrls,
     formJson?.source?.type || "",
     formJson?.source?.method || "",
-    formJson?.source?.url || "",
-    JSON.stringify(formJson?.source?.params ?? {}),
-    JSON.stringify(formJson?.source?.body ?? {}),
-    JSON.stringify(formJson?.source?.headers ?? {})
+    formJson?.source?.endpoint || ""
   ]);
 
 
