@@ -313,7 +313,11 @@ export default function LogiksForm({
           let values = finalValues ? { ...finalValues, geolocation: finalGeo } : {}
           const res = await methodFn(values);
           callback?.(res);
-          toast?.success?.(getSuccessMessage(res));
+
+          const message = getSuccessMessage(res, formJson?.submit_msg);
+          if (message) {
+            toast?.success?.(message);
+          }
 
           if (methods?.handleActions) {
             let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
@@ -350,7 +354,11 @@ export default function LogiksForm({
           },
         });
         callback?.(res);
-        toast?.success?.(getSuccessMessage(res))
+        const message = getSuccessMessage(res, formJson?.submit_msg);
+
+        if (message) {
+          toast?.success?.(message);
+        }
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
           const link = formJson?.gotolink?.replace(
@@ -444,8 +452,11 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
+        const message = getSuccessMessage(res, formJson?.submit_msg);
 
-        toast?.success?.(getSuccessMessage(res))
+        if (message) {
+          toast?.success?.(message);
+        }
         callback?.(res);
         if (methods?.handleActions) {
           let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
@@ -494,7 +505,7 @@ export default function LogiksForm({
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
-   
+
     />,
     "tab": <TabFormView
       title={formJson?.title ?? ""}

@@ -143,6 +143,7 @@ export interface FormJson {
     module_refid?: string | undefined;
     buttons?: Record<string, any>;
     button_labels?: FormButtonLabels | undefined;
+    submit_msg?: boolean | string;
 }
 export interface Toast {
     (message: string): void;
