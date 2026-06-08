@@ -34,7 +34,7 @@ export default function CommonInfo({
                 {/* Left Column - Avatar */}
                 {avatarField && (
 
-                    <div className="lg:col-span-2 flex flex-col items-center min-h-0 max-h-40 overflow-y-auto ">
+                    <div className="lg:col-span-2 flex flex-col items-center  ">
                         <div
                             id={`wrapper-${avatarField.name}`}
                             className={`
@@ -55,7 +55,7 @@ export default function CommonInfo({
                     </div>
                 )}
                 {/* Right Column - Details Grid */}
-                <div className={`${rightColSpan} min-h-0 max-h-40  overflow-y-auto `}>
+                <div className={`${rightColSpan}  `}>
 
                     <div className="grid grid-cols-12 gap-2">
                         {fields?.map((field, index) => {

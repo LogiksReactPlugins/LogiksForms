@@ -2,7 +2,7 @@ import { useEffect, useState, type JSX } from "react";
 import { fileIconClassMap, getFileExtension, getMimeCategory, isAbsoluteUrl, isValidPath } from "../utils.js";
 import type { FileCategory, SqlEndpoints } from "../Form.types.js";
 import FilePreview from "./FilePreview.js";
-import { getPreviewUrl } from "../service.js";
+import { getPreviewUrl, getPreviewUrlWithBlob } from "../service.js";
 
 type FilePreviewTriggerProps = {
   filePath: string;
@@ -16,41 +16,44 @@ function getFileIcon(category: FileCategory): JSX.Element {
 const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) => {
   const cleanPath = filePath?.replace(/^[^&]*&/, "");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [blob, setBlob] = useState<Blob | null>(null);
   const [open, setOpen] = useState(false);
   const ext = getFileExtension(cleanPath);
   const category = getMimeCategory(ext);
 
   useEffect(() => {
+    if (!isValidPath(filePath)) return;
 
-    if (isAbsoluteUrl(cleanPath)) {
-      setPreviewUrl(cleanPath);
-      return;
-    }
-
-    if (!sqlOpsUrls) return;
-
-    if (!isValidPath(filePath)) {
-      console.log("skipping preview:", filePath);
-      return;
-    }
-
-    // load immediately for images (thumbnail)
     if (category !== "image" && !open) return;
+
     let active = true;
     let objectUrl: string | null = null;
 
-    getPreviewUrl(cleanPath, sqlOpsUrls).then((url) => {
-
+    getPreviewUrlWithBlob(
+      cleanPath,
+      sqlOpsUrls
+    ).then(({ previewUrl, blob }) => {
       if (!active) return;
-      objectUrl = url;
-      setPreviewUrl(url);
+
+      objectUrl = previewUrl;
+      setPreviewUrl(previewUrl);
+      setBlob(blob);
     });
 
     return () => {
       active = false;
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
+
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
     };
-  }, [category, open, cleanPath, sqlOpsUrls]);
+  }, [
+    category,
+    open,
+    cleanPath,
+    sqlOpsUrls,
+    filePath,
+  ]);
 
 
 
@@ -105,7 +108,7 @@ const FilePreviewTrigger = ({ filePath, sqlOpsUrls }: FilePreviewTriggerProps) =
             </button>
 
             {previewUrl ? (
-              <FilePreview fileUrl={previewUrl} category={category} />
+              <FilePreview sqlOpsUrls={sqlOpsUrls} filePath={filePath}  blob={blob}  fileUrl={previewUrl} category={category} />
             ) : (
               <div className="flex flex-col items-center justify-center py-12">
                 <i className="fa-solid fa-spinner fa-spin text-3xl text-gray-900 mb-3" />

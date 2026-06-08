@@ -124,6 +124,9 @@ export interface SqlEndpoints {
     dbopsCreate?: string;
     uploadURL?: string;
     removeFileURL?: string;
+    native?: {
+        downloadFile?: (blob: Blob, fileName: string) => Promise<void>;
+    };
 }
 export interface FormButtonLabels {
     submit?: string;

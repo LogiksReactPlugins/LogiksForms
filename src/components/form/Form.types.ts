@@ -153,6 +153,12 @@ export interface SqlEndpoints {
     dbopsCreate?: string;
     uploadURL?: string;
     removeFileURL?: string;
+    native?: {
+        downloadFile?: (
+            blob: Blob,
+            fileName: string
+        ) => Promise<void>;
+    };
 };
 
 export interface FormButtonLabels {
@@ -223,7 +229,7 @@ export interface BaseFormViewProps {
     refid?: string | undefined;
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
-    button_labels?: FormButtonLabels | undefined ;
+    button_labels?: FormButtonLabels | undefined;
 
 }
 

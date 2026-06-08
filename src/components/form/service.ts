@@ -1,6 +1,7 @@
 // sqlClient.ts
 import axios, { type AxiosResponse } from "axios";
 import type { SqlEndpoints, UploadResponse } from "./Form.types.js";
+import { isAbsoluteUrl } from "./utils.js";
 
 
 
@@ -193,6 +194,47 @@ export async function getPreviewUrl(
     );
 
     return URL.createObjectURL(res.data);
+}
+
+export async function getPreviewUrlWithBlob(
+    fileUrl: string,
+    sqlOpsUrls?: Record<string, any>
+): Promise<{
+    previewUrl: string;
+    blob: Blob;
+}> {
+    // Absolute URL
+    if (isAbsoluteUrl(fileUrl)) {
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+
+        return {
+            previewUrl: URL.createObjectURL(blob),
+            blob,
+        };
+    }
+
+    // Relative URL
+    const previewPath =
+        sqlOpsUrls?.previewPath ??
+        "/api/files/preview";
+
+    const { data: blob } = await axios.get(
+        `${sqlOpsUrls?.baseURL}${previewPath}?uri=${encodeURIComponent(
+            fileUrl
+        )}`,
+        {
+            responseType: "blob",
+            headers: {
+                Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
+            },
+        }
+    );
+
+    return {
+        previewUrl: URL.createObjectURL(blob),
+        blob,
+    };
 }
 
 
