@@ -20,7 +20,8 @@ export default function AccordionFormView({
   refid,
   module_refid,
   buttons,
-  button_labels
+  button_labels,
+  AttachmentPopup
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -138,6 +139,7 @@ export default function AccordionFormView({
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
                   chainMap={chainMap}
+                  AttachmentPopup={AttachmentPopup}
 
                 />
               </Accordion>
@@ -209,6 +211,7 @@ export default function AccordionFormView({
                         chainMap={chainMap}
                         fieldLoading={fieldLoading[field.name] ?? false}
                         setFieldLoading={updateFieldLoading}
+                        AttachmentPopup={AttachmentPopup}
                       />
                     </div>
                   })}

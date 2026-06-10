@@ -18,7 +18,8 @@ export default function LogiksForm({
   callback = () => { },
   initialvalues,
   toast,
-  location_required = true
+  location_required = true,
+  AttachmentPopup
 }: FormProps) {
 
   let viewMode: ViewMode = determineViewMode(formJson);
@@ -491,6 +492,7 @@ export default function LogiksForm({
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
+      AttachmentPopup={AttachmentPopup}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -505,6 +507,7 @@ export default function LogiksForm({
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
+      AttachmentPopup={AttachmentPopup}
 
     />,
     "tab": <TabFormView
@@ -521,6 +524,7 @@ export default function LogiksForm({
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
+      AttachmentPopup={AttachmentPopup}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -535,6 +539,7 @@ export default function LogiksForm({
       module_refid={formJson?.module_refid}
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
+      AttachmentPopup={AttachmentPopup}
     />
   };
 

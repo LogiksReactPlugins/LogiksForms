@@ -20,7 +20,8 @@ export default function CardFormView({
   refid,
   module_refid,
   buttons,
-  button_labels
+  button_labels,
+  AttachmentPopup
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -143,6 +144,7 @@ export default function CardFormView({
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
                   chainMap={chainMap}
+                  AttachmentPopup={AttachmentPopup}
 
                 />
               </Card>
@@ -211,6 +213,7 @@ export default function CardFormView({
                         chainMap={chainMap}
                         fieldLoading={fieldLoading[field.name] ?? false}
                         setFieldLoading={updateFieldLoading}
+                        AttachmentPopup={AttachmentPopup}
                       />
                     </div>
                   })}

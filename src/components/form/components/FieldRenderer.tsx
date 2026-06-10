@@ -22,7 +22,8 @@ export default function FieldRenderer({
   setFieldOptions,
   chainMap,
   fieldLoading,
-  setFieldLoading
+  setFieldLoading,
+  AttachmentPopup
 }: FieldRendererProps) {
 
   const {
@@ -677,10 +678,14 @@ export default function FieldRenderer({
                 return (
 
                   <div key={file} className="relative group">
-                    <FilePreviewTrigger
+
+                    {/* <FilePreviewTrigger
                       sqlOpsUrls={sqlOpsUrls}
                       filePath={file}
-                    />
+                    /> */}
+                    {AttachmentPopup && (
+                      <AttachmentPopup url={file} />
+                    )}
 
                     {/* Remove button */}
                     <button

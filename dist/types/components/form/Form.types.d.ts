@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik';
-import { ReactNode } from 'react';
+import { ReactNode, ComponentType } from 'react';
 type ApiSrc = {
     type: string;
     endpoint: string;
@@ -101,6 +101,7 @@ export interface CommonInfoProps {
     chainMap: ChainMap;
     setFieldLoading?: (fieldName: string, loading: boolean) => void;
     fieldLoading?: boolean;
+    AttachmentPopup?: ComponentType<any> | undefined;
 }
 export type FileItem = {
     fileId: number;
@@ -162,6 +163,7 @@ export interface FormProps {
     initialvalues?: Record<string, any>;
     toast?: Toast;
     location_required?: boolean;
+    AttachmentPopup?: ComponentType<any>;
 }
 export type OptionItem = {
     value: string;
@@ -185,6 +187,7 @@ export interface BaseFormViewProps {
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
     button_labels?: FormButtonLabels | undefined;
+    AttachmentPopup?: ComponentType<any> | undefined;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;
@@ -205,6 +208,7 @@ export interface FieldRendererProps {
     chainMap: ChainMap;
     setFieldLoading?: (fieldName: string, loading: boolean) => void;
     fieldLoading?: boolean;
+    AttachmentPopup?: ComponentType<any> | undefined;
 }
 export interface sqlQueryProps {
     table: string;

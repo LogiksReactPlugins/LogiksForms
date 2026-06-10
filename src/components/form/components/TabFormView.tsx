@@ -20,7 +20,8 @@ export default function TabFormView({
   refid,
   module_refid,
   buttons,
-  button_labels
+  button_labels,
+  AttachmentPopup
 
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
@@ -217,6 +218,7 @@ export default function TabFormView({
                   setFieldOptions={setOptionsForField}
                   fieldOptions={fieldOptions}
                   chainMap={chainMap}
+                  AttachmentPopup={AttachmentPopup}
 
                 />
               </div>
@@ -314,6 +316,7 @@ export default function TabFormView({
                   chainMap={chainMap}
                   fieldLoading={fieldLoading[field.name] ?? false}
                   setFieldLoading={updateFieldLoading}
+                  AttachmentPopup={AttachmentPopup}
                 />
               </div>
             })}

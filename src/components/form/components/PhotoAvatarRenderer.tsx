@@ -87,11 +87,9 @@ export default function PhotoAvatarRenderer({
     };
 
 
-
     const inputConfig = getInputConfig(field);
     const isMultiple = field.multiple === true;
 
-    console.log("inputConfig", inputConfig);
 
     return (
         <div >

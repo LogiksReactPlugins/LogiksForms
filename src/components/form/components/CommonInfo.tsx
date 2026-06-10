@@ -18,7 +18,8 @@ export default function CommonInfo({
     module_refid,
     fieldOptions,
     setFieldOptions,
-    chainMap
+    chainMap,
+    AttachmentPopup
 
 }: CommonInfoProps) {
 
@@ -82,6 +83,7 @@ export default function CommonInfo({
                                             ? { optionsOverride: fieldOptions[field.name] }
                                             : {})}
                                             chainMap={chainMap}
+                                            AttachmentPopup={AttachmentPopup}
                                     />
                                 </div>
                             );
