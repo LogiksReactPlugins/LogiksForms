@@ -2,7 +2,7 @@
 import type { FormikProps } from "formik";
 import type { AxiosRequestConfig } from "axios";
 
-import type { ReactNode,ComponentType } from "react";
+import type { ReactNode, ComponentType } from "react";
 
 type ApiSrc = {
     type: string;
@@ -127,7 +127,7 @@ export interface CommonInfoProps {
     ) => void;
 
     fieldLoading?: boolean;
-     AttachmentPopup?: ComponentType<any> |  undefined;
+    AttachmentPopup?: ComponentType<any> | undefined;
 }
 
 export type FileItem = {
@@ -226,8 +226,8 @@ export interface BaseFormViewProps {
     refid?: string | undefined;
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
-    button_labels?: FormButtonLabels | undefined ;
-    AttachmentPopup?: ComponentType<any> |  undefined;
+    button_labels?: FormButtonLabels | undefined;
+    AttachmentPopup?: ComponentType<any> | undefined;
 
 }
 
@@ -259,7 +259,7 @@ export interface FieldRendererProps {
     ) => void;
 
     fieldLoading?: boolean;
-     AttachmentPopup?: ComponentType<any> |  undefined;
+    AttachmentPopup?: ComponentType<any> | undefined;
 }
 
 export interface sqlQueryProps {

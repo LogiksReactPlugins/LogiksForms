@@ -14403,7 +14403,7 @@ function $r({
     [t]
   ), d = u ? "lg:col-span-10" : "lg:col-span-12";
   return /* @__PURE__ */ p.jsx("div", { className: "bg-white min-h-3/10 ", children: /* @__PURE__ */ p.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-6 ", children: [
-    u && /* @__PURE__ */ p.jsx("div", { className: "lg:col-span-2 flex flex-col items-center min-h-0 max-h-40 overflow-y-auto ", children: /* @__PURE__ */ p.jsx(
+    u && /* @__PURE__ */ p.jsx("div", { className: "lg:col-span-2 flex flex-col items-center", children: /* @__PURE__ */ p.jsx(
       "div",
       {
         id: `wrapper-${u.name}`,
@@ -14424,7 +14424,7 @@ function $r({
         )
       }
     ) }),
-    /* @__PURE__ */ p.jsx("div", { className: `${d} min-h-0 max-h-40  overflow-y-auto `, children: /* @__PURE__ */ p.jsx("div", { className: "grid grid-cols-12 gap-2", children: t?.map((f, h) => {
+    /* @__PURE__ */ p.jsx("div", { className: `${d} `, children: /* @__PURE__ */ p.jsx("div", { className: "grid grid-cols-12 gap-2", children: t?.map((f, h) => {
       if (f.type === "avatar") return null;
       const m = Fn(f.hidden);
       return /* @__PURE__ */ p.jsx("div", { id: `wrapper-${f.name}`, className: `transition-colors duration-200 col-span-12 md:col-span-6 
