@@ -556,11 +556,32 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
   try {
     const position = await new Promise<GeolocationPosition>(
       (resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 30000,
-          maximumAge: 0,
-        });
+        console.log("Requesting geolocation...");
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            console.log("GPS SUCCESS", {
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+              altitude: pos.coords.altitude,
+              accuracy: pos.coords.accuracy,
+            });
+
+            resolve(pos);
+          },
+          (err) => {
+            console.log("GPS ERROR", {
+              code: err.code,
+              message: err.message,
+            });
+
+            reject(err);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 30000,
+            maximumAge: 0,
+          }
+        );
       }
     );
 
@@ -570,6 +591,12 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
       altitude,
       accuracy,
     } = position.coords;
+    console.log("FETCH GEO RETURNING", {
+  latitude,
+  longitude,
+  altitude,
+  accuracy,
+});
 
     return {
       latitude,
