@@ -547,6 +547,31 @@ export type GeolocationData = {
 };
 
 export async function fetchGeolocation(): Promise<GeolocationData> {
+
+  // Capacitor Native App
+  if ((window as any).Capacitor?.isNativePlatform?.()) {
+    try {
+      const moduleName = "@capacitor/geolocation";
+
+      const { Geolocation } = await import(
+        moduleName
+      );
+
+      const pos = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+      });
+
+      return {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        altitude: pos.coords.altitude,
+        accuracy: pos.coords.accuracy,
+      };
+    } catch (err) {
+      console.warn("Capacitor geolocation failed, falling back to navigator.geolocation", err);
+    }
+  }
+
   if (!("geolocation" in navigator)) {
     throw new Error(
       "Geolocation is not supported by this browser. You cannot access this portal."
@@ -556,26 +581,9 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
   try {
     const position = await new Promise<GeolocationPosition>(
       (resolve, reject) => {
-        console.log("Requesting geolocation...");
         navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            console.log("GPS SUCCESS", {
-              latitude: pos.coords.latitude,
-              longitude: pos.coords.longitude,
-              altitude: pos.coords.altitude,
-              accuracy: pos.coords.accuracy,
-            });
-
-            resolve(pos);
-          },
-          (err) => {
-            console.log("GPS ERROR", {
-              code: err.code,
-              message: err.message,
-            });
-
-            reject(err);
-          },
+          resolve,
+          reject,
           {
             enableHighAccuracy: true,
             timeout: 30000,
@@ -585,27 +593,16 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
       }
     );
 
-    const {
-      latitude,
-      longitude,
-      altitude,
-      accuracy,
-    } = position.coords;
-    console.log("FETCH GEO RETURNING", {
-  latitude,
-  longitude,
-  altitude,
-  accuracy,
-});
-
     return {
-      latitude,
-      longitude,
-      altitude,
-      accuracy,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      altitude: position.coords.altitude,
+      accuracy: position.coords.accuracy,
     };
 
   } catch (error) {
+    console.log("error",error);
+    
     if (!(error instanceof GeolocationPositionError)) {
       throw new Error("Failed to get your location.");
     }
