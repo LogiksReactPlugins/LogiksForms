@@ -547,10 +547,13 @@ export type GeolocationData = {
 };
 
 export async function fetchGeolocation(): Promise<GeolocationData> {
+  console.log("------------inside fetchGeolocation ------ ");
+  
 
   // Capacitor Native App
   if ((window as any).Capacitor?.isNativePlatform?.()) {
     try {
+       console.log("------------inside Capacitor Native App check ------ ");
       const moduleName = "@capacitor/geolocation";
 
       const { Geolocation } = await import(
@@ -561,6 +564,8 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
         enableHighAccuracy: true,
       });
 
+         console.log("Capacitor GPS SUCCESS", pos.coords);
+
       return {
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
@@ -568,10 +573,10 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
         accuracy: pos.coords.accuracy,
       };
     } catch (err) {
-      console.warn("Capacitor geolocation failed, falling back to navigator.geolocation", err);
+      console.log("Capacitor geolocation failed, falling back to navigator.geolocation", err);
     }
   }
-
+console.log("Using navigator.geolocation");
   if (!("geolocation" in navigator)) {
     throw new Error(
       "Geolocation is not supported by this browser. You cannot access this portal."
@@ -592,7 +597,7 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
         );
       }
     );
-
+console.log(" navigator.geolocation position",position);
     return {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
