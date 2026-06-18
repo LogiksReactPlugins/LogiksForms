@@ -10,13 +10,15 @@ type PhotoAvatarRendererProps = {
     formik: FormikProps<Record<string, any>>;
     sqlOpsUrls?: SqlEndpoints | undefined;
     module_refid?: string | undefined;
+    filesToDelete?: React.RefObject<string[]> | undefined;
 };
 
 export default function PhotoAvatarRenderer({
     formik,
     field,
     sqlOpsUrls,
-    module_refid
+    module_refid,
+    filesToDelete
 }: PhotoAvatarRendererProps) {
     let key = field?.name;
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -74,16 +76,10 @@ export default function PhotoAvatarRenderer({
         const updated = existing.filter((f) => f.split("&")[0] !== fileId);
 
         formik.setFieldValue(key, updated);
+        filesToDelete?.current.push(fileId)
+        handlePersist(updated, field, module_refid);
 
 
-        try {
-            if (!file.split("&")[0]) return
-            await deleteFile(sqlOpsUrls, fileId);
-            handlePersist(updated, field, module_refid);
-        } catch (err) {
-            formik.setFieldValue(key, existing);
-            window.alert("Failed to delete file due to a technical issue. Please try again.")
-        }
     };
 
 

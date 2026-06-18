@@ -8,7 +8,7 @@ import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
-import { sqlClient } from "./service.js";
+import { deleteFile, sqlClient } from "./service.js";
 type ViewMode = "accordion" | "cards" | "tab" | "simple";
 export default function LogiksForm({
   formJson,
@@ -27,6 +27,7 @@ export default function LogiksForm({
   const refid = formJson?.source?.refid;
   const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
+  const filesToDelete = React.useRef<string[]>([]);
 
   // const isLocationRequired =
   //   location_required && formJson.location_required !== false;
@@ -43,6 +44,11 @@ export default function LogiksForm({
     return getAltitudeFieldKeys(formJson.fields);
   }, [formJson.fields]);
 
+  React.useEffect(() => {
+    return () => {
+      filesToDelete.current = [];
+    };
+  }, []);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -218,7 +224,17 @@ export default function LogiksForm({
     formJson?.source?.endpoint || ""
   ]);
 
+  const processPendingDeletes = async () => {
+    if (!filesToDelete.current.length) return;
 
+    await Promise.all(
+      filesToDelete.current.map((fileId) =>
+        deleteFile(sqlOpsUrls, fileId)
+      )
+    );
+
+    filesToDelete.current = [];
+  };
 
   // ---------- Handle Form Submission ----------
   const handleSubmit = async (values: Record<string, any>) => {
@@ -313,6 +329,7 @@ export default function LogiksForm({
         try {
           let values = finalValues ? { ...finalValues, geolocation: finalGeo } : {}
           const res = await methodFn(values);
+          await processPendingDeletes();
           callback?.(res);
 
           const message = getSuccessMessage(res, formJson?.submit_msg);
@@ -354,7 +371,9 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
+
         callback?.(res);
+        await processPendingDeletes();
         const message = getSuccessMessage(res, formJson?.submit_msg);
 
         if (message) {
@@ -453,6 +472,7 @@ export default function LogiksForm({
             "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
           },
         });
+        await processPendingDeletes();
         const message = getSuccessMessage(res, formJson?.submit_msg);
 
         if (message) {
@@ -474,6 +494,7 @@ export default function LogiksForm({
         throw new Error(getErrorMessage(err));
       }
     }
+
   };
 
 
@@ -493,6 +514,7 @@ export default function LogiksForm({
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
       AttachmentPopup={AttachmentPopup}
+      filesToDelete={filesToDelete}
     />,
     "cards": <CardFormView
       title={formJson?.title ?? ""}
@@ -508,6 +530,7 @@ export default function LogiksForm({
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
       AttachmentPopup={AttachmentPopup}
+      filesToDelete={filesToDelete}
 
     />,
     "tab": <TabFormView
@@ -525,6 +548,7 @@ export default function LogiksForm({
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
       AttachmentPopup={AttachmentPopup}
+      filesToDelete={filesToDelete}
     />,
     "simple": <NormalFormView
       title={formJson?.title ?? ""}
@@ -540,6 +564,7 @@ export default function LogiksForm({
       buttons={formJson?.buttons}
       button_labels={formJson.button_labels}
       AttachmentPopup={AttachmentPopup}
+      filesToDelete={filesToDelete}
     />
   };
 

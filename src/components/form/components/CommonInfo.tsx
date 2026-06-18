@@ -19,7 +19,8 @@ export default function CommonInfo({
     fieldOptions,
     setFieldOptions,
     chainMap,
-    AttachmentPopup
+    AttachmentPopup,
+    filesToDelete
 
 }: CommonInfoProps) {
 
@@ -50,6 +51,7 @@ export default function CommonInfo({
                                 field={avatarField}
                                 sqlOpsUrls={sqlOpsUrls}
                                 module_refid={module_refid}
+                                filesToDelete={filesToDelete}
                             />
 
                         </div>
@@ -62,7 +64,7 @@ export default function CommonInfo({
                         {fields?.map((field, index) => {
 
                             if (field.type === "avatar") return null;
-                            const hidden = isHidden(field.hidden) ;
+                            const hidden = isHidden(field.hidden);
 
                             return (
                                 <div key={field.name} id={`wrapper-${field.name}`} className={`transition-colors duration-200 col-span-12 md:col-span-6 
@@ -82,8 +84,9 @@ export default function CommonInfo({
                                         {...(fieldOptions?.[field.name]
                                             ? { optionsOverride: fieldOptions[field.name] }
                                             : {})}
-                                            chainMap={chainMap}
-                                            AttachmentPopup={AttachmentPopup}
+                                        chainMap={chainMap}
+                                        AttachmentPopup={AttachmentPopup}
+                                        filesToDelete={filesToDelete}
                                     />
                                 </div>
                             );

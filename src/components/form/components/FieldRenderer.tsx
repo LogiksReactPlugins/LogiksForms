@@ -23,7 +23,8 @@ export default function FieldRenderer({
   chainMap,
   fieldLoading,
   setFieldLoading,
-  AttachmentPopup
+  AttachmentPopup,
+  filesToDelete
 }: FieldRendererProps) {
 
   const {
@@ -34,7 +35,7 @@ export default function FieldRenderer({
     options, isDisabled, key, filteredOptions, open, listRef, triggerRef, isFocused, exactMatch, loading
   } = useFieldRenderer({
     field, formik, methods, sqlOpsUrls,
-    refid, module_refid, chainMap,
+    refid, module_refid, chainMap, filesToDelete,
     ...(setFieldLoading && { setFieldLoading }),
     ...(optionsOverride && { optionsOverride }),
     ...(setFieldOptions && { setFieldOptions }),
@@ -613,6 +614,7 @@ export default function FieldRenderer({
             field={field}
             sqlOpsUrls={sqlOpsUrls}
             module_refid={module_refid}
+            filesToDelete={filesToDelete}
 
           />
         );
@@ -679,10 +681,10 @@ export default function FieldRenderer({
 
                   <div key={file} className="relative group">
 
-                    {/* <FilePreviewTrigger
+                    <FilePreviewTrigger
                       sqlOpsUrls={sqlOpsUrls}
                       filePath={file}
-                    /> */}
+                    />
                     {AttachmentPopup && (
                       <AttachmentPopup url={file} />
                     )}

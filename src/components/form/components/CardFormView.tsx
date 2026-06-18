@@ -21,7 +21,8 @@ export default function CardFormView({
   module_refid,
   buttons,
   button_labels,
-  AttachmentPopup
+  AttachmentPopup,
+  filesToDelete
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -122,6 +123,19 @@ export default function CardFormView({
 
   const resetForm = () => {
     formik.resetForm();
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
+  }
+
+ 
+
+  const cancel = () => {
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
+    onCancel?.();
+
   }
 
   return (
@@ -145,6 +159,7 @@ export default function CardFormView({
                   fieldOptions={fieldOptions}
                   chainMap={chainMap}
                   AttachmentPopup={AttachmentPopup}
+                  filesToDelete={filesToDelete}
 
                 />
               </Card>
@@ -214,6 +229,7 @@ export default function CardFormView({
                         fieldLoading={fieldLoading[field.name] ?? false}
                         setFieldLoading={updateFieldLoading}
                         AttachmentPopup={AttachmentPopup}
+                        filesToDelete={filesToDelete}
                       />
                     </div>
                   })}
@@ -241,7 +257,7 @@ export default function CardFormView({
             <div className='space-x-3'>
 
 
-              <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+              <button type="button" onClick={cancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                 {button_labels?.cancel || "Cancel"} 
               </button>
               <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">

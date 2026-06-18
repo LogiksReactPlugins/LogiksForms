@@ -21,7 +21,8 @@ export default function TabFormView({
   module_refid,
   buttons,
   button_labels,
-  AttachmentPopup
+  AttachmentPopup,
+  filesToDelete
 
 }: GroupedFormViewPrps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
@@ -154,8 +155,25 @@ export default function TabFormView({
     [flatFields]
   );
 
+
+
+
   const resetForm = () => {
     formik.resetForm();
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
+  }
+
+ 
+
+  const cancel = () => {
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
+    onCancel?.();
+
+
   }
 
 
@@ -219,6 +237,7 @@ export default function TabFormView({
                   fieldOptions={fieldOptions}
                   chainMap={chainMap}
                   AttachmentPopup={AttachmentPopup}
+                  filesToDelete={filesToDelete}
 
                 />
               </div>
@@ -317,6 +336,7 @@ export default function TabFormView({
                   fieldLoading={fieldLoading[field.name] ?? false}
                   setFieldLoading={updateFieldLoading}
                   AttachmentPopup={AttachmentPopup}
+                  filesToDelete={filesToDelete}
                 />
               </div>
             })}
@@ -327,7 +347,7 @@ export default function TabFormView({
             </button>}
 
             <div className='space-x-3'>
-              <button onClick={onCancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+              <button onClick={cancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
                 {button_labels?.cancel || "Cancel"}
               </button>
               <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">

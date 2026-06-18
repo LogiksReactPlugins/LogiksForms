@@ -102,6 +102,7 @@ export interface CommonInfoProps {
     setFieldLoading?: (fieldName: string, loading: boolean) => void;
     fieldLoading?: boolean;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]> | undefined;
 }
 export type FileItem = {
     fileId: number;
@@ -188,6 +189,7 @@ export interface BaseFormViewProps {
     buttons?: Record<string, any> | undefined;
     button_labels?: FormButtonLabels | undefined;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]>;
 }
 export interface SimpleFormViewProps extends BaseFormViewProps {
     fields: Record<string, Omit<FormField, "name">>;
@@ -209,6 +211,7 @@ export interface FieldRendererProps {
     setFieldLoading?: (fieldName: string, loading: boolean) => void;
     fieldLoading?: boolean;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]> | undefined;
 }
 export interface sqlQueryProps {
     table: string;

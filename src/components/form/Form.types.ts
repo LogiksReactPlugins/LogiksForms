@@ -128,6 +128,7 @@ export interface CommonInfoProps {
 
     fieldLoading?: boolean;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]> | undefined;
 }
 
 export type FileItem = {
@@ -228,6 +229,7 @@ export interface BaseFormViewProps {
     buttons?: Record<string, any> | undefined;
     button_labels?: FormButtonLabels | undefined;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]>;
 
 }
 
@@ -260,6 +262,7 @@ export interface FieldRendererProps {
 
     fieldLoading?: boolean;
     AttachmentPopup?: ComponentType<any> | undefined;
+    filesToDelete?: React.RefObject<string[]> | undefined;
 }
 
 export interface sqlQueryProps {

@@ -19,11 +19,12 @@ export default function NormalFormView({
   module_refid,
   buttons,
   button_labels,
-  AttachmentPopup
+  AttachmentPopup,
+  filesToDelete
 }: SimpleFormViewProps) {
-    const flatfields = React.useMemo(()=>{
+  const flatfields = React.useMemo(() => {
     return flatFields(fields, sqlOpsUrls?.operation)
-  },[fields,sqlOpsUrls?.operation]);
+  }, [fields, sqlOpsUrls?.operation]);
 
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -63,8 +64,8 @@ export default function NormalFormView({
 
 
   const { initialValues, validationSchema } = React.useMemo(() => {
-    console.log("dddd");
-    
+
+
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
     flatfields.forEach((field) => {
@@ -128,9 +129,21 @@ export default function NormalFormView({
 
   const resetForm = () => {
     formik.resetForm();
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
   }
 
-  console.log("formik.values", formik.values);
+ 
+
+  const cancel = () => {
+    if (filesToDelete) {
+      filesToDelete.current = [];
+    }
+    onCancel?.();
+
+
+  }
 
 
 
@@ -152,6 +165,7 @@ export default function NormalFormView({
                 fieldOptions={fieldOptions}
                 chainMap={chainMap}
                 AttachmentPopup={AttachmentPopup}
+                filesToDelete={filesToDelete}
 
 
               />
@@ -211,6 +225,7 @@ export default function NormalFormView({
                     fieldLoading={fieldLoading[field.name] ?? false}
                     setFieldLoading={updateFieldLoading}
                     AttachmentPopup={AttachmentPopup}
+                    filesToDelete={filesToDelete}
                   />
                 </div>
               })}
@@ -219,7 +234,7 @@ export default function NormalFormView({
             <div className="mt-8 flex justify-between space-x-3">
               <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
               <div className='space-x-3'>
-                <button type="button" onClick={onCancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+                <button type="button" onClick={cancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                   {button_labels?.cancel || "Cancel"}
                 </button>
                 <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">

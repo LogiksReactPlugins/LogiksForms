@@ -29,7 +29,8 @@ export default function useFieldRenderer({
     optionsOverride,
     setFieldOptions,
     chainMap,
-    setFieldLoading
+    setFieldLoading,
+    filesToDelete
 }: FieldRendererProps) {
 
     const isOptionField = [
@@ -626,7 +627,7 @@ export default function useFieldRenderer({
                             const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
                             responseData = res;
                         } catch (error) {
-                             
+
                         } finally {
                             setFieldLoading?.(chain.target, false);
                         }
@@ -789,16 +790,9 @@ export default function useFieldRenderer({
         const updated = existing.filter((f) => f.split("&")[0] !== fileId);
 
         formik.setFieldValue(key, updated);
+        filesToDelete?.current.push(fileId)
+        handlePersist(updated, field, module_refid);
 
-
-        try {
-            await deleteFile(sqlOpsUrls, fileId);
-            handlePersist(updated, field, module_refid);
-        } catch (err) {
-            console.log(err)
-            formik.setFieldValue(key, existing);
-            window.alert("Failed to delete file due to a technical issue. Please try again.")
-        }
     };
 
 
