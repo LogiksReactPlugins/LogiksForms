@@ -46,14 +46,36 @@ export default function LogiksForm({
 
   React.useEffect(() => {
     let isMounted = true;
-    console.log("geoFieldKeys",geoFieldKeys);
-    
+    console.log("geoFieldKeys", geoFieldKeys);
+
 
     const initGeo = async () => {
-console.log("fetching geolocation")
+
       try {
-        const { latitude, longitude, altitude } = await fetchGeolocation();
-        console.log("latitude, longitude, altitude",latitude, longitude, altitude)
+
+        let latitude: number | string;
+        let longitude: number | string;
+        let altitude: number | null = null;
+
+        if (
+          (window as any).Capacitor?.isNativePlatform?.() &&
+          sqlOpsUrls?.native?.getGeoLocation
+        ) {
+          const geo = await sqlOpsUrls.native.getGeoLocation();
+
+          const [lat, lng] = geo.split(",");
+
+          latitude = lat ?? "0";
+          longitude = lng ?? "0";
+        } else {
+
+          const pos = await fetchGeolocation();
+
+          latitude = pos.latitude;
+          longitude = pos.longitude;
+          altitude = pos.altitude;
+
+        }
 
         const geo = `${latitude},${longitude}`;
         const resolvedValues: Record<string, any> = {};
@@ -66,8 +88,8 @@ console.log("fetching geolocation")
           resolvedValues[key] = altitude ?? "";
         });
 
-        console.log("resolvedValues",resolvedValues);
-        
+        console.log("resolvedValues", resolvedValues);
+
 
         if (isMounted) {
           setResolvedData(prev => ({
@@ -235,18 +257,18 @@ console.log("fetching geolocation")
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
-        console.log("geoFieldKeys.length > 0",geoFieldKeys);
-        
+      console.log("geoFieldKeys.length > 0", geoFieldKeys);
+
 
       const geoKey = geoFieldKeys[0];
-      console.log("geoKey",geoKey);
-      console.log("values",values);
-      
-      
+      console.log("geoKey", geoKey);
+      console.log("values", values);
+
+
       const geoValue = geoKey ? values[geoKey] : null;
-      console.log("geoValue",geoValue);
+      console.log("geoValue", geoValue);
       finalGeo = geoValue || "0,0";
-      console.log("finalGeo",finalGeo);
+      console.log("finalGeo", finalGeo);
 
       // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
@@ -298,8 +320,8 @@ console.log("fetching geolocation")
       }
     }
 
-    console.log("finalValues",finalValues);
-    
+    console.log("finalValues", finalValues);
+
 
     // else if (isLocationRequired) {
 
