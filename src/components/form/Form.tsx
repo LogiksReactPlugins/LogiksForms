@@ -46,9 +46,7 @@ export default function LogiksForm({
 
   React.useEffect(() => {
     let isMounted = true;
-    console.log("geoFieldKeys", geoFieldKeys);
-
-
+    
     const initGeo = async () => {
 
       try {
@@ -87,9 +85,6 @@ export default function LogiksForm({
         altitudeFieldKeys.forEach((key) => {
           resolvedValues[key] = altitude ?? "";
         });
-
-        console.log("resolvedValues", resolvedValues);
-
 
         if (isMounted) {
           setResolvedData(prev => ({
@@ -257,18 +252,11 @@ export default function LogiksForm({
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
-      console.log("geoFieldKeys.length > 0", geoFieldKeys);
-
-
+  
       const geoKey = geoFieldKeys[0];
-      console.log("geoKey", geoKey);
-      console.log("values", values);
-
-
       const geoValue = geoKey ? values[geoKey] : null;
-      console.log("geoValue", geoValue);
       finalGeo = geoValue || "0,0";
-      console.log("finalGeo", finalGeo);
+    
 
       // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
@@ -319,9 +307,6 @@ export default function LogiksForm({
 
       }
     }
-
-    console.log("finalValues", finalValues);
-
 
     // else if (isLocationRequired) {
 
