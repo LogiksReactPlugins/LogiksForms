@@ -547,6 +547,7 @@ export type GeolocationData = {
 };
 
 export async function fetchGeolocation(): Promise<GeolocationData> {
+
   if (!("geolocation" in navigator)) {
     throw new Error(
       "Geolocation is not supported by this browser. You cannot access this portal."
@@ -556,29 +557,28 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
   try {
     const position = await new Promise<GeolocationPosition>(
       (resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 30000,
-          maximumAge: 0,
-        });
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          reject,
+          {
+            enableHighAccuracy: true,
+            timeout: 30000,
+            maximumAge: 0,
+          }
+        );
       }
     );
 
-    const {
-      latitude,
-      longitude,
-      altitude,
-      accuracy,
-    } = position.coords;
-
     return {
-      latitude,
-      longitude,
-      altitude,
-      accuracy,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      altitude: position.coords.altitude,
+      accuracy: position.coords.accuracy,
     };
 
   } catch (error) {
+    console.log("error",error);
+    
     if (!(error instanceof GeolocationPositionError)) {
       throw new Error("Failed to get your location.");
     }

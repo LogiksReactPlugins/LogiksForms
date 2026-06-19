@@ -126,6 +126,9 @@ export interface SqlEndpoints {
     dbopsCreate?: string;
     uploadURL?: string;
     removeFileURL?: string;
+    native?: {
+        getGeoLocation?: () => Promise<string>;
+    };
 }
 export interface FormButtonLabels {
     submit?: string;

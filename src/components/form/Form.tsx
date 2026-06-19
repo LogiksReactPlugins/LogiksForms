@@ -52,11 +52,34 @@ export default function LogiksForm({
 
   React.useEffect(() => {
     let isMounted = true;
-
+    
     const initGeo = async () => {
 
       try {
-        const { latitude, longitude, altitude } = await fetchGeolocation();
+
+        let latitude: number | string;
+        let longitude: number | string;
+        let altitude: number | null = null;
+
+        if (
+          (window as any).Capacitor?.isNativePlatform?.() &&
+          sqlOpsUrls?.native?.getGeoLocation
+        ) {
+          const geo = await sqlOpsUrls.native.getGeoLocation();
+
+          const [lat, lng] = geo.split(",");
+
+          latitude = lat ?? "0";
+          longitude = lng ?? "0";
+        } else {
+
+          const pos = await fetchGeolocation();
+
+          latitude = pos.latitude;
+          longitude = pos.longitude;
+          altitude = pos.altitude;
+
+        }
 
         const geo = `${latitude},${longitude}`;
         const resolvedValues: Record<string, any> = {};
@@ -245,10 +268,11 @@ export default function LogiksForm({
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
-
+  
       const geoKey = geoFieldKeys[0];
       const geoValue = geoKey ? values[geoKey] : null;
       finalGeo = geoValue || "0,0";
+    
 
       // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
