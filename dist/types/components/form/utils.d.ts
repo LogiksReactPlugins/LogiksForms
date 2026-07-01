@@ -43,7 +43,6 @@ export declare function writePersistedValue(module_refid: string, key: string, v
 export declare function getFileExtension(path?: string): string;
 export declare function getMimeCategory(ext: string): "image" | "pdf" | "video" | "text" | "other";
 export declare const fileIconClassMap: Record<FileCategory, string>;
-export declare function sanitizeHtml(html: string): string;
 export declare function filterSavableValues(values: Record<string, any>, flatFields: FormField[]): Record<string, any>;
 export declare function getErrorMessage(err: unknown): string;
 export declare function getSuccessMessage(res: any, submitMsg?: boolean | string): string | null;

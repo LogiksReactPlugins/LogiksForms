@@ -4,6 +4,7 @@ import useFieldRenderer from '../hooks/useFieldRenderer.js';
 import { fetchGeolocation, getMaxDate, getOptionLabel, groupOptions, validateFiles } from '../utils.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
+import Markdown from './Markdown.js';
 import MultiSelect from './MultiSelect.js';
 import PhotoAvatarRenderer from './PhotoAvatarRenderer.js';
 import { DropdownPortal } from './PortalDropdown.js';
@@ -232,6 +233,19 @@ export default function FieldRenderer({
           </div>
         )
       }
+
+      case "markdown":
+        return (
+          <Markdown
+            field={field}
+            formik={formik}
+            isDisabled={isDisabled}
+            handlePersist={handlePersist}
+            executeFieldMethod={executeFieldMethod}
+            module_refid={module_refid}
+            labelClasses={labelClasses}
+          />
+        );
 
       case "textarea":
         return (

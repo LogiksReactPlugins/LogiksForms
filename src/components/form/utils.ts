@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import axios from "axios";
 import type { FormikProps } from "formik";
-import DOMPurify from "dompurify";
+
 import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap, FormikLike } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 
@@ -459,7 +459,7 @@ export const normalizeOptions = (opts?: any): OptionItem[] => {
       label: String(o.label ?? o.title ?? o.value),
       group:
         o.group ??
-        o.category ?? // 👈 support category if present
+        o.category ?? //  support category if present
         undefined,
     }));
   }
@@ -744,11 +744,7 @@ export const fileIconClassMap: Record<FileCategory, string> = {
   other: "fa fa-file"
 };
 
-export function sanitizeHtml(html: string) {
-  return DOMPurify.sanitize(html, {
-    USE_PROFILES: { html: true },
-  });
-}
+
 
 
 export function filterSavableValues(
@@ -997,8 +993,6 @@ export const buildApiParams = ({
       params[key] = formValues?.[val as string];
     }
   }
-
-  console.log("ddddddddparams", params);
 
 
   return params;

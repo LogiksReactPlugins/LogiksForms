@@ -29,12 +29,11 @@ export default defineConfig(({ mode }) => {
         fileName: () => `index.es.js`
       },
       rollupOptions: {
-        external: ['react', 'react-dom', 'formik', 'yup', 'axios', '@tiptap/react', '@tiptap/starter-kit','@tiptap/pm'],
+        external: ['react', 'react-dom'],
         output: {
           globals: {
             react: 'React',
-            'react-dom': 'ReactDOM',
-            yup: "Yup",
+            'react-dom': 'ReactDOM'
           },
           exports: "named",
         }
