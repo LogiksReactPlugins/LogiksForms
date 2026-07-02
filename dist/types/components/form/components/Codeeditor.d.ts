@@ -9,6 +9,6 @@ interface Props {
     handlePersist: (value: any, field: FormField, module_refid: string) => void;
     module_refid: string;
 }
-export default function Markdown({ field, formik, isDisabled, handlePersist, executeFieldMethod, module_refid, labelClasses }: Props): import("react").JSX.Element;
+export default function CodeEditor({ field, formik, isDisabled, handlePersist, executeFieldMethod, module_refid, labelClasses }: Props): import("react").JSX.Element;
 export {};
-//# sourceMappingURL=Markdown.d.ts.map
+//# sourceMappingURL=Codeeditor.d.ts.map

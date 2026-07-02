@@ -145,7 +145,7 @@ export default function NormalFormView({
 
   }
 
-
+console.log("formik.values",formik.values)
 
   return (
     <>

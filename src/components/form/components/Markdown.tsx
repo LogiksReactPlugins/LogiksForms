@@ -45,16 +45,15 @@ export default function Markdown({
       className="relative"
       data-color-mode="light"
     >
+   
       <label className={labelClasses}>
-        {field.label}
-        {field.required && (
-          <span className="text-red-500 ml-1">*</span>
-        )}
-      </label>
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
 
       <MDEditor
         value={value}
-        height={300}
+        height={field.height ?? 300}
         preview={"edit"}
       
         textareaProps={{

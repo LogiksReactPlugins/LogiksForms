@@ -2,6 +2,7 @@
 import type { FieldRendererProps, FormField } from '../Form.types.js';
 import useFieldRenderer from '../hooks/useFieldRenderer.js';
 import { fetchGeolocation, getMaxDate, getOptionLabel, groupOptions, validateFiles } from '../utils.js';
+import CodeEditor from './Codeeditor.js';
 import CustomSelect from './CustomSelect.js';
 import FilePreviewTrigger from './FilePreviewTrigger.js';
 import Markdown from './Markdown.js';
@@ -237,6 +238,19 @@ export default function FieldRenderer({
       case "markdown":
         return (
           <Markdown
+            field={field}
+            formik={formik}
+            isDisabled={isDisabled}
+            handlePersist={handlePersist}
+            executeFieldMethod={executeFieldMethod}
+            module_refid={module_refid}
+            labelClasses={labelClasses}
+          />
+        );
+
+      case "codeeditor":
+        return (
+          <CodeEditor
             field={field}
             formik={formik}
             isDisabled={isDisabled}
@@ -695,10 +709,10 @@ export default function FieldRenderer({
 
                   <div key={file} className="relative group">
 
-                    <FilePreviewTrigger
+                    {/* <FilePreviewTrigger
                       sqlOpsUrls={sqlOpsUrls}
                       filePath={file}
-                    />
+                    /> */}
                     {AttachmentPopup && (
                       <AttachmentPopup url={file} />
                     )}

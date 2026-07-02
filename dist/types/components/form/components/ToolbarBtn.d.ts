@@ -14,6 +14,6 @@ type ChildrenButtonProps = BaseProps & {
     icon?: never;
 };
 type ToolbarButtonProps = IconButtonProps | ChildrenButtonProps;
-export declare function ToolbarButton(props: ToolbarButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function ToolbarButton(props: ToolbarButtonProps): import("react").JSX.Element;
 export {};
 //# sourceMappingURL=ToolbarBtn.d.ts.map
