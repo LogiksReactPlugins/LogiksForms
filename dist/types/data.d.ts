@@ -12,6 +12,30 @@ export declare const example10: {
         uploadURL: string;
         operation: string;
     };
+    toolbar: {
+        camera: {
+            type: string;
+            method: string;
+            tooltip: string;
+            icon: string;
+            class: string;
+        };
+        qrcode: {
+            type: string;
+            method: string;
+            tooltip: string;
+            icon: string;
+            class: string;
+        };
+        doc: {
+            type: string;
+            endpoint: string;
+            method: string;
+            tooltip: string;
+            icon: string;
+            class: string;
+        };
+    };
     hooks: {
         presubmit: string[];
     };

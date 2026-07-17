@@ -22,9 +22,11 @@ export default function NormalFormView({
   AttachmentPopup,
   filesToDelete
 }: SimpleFormViewProps) {
+
   const flatfields = React.useMemo(() => {
     return flatFields(fields, sqlOpsUrls?.operation)
   }, [fields, sqlOpsUrls?.operation]);
+
 
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -85,7 +87,7 @@ export default function NormalFormView({
     [flatfields]
   );
 
-
+  console.log("chainMap", chainMap);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -134,7 +136,7 @@ export default function NormalFormView({
     }
   }
 
- 
+
 
   const cancel = () => {
     if (filesToDelete) {
@@ -145,7 +147,7 @@ export default function NormalFormView({
 
   }
 
-console.log("formik.values",formik.values)
+  console.log("formik.values", formik.values)
 
   return (
     <>

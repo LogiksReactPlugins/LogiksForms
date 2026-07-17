@@ -6,6 +6,7 @@ import { determineViewMode, fetchGeolocation, getAltitudeFieldKeys, getErrorMess
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
 import NormalFormView from "./components/NormalFormView.js";
+import FormToolbar from "./components/FormToolbar.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
 import { deleteFile, sqlClient } from "./service.js";
@@ -52,7 +53,7 @@ export default function LogiksForm({
 
   React.useEffect(() => {
     let isMounted = true;
-    
+
     const initGeo = async () => {
 
       try {
@@ -268,11 +269,11 @@ export default function LogiksForm({
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
-  
+
       const geoKey = geoFieldKeys[0];
       const geoValue = geoKey ? values[geoKey] : null;
       finalGeo = geoValue || "0,0";
-    
+
 
       // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
@@ -594,6 +595,12 @@ export default function LogiksForm({
 
   return (
     <div className="relative">
+        <FormToolbar
+        toolbar={formJson.toolbar}
+        methods={methods}
+        sqlOpsUrls={sqlOpsUrls}
+        populateForm={safeSetResolvedData}
+    />
       {formView[viewMode]}
     </div>
   );
