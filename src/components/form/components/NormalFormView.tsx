@@ -5,7 +5,13 @@ import FieldRenderer from './FieldRenderer.js';
 import { buildChainMap, filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { SimpleFormViewProps, FormField, OptionItem } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
+export interface NormalFormViewHandle {
+  populateForm: (payload: Record<string, any>) => void;
+}
 
+interface NormalFormViewProps extends SimpleFormViewProps {
+  ref?: React.Ref<NormalFormViewHandle>;
+}
 
 export default function NormalFormView({
   title,
@@ -20,8 +26,9 @@ export default function NormalFormView({
   buttons,
   button_labels,
   AttachmentPopup,
-  filesToDelete
-}: SimpleFormViewProps) {
+  filesToDelete,
+  ref
+}: NormalFormViewProps) {
 
   const flatfields = React.useMemo(() => {
     return flatFields(fields, sqlOpsUrls?.operation)
@@ -65,6 +72,7 @@ export default function NormalFormView({
   }, [flatfields]);
 
 
+
   const { initialValues, validationSchema } = React.useMemo(() => {
 
 
@@ -87,7 +95,7 @@ export default function NormalFormView({
     [flatfields]
   );
 
-  console.log("chainMap", chainMap);
+
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -107,6 +115,32 @@ export default function NormalFormView({
       }
     }
   })
+
+
+  React.useImperativeHandle(ref, () => ({
+    populateForm: (payload: Record<string, any>) => {
+      if (!payload) return;
+
+      const relevantFields = flatfields.filter((f) => f.name in payload);
+      const normalized: Record<string, any> = {};
+      const scratchSchema: Record<string, Yup.AnySchema> = {};
+
+      intializeForm(
+        relevantFields,
+        normalized,
+        scratchSchema,
+        payload,
+        module_refid,
+        sqlOpsUrls?.operation
+      );
+
+      formik.setValues((prev) => ({
+        ...prev,
+        ...normalized,
+      }));
+    },
+  }), [flatfields, module_refid, sqlOpsUrls?.operation]);
+
 
   //let visibleButtons = buttons ? Object.entries(buttons) : []
 

@@ -34,8 +34,8 @@ export default function FormToolbar({
   ) => {
     try {
       let response: any = {};
-      console.log("config", config);
-      console.log("executeAction payload", payload);
+
+     
 
       if (config.type === "method") {
         const fn = methods?.[config.method!];
@@ -241,6 +241,7 @@ export default function FormToolbar({
           }
 
           try {
+             console.log("executeAction payload", payload);
             populateForm(payload);
           } finally {
             pendingActionRef.current = null;

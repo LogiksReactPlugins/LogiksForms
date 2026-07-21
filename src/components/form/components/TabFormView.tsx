@@ -1,18 +1,35 @@
-import React from 'react'
+import React from "react";
 import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
-import { useFormik } from 'formik';
-import { buildChainMap, filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
-import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
-import CommonInfo from './CommonInfo.js';
+import { useFormik } from "formik";
+import {
+  buildChainMap,
+  filterSavableValues,
+  intializeForm,
+  isHidden,
+  tailwindCols,
+  toColWidth,
+} from "../utils.js";
+import type {
+  GroupedFormViewPrps,
+  OptionItem,
+  SelectOptions,
+} from "../Form.types.js";
+import CommonInfo from "./CommonInfo.js";
+export interface TabFormViewHandle {
+  populateForm: (payload: Record<string, any>) => void;
+}
 
+interface TabFormViewProps extends GroupedFormViewPrps {
+  ref?: React.Ref<TabFormViewHandle>;
+}
 
 export default function TabFormView({
   title,
   groupedFields,
   data,
-  onSubmit = async (values) => { },
-  onCancel = () => { },
+  onSubmit = async (values) => {},
+  onCancel = () => {},
   methods = {},
   components = {},
   sqlOpsUrls,
@@ -22,9 +39,9 @@ export default function TabFormView({
   buttons,
   button_labels,
   AttachmentPopup,
-  filesToDelete
-
-}: GroupedFormViewPrps) {
+  filesToDelete,
+  ref,
+}: TabFormViewProps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const groupNames = Object.keys(tabGroups);
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
@@ -33,94 +50,95 @@ export default function TabFormView({
     Record<string, OptionItem[]>
   >({});
 
-
-
-
   const setOptionsForField = (name: string, options: OptionItem[]) => {
-    setFieldOptions(prev => ({
+    setFieldOptions((prev) => ({
       ...prev,
       [name]: options,
     }));
   };
 
+  const { initialValues, validationSchema, stepperSchemas } =
+    React.useMemo(() => {
+      const values: Record<string, any> = {};
+      const globalSchema: Record<string, Yup.AnySchema> = {};
+      const stepSchemas: Record<string, Record<string, Yup.AnySchema>> = {};
 
-  const { initialValues, validationSchema, stepperSchemas } = React.useMemo(() => {
-    const values: Record<string, any> = {};
-    const globalSchema: Record<string, Yup.AnySchema> = {};
-    const stepSchemas: Record<string, Record<string, Yup.AnySchema>> = {};
+      if (widget) {
+        Object.entries(groupedFields).forEach(([step, fields]) => {
+          const stepSchema: Record<string, Yup.AnySchema> = {};
+          intializeForm(
+            fields,
+            values,
+            stepSchema,
+            data,
+            module_refid,
+            sqlOpsUrls?.operation,
+          );
 
-    if (widget) {
-      Object.entries(groupedFields).forEach(([step, fields]) => {
-        const stepSchema: Record<string, Yup.AnySchema> = {};
-        intializeForm(fields, values, stepSchema, data, module_refid, sqlOpsUrls?.operation);
+          stepSchemas[step] = stepSchema;
+        });
+      } else {
+        Object.entries(groupedFields).forEach(([_, fields]) => {
+          intializeForm(
+            fields,
+            values,
+            globalSchema,
+            data,
+            module_refid,
+            sqlOpsUrls?.operation,
+          );
+        });
+      }
 
-        stepSchemas[step] = stepSchema;
-      });
-    } else {
-      Object.entries(groupedFields).forEach(([_, fields]) => {
-        intializeForm(fields, values, globalSchema, data, module_refid, sqlOpsUrls?.operation);
-      });
-    }
-
-    return {
-      initialValues: values,
-      validationSchema: globalSchema,
-      stepperSchemas: stepSchemas,
-    };
-  }, [groupedFields, data, widget, module_refid, sqlOpsUrls?.operation]);
-
-
+      return {
+        initialValues: values,
+        validationSchema: globalSchema,
+        stepperSchemas: stepSchemas,
+      };
+    }, [groupedFields, data, widget, module_refid, sqlOpsUrls?.operation]);
 
   const flatFields = React.useMemo(
     () => Object.values(groupedFields).flat(),
-    [groupedFields]
+    [groupedFields],
   );
 
   const currentStepKey = groupNames[activeTabIndex] ?? null;
 
   const currentStepSchema =
     widget && currentStepKey
-      ? stepperSchemas[currentStepKey] ?? {}
+      ? (stepperSchemas[currentStepKey] ?? {})
       : validationSchema;
-
-
 
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object().shape(currentStepSchema),
     onSubmit: async (values) => {
-
       let filteredValues = filterSavableValues(values, flatFields);
 
       if (widget) {
         if (activeTabIndex < groupNames.length - 1) {
-          setActiveTabIndex(pre => pre + 1)
+          setActiveTabIndex((pre) => pre + 1);
         }
 
         if (activeTabIndex === groupNames.length - 1) {
-          submitValues(filteredValues)
+          submitValues(filteredValues);
         }
       } else {
-
-        submitValues(filteredValues)
+        submitValues(filteredValues);
       }
-
-    }
-  })
+    },
+  });
 
   const submitValues = async (values: Record<string, any>) => {
     try {
       const res = await onSubmit(values);
       console.log("res", res);
-      formik.resetForm()
-
+      formik.resetForm();
     } catch (error) {
       console.log("error", error);
     }
-  }
-
-
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,74 +149,87 @@ export default function TabFormView({
       if (Object.keys(errors).length > 0) {
         alert("Please fill all required fields before submitting.");
         formik.setTouched(
-          Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+          Object.keys(errors).reduce(
+            (acc, key) => ({ ...acc, [key]: true }),
+            {},
+          ),
         );
         return;
       }
     }
 
-
     formik.handleSubmit(e);
   };
 
-
   const handlePrevious = () => {
-    setActiveTabIndex(pre => {
+    setActiveTabIndex((pre) => {
       if (pre > 0) {
-        return pre - 1
+        return pre - 1;
       }
-      return pre
-    })
-  }
-  const chainMap = React.useMemo(
-    () => buildChainMap(flatFields),
-    [flatFields]
+      return pre;
+    });
+  };
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      populateForm: (payload: Record<string, any>) => {
+        if (!payload) return;
+
+        const relevantFields = flatFields.filter((f) => f.name in payload);
+        const normalized: Record<string, any> = {};
+        const scratchSchema: Record<string, Yup.AnySchema> = {};
+
+        intializeForm(
+          relevantFields,
+          normalized,
+          scratchSchema,
+          payload,
+          module_refid,
+          sqlOpsUrls?.operation,
+        );
+
+        formik.setValues((prev) => ({
+          ...prev,
+          ...normalized,
+        }));
+      },
+    }),
+    [flatFields, module_refid, sqlOpsUrls?.operation],
   );
-
-
-
+  const chainMap = React.useMemo(() => buildChainMap(flatFields), [flatFields]);
 
   const resetForm = () => {
     formik.resetForm();
     if (filesToDelete) {
       filesToDelete.current = [];
     }
-  }
-
- 
+  };
 
   const cancel = () => {
     if (filesToDelete) {
       filesToDelete.current = [];
     }
     onCancel?.();
-
-
-  }
-
+  };
 
   // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
   //   if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
   //   return true;
   // }) : []
 
-
   async function handleClick(method: string, val: Record<string, any>) {
-
     const methodFn = methods?.[method as keyof typeof methods];
 
     if (methodFn) {
       try {
         await methodFn();
-
       } catch (err) {
         console.error("Method execution failed:", err);
-
       }
-      return
+      return;
     }
-    methods?.handleAction?.({ [method]: val }, formik.values)
-
+    methods?.handleAction?.({ [method]: val }, formik.values);
   }
 
   const [fieldLoading, setFieldLoading] = React.useState<
@@ -206,26 +237,20 @@ export default function TabFormView({
   >({});
 
   const updateFieldLoading = (fieldName: string, loading: boolean) => {
-    setFieldLoading(prev => ({
+    setFieldLoading((prev) => ({
       ...prev,
       [fieldName]: loading,
     }));
   };
-
-
 
   return (
     <div className=" max-w-full  m-4">
       {/* Modern Tab Navigation */}
       <form onSubmit={handleSubmit} className="w-full mx-auto">
         <div className="relative">
-
           <div className="relative  rounded-t-lg px-1 pt-1  shadow-inner">
-
-
-
             {commonFields.length > 0 && (
-              <div className='p-3'>
+              <div className="p-3">
                 <CommonInfo
                   refid={refid}
                   module_refid={module_refid}
@@ -238,23 +263,22 @@ export default function TabFormView({
                   chainMap={chainMap}
                   AttachmentPopup={AttachmentPopup}
                   filesToDelete={filesToDelete}
-
                 />
               </div>
             )}
 
             {/* Tab buttons */}
-            <nav className="relative flex bg-gray-100" >
+            <nav className="relative flex bg-gray-100">
               {groupNames.map((group, index) => (
                 <button
                   key={group}
                   type="button"
                   onClick={() => setActiveTabIndex(index)}
-                  className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
-                    ? 'text-action bg-white'
-                    : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
-                    }`}
-
+                  className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${
+                    activeTabIndex === index
+                      ? "text-action bg-white"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
+                  }`}
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
                     {/* Add icons based on common tab names */}
@@ -275,86 +299,108 @@ export default function TabFormView({
         >
           {/* Content Header */}
 
-
-
           {/* Fields Container */}
-          <div className='grid grid-cols-12 gap-4'>
-            {currentStepKey && tabGroups[currentStepKey]?.map((field, index) => {
-
-              const hidden = isHidden(field.hidden);
-              const wrapperClass = `
+          <div className="grid grid-cols-12 gap-4">
+            {currentStepKey &&
+              tabGroups[currentStepKey]?.map((field, index) => {
+                const hidden = isHidden(field.hidden);
+                const wrapperClass = `
                   col-span-12 md:col-span-6
                   ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
                   ${hidden ? "hidden" : ""}
                 `;
-              if (field.type === "static" || field.type === "static2") {
-                const isPrimary = field.type === "static";
+                if (field.type === "static" || field.type === "static2") {
+                  const isPrimary = field.type === "static";
 
-                return (
-                  <div
-                    key={field?.name}
-                    id={`wrapper-${field.name}`}
-                    className="col-span-12"
-                  >
+                  return (
                     <div
-                      className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                      key={field?.name}
+                      id={`wrapper-${field.name}`}
+                      className="col-span-12"
                     >
-                      <div className="flex items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-3">
-
-                          <h2
-                            className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
-                          >
-                            {field.label}
-                          </h2>
+                      <div
+                        className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                      >
+                        <div className="flex items-center justify-between px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <h2
+                              className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
+                            >
+                              {field.label}
+                            </h2>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  );
+                }
+
+                return (
+                  <div
+                    id={`wrapper-${field.name}`}
+                    key={field?.name ?? `field-${index}`}
+                    className={wrapperClass}
+                  >
+                    <FieldRenderer
+                      refid={refid}
+                      module_refid={module_refid}
+                      sqlOpsUrls={sqlOpsUrls}
+                      key={field.name}
+                      field={field}
+                      formik={formik}
+                      methods={methods}
+                      components={components}
+                      setFieldOptions={setOptionsForField}
+                      {...(fieldOptions[field.name]
+                        ? { optionsOverride: fieldOptions[field.name] }
+                        : {})}
+                      chainMap={chainMap}
+                      fieldLoading={fieldLoading[field.name] ?? false}
+                      setFieldLoading={updateFieldLoading}
+                      AttachmentPopup={AttachmentPopup}
+                      filesToDelete={filesToDelete}
+                    />
                   </div>
                 );
-              }
-
-              return <div
-                id={`wrapper-${field.name}`}
-                key={field?.name ?? `field-${index}`}
-                className={wrapperClass}
-              >
-                <FieldRenderer
-                  refid={refid}
-                  module_refid={module_refid}
-                  sqlOpsUrls={sqlOpsUrls}
-                  key={field.name}
-                  field={field}
-                  formik={formik}
-                  methods={methods}
-                  components={components}
-                  setFieldOptions={setOptionsForField}
-                  {...(fieldOptions[field.name]
-                    ? { optionsOverride: fieldOptions[field.name] }
-                    : {})}
-                  chainMap={chainMap}
-                  fieldLoading={fieldLoading[field.name] ?? false}
-                  setFieldLoading={updateFieldLoading}
-                  AttachmentPopup={AttachmentPopup}
-                  filesToDelete={filesToDelete}
-                />
-              </div>
-            })}
+              })}
           </div>
-          <div className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}>
-            {activeTabIndex > 0 && <button onClick={handlePrevious} type="button" className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-              Previous
-            </button>}
+          <div
+            className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}
+          >
+            {activeTabIndex > 0 && (
+              <button
+                onClick={handlePrevious}
+                type="button"
+                className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
+              >
+                Previous
+              </button>
+            )}
 
-            <div className='space-x-3'>
-              <button onClick={cancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
+            <div className="space-x-3">
+              <button
+                onClick={cancel}
+                type="button"
+                className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
+              >
                 {button_labels?.cancel || "Cancel"}
               </button>
-              <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+              <button
+                type="button"
+                onClick={resetForm}
+                className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+              >
                 {button_labels?.reset || "Reset"}
               </button>
-              <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {button_labels?.submit ? button_labels?.submit : widget ? "Next" : "Save"}
+              <button
+                type="submit"
+                className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
+              >
+                {button_labels?.submit
+                  ? button_labels?.submit
+                  : widget
+                    ? "Next"
+                    : "Save"}
               </button>
             </div>
           </div>
@@ -363,18 +409,21 @@ export default function TabFormView({
           <div className="mt-2 pt-3  border-t border-gray-100">
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex items-center">
-                <span>Tab {activeTabIndex + 1} of {groupNames.length}</span>
-                <p className='text-sm text-gray-700 ml-3'>All fields marked (*) are required</p>
+                <span>
+                  Tab {activeTabIndex + 1} of {groupNames.length}
+                </span>
+                <p className="text-sm text-gray-700 ml-3">
+                  All fields marked (*) are required
+                </p>
               </div>
 
               <div className="flex gap-1">
                 {groupNames.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex
-                      ? 'bg-action w-6'
-                      : 'bg-gray-300'
-                      }`}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === activeTabIndex ? "bg-action w-6" : "bg-gray-300"
+                    }`}
                   ></div>
                 ))}
               </div>
@@ -395,7 +444,6 @@ export default function TabFormView({
             </button>
           ))}
       </div> */}
-
     </div>
   );
-};
+}
