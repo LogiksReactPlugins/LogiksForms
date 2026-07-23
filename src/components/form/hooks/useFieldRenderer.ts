@@ -458,7 +458,7 @@ export default function useFieldRenderer({
         if (!ac && !aj) return;
 
         const value = formik.values[field.name];
-        if (!value) return;
+
 
         const ajaxChains = Array.isArray(aj) ? aj : aj ? [aj] : [];
 
@@ -470,9 +470,9 @@ export default function useFieldRenderer({
                     const src = ac.src;
                     if (!src || !sqlOpsUrls) return;
 
-                    let row: any;
+                    let row: any = {};
 
-                    if ("type" in src && src.type === "api") {
+                    if ("type" in src && src.type === "api" && value) {
                         let curr_field = field.name;
 
                         if (typeof field.parameter === "string" && field.parameter) {
@@ -510,47 +510,54 @@ export default function useFieldRenderer({
                         row = getFirstRow(res)
                     } else {
 
-                        let query: sqlQueryProps | undefined;
+                        if (value) {
+                            let query: sqlQueryProps | undefined;
 
-                        if (!src.queryid) {
-                            if (!src.table || !src.columns) {
-                                throw new Error("SQL query requires field.table");
+                            if (!src.queryid) {
+                                if (!src.table || !src.columns) {
+                                    throw new Error("SQL query requires field.table");
+                                }
+                                const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
+                                    refid: value,
+                                });
+                                query = {
+                                    ...src,
+                                    table: src.table,
+                                    cols: src.columns,
+                                    where: resolvedWhere,
+                                };
                             }
-                            const resolvedWhere = replacePlaceholders(src?.where ?? {}, {
-                                refid: value,
-                            });
-                            query = {
-                                ...src,
-                                table: src.table,
-                                cols: src.columns,
-                                where: resolvedWhere,
-                            };
+
+
+                            const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
+
+                            row = Array.isArray(res?.data?.data)
+                                ? res.data.data[0]
+                                : Array.isArray(res?.data)
+                                    ? res.data[0]
+                                    : res?.data;
                         }
 
 
-                        const { data: res } = await fetchDataByquery(sqlOpsUrls, query, src?.queryid, value, module_refid);
-
-                        row = Array.isArray(res?.data?.data)
-                            ? res.data.data[0]
-                            : Array.isArray(res?.data)
-                                ? res.data[0]
-                                : res?.data;
                     }
 
                     let normalizedRow = normalizeRowSafe(row);
+                    console.log("normalizedRow", normalizedRow);
+
 
                     if (normalizedRow) {
                         ac.target
                             .split(",")
                             .map(t => t.trim())
                             .forEach(t => {
-                                if (normalizedRow[t] !== undefined) {
-                                    formik.setFieldValue(t, normalizedRow[t]);
-                                }
+
+                                formik.setFieldValue(t, normalizedRow[t] ?? "");
+
                             });
                     }
+                    return
                 }
-
+                if (!value) return;
                 // ---------- AJAX CHAIN (ARRAY SAFE) ----------
                 for (const chain of ajaxChains) {
                     setFieldLoading?.(chain.target, true);

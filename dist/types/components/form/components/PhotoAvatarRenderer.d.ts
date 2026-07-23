@@ -8,6 +8,6 @@ type PhotoAvatarRendererProps = {
     module_refid?: string | undefined;
     filesToDelete?: React.RefObject<string[]> | undefined;
 };
-export default function PhotoAvatarRenderer({ formik, field, sqlOpsUrls, module_refid, filesToDelete }: PhotoAvatarRendererProps): import("react/jsx-runtime").JSX.Element;
+export default function PhotoAvatarRenderer({ formik, field, sqlOpsUrls, module_refid, filesToDelete }: PhotoAvatarRendererProps): React.JSX.Element;
 export {};
 //# sourceMappingURL=PhotoAvatarRenderer.d.ts.map
