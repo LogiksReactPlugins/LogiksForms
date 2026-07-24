@@ -27,6 +27,12 @@ export declare const example10: {
         company_code_id: {
             label: string;
             type: string;
+            buttons: {
+                "api@hse.someAction": {
+                    label: string;
+                    icon: string;
+                };
+            };
             parameter: string;
             required: boolean;
             source: {
