@@ -73,7 +73,9 @@ export default function FieldRenderer({
   }, [moreOpen]);
 
   const handleButtonClick = (method: string, val: any) => {
-    methods?.handleAction?.({ [method]: val }, formik.values, refreshOptions);
+    console.log("called handleaction");
+    
+    methods?.handleActions?.({ [method]: val }, formik.values, refreshOptions);
   };
 
   const renderField = (): React.ReactNode => {

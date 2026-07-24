@@ -14008,7 +14008,7 @@ function Wn({
     return document.addEventListener("mousedown", te), () => document.removeEventListener("mousedown", te);
   }, [Me]);
   const G = (te, P) => {
-    n?.handleAction?.({ [te]: P }, e.values, _);
+    console.log("called handleaction"), n?.handleActions?.({ [te]: P }, e.values, _);
   }, le = () => {
     switch (t.type) {
       case "suggest":
