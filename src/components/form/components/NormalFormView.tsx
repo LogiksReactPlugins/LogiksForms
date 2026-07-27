@@ -121,22 +121,9 @@ export default function NormalFormView({
     populateForm: (payload: Record<string, any>) => {
       if (!payload) return;
 
-      const relevantFields = flatfields.filter((f) => f.name in payload);
-      const normalized: Record<string, any> = {};
-      const scratchSchema: Record<string, Yup.AnySchema> = {};
-
-      intializeForm(
-        relevantFields,
-        normalized,
-        scratchSchema,
-        payload,
-        module_refid,
-        sqlOpsUrls?.operation
-      );
-
       formik.setValues((prev) => ({
         ...prev,
-        ...normalized,
+        ...payload,
       }));
     },
   }), [flatfields, module_refid, sqlOpsUrls?.operation]);

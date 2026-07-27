@@ -26,9 +26,9 @@ type ViewMode = "accordion" | "cards" | "tab" | "simple";
 export default function LogiksForm({
   formJson,
   methods = {},
-  onCancel = () => {},
+  onCancel = () => { },
   components = {},
-  callback = () => {},
+  callback = () => { },
   initialvalues,
   toast,
   location_required = true,
@@ -483,7 +483,7 @@ export default function LogiksForm({
           url:
             sqlOpsUrls.baseURL +
             sqlOpsUrls[
-              sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"
+            sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"
             ],
           data: {
             refid: dbopsId,
@@ -523,7 +523,7 @@ export default function LogiksForm({
   const formView = {
     accordion: (
       <AccordionFormView
-      ref={formRef}
+        ref={formRef}
         title={formJson?.title ?? ""}
         groupedFields={groupedFields}
         data={resolvedData}
@@ -542,7 +542,7 @@ export default function LogiksForm({
     ),
     cards: (
       <CardFormView
-      ref={formRef}
+        ref={formRef}
         title={formJson?.title ?? ""}
         groupedFields={groupedFields}
         data={resolvedData}
@@ -561,7 +561,7 @@ export default function LogiksForm({
     ),
     tab: (
       <TabFormView
-      ref={formRef}
+        ref={formRef}
         title={formJson?.title ?? ""}
         groupedFields={groupedFields}
         data={resolvedData}
