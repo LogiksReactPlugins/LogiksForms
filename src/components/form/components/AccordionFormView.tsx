@@ -55,8 +55,10 @@ export default function AccordionFormView({
   const { initialValues, validationSchema } = React.useMemo(() => {
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
+    const effectiveOperation =
+      sqlOpsUrls?.operation === "clone" ? "create" : sqlOpsUrls?.operation;
     Object.values(groupedFields).flat().forEach((field) => {
-      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls?.operation);
+      intializeForm([field], values, schema, data, module_refid, effectiveOperation);
     });
 
     return {
@@ -123,7 +125,7 @@ export default function AccordionFormView({
     }
   }
 
- 
+
 
   const cancel = () => {
     if (filesToDelete) {
@@ -260,13 +262,13 @@ export default function AccordionFormView({
             <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
             <div className='space-x-3'>
               <button type="button" onClick={cancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-               {button_labels?.cancel || "Cancel"}  
+                {button_labels?.cancel || "Cancel"}
               </button>
               <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-               {button_labels?.reset || "Reset"} 
+                {button_labels?.reset || "Reset"}
               </button>
               <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-               {button_labels?.submit || "Save"}
+                {button_labels?.submit || "Save"}
               </button>
             </div>
           </div>

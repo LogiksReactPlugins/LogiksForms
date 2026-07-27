@@ -22,9 +22,11 @@ export default function NormalFormView({
   AttachmentPopup,
   filesToDelete
 }: SimpleFormViewProps) {
+    const effectiveOperation =
+      sqlOpsUrls?.operation === "clone" ? "create" : sqlOpsUrls?.operation;
   const flatfields = React.useMemo(() => {
-    return flatFields(fields, sqlOpsUrls?.operation)
-  }, [fields, sqlOpsUrls?.operation]);
+    return flatFields(fields, effectiveOperation)
+  }, [fields, effectiveOperation]);
 
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -68,15 +70,17 @@ export default function NormalFormView({
 
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
+  
+
     flatfields.forEach((field) => {
-      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls?.operation);
+      intializeForm([field], values, schema, data, module_refid, effectiveOperation);
     });
 
     return {
       initialValues: values,
       validationSchema: schema,
     };
-  }, [flatfields, data]);
+  }, [flatfields, data, effectiveOperation]);
 
   //console.log("fields", fields);
 
@@ -134,7 +138,7 @@ export default function NormalFormView({
     }
   }
 
- 
+
 
   const cancel = () => {
     if (filesToDelete) {

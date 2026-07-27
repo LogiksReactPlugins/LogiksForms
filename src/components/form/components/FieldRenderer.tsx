@@ -688,6 +688,7 @@ export default function FieldRenderer({
                     existingFiles: files,
                     maxFiles: max,
                     maxFileSize: field.file_size,
+                    accept:field?.accept
                   });
                   if (!validFiles) return;
                   if (validFiles) handleFileUpload(validFiles);
@@ -710,10 +711,10 @@ export default function FieldRenderer({
 
                   <div key={file} className="relative group">
 
-                    <FilePreviewTrigger
+                    {/* <FilePreviewTrigger
                       sqlOpsUrls={sqlOpsUrls}
                       filePath={file}
-                    />
+                    /> */}
                     {AttachmentPopup && (
                       <AttachmentPopup url={file} />
                     )}

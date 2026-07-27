@@ -25,9 +25,19 @@ export default function LogiksForm({
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
-  const groupedFields = groupFields(formJson?.fields ?? {}, sqlOpsUrls?.operation);
+  
+ 
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
   const filesToDelete = React.useRef<string[]>([]);
+
+  const operation = sqlOpsUrls?.operation;
+
+  const effectiveOperation =
+  operation === "clone" ? "create" : operation;
+
+  const shouldFetchData = operation !== "create";
+  const shouldCreate = operation === "create" || operation === "clone";
+   const groupedFields = groupFields(formJson?.fields ?? {}, effectiveOperation);
 
   // const isLocationRequired =
   //   location_required && formJson.location_required !== false;
@@ -52,7 +62,7 @@ export default function LogiksForm({
 
   React.useEffect(() => {
     let isMounted = true;
-    
+
     const initGeo = async () => {
 
       try {
@@ -157,7 +167,7 @@ export default function LogiksForm({
         return;
       }
 
-      if (source.type === "method" && sqlOpsUrls?.operation !== "create") {
+      if (source.type === "method" && shouldFetchData) {
         const methodName = source.method as keyof typeof methods | undefined;
         const methodFn = methodName ? methods[methodName] : undefined;
         if (methodFn) {
@@ -173,7 +183,7 @@ export default function LogiksForm({
         }
       }
 
-      if (source.type === "api" && sqlOpsUrls?.operation !== "create") {
+      if (source.type === "api" && shouldFetchData) {
         try {
 
           const config = {
@@ -208,8 +218,8 @@ export default function LogiksForm({
       if ((source.type === "sql" &&
         source.refid &&
         source.refid !== "0" &&
-        sqlOpsUrls?.operation !== "create") ||
-        (sqlOpsUrls?.operation !== "create" && source.dbopsid)) {
+        shouldFetchData) ||
+        (shouldFetchData && source.dbopsid)) {
 
         if (!sqlOpsUrls) {
           console.error("SQL source requires formJson.endPoints but it is missing");
@@ -227,7 +237,7 @@ export default function LogiksForm({
                 refid: refid,
               }),
             },
-            fields: transformedObject(formJson.fields, sqlOpsUrls.operation),
+            fields: transformedObject(formJson.fields, effectiveOperation),
 
           }, source?.dbopsid, formJson?.module_refid);
 
@@ -268,11 +278,11 @@ export default function LogiksForm({
 
     if (geoFieldKeys.length > 0 ||
       altitudeFieldKeys.length > 0) {
-  
+
       const geoKey = geoFieldKeys[0];
       const geoValue = geoKey ? values[geoKey] : null;
       finalGeo = geoValue || "0,0";
-    
+
 
       // if (isLocationRequired && (!finalGeo || finalGeo === "0,0")) {
 
@@ -362,7 +372,8 @@ export default function LogiksForm({
           }
 
           if (methods?.handleActions) {
-            let referenceid = sqlOpsUrls?.operation === "update" ? refid : res?.data?.refid
+
+            let referenceid = shouldCreate ? res?.data?.refid : refid;
             const link = formJson?.gotolink?.replace(
               "{hashid}",
               String(referenceid)
@@ -404,7 +415,7 @@ export default function LogiksForm({
           toast?.success?.(message);
         }
         if (methods?.handleActions) {
-          let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
+          let referenceid = shouldCreate ? res?.data?.refid : refid;
           const link = formJson?.gotolink?.replace(
             "{hashid}",
             String(referenceid)
@@ -467,9 +478,9 @@ export default function LogiksForm({
             method: "POST",
             url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetRefId,
             data: {
-              "operation": sqlOpsUrls.operation,
+              "operation": effectiveOperation,
               "source": query,
-              "fields": transformedObject(formJson.fields, sqlOpsUrls.operation),
+              "fields": transformedObject(formJson.fields, effectiveOperation),
               "forcefill": formJson.forcefill,
               "datahash": resHashId.data.refhash,
               srcid: formJson?.module_refid
@@ -484,7 +495,10 @@ export default function LogiksForm({
         }
         const res = await axios({
           method: "POST",
-          url: sqlOpsUrls.baseURL + sqlOpsUrls[sqlOpsUrls.operation === "update" ? "dbopsUpdate" : "dbopsCreate"],
+          url: sqlOpsUrls.baseURL + sqlOpsUrls[
+            shouldCreate ?
+              "dbopsCreate" : "dbopsUpdate"
+          ],
           data: {
             "refid": dbopsId,
             "fields": finalValues,
@@ -504,7 +518,7 @@ export default function LogiksForm({
         }
         callback?.(res);
         if (methods?.handleActions) {
-          let referenceid = sqlOpsUrls.operation === "update" ? refid : res?.data?.refid
+          let referenceid = shouldCreate ? res?.data?.refid : refid;
           const link = formJson?.gotolink?.replace(
             "{hashid}",
             String(referenceid)

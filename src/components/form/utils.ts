@@ -873,6 +873,7 @@ type ValidateFileInputParams = {
   existingFiles: string[];
   maxFiles: number;
   maxFileSize?: number | undefined; // bytes
+  accept?: string | undefined;
 };
 
 const formatSize = (bytes: number) => {
@@ -881,16 +882,49 @@ const formatSize = (bytes: number) => {
   }
   return `${(bytes / 1024).toFixed(0)} KB`;
 };
+
+export const isFileAccepted = (file: File, accept?: string): boolean => {
+  if (!accept?.trim()) return true;
+
+  const fileType = (file.type || "").toLowerCase();
+  const fileName = file.name.toLowerCase();
+
+  const rules = accept
+    .split(",")
+    .map((rule) => rule.trim().toLowerCase())
+    .filter(Boolean);
+
+  return rules.some((rule) => {
+    // Extension (.pdf, .docx)
+    if (rule.startsWith(".")) {
+      return fileName.endsWith(rule);
+    }
+
+    // Wildcard (image/*, video/*)
+    if (rule.endsWith("/*")) {
+      const prefix = rule.slice(0, -1); // image/
+      return fileType.startsWith(prefix);
+    }
+
+    // Exact MIME (application/pdf)
+    return fileType === rule;
+  });
+};
+
 export const validateFiles = ({
   e,
   existingFiles,
   maxFiles,
-  maxFileSize
+  maxFileSize,
+  accept
 }: ValidateFileInputParams) => {
   const selectedFiles = e.currentTarget.files;
   if (!selectedFiles) return null;
+
   const fileArray = Array.from(selectedFiles);
+
   const total = existingFiles.length + fileArray.length;
+
   if (total > maxFiles) {
     alert(`You can upload maximum ${maxFiles} file(s)`);
     e.currentTarget.value = "";
@@ -905,6 +939,23 @@ export const validateFiles = ({
     if (invalidFile) {
       alert(
         `File "${invalidFile.name}" exceeds max size of ${formatSize(maxFileSize)}`);
+      e.currentTarget.value = "";
+      return null;
+    }
+  }
+
+    if (accept) {
+    const invalidFiles = fileArray.filter(
+      (file) => !isFileAccepted(file, accept)
+    );
+
+    if (invalidFiles.length > 0) {
+      alert(
+        `Unsupported file type:\n\n${invalidFiles
+          .map((f) => f.name)
+          .join("\n")}\n\nAllowed types:\n${accept}`
+      );
+
       e.currentTarget.value = "";
       return null;
     }
