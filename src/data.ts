@@ -1,7 +1,7 @@
 
 
 export const example10 = {
-      "endPoints": {
+    "endPoints": {
         "baseURL": "http://192.168.0.20:9999",
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkRJVkI2Kzh2Ym53NDN3YzhGMFZpRDZlbGpscTlhN0pQMlhrbFgvMnN3b3lrRE0wWTBKYS9FTFpjaHJnc0dnWDZlakgzSW9qK2ZPWFVhUkdtZ0hRT2NyTHpzM3RLUTVXd21Xbk5GcWdNWlZPYXJNWWt2STdqeTUxelVYWmRBcDArbkhyOTZBVUdVbG5VclFzMGJlYitWb3ppWmMrZHFvVjlUQ3dQcEtHajMvMXpPdmY2aVYvYkpJbStrckhqZ201UDE4UFU0WTdqNmJjOExlb0hwUzY3VTMvR2FzQ3Z0R2VZQlJNZitlOUtEeUwxREZ6NGxoR0tkaTNsSWoyZ0s5WEZyQ3FvN3E4YVVqNlFSb24zQm9DT1hGL1JTOUJqQzlqd05oOUk0aENXc3FUdkN4QW4za2tQc3gycHg2VkZaeEUwYVFyVEFsd1F4RjNjWkVCN3JsR0tscVBjR1RuOEgvZzRpOFhYT09uUVd4cUdSYUs4SVZYMUQ5a2hjOXVGZ3dmK2JGN1dobnNWTHQzeEdIZDVjY25FMXNOVEhrbkxiQ1VCVWhCMERPYStiUEEwKy9CUUtTb2hGOUJHTlZTN1l5cTBmY05ITHgwVGpuUzErS0hZK3UvQmFWR2hrdGpxUlpCQ3I1VVpTM25iNzhnRUhBPT0iLCJpYXQiOjE3ODAwNDQ0NTcsImV4cCI6MTc4MDA0ODA1NywianRpIjoiYWNjOjE6MTc4MDA0NDQ1NzE1MDp3ZWIifQ.R8ZTHkRNS4AFIQG5zcOFOJ6XckvIZKIpPWKv9jXJ6js",
         "dbopsGetHash": "/api/dbops",
@@ -40,6 +40,14 @@ export const example10 = {
         "company_code_id": {
             "label": "Company/ SPV",
             "type": "select",
+            "buttons": {
+                "api@hse.someAction": {
+                    "label": "Add",
+                    "icon": "fa fa-plus",
+
+                },
+
+            },
             "parameter": "company_id",
             "required": true,
             "source": {
@@ -129,7 +137,7 @@ export const example10 = {
         "conducted_by_name": {
             "label": "Conducted By (Name)",
             "type": "select",
-            "multiple":true,
+            "multiple": true,
             "width": 4,
             "search": true,
             "options": [
