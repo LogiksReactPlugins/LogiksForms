@@ -31,12 +31,15 @@ export default function PhotoAvatarRenderer({
             ? [formik.values[key]]
             : [];
 
+     const inputConfig = getInputConfig(field);
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const validFiles = validateFiles({
             e,
             existingFiles: files,
             maxFiles: max,
             maxFileSize: field.file_size,
+            accept:inputConfig.accept
         });
         if (!validFiles) return;
 
@@ -83,7 +86,7 @@ export default function PhotoAvatarRenderer({
     };
 
 
-    const inputConfig = getInputConfig(field);
+   
     const isMultiple = field.multiple === true;
 
 

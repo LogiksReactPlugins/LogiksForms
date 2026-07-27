@@ -57,8 +57,10 @@ export default function CardFormView({
   const { initialValues, validationSchema } = React.useMemo(() => {
     const values: Record<string, any> = {};
     const schema: Record<string, Yup.AnySchema> = {};
+    const effectiveOperation =
+      sqlOpsUrls?.operation === "clone" ? "create" : sqlOpsUrls?.operation;
     Object.values(groupedFields).flat().forEach((field) => {
-      intializeForm([field], values, schema, data, module_refid, sqlOpsUrls?.operation);
+      intializeForm([field], values, schema, data, module_refid, effectiveOperation);
     });
 
     return {

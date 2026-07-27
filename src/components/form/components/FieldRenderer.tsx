@@ -716,6 +716,7 @@ export default function FieldRenderer({
                     existingFiles: files,
                     maxFiles: max,
                     maxFileSize: field.file_size,
+                    accept:field?.accept
                   });
                   if (!validFiles) return;
                   if (validFiles) handleFileUpload(validFiles);

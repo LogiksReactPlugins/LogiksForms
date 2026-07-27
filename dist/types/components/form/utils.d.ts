@@ -63,8 +63,10 @@ type ValidateFileInputParams = {
     existingFiles: string[];
     maxFiles: number;
     maxFileSize?: number | undefined;
+    accept?: string | undefined;
 };
-export declare const validateFiles: ({ e, existingFiles, maxFiles, maxFileSize }: ValidateFileInputParams) => FileList | null;
+export declare const isFileAccepted: (file: File, accept?: string) => boolean;
+export declare const validateFiles: ({ e, existingFiles, maxFiles, maxFileSize, accept }: ValidateFileInputParams) => FileList | null;
 export declare const mergeOptions: (field: {
     options?: any;
     options_top?: any;

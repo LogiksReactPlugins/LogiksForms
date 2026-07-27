@@ -48,17 +48,18 @@ export default function TabFormView({
     const values: Record<string, any> = {};
     const globalSchema: Record<string, Yup.AnySchema> = {};
     const stepSchemas: Record<string, Record<string, Yup.AnySchema>> = {};
-
+    const effectiveOperation =
+      sqlOpsUrls?.operation === "clone" ? "create" : sqlOpsUrls?.operation;
     if (widget) {
       Object.entries(groupedFields).forEach(([step, fields]) => {
         const stepSchema: Record<string, Yup.AnySchema> = {};
-        intializeForm(fields, values, stepSchema, data, module_refid, sqlOpsUrls?.operation);
+        intializeForm(fields, values, stepSchema, data, module_refid, effectiveOperation);
 
         stepSchemas[step] = stepSchema;
       });
     } else {
       Object.entries(groupedFields).forEach(([_, fields]) => {
-        intializeForm(fields, values, globalSchema, data, module_refid, sqlOpsUrls?.operation);
+        intializeForm(fields, values, globalSchema, data, module_refid, effectiveOperation);
       });
     }
 
@@ -165,7 +166,7 @@ export default function TabFormView({
     }
   }
 
- 
+
 
   const cancel = () => {
     if (filesToDelete) {
