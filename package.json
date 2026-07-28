@@ -69,6 +69,7 @@
     "axios": "^1.11.0",
     "formik": "^2.4.6",
     "html5-qrcode": "^2.3.8",
+    "jsqr": "^1.4.0",
     "monaco-editor": "^0.55.1",
     "yup": "^1.7.0"
   }

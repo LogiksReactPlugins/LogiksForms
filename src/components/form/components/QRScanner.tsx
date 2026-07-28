@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState, useId } from "react";
 import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
+import jsQRImport from "jsqr";
 
 interface QRScannerProps {
   open: boolean;
   onClose: () => void;
   onScan: (value: string) => void;
 }
+
+const jsQR = jsQRImport as unknown as (
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+) => { data: string } | null;
 
 export default function QRScanner({ open, onClose, onScan }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -15,6 +22,8 @@ export default function QRScanner({ open, onClose, onScan }: QRScannerProps) {
   const sessionIdRef = useRef(0);
 
   const [isStarting, setIsStarting] = useState(true);
+
+  const [loadingMode, setLoadingMode] = useState<"camera" | "upload">("camera");
   const [error, setError] = useState<string | null>(null);
   const [torchOn, setTorchOn] = useState(false);
   const [torchSupported, setTorchSupported] = useState(false);
@@ -50,43 +59,67 @@ export default function QRScanner({ open, onClose, onScan }: QRScannerProps) {
     startPromiseRef.current = null;
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
 
-    if (!file) return;
 
-    const session = ++sessionIdRef.current;
 
-    await stopScanner();
 
-    setError(null);
-    setIsStarting(true);
+const handleFileUpload = async (
+  e: React.ChangeEvent<HTMLInputElement>,
+) => {
+  const file = e.target.files?.[0];
+  e.target.value = "";
 
-    const scanner = new Html5Qrcode(readerId);
+  if (!file) return;
 
-    try {
-      const decodedText = await scanner.scanFile(file, false);
+  setError(null);
+  setIsStarting(true);
+  setLoadingMode("upload");
 
-      if (session !== sessionIdRef.current || !mountedRef.current) return;
+  try {
+    const img = new Image();
 
-      onScan(decodedText);
-    } catch (err) {
-      if (session !== sessionIdRef.current || !mountedRef.current) return;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
 
-      setError(
-        "Couldn't find a QR code in that image. Try another image or use the camera.",
-      );
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
 
-      console.error(err);
-    } finally {
-      scanner.clear();
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas not supported");
 
-      if (session === sessionIdRef.current && mountedRef.current) {
-        setIsStarting(false);
-      }
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+
+    const result = jsQR(
+      imageData.data,
+      imageData.width,
+      imageData.height,
+    );
+
+    URL.revokeObjectURL(img.src);
+
+    if (!result) {
+      throw new Error("QR not found");
     }
-  };
+
+    onScan(result.data);
+  } catch (err) {
+    console.error(err);
+    setError("Couldn't find a QR code in that image.");
+  } finally {
+    setIsStarting(false);
+  }
+};
 
   const handleClose = async () => {
     await stopScanner();
@@ -98,6 +131,7 @@ export default function QRScanner({ open, onClose, onScan }: QRScannerProps) {
     const session = ++sessionIdRef.current;
     setError(null);
     setIsStarting(true);
+    setLoadingMode("camera");
     setTorchOn(false);
     setTorchSupported(false);
 
@@ -252,9 +286,11 @@ export default function QRScanner({ open, onClose, onScan }: QRScannerProps) {
 
     {/* Loading overlay */}
     {isStarting && !error && (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/70 text-white">
+     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/70 text-white">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-        <span className="text-sm">Starting camera…</span>
+        <span className="text-sm">
+          {loadingMode === "upload" ? "Reading image…" : "Starting camera…"}
+        </span>
       </div>
     )}
 

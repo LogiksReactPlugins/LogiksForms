@@ -795,7 +795,195 @@ export function getSuccessMessage(
 }
 
 
+export type PayloadFormat =
+  | "json"
+  | "url-encoded-json"
+  | "base64-json"
+  | "query-string"
+  | "key-value"
+  | "csv"
+  | "xml";
 
+export interface PayloadParseResult {
+  success: boolean;
+  data?: Record<string, unknown>;
+  format?: PayloadFormat;
+  error?: string;
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value)
+  );
+}
+
+function success(
+  format: PayloadFormat,
+  data: Record<string, unknown>,
+): PayloadParseResult {
+  return {
+    success: true,
+    format,
+    data,
+  };
+}
+
+export function parseSerializedData(input: string): PayloadParseResult {
+  input = input.trim();
+
+  if (!input) {
+    return {
+      success: false,
+      error: "Payload is empty.",
+    };
+  }
+
+  // -----------------------------
+  // JSON
+  // -----------------------------
+  try {
+    const parsed = JSON.parse(input);
+
+    if (isObject(parsed)) {
+      return success("json", parsed);
+    }
+  } catch {}
+
+  // -----------------------------
+  // URL-encoded JSON
+  // -----------------------------
+  try {
+    const decoded = decodeURIComponent(input);
+
+    if (decoded !== input) {
+      const parsed = JSON.parse(decoded);
+
+      if (isObject(parsed)) {
+        return success("url-encoded-json", parsed);
+      }
+    }
+  } catch {}
+
+  // -----------------------------
+  // Base64 JSON
+  // -----------------------------
+  try {
+    const looksLikeBase64 =
+      input.length >= 8 &&
+      input.length % 4 === 0 &&
+      /^[A-Za-z0-9+/]+={0,2}$/.test(input);
+
+    if (looksLikeBase64) {
+      const decoded = atob(input);
+      const parsed = JSON.parse(decoded);
+
+      if (isObject(parsed)) {
+        return success("base64-json", parsed);
+      }
+    }
+  } catch {}
+
+  // -----------------------------
+  // Query String
+  // -----------------------------
+  try {
+    if (input.includes("=")) {
+      const params = new URLSearchParams(input);
+      const data = Object.fromEntries(params.entries());
+
+      if (Object.keys(data).length) {
+        return success("query-string", data);
+      }
+    }
+  } catch {}
+
+  // -----------------------------
+  // Key : Value
+  // -----------------------------
+  try {
+    if (input.includes(":")) {
+      const data: Record<string, unknown> = {};
+
+      const lines = input
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      let valid = false;
+
+      for (const line of lines) {
+        const index = line.indexOf(":");
+
+        if (index === -1) continue;
+
+        const key = line.slice(0, index).trim();
+        const value = line.slice(index + 1).trim();
+
+        if (!key) continue;
+
+        data[key] = value;
+        valid = true;
+      }
+
+      if (valid) {
+        return success("key-value", data);
+      }
+    }
+  } catch {}
+
+  // -----------------------------
+  // CSV
+  // -----------------------------
+  try {
+    const lines = input
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (lines.length === 2 && lines[0]?.includes(",")) {
+      const headers = lines[0].split(",").map((h) => h.trim());
+      const values = lines[1]?.split(",").map((v) => v.trim());
+
+      if (headers.length === values?.length) {
+        const data = Object.fromEntries(
+          headers.map((header, index) => [header, values[index]]),
+        );
+
+        return success("csv", data);
+      }
+    }
+  } catch {}
+
+  // -----------------------------
+  // XML
+  // -----------------------------
+  try {
+    if (input.startsWith("<")) {
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(input, "application/xml");
+
+      if (!xml.querySelector("parsererror")) {
+        const root = xml.documentElement;
+        const data: Record<string, unknown> = {};
+
+        Array.from(root.children).forEach((child) => {
+          data[child.tagName] = child.textContent ?? "";
+        });
+
+        if (Object.keys(data).length) {
+          return success("xml", data);
+        }
+      }
+    }
+  } catch {}
+
+  return {
+    success: false,
+    error: "Unsupported serialized payload format.",
+  };
+}
 
 
 export const getInputConfig = (field: FormField): {

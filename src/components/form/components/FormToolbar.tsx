@@ -2,6 +2,7 @@ import React, { useMemo, useState, useRef } from "react";
 import axios from "axios";
 import type { FormToolbar, ToolbarAction } from "../Form.types.js";
 import QRScanner from "./QRScanner.js";
+import { parseSerializedData } from "../utils.js";
 
 interface FormToolbarProps {
   toolbar?: FormToolbar | undefined;
@@ -35,7 +36,7 @@ export default function FormToolbar({
     try {
       let response: any = {};
 
-     
+
 
       if (config.type === "method") {
         const fn = methods?.[config.method!];
@@ -74,8 +75,8 @@ export default function FormToolbar({
       }
 
       if (response && typeof response === "object") {
-        console.log("pouplateForm response", response);
-        
+   
+
         populateForm(response);
       }
     } catch (err) {
@@ -158,7 +159,7 @@ export default function FormToolbar({
     </button>
   );
   const [singleAction] = actions;
-  console.log("actions", actions);
+
 
   return (
     <div className="mb-4 flex items-center justify-end gap-2 pb-3 border-b border-gray-100">
@@ -232,17 +233,14 @@ export default function FormToolbar({
 
           if (!pendingActionRef.current) return;
 
-          let payload: Record<string, unknown> = { value };
-
           try {
-            payload = JSON.parse(value);
-          } catch {
-            // Not JSON, keep the raw value
-          }
-
-          try {
-             console.log("executeAction payload", payload);
-            populateForm(payload);
+           
+            const result = parseSerializedData(value);
+            if (!result.success) {
+              console.warn(result.error);
+              return;
+            }
+            populateForm(result.data!);
           } finally {
             pendingActionRef.current = null;
           }
