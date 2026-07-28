@@ -2,7 +2,7 @@ import React from 'react'
 import FieldRenderer from "./FieldRenderer.js";
 import * as Yup from "yup";
 import { useFormik } from 'formik';
-import { buildChainMap, filterSavableValues, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import { buildChainMap, filterSavableValues, getButtonClass, getButtonConfig, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
@@ -214,7 +214,7 @@ export default function TabFormView({
   };
 
 
-
+  const buttonConfig = getButtonConfig(button_labels);
   return (
     <div className=" max-w-full  m-4">
       {/* Modern Tab Navigation */}
@@ -347,17 +347,45 @@ export default function TabFormView({
               Previous
             </button>}
 
-            <div className='space-x-3'>
-              <button onClick={cancel} type="button" className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {button_labels?.cancel || "Cancel"}
-              </button>
-              <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                {button_labels?.reset || "Reset"}
-              </button>
-              <button type='submit' className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {button_labels?.submit ? button_labels?.submit : widget ? "Next" : "Save"}
-              </button>
-            </div>
+              <div className="space-x-3">
+                          <button
+                            type="button"
+                            onClick={cancel}
+                             className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                              buttonConfig.cancel?.class
+                            )}`}
+                          >
+                            {buttonConfig.cancel?.icon && (
+                              <i className={`${buttonConfig.cancel.icon} mr-2`} />
+                            )}
+                            {buttonConfig.cancel?.label ?? "Cancel"}
+                          </button>
+          
+                          <button
+                            type="button"
+                            onClick={resetForm}
+                            className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                              buttonConfig.reset?.class
+                            )}`}
+                          >
+                            {buttonConfig.reset?.icon && (
+                              <i className={`${buttonConfig.reset.icon} mr-2`} />
+                            )}
+                            {buttonConfig.reset?.label ?? "Reset"}
+                          </button>
+          
+                          <button
+                            type="submit"
+                               className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                              buttonConfig.submit?.class
+                            )}`}
+                          >
+                            {buttonConfig.submit?.icon && (
+                              <i className={`${buttonConfig.submit.icon} mr-2`} />
+                            )}
+                            {buttonConfig.submit?.label ?? "Save"}
+                          </button>
+                        </div>
           </div>
 
           {/* Progress Indicator */}

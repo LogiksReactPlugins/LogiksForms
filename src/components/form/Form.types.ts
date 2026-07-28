@@ -170,6 +170,13 @@ export interface FormButtonLabels {
     cancel?: string;
 }
 
+export interface FormButtonConfig {
+  type: string;
+  label?: string;
+  class?: string ;
+  icon?: string;
+}
+
 export interface FormJson {
     title?: string | undefined;
     location_required?: boolean;
@@ -182,7 +189,7 @@ export interface FormJson {
     gotolink?: string;
     module_refid?: string | undefined;
     buttons?: Record<string, any>;
-    button_labels?: FormButtonLabels | undefined;
+    button_labels?: FormButtonLabels | FormButtonConfig[] |  undefined;
     submit_msg?: boolean | string;
 }
 
@@ -233,7 +240,7 @@ export interface BaseFormViewProps {
     refid?: string | undefined;
     module_refid?: string | undefined;
     buttons?: Record<string, any> | undefined;
-    button_labels?: FormButtonLabels | undefined;
+    button_labels?: FormButtonLabels | FormButtonConfig[] |  undefined;
     AttachmentPopup?: ComponentType<any> | undefined;
     filesToDelete?: React.RefObject<string[]>;
 

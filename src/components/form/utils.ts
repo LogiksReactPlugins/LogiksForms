@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import type { FormikProps } from "formik";
 
-import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap, FormikLike } from "./Form.types.js";
+import type { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap, FormikLike, FormButtonLabels, FormButtonConfig } from "./Form.types.js";
 import { FILE_TYPES, IMAGE_EXT, PDF_EXT, TEXT_EXT, VIDEO_EXT } from "./constant.js";
 
 export function determineViewMode(json: FormJson) {
@@ -577,8 +577,8 @@ export async function fetchGeolocation(): Promise<GeolocationData> {
     };
 
   } catch (error) {
-    console.log("error",error);
-    
+    console.log("error", error);
+
     if (!(error instanceof GeolocationPositionError)) {
       throw new Error("Failed to get your location.");
     }
@@ -794,9 +794,32 @@ export function getSuccessMessage(
   return "Operation completed successfully";
 }
 
+export function getButtonClass(
+  customClass?: string,
+  defaultClass = "bg-white text-gray-700"
+) {
+  return customClass ?? defaultClass;
+}
+export function getButtonConfig(
+  buttonLabels?: FormButtonLabels | FormButtonConfig[]
+) {
+  if (!buttonLabels) {
+    return {};
+  }
+  if (Array.isArray(buttonLabels)) {
+    return {
+      submit: buttonLabels.find((b) => b.type === "submit"),
+      reset: buttonLabels.find((b) => b.type === "reset"),
+      cancel: buttonLabels.find((b) => b.type === "cancel"),
+    };
+  }
 
-
-
+  return {
+    submit: { label: buttonLabels?.submit,class:undefined,icon: undefined},
+    reset: { label: buttonLabels?.reset ,class:undefined,icon: undefined},
+    cancel: { label: buttonLabels?.cancel,class:undefined,icon: undefined },
+  };
+}
 
 export const getInputConfig = (field: FormField): {
   accept?: string;
@@ -940,7 +963,7 @@ export const validateFiles = ({
     }
   }
 
-    if (accept) {
+  if (accept) {
     const invalidFiles = fileArray.filter(
       (file) => !isFileAccepted(file, accept)
     );
