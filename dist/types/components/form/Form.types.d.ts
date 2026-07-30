@@ -151,6 +151,12 @@ export interface FormToolbar {
     qrcode?: ToolbarAction;
     doc?: ToolbarAction;
 }
+export interface FormButtonConfig {
+    type: string;
+    label?: string;
+    class?: string;
+    icon?: string;
+}
 export interface FormJson {
     title?: string | undefined;
     location_required?: boolean;

@@ -46,6 +46,32 @@ export declare const fileIconClassMap: Record<FileCategory, string>;
 export declare function filterSavableValues(values: Record<string, any>, flatFields: FormField[]): Record<string, any>;
 export declare function getErrorMessage(err: unknown): string;
 export declare function getSuccessMessage(res: any, submitMsg?: boolean | string): string | null;
+export declare function getButtonClass(customClass?: string, defaultClass?: string): string;
+export declare function getButtonConfig(buttonLabels?: FormButtonLabels | FormButtonConfig[]): {
+    submit?: never;
+    reset?: never;
+    cancel?: never;
+} | {
+    submit: FormButtonConfig | undefined;
+    reset: FormButtonConfig | undefined;
+    cancel: FormButtonConfig | undefined;
+} | {
+    submit: {
+        label: string | undefined;
+        class: undefined;
+        icon: undefined;
+    };
+    reset: {
+        label: string | undefined;
+        class: undefined;
+        icon: undefined;
+    };
+    cancel: {
+        label: string | undefined;
+        class: undefined;
+        icon: undefined;
+    };
+};
 export type PayloadFormat = "json" | "url-encoded-json" | "base64-json" | "query-string" | "key-value" | "csv" | "xml";
 export interface PayloadParseResult {
     success: boolean;
