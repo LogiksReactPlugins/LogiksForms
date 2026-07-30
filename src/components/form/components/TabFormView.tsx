@@ -193,10 +193,10 @@ export default function TabFormView({
     onCancel?.();
   };
 
-  // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-  //   if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
-  //   return true;
-  // }) : []
+  let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+    if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
+    return true;
+  }) : []
 
   async function handleClick(method: string, val: Record<string, any>) {
     const methodFn = methods?.[method as keyof typeof methods];
@@ -423,7 +423,7 @@ export default function TabFormView({
         </div>
       </form>
 
-      {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+      <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
         {visibleButtons &&
           visibleButtons.map(([key, val]) => (
             <button
@@ -434,7 +434,7 @@ export default function TabFormView({
               {val.label}
             </button>
           ))}
-      </div> */}
+      </div>
     </div>
   );
 }
