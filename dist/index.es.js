@@ -37184,7 +37184,7 @@ function U$(e) {
 }
 function H$(e, t) {
   const n = t.tagID;
-  e.openElements.hasInScope(n) && (e.openElements.generateImpliedEndTags(), e.openElements.popUntilTagNamePopped(n), e.activeFormattingElements.clearToLastMarker());
+  e.openElements.hasInScope(n) && (e.openElements.generateImpliedEndTagsWithExclusion(n), e.openElements.popUntilTagNamePopped(n));
 }
 function $$(e) {
   e._reconstructActiveFormattingElements(), e._insertFakeElement(ce.BR, D.BR), e.openElements.pop(), e.framesetOk = !1;
@@ -72735,8 +72735,17 @@ function boe({
         /* @__PURE__ */ R.jsx("button", { type: "button", onClick: Z, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: p?.reset || "Reset" }),
         /* @__PURE__ */ R.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: p?.submit || "Save" })
       ] })
-    ] })
-  ] }) }) }) });
+    ] }),
+    /* @__PURE__ */ y.jsx("div", { className: "flex justify-end gap-2  p-3 border-t border-gray-100", children: M && M.map(([k, W]) => /* @__PURE__ */ y.jsx(
+      "button",
+      {
+        onClick: () => G(k, W),
+        className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer",
+        children: W.label
+      },
+      k
+    )) })
+  ] }) }) });
 }
 var rt;
 (function(e) {
@@ -104157,8 +104166,17 @@ function Qoe({
         /* @__PURE__ */ R.jsx("button", { type: "button", onClick: Z, className: "px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer", children: h?.reset || "Reset" }),
         /* @__PURE__ */ R.jsx("button", { type: "submit", className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ", children: h?.submit || "Save" })
       ] })
-    ] })
-  ] }) }) });
+    ] }),
+    /* @__PURE__ */ y.jsx("div", { className: "flex justify-end gap-2  p-3 border-t border-gray-100", children: M && M.map(([k, W]) => /* @__PURE__ */ y.jsx(
+      "button",
+      {
+        onClick: () => G(k, W),
+        className: "px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer",
+        children: W.label
+      },
+      k
+    )) })
+  ] }) });
 }
 function _le({
   formJson: e,

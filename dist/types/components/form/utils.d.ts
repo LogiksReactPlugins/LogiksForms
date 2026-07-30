@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik';
-import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap } from './Form.types.js';
+import { FormJson, FormField, AutocompleteConfig, FileCategory, FileItem, OptionItem, ChainMap, FormButtonLabels, FormButtonConfig } from './Form.types.js';
 import * as Yup from "yup";
 export declare function determineViewMode(json: FormJson): "accordion" | "simple" | "cards" | "tab";
 export declare const isAbsoluteUrl: (path: string) => boolean;

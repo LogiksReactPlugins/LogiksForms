@@ -5,6 +5,8 @@ import { useFormik } from "formik";
 import {
   buildChainMap,
   filterSavableValues,
+  getButtonClass,
+  getButtonConfig,
   intializeForm,
   isHidden,
   tailwindCols,
@@ -184,231 +186,244 @@ export default function TabFormView({
 
 
 
-const cancel = () => {
-  if (filesToDelete) {
-    filesToDelete.current = [];
-  }
-  onCancel?.();
-};
-
-// let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-//   if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
-//   return true;
-// }) : []
-
-async function handleClick(method: string, val: Record<string, any>) {
-  const methodFn = methods?.[method as keyof typeof methods];
-
-  if (methodFn) {
-    try {
-      await methodFn();
-    } catch (err) {
-      console.error("Method execution failed:", err);
+  const cancel = () => {
+    if (filesToDelete) {
+      filesToDelete.current = [];
     }
-    return;
+    onCancel?.();
+  };
+
+  // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+  //   if (val.groups) return val.groups.includes(groupNames[activeTabIndex])
+  //   return true;
+  // }) : []
+
+  async function handleClick(method: string, val: Record<string, any>) {
+    const methodFn = methods?.[method as keyof typeof methods];
+
+    if (methodFn) {
+      try {
+        await methodFn();
+      } catch (err) {
+        console.error("Method execution failed:", err);
+      }
+      return;
+    }
+    methods?.handleAction?.({ [method]: val }, formik.values);
   }
-  methods?.handleAction?.({ [method]: val }, formik.values);
-}
 
-const [fieldLoading, setFieldLoading] = React.useState<
-  Record<string, boolean>
->({});
+  const [fieldLoading, setFieldLoading] = React.useState<
+    Record<string, boolean>
+  >({});
 
-const updateFieldLoading = (fieldName: string, loading: boolean) => {
-  setFieldLoading((prev) => ({
-    ...prev,
-    [fieldName]: loading,
-  }));
-};
+  const updateFieldLoading = (fieldName: string, loading: boolean) => {
+    setFieldLoading((prev) => ({
+      ...prev,
+      [fieldName]: loading,
+    }));
+  };
+  const buttonConfig = getButtonConfig(button_labels);
+  return (
+    <div className=" max-w-full  m-4">
+      {/* Modern Tab Navigation */}
+      <form onSubmit={handleSubmit} className="w-full mx-auto">
+        <div className="relative">
+          <div className="relative  rounded-t-lg px-1 pt-1  shadow-inner">
+            {commonFields.length > 0 && (
+              <div className="p-3">
+                <CommonInfo
+                  refid={refid}
+                  module_refid={module_refid}
+                  sqlOpsUrls={sqlOpsUrls}
+                  fields={commonFields}
+                  formik={formik}
+                  methods={methods}
+                  setFieldOptions={setOptionsForField}
+                  fieldOptions={fieldOptions}
+                  chainMap={chainMap}
+                  AttachmentPopup={AttachmentPopup}
+                  filesToDelete={filesToDelete}
+                />
+              </div>
+            )}
 
-return (
-  <div className=" max-w-full  m-4">
-    {/* Modern Tab Navigation */}
-    <form onSubmit={handleSubmit} className="w-full mx-auto">
-      <div className="relative">
-        <div className="relative  rounded-t-lg px-1 pt-1  shadow-inner">
-          {commonFields.length > 0 && (
-            <div className="p-3">
-              <CommonInfo
-                refid={refid}
-                module_refid={module_refid}
-                sqlOpsUrls={sqlOpsUrls}
-                fields={commonFields}
-                formik={formik}
-                methods={methods}
-                setFieldOptions={setOptionsForField}
-                fieldOptions={fieldOptions}
-                chainMap={chainMap}
-                AttachmentPopup={AttachmentPopup}
-                filesToDelete={filesToDelete}
-              />
-            </div>
-          )}
-
-          {/* Tab buttons */}
-          <nav className="relative flex bg-gray-100">
-            {groupNames.map((group, index) => (
-              <button
-                key={group}
-                type="button"
-                onClick={() => setActiveTabIndex(index)}
-                className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
+            {/* Tab buttons */}
+            <nav className="relative flex bg-gray-100">
+              {groupNames.map((group, index) => (
+                <button
+                  key={group}
+                  type="button"
+                  onClick={() => setActiveTabIndex(index)}
+                  className={`relative cursor-pointer flex-shrink-0 py-2 px-2 sm:px-4 rounded-t-lg  text-xs sm:text-sm font-semibold transition-all duration-300 ease-out focus:outline-none whitespace-nowrap ${activeTabIndex === index
                     ? "text-action bg-white"
                     : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
-                  }`}
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
-                  {/* Add icons based on common tab names */}
+                    }`}
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2 capitalize">
+                    {/* Add icons based on common tab names */}
 
-                  {group}
-                </span>
-              </button>
-            ))}
-          </nav>
+                    {group}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
         </div>
-      </div>
 
-      {/* Content Area with Animation */}
+        {/* Content Area with Animation */}
 
-      <div
-        key={groupNames[activeTabIndex]}
-        className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
-      >
-        {/* Content Header */}
+        <div
+          key={groupNames[activeTabIndex]}
+          className="bg-white  border border-gray-100 border-t-0 rounded-b-lg p-3 animate-in fade-in duration-300"
+        >
+          {/* Content Header */}
 
-        {/* Fields Container */}
-        <div className="grid grid-cols-12 gap-4">
-          {currentStepKey &&
-            tabGroups[currentStepKey]?.map((field, index) => {
-              const hidden = isHidden(field.hidden);
-              const wrapperClass = `
+          {/* Fields Container */}
+          <div className="grid grid-cols-12 gap-4">
+            {currentStepKey &&
+              tabGroups[currentStepKey]?.map((field, index) => {
+                const hidden = isHidden(field.hidden);
+                const wrapperClass = `
                   col-span-12 md:col-span-6
                   ${tailwindCols[toColWidth(Number(field.width))] || "lg:col-span-4"}
                   ${hidden ? "hidden" : ""}
                 `;
-              if (field.type === "static" || field.type === "static2") {
-                const isPrimary = field.type === "static";
+                if (field.type === "static" || field.type === "static2") {
+                  const isPrimary = field.type === "static";
 
-                return (
-                  <div
-                    key={field?.name}
-                    id={`wrapper-${field.name}`}
-                    className="col-span-12"
-                  >
+                  return (
                     <div
-                      className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                      key={field?.name}
+                      id={`wrapper-${field.name}`}
+                      className="col-span-12"
                     >
-                      <div className="flex items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <h2
-                            className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
-                          >
-                            {field.label}
-                          </h2>
+                      <div
+                        className={` bg-gray-100 ${isPrimary ? "mt-4" : "mt-3"}`}
+                      >
+                        <div className="flex items-center justify-between px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <h2
+                              className={`${isPrimary ? "text-base " : "text-sm"} font-semibold text-gray-800`}
+                            >
+                              {field.label}
+                            </h2>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  );
+                }
+
+                return (
+                  <div
+                    id={`wrapper-${field.name}`}
+                    key={field?.name ?? `field-${index}`}
+                    className={wrapperClass}
+                  >
+                    <FieldRenderer
+                      refid={refid}
+                      module_refid={module_refid}
+                      sqlOpsUrls={sqlOpsUrls}
+                      key={field.name}
+                      field={field}
+                      formik={formik}
+                      methods={methods}
+                      components={components}
+                      setFieldOptions={setOptionsForField}
+                      {...(fieldOptions[field.name]
+                        ? { optionsOverride: fieldOptions[field.name] }
+                        : {})}
+                      chainMap={chainMap}
+                      fieldLoading={fieldLoading[field.name] ?? false}
+                      setFieldLoading={updateFieldLoading}
+                      AttachmentPopup={AttachmentPopup}
+                      filesToDelete={filesToDelete}
+                    />
                   </div>
                 );
-              }
-
-              return (
-                <div
-                  id={`wrapper-${field.name}`}
-                  key={field?.name ?? `field-${index}`}
-                  className={wrapperClass}
-                >
-                  <FieldRenderer
-                    refid={refid}
-                    module_refid={module_refid}
-                    sqlOpsUrls={sqlOpsUrls}
-                    key={field.name}
-                    field={field}
-                    formik={formik}
-                    methods={methods}
-                    components={components}
-                    setFieldOptions={setOptionsForField}
-                    {...(fieldOptions[field.name]
-                      ? { optionsOverride: fieldOptions[field.name] }
-                      : {})}
-                    chainMap={chainMap}
-                    fieldLoading={fieldLoading[field.name] ?? false}
-                    setFieldLoading={updateFieldLoading}
-                    AttachmentPopup={AttachmentPopup}
-                    filesToDelete={filesToDelete}
-                  />
-                </div>
-              );
-            })}
-        </div>
-        <div
-          className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}
-        >
-          {activeTabIndex > 0 && (
-            <button
-              onClick={handlePrevious}
-              type="button"
-              className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
-            >
-              Previous
-            </button>
-          )}
-
-          <div className="space-x-3">
-            <button
-              onClick={cancel}
-              type="button"
-              className="px-5 cursor-pointer py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
-            >
-              {button_labels?.cancel || "Cancel"}
-            </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
-            >
-              {button_labels?.reset || "Reset"}
-            </button>
-            <button
-              type="submit"
-              className="px-5 cursor-pointer py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
-            >
-              {button_labels?.submit
-                ? button_labels?.submit
-                : widget
-                  ? "Next"
-                  : "Save"}
-            </button>
+              })}
           </div>
-        </div>
+          <div
+            className={`mt-8 flex ${activeTabIndex > 0 ? "justify-between" : "justify-end"} space-x-3`}
+          >
+            {activeTabIndex > 0 && (
+              <button
+                onClick={handlePrevious}
+                type="button"
+                className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 "
+              >
+                Previous
+              </button>
+            )}
 
-        {/* Progress Indicator */}
-        <div className="mt-2 pt-3  border-t border-gray-100">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center">
-              <span>
-                Tab {activeTabIndex + 1} of {groupNames.length}
-              </span>
-              <p className="text-sm text-gray-700 ml-3">
-                All fields marked (*) are required
-              </p>
+            <div className="space-x-3">
+              <button
+                type="button"
+                onClick={cancel}
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.cancel?.class
+                )}`}
+              >
+                {buttonConfig.cancel?.icon && (
+                  <i className={`${buttonConfig.cancel.icon} mr-2`} />
+                )}
+                {buttonConfig.cancel?.label ?? "Cancel"}
+              </button>
+
+              <button
+                type="button"
+                onClick={resetForm}
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.reset?.class
+                )}`}
+              >
+                {buttonConfig.reset?.icon && (
+                  <i className={`${buttonConfig.reset.icon} mr-2`} />
+                )}
+                {buttonConfig.reset?.label ?? "Reset"}
+              </button>
+
+              <button
+                type="submit"
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.submit?.class
+                )}`}
+              >
+                {buttonConfig.submit?.icon && (
+                  <i className={`${buttonConfig.submit.icon} mr-2`} />
+                )}
+                {buttonConfig.submit?.label ?? "Save"}
+              </button>
             </div>
+          </div>
 
-            <div className="flex gap-1">
-              {groupNames.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex ? "bg-action w-6" : "bg-gray-300"
-                    }`}
-                ></div>
-              ))}
+          {/* Progress Indicator */}
+          <div className="mt-2 pt-3  border-t border-gray-100">
+            <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center">
+                <span>
+                  Tab {activeTabIndex + 1} of {groupNames.length}
+                </span>
+                <p className="text-sm text-gray-700 ml-3">
+                  All fields marked (*) are required
+                </p>
+              </div>
+
+              <div className="flex gap-1">
+                {groupNames.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeTabIndex ? "bg-action w-6" : "bg-gray-300"
+                      }`}
+                  ></div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
 
-    {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+      {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
         {visibleButtons &&
           visibleButtons.map(([key, val]) => (
             <button
@@ -420,6 +435,6 @@ return (
             </button>
           ))}
       </div> */}
-  </div>
-);
+    </div>
+  );
 }

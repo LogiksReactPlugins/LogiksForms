@@ -1,22 +1,11 @@
 import React from "react";
 import * as Yup from "yup";
-import { useFormik } from "formik";
-import FieldRenderer from "./FieldRenderer.js";
-import {
-  buildChainMap,
-  filterSavableValues,
-  intializeForm,
-  isHidden,
-  tailwindCols,
-  toColWidth,
-} from "../utils.js";
-import Accordion from "./Accordion.js";
-import type {
-  GroupedFormViewPrps,
-  OptionItem,
-  SelectOptions,
-} from "../Form.types.js";
-import CommonInfo from "./CommonInfo.js";
+import { useFormik } from 'formik';
+import FieldRenderer from './FieldRenderer.js';
+import { buildChainMap, filterSavableValues, getButtonClass, getButtonConfig, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
+import Accordion from './Accordion.js'
+import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
+import CommonInfo from './CommonInfo.js';
 
 export interface AccordionFormViewHandle {
   populateForm: (payload: Record<string, any>) => void;
@@ -117,31 +106,30 @@ export default function AccordionFormView({
     }),
     [flatFields, module_refid, sqlOpsUrls?.operation],
   );
-
   const chainMap = React.useMemo(() => buildChainMap(flatFields), [flatFields]);
+  let commonButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+    if (val.groups && val.groups.length > 0) return false
+    return true;
+  }) : [];
 
-  // let commonButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-  //   if (val.groups && val.groups.length > 0) return false
-  //   return true;
-  // }) : [];
 
-  // async function handleClick(method: string, val: Record<string, any>) {
+  async function handleClick(method: string, val: Record<string, any>) {
 
-  //   const methodFn = methods?.[method as keyof typeof methods];
+    const methodFn = methods?.[method as keyof typeof methods];
 
-  //   if (methodFn) {
-  //     try {
-  //       await methodFn();
+    if (methodFn) {
+      try {
+        await methodFn();
 
-  //     } catch (err) {
-  //       console.error("Method execution failed:", err);
+      } catch (err) {
+        console.error("Method execution failed:", err);
 
-  //     }
-  //     return
-  //   }
-  //   methods?.handleAction?.({ [method]: val }, formik.values)
+      }
+      return
+    }
+    methods?.handleAction?.({ [method]: val }, formik.values)
 
-  // }
+  }
 
   const resetForm = () => {
     formik.resetForm();
@@ -157,7 +145,7 @@ export default function AccordionFormView({
     }
     onCancel?.();
   };
-
+  const buttonConfig = getButtonConfig(button_labels);
   return (
     <div className="relative max-w-full">
       <div className="bg-white border border-gray-100 rounded-md animate-in fade-in duration-300">
@@ -182,10 +170,10 @@ export default function AccordionFormView({
             )}
             {tabGroups &&
               Object.entries(tabGroups).map(([group, fields], index) => {
-                // let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
-                //   if (val.groups) return val.groups.includes(group)
-                //   return false;
-                // }) : [];
+                let visibleButtons = buttons ? Object.entries(buttons).filter(([_, val]) => {
+                  if (val.groups) return val.groups.includes(group)
+                  return false;
+                }) : [];
 
                 return (
                   <Accordion
@@ -260,18 +248,18 @@ export default function AccordionFormView({
                       })}
                     </div>
 
-                    {/* <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
-                  {visibleButtons &&
-                    visibleButtons.map(([key, val]) => (
-                      <button
-                        key={key}
-                        onClick={() => handleClick(key, val)}
-                        className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
-                      >
-                        {val.label}
-                      </button>
-                    ))}
-                </div> */}
+                    <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+                      {visibleButtons &&
+                        visibleButtons.map(([key, val]) => (
+                          <button
+                            key={key}
+                            onClick={() => handleClick(key, val)}
+                            className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                          >
+                            {val.label}
+                          </button>
+                        ))}
+                    </div>
                   </Accordion>
                 );
               })}
@@ -280,21 +268,49 @@ export default function AccordionFormView({
           {/* Action Buttons */}
           <div className="mt-8 flex justify-between space-x-3">
             <p className='text-sm text-gray-700'>All fields marked (*) are required</p>
-            <div className='space-x-3'>
-              <button type="button" onClick={cancel} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {button_labels?.cancel || "Cancel"}
+            <div className="space-x-3">
+              <button
+                type="button"
+                onClick={cancel}
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.cancel?.class
+                )}`}
+              >
+                {buttonConfig.cancel?.icon && (
+                  <i className={`${buttonConfig.cancel.icon} mr-2`} />
+                )}
+                {buttonConfig.cancel?.label ?? "Cancel"}
               </button>
-              <button type="button" onClick={resetForm} className="px-5 py-2 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-200  shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                {button_labels?.reset || "Reset"}
+
+              <button
+                type="button"
+                onClick={resetForm}
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.reset?.class
+                )}`}
+              >
+                {buttonConfig.reset?.icon && (
+                  <i className={`${buttonConfig.reset.icon} mr-2`} />
+                )}
+                {buttonConfig.reset?.label ?? "Reset"}
               </button>
-              <button type="submit" className="px-5 py-2 bg-action font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 ">
-                {button_labels?.submit || "Save"}
+
+              <button
+                type="submit"
+                className={`px-5 py-2 font-semibold rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer ${getButtonClass(
+                  buttonConfig.submit?.class
+                )}`}
+              >
+                {buttonConfig.submit?.icon && (
+                  <i className={`${buttonConfig.submit.icon} mr-2`} />
+                )}
+                {buttonConfig.submit?.label ?? "Save"}
               </button>
             </div>
           </div>
         </form>
 
-        {/* <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
+        <div className="flex justify-end gap-2  p-3 border-t border-gray-100">
           {commonButtons &&
             commonButtons.map(([key, val]) => (
               <button
@@ -305,7 +321,7 @@ export default function AccordionFormView({
                 {val.label}
               </button>
             ))}
-        </div> */}
+        </div>
       </div>
     </div>
   );
