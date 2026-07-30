@@ -139,7 +139,7 @@ export interface FormButtonLabels {
     cancel?: string;
 }
 export interface ToolbarAction {
-    type: "method" | "api";
+    type: string;
     method?: string;
     endpoint?: string;
     tooltip?: string;

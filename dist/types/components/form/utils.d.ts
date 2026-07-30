@@ -46,6 +46,14 @@ export declare const fileIconClassMap: Record<FileCategory, string>;
 export declare function filterSavableValues(values: Record<string, any>, flatFields: FormField[]): Record<string, any>;
 export declare function getErrorMessage(err: unknown): string;
 export declare function getSuccessMessage(res: any, submitMsg?: boolean | string): string | null;
+export type PayloadFormat = "json" | "url-encoded-json" | "base64-json" | "query-string" | "key-value" | "csv" | "xml";
+export interface PayloadParseResult {
+    success: boolean;
+    data?: Record<string, unknown>;
+    format?: PayloadFormat;
+    error?: string;
+}
+export declare function parseSerializedData(input: string): PayloadParseResult;
 export declare const getInputConfig: (field: FormField) => {
     accept?: string;
     capture?: "user" | "environment";
