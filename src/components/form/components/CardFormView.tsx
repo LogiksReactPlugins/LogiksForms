@@ -7,7 +7,13 @@ import Card from './Card.js'
 import type { GroupedFormViewPrps, OptionItem, SelectOptions } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
 
+export interface CardFormViewwHandle {
+  populateForm: (payload: Record<string, any>) => void;
+}
 
+interface CardFormViewProps extends GroupedFormViewPrps {
+  ref?: React.Ref<CardFormViewwHandle>;
+}
 export default function CardFormView({
   title,
   groupedFields,
@@ -22,8 +28,9 @@ export default function CardFormView({
   buttons,
   button_labels,
   AttachmentPopup,
-  filesToDelete
-}: GroupedFormViewPrps) {
+  filesToDelete,
+  ref
+}: CardFormViewProps) {
   const { common: commonFields = [], ...tabGroups } = groupedFields;
   const [fieldOptions, setFieldOptions] = React.useState<
     Record<string, OptionItem[]>
@@ -93,6 +100,17 @@ export default function CardFormView({
 
     }
   })
+
+    React.useImperativeHandle(ref, () => ({
+      populateForm: (payload: Record<string, any>) => {
+        if (!payload) return;
+  
+        formik.setValues((prev) => ({
+          ...prev,
+          ...payload,
+        }));
+      },
+    }), [flatFields, module_refid, sqlOpsUrls?.operation]);
 
   const chainMap = React.useMemo(
     () => buildChainMap(flatFields),

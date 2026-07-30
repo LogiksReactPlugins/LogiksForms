@@ -169,7 +169,20 @@ export interface FormButtonLabels {
     reset?: string;
     cancel?: string;
 }
+export interface ToolbarAction {
+  type: "method" | "api";
+  method?: string;
+  endpoint?: string;
+  tooltip?: string;
+  icon?: string;
+  class?: string;
+}
 
+export interface FormToolbar {
+  camera?: ToolbarAction;
+  qrcode?: ToolbarAction;
+  doc?: ToolbarAction;
+}
 export interface FormJson {
     title?: string | undefined;
     location_required?: boolean;
@@ -184,6 +197,7 @@ export interface FormJson {
     buttons?: Record<string, any>;
     button_labels?: FormButtonLabels | undefined;
     submit_msg?: boolean | string;
+    toolbar?: FormToolbar;
 }
 
 

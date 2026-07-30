@@ -1,11 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { determineViewMode, fetchGeolocation, getAltitudeFieldKeys, getErrorMessage, getGeoFieldKeys, getSuccessMessage, groupFields, replacePlaceholders, transformedObject } from "./utils.js";
+import {
+  determineViewMode,
+  fetchGeolocation,
+  getAltitudeFieldKeys,
+  getErrorMessage,
+  getGeoFieldKeys,
+  getSuccessMessage,
+  groupFields,
+  replacePlaceholders,
+  transformedObject,
+} from "./utils.js";
 
 import AccordionFormView from "./components/AccordionFormView.js";
 import TabFormView from "./components/TabFormView.js";
-import NormalFormView from "./components/NormalFormView.js";
+import NormalFormView, {
+  type NormalFormViewHandle,
+} from "./components/NormalFormView.js";
+import FormToolbar from "./components/FormToolbar.js";
 import type { FormProps } from "./Form.types.js";
 import CardFormView from "./components/CardFormView.js";
 import { deleteFile, sqlClient } from "./service.js";
@@ -19,9 +32,8 @@ export default function LogiksForm({
   initialvalues,
   toast,
   location_required = true,
-  AttachmentPopup
+  AttachmentPopup,
 }: FormProps) {
-
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
@@ -29,7 +41,7 @@ export default function LogiksForm({
  
   const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
   const filesToDelete = React.useRef<string[]>([]);
-
+  const formRef = React.useRef<NormalFormViewHandle>(null);
   const operation = sqlOpsUrls?.operation;
 
   const effectiveOperation =
@@ -39,16 +51,15 @@ export default function LogiksForm({
   const shouldCreate = operation === "create" || operation === "clone";
    const groupedFields = groupFields(formJson?.fields ?? {}, effectiveOperation);
 
+  
   // const isLocationRequired =
   //   location_required && formJson.location_required !== false;
 
   // console.log("isLocationRequired", isLocationRequired);
 
-
   const geoFieldKeys = React.useMemo(() => {
-    return getGeoFieldKeys(formJson.fields)
+    return getGeoFieldKeys(formJson.fields);
   }, [formJson.fields]);
-
 
   const altitudeFieldKeys = React.useMemo(() => {
     return getAltitudeFieldKeys(formJson.fields);
@@ -64,9 +75,7 @@ export default function LogiksForm({
     let isMounted = true;
 
     const initGeo = async () => {
-
       try {
-
         let latitude: number | string;
         let longitude: number | string;
         let altitude: number | null = null;
@@ -82,13 +91,11 @@ export default function LogiksForm({
           latitude = lat ?? "0";
           longitude = lng ?? "0";
         } else {
-
           const pos = await fetchGeolocation();
 
           latitude = pos.latitude;
           longitude = pos.longitude;
           altitude = pos.altitude;
-
         }
 
         const geo = `${latitude},${longitude}`;
@@ -103,9 +110,9 @@ export default function LogiksForm({
         });
 
         if (isMounted) {
-          setResolvedData(prev => ({
+          setResolvedData((prev) => ({
             ...prev,
-            ...resolvedValues
+            ...resolvedValues,
           }));
         }
       } catch (err) {
@@ -114,10 +121,8 @@ export default function LogiksForm({
     };
 
     const timer = setTimeout(() => {
-      if (geoFieldKeys.length > 0 ||
-        altitudeFieldKeys.length > 0) {
+      if (geoFieldKeys.length > 0 || altitudeFieldKeys.length > 0) {
         initGeo();
-
       }
     }, 0);
 
@@ -127,12 +132,10 @@ export default function LogiksForm({
     };
   }, [geoFieldKeys, altitudeFieldKeys]);
 
-
-
   React.useEffect(() => {
-    setResolvedData(prev => ({
+    setResolvedData((prev) => ({
       ...prev,
-      ...(initialvalues ?? {})
+      ...(initialvalues ?? {}),
     }));
   }, [initialvalues]);
 
@@ -140,7 +143,7 @@ export default function LogiksForm({
     (data?: Record<string, any>) => {
       if (!data) return;
 
-      setResolvedData(prev => {
+      setResolvedData((prev) => {
         const merged = { ...prev };
 
         for (const key in data) {
@@ -152,10 +155,8 @@ export default function LogiksForm({
         return merged;
       });
     },
-    []
+    [],
   );
-
-
 
   // ---------- Fetch Initial Data ----------
   React.useEffect(() => {
@@ -163,7 +164,7 @@ export default function LogiksForm({
     const fetchData = async () => {
       const source = formJson?.source ?? {};
       if (!source?.type) {
-        if (isMounted) setResolvedData(prev => prev);
+        if (isMounted) setResolvedData((prev) => prev);
         return;
       }
 
@@ -176,42 +177,41 @@ export default function LogiksForm({
             if (isMounted) safeSetResolvedData(result);
           } catch (err) {
             console.error("Method execution failed:", err);
-            if (isMounted) setResolvedData(prev => prev);
+            if (isMounted) setResolvedData((prev) => prev);
           }
         } else {
-          if (isMounted) setResolvedData(prev => prev);
+          if (isMounted) setResolvedData((prev) => prev);
         }
       }
 
       if (source.type === "api" && shouldFetchData) {
         try {
-
           const config = {
             method: source.method || "GET",
             url: sqlOpsUrls?.baseURL + source.endpoint,
 
             headers: {
-              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+              Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
             },
             ...(source.method === "GET"
               ? { params: { refid: source.refid } }
               : { data: { refid: source.refid } }),
-          }
-
+          };
 
           const { data } = await axios(config);
 
-          const value = data?.results?.options ?
-            data?.results?.options : data.data
+          const value = data?.results?.options
+            ? data?.results?.options
+            : data.data
               ? data.data
               : data.results
                 ? data.results
-                : data
+                : data;
 
           if (isMounted) safeSetResolvedData(value ?? {});
         } catch (err) {
           console.error("API fetch failed:", err);
-          if (isMounted) setResolvedData(prev => prev);
+          if (isMounted) setResolvedData((prev) => prev);
         }
       }
 
@@ -222,21 +222,25 @@ export default function LogiksForm({
         (shouldFetchData && source.dbopsid)) {
 
         if (!sqlOpsUrls) {
-          console.error("SQL source requires formJson.endPoints but it is missing");
+          console.error(
+            "SQL source requires formJson.endPoints but it is missing",
+          );
           return;
         }
 
         try {
-
-          const data = await sqlClient.fetch(sqlOpsUrls, {
-            source: {
-              ...source,
-              table: source.table,
-              columns: source.columns,
-              "where": replacePlaceholders(source.where, {
-                refid: refid,
-              }),
-            },
+          const data = await sqlClient.fetch(
+            sqlOpsUrls,
+            {
+              source: {
+                ...source,
+                table: source.table,
+                columns: source.columns,
+                where: replacePlaceholders(source.where, {
+                  refid: refid,
+                }),
+              },
+           
             fields: transformedObject(formJson.fields, effectiveOperation),
 
           }, source?.dbopsid, formJson?.module_refid);
@@ -249,21 +253,21 @@ export default function LogiksForm({
     };
 
     fetchData();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [
     sqlOpsUrls,
     formJson?.source?.type || "",
     formJson?.source?.method || "",
-    formJson?.source?.endpoint || ""
+    formJson?.source?.endpoint || "",
   ]);
 
   const processPendingDeletes = async () => {
     if (!filesToDelete.current.length) return;
 
     await Promise.all(
-      filesToDelete.current.map((fileId) =>
-        deleteFile(sqlOpsUrls, fileId)
-      )
+      filesToDelete.current.map((fileId) => deleteFile(sqlOpsUrls, fileId)),
     );
 
     filesToDelete.current = [];
@@ -288,7 +292,6 @@ export default function LogiksForm({
 
       //   try {
 
-
       //     const { latitude, longitude } = await fetchGeolocation();
       //     const geo = `${latitude},${longitude}`
       //     if (!geo) {
@@ -304,33 +307,24 @@ export default function LogiksForm({
 
       // }
 
-      const geoMissingKeys = geoFieldKeys.filter(
-        (k) => !values[k]
-      );
+      const geoMissingKeys = geoFieldKeys.filter((k) => !values[k]);
 
       const altitudeMissingKeys = altitudeFieldKeys.filter(
-        (k) => values[k] === undefined || values[k] === null || values[k] === ""
+        (k) =>
+          values[k] === undefined || values[k] === null || values[k] === "",
       );
 
-      const altitudeKey = altitudeFieldKeys[0]
+      const altitudeKey = altitudeFieldKeys[0];
       const altitudeValue = altitudeKey ? values[altitudeKey] : null;
 
-      if (geoMissingKeys.length > 0 ||
-        altitudeMissingKeys.length > 0) {
-
+      if (geoMissingKeys.length > 0 || altitudeMissingKeys.length > 0) {
         finalValues = {
           ...values,
+          ...Object.fromEntries(geoMissingKeys.map((k) => [k, finalGeo])),
           ...Object.fromEntries(
-            geoMissingKeys.map(k => [k, finalGeo])
-          ),
-          ...Object.fromEntries(
-            altitudeMissingKeys.map((k) => [
-              k,
-              altitudeValue,
-            ])
+            altitudeMissingKeys.map((k) => [k, altitudeValue]),
           ),
         };
-
       }
     }
 
@@ -354,14 +348,14 @@ export default function LogiksForm({
     //   }
     // }
 
-
-
     if (source.type === "method") {
       const methodName = source.method as keyof typeof methods | undefined;
       const methodFn = methodName ? methods[methodName] : undefined;
       if (methodFn) {
         try {
-          let values = finalValues ? { ...finalValues, geolocation: finalGeo } : {}
+          let values = finalValues
+            ? { ...finalValues, geolocation: finalGeo }
+            : {};
           const res = await methodFn(values);
           await processPendingDeletes();
           callback?.(res);
@@ -376,26 +370,25 @@ export default function LogiksForm({
             let referenceid = shouldCreate ? res?.data?.refid : refid;
             const link = formJson?.gotolink?.replace(
               "{hashid}",
-              String(referenceid)
+              String(referenceid),
             );
 
             methods.handleActions(link);
-
           }
         } catch (err) {
           // callback?.(err);
           toast?.error?.(getErrorMessage(err));
           throw new Error(getErrorMessage(err));
-
         }
       }
     }
 
     if (source.type === "api") {
       if (!sqlOpsUrls) {
-        console.error("SQL source requires formJson.endPoints but it is missing");
+        console.error(
+          "SQL source requires formJson.endPoints but it is missing",
+        );
         throw new Error("Something went wrong");
-
       }
       try {
         const res = await axios({
@@ -403,7 +396,7 @@ export default function LogiksForm({
           url: sqlOpsUrls.baseURL + source.endpoint,
           data: finalValues ? { ...finalValues, geolocation: finalGeo } : {},
           headers: {
-            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
           },
         });
 
@@ -418,28 +411,28 @@ export default function LogiksForm({
           let referenceid = shouldCreate ? res?.data?.refid : refid;
           const link = formJson?.gotolink?.replace(
             "{hashid}",
-            String(referenceid)
+            String(referenceid),
           );
 
           methods.handleActions(link);
-
         }
       } catch (err) {
         // callback?.(err);
         toast?.error?.(getErrorMessage(err));
         throw new Error(getErrorMessage(err));
-
       }
     }
 
     if (source.type === "sql") {
-
       const sqlOpsUrls = formJson.endPoints;
 
       if (!sqlOpsUrls) {
-        console.error("SQL source requires formJson.endPoints but it is missing");
-        throw new Error("SQL source requires formJson.endPoints but it is missing");
-
+        console.error(
+          "SQL source requires formJson.endPoints but it is missing",
+        );
+        throw new Error(
+          "SQL source requires formJson.endPoints but it is missing",
+        );
       }
 
       try {
@@ -455,23 +448,22 @@ export default function LogiksForm({
           method: "GET",
           url: sqlOpsUrls.baseURL + sqlOpsUrls.dbopsGetHash,
           headers: {
-            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
           },
         });
 
         if (!skipquery) {
-
           let query = {
-            ...source
-          }
+            ...source,
+          };
 
           if (source.where) {
             query = {
               ...source,
-              "where": replacePlaceholders(source.where, {
+              where: replacePlaceholders(source.where, {
                 refid: refid,
               }),
-            }
+            };
           }
 
           const resQueryId = await axios({
@@ -487,11 +479,10 @@ export default function LogiksForm({
             },
 
             headers: {
-              "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+              Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
             },
           });
           dbopsId = resQueryId?.data.refid;
-
         }
         const res = await axios({
           method: "POST",
@@ -500,14 +491,13 @@ export default function LogiksForm({
               "dbopsCreate" : "dbopsUpdate"
           ],
           data: {
-            "refid": dbopsId,
-            "fields": finalValues,
-            "datahash": resHashId.data.refhash,
-            "geolocation": finalGeo
-
+            refid: dbopsId,
+            fields: finalValues,
+            datahash: resHashId.data.refhash,
+            geolocation: finalGeo,
           },
           headers: {
-            "Authorization": `Bearer ${sqlOpsUrls?.accessToken}`
+            Authorization: `Bearer ${sqlOpsUrls?.accessToken}`,
           },
         });
         await processPendingDeletes();
@@ -521,7 +511,7 @@ export default function LogiksForm({
           let referenceid = shouldCreate ? res?.data?.refid : refid;
           const link = formJson?.gotolink?.replace(
             "{hashid}",
-            String(referenceid)
+            String(referenceid),
           );
           methods.handleActions(link);
         }
@@ -532,82 +522,96 @@ export default function LogiksForm({
         throw new Error(getErrorMessage(err));
       }
     }
-
   };
 
-
-
   const formView = {
-    "accordion": <AccordionFormView
-      title={formJson?.title ?? ""}
-      groupedFields={groupedFields}
-      data={resolvedData}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      methods={methods}
-      components={components}
-      sqlOpsUrls={sqlOpsUrls}
-      refid={refid}
-      module_refid={formJson?.module_refid}
-      buttons={formJson?.buttons}
-      button_labels={formJson.button_labels}
-      AttachmentPopup={AttachmentPopup}
-      filesToDelete={filesToDelete}
-    />,
-    "cards": <CardFormView
-      title={formJson?.title ?? ""}
-      groupedFields={groupedFields}
-      data={resolvedData}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      methods={methods}
-      components={components}
-      sqlOpsUrls={sqlOpsUrls}
-      refid={refid}
-      module_refid={formJson?.module_refid}
-      buttons={formJson?.buttons}
-      button_labels={formJson.button_labels}
-      AttachmentPopup={AttachmentPopup}
-      filesToDelete={filesToDelete}
-
-    />,
-    "tab": <TabFormView
-      title={formJson?.title ?? ""}
-      groupedFields={groupedFields}
-      data={resolvedData}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      methods={methods}
-      components={components}
-      widget={formJson?.widget}
-      sqlOpsUrls={sqlOpsUrls}
-      refid={refid}
-      module_refid={formJson?.module_refid}
-      buttons={formJson?.buttons}
-      button_labels={formJson.button_labels}
-      AttachmentPopup={AttachmentPopup}
-      filesToDelete={filesToDelete}
-    />,
-    "simple": <NormalFormView
-      title={formJson?.title ?? ""}
-      fields={formJson.fields}
-      data={resolvedData}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      methods={methods}
-      components={components}
-      sqlOpsUrls={sqlOpsUrls}
-      refid={refid}
-      module_refid={formJson?.module_refid}
-      buttons={formJson?.buttons}
-      button_labels={formJson.button_labels}
-      AttachmentPopup={AttachmentPopup}
-      filesToDelete={filesToDelete}
-    />
+    accordion: (
+      <AccordionFormView
+        ref={formRef}
+        title={formJson?.title ?? ""}
+        groupedFields={groupedFields}
+        data={resolvedData}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+        methods={methods}
+        components={components}
+        sqlOpsUrls={sqlOpsUrls}
+        refid={refid}
+        module_refid={formJson?.module_refid}
+        buttons={formJson?.buttons}
+        button_labels={formJson.button_labels}
+        AttachmentPopup={AttachmentPopup}
+        filesToDelete={filesToDelete}
+      />
+    ),
+    cards: (
+      <CardFormView
+        ref={formRef}
+        title={formJson?.title ?? ""}
+        groupedFields={groupedFields}
+        data={resolvedData}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+        methods={methods}
+        components={components}
+        sqlOpsUrls={sqlOpsUrls}
+        refid={refid}
+        module_refid={formJson?.module_refid}
+        buttons={formJson?.buttons}
+        button_labels={formJson.button_labels}
+        AttachmentPopup={AttachmentPopup}
+        filesToDelete={filesToDelete}
+      />
+    ),
+    tab: (
+      <TabFormView
+        ref={formRef}
+        title={formJson?.title ?? ""}
+        groupedFields={groupedFields}
+        data={resolvedData}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+        methods={methods}
+        components={components}
+        widget={formJson?.widget}
+        sqlOpsUrls={sqlOpsUrls}
+        refid={refid}
+        module_refid={formJson?.module_refid}
+        buttons={formJson?.buttons}
+        button_labels={formJson.button_labels}
+        AttachmentPopup={AttachmentPopup}
+        filesToDelete={filesToDelete}
+      />
+    ),
+    simple: (
+      <NormalFormView
+        ref={formRef}
+        title={formJson?.title ?? ""}
+        fields={formJson.fields}
+        data={resolvedData}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+        methods={methods}
+        components={components}
+        sqlOpsUrls={sqlOpsUrls}
+        refid={refid}
+        module_refid={formJson?.module_refid}
+        buttons={formJson?.buttons}
+        button_labels={formJson.button_labels}
+        AttachmentPopup={AttachmentPopup}
+        filesToDelete={filesToDelete}
+      />
+    ),
   };
 
   return (
     <div className="relative">
+      <FormToolbar
+        toolbar={formJson.toolbar}
+        methods={methods}
+        sqlOpsUrls={sqlOpsUrls}
+        populateForm={(payload) => formRef.current?.populateForm(payload)}
+      />
       {formView[viewMode]}
     </div>
   );

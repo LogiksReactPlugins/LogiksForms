@@ -14,6 +14,31 @@ export const example10 = {
         "uploadURL": "/api/files/upload",
         "operation": "create",
     },
+    "toolbar": {
+        "camera": {
+            "type": "method",
+            "method": "getPANDetails",
+            "tooltip": "Capture image",
+            "icon": "fa fa-camera",
+            "class": "btn-primary"
+        },
+          "qrcode": {
+    "type": "method",
+    "method": "getPANDetails",
+    "tooltip": "Scan QR",
+    "icon": "fa fa-user",
+    "class": "btn-primary"
+  },
+  "doc": {
+    "type": "api",
+    "endpoint": "/api/dbops",
+    "method":"POST",
+    "tooltip": "Get PAN Details",
+    "icon": "fa fa-user",
+    "class": "btn-primary"
+  }
+       
+    },
     "hooks": {
         "presubmit": [
             "hse.avoidSpecialCharacters"
@@ -28,13 +53,13 @@ export const example10 = {
     },
     "gotolink": "infoview/hse.induction/{hashid}",
     "fields": {
-            "location_id": {
+        "location_id": {
             "label": "Code Editor",
-            "type": "codeeditor",
+            "type": "markdown",
             "required": true,
             "width": 12,
-            height:"70vh",
-            language:"javascript",
+            height: "70vh",
+            language: "javascript",
 
         },
         "company_code_id": {
@@ -66,7 +91,7 @@ export const example10 = {
                 }
             ],
             "no-option": "Select Company/ SPV",
-            "width": 4,
+            "width": 12,
             "options": []
         },
         "sector_id": {
@@ -106,7 +131,7 @@ export const example10 = {
             "max": "today",
             "width": 4
         },
-    
+
         "photo_attendance": {
             "label": "Induction Photo/Attendance (Max. Sizes:10MB)",
             "type": "camera",
@@ -141,226 +166,7 @@ export const example10 = {
             "width": 4,
             "search": true,
             "options": [
-                {
-                    "title": "Admin",
-                    "value": "admin"
-                },
-                {
-                    "title": "Shivraj",
-                    "value": "shivraj"
-                },
-                {
-                    "title": "Pramod",
-                    "value": "pramod"
-                },
-                {
-                    "title": "Manthan M",
-                    "value": "manthan"
-                },
-                {
-                    "title": "susamyas",
-                    "value": "susamya_ghosh@welspun.com"
-                },
-                {
-                    "title": "Aniket Birje",
-                    "value": "aniket.birje"
-                },
-                {
-                    "title": "silk-updated",
-                    "value": "100"
-                },
-                {
-                    "title": "Yesh",
-                    "value": "Yesh"
-                },
-                {
-                    "title": "Dharmendra Kushwaha",
-                    "value": "Dharmendra_Kushwaha@welspun.com"
-                },
-                {
-                    "title": "sushant",
-                    "value": "sushant"
-                },
-                {
-                    "title": "pragati",
-                    "value": "pragati"
-                },
-                {
-                    "title": "dipti",
-                    "value": "dipti"
-                },
-                {
-                    "title": "testing",
-                    "value": "test"
-                },
-                {
-                    "title": "indulekha.singh",
-                    "value": "indulekha.singh"
-                },
-                {
-                    "title": "Initial Test",
-                    "value": "initialtest"
-                },
-                {
-                    "title": "User WELS",
-                    "value": "user"
-                },
-                {
-                    "title": "Business",
-                    "value": "business1"
-                },
-                {
-                    "title": "Manager 1",
-                    "value": "manager1"
-                },
-                {
-                    "title": "indulekha",
-                    "value": "indulekha"
-                },
-                {
-                    "title": "wel user",
-                    "value": "wel_user"
-                },
-                {
-                    "title": "Vikas Yadav",
-                    "value": "Vikas_Yadav1@welspun.com"
-                },
-                {
-                    "title": "Suyog Sakhare",
-                    "value": "Suyog_Sakhare@welspun.com"
-                },
-                {
-                    "title": "shital",
-                    "value": "shital"
-                },
-                {
-                    "title": "shitu",
-                    "value": "shitu"
-                },
-                {
-                    "title": "tester1",
-                    "value": "tester1"
-                },
-                {
-                    "title": "tester2",
-                    "value": "tester2"
-                },
-                {
-                    "title": "Manasi Gosavi",
-                    "value": "manasi"
-                },
-                {
-                    "title": "tester3",
-                    "value": "tester3"
-                },
-                {
-                    "title": "Dev Akif",
-                    "value": "akif"
-                },
-                {
-                    "title": "Vaibhav Mahale",
-                    "value": "Vaibhav"
-                },
-                {
-                    "title": "Saurabh Patil",
-                    "value": "saurabh patil"
-                },
-                {
-                    "title": "Manas G",
-                    "value": "manas"
-                },
-                {
-                    "title": "Amit Shah",
-                    "value": "amit.shah@welspun.com"
-                },
-                {
-                    "title": "Priya Mehta",
-                    "value": "priya.mehta@welspun.com"
-                },
-                {
-                    "title": "Rahul Patel",
-                    "value": "rahul.patel@welspun.com"
-                },
-                {
-                    "title": "Sneha Joshi",
-                    "value": "sneha.joshi@welspun.com"
-                },
-                {
-                    "title": "Vikram Singh",
-                    "value": "vikram.singh@welspun.com"
-                },
-                {
-                    "title": "Neha Verma",
-                    "value": "neha.verma@welspun.com"
-                },
-                {
-                    "title": "Karan Desai",
-                    "value": "karan.desai@welspun.com"
-                },
-                {
-                    "title": "Pooja Nair",
-                    "value": "pooja.nair@welspun.com"
-                },
-                {
-                    "title": "Rohan Kulkarni",
-                    "value": "rohan.kulkarni@welspun.com"
-                },
-                {
-                    "title": "Isha Trivedi",
-                    "value": "isha.trivedi@welspun.com"
-                },
-                {
-                    "title": "Arjun Malhotra",
-                    "value": "arjun.malhotra@welspun.com"
-                },
-                {
-                    "title": "Kavya Iyer",
-                    "value": "kavya.iyer@welspun.com"
-                },
-                {
-                    "title": "Nitin Chawla",
-                    "value": "nitin.chawla@welspun.com"
-                },
-                {
-                    "title": "Meera Soni",
-                    "value": "meera.soni@welspun.com"
-                },
-                {
-                    "title": "Yash Thakkar",
-                    "value": "yash.thakkar@welspun.com"
-                },
-                {
-                    "title": "Test User",
-                    "value": "testuser@welspun.com"
-                },
-                {
-                    "title": "Test User",
-                    "value": "testuser1@welspun.com"
-                },
-                {
-                    "title": "Riyan Ali",
-                    "value": "riyan"
-                },
-                {
-                    "title": "shitu2",
-                    "value": "shitu2"
-                },
-                {
-                    "title": "Test User2",
-                    "value": "testuser2@welspun.com"
-                },
-                {
-                    "title": "oliva",
-                    "value": "oliva"
-                },
-                {
-                    "title": "Rajesh Subramanian",
-                    "value": "raasubramanian@deloitte.com"
-                },
-                {
-                    "title": "Manthan",
-                    "value": "manthan.u@gmail.com"
-                },
+
                 {
                     "title": "Vasudeo Gaichor",
                     "value": "vasudeo"
@@ -379,7 +185,7 @@ export const example10 = {
             "width": 4
         }
     },
- 
+
     "module_refid": "hse.induction",
     "module_type": "forms"
 }

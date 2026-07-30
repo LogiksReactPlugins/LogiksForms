@@ -5,7 +5,13 @@ import FieldRenderer from './FieldRenderer.js';
 import { buildChainMap, filterSavableValues, flatFields, intializeForm, isHidden, tailwindCols, toColWidth } from '../utils.js';
 import type { SimpleFormViewProps, FormField, OptionItem } from "../Form.types.js";
 import CommonInfo from './CommonInfo.js';
+export interface NormalFormViewHandle {
+  populateForm: (payload: Record<string, any>) => void;
+}
 
+interface NormalFormViewProps extends SimpleFormViewProps {
+  ref?: React.Ref<NormalFormViewHandle>;
+}
 
 export default function NormalFormView({
   title,
@@ -20,13 +26,17 @@ export default function NormalFormView({
   buttons,
   button_labels,
   AttachmentPopup,
-  filesToDelete
-}: SimpleFormViewProps) {
+  filesToDelete,
+  ref
+}: NormalFormViewProps) {
+
     const effectiveOperation =
       sqlOpsUrls?.operation === "clone" ? "create" : sqlOpsUrls?.operation;
+
   const flatfields = React.useMemo(() => {
     return flatFields(fields, effectiveOperation)
   }, [fields, effectiveOperation]);
+
 
 
   const [fieldOptions, setFieldOptions] = React.useState<
@@ -63,6 +73,7 @@ export default function NormalFormView({
       { commonFields: [] as FormField[], otherFields: [] as FormField[] }
     );
   }, [flatfields]);
+
 
 
   const { initialValues, validationSchema } = React.useMemo(() => {
@@ -110,6 +121,19 @@ export default function NormalFormView({
     }
   })
 
+
+  React.useImperativeHandle(ref, () => ({
+    populateForm: (payload: Record<string, any>) => {
+      if (!payload) return;
+
+      formik.setValues((prev) => ({
+        ...prev,
+        ...payload,
+      }));
+    },
+  }), [flatfields, module_refid, sqlOpsUrls?.operation]);
+
+
   //let visibleButtons = buttons ? Object.entries(buttons) : []
 
 
@@ -149,7 +173,7 @@ export default function NormalFormView({
 
   }
 
-console.log("formik.values",formik.values)
+  console.log("formik.values", formik.values)
 
   return (
     <>
