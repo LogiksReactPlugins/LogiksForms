@@ -7,6 +7,8 @@ import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
 import RichTextToolbar from './RIchTextToolbar.js'
 import { useEffect } from "react";
 
@@ -32,7 +34,8 @@ export default function RichTextEditor({
         },
       }),
       Underline,
-
+      TextStyle,
+      Color,
       Image,
       Table.configure({ resizable: true }),
       TableRow,

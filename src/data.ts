@@ -55,7 +55,7 @@ export const example10 = {
     "fields": {
         "location_id": {
             "label": "Code Editor",
-            "type": "markdown",
+            "type": "richtextarea",
             "required": true,
             "width": 12,
             height: "70vh",

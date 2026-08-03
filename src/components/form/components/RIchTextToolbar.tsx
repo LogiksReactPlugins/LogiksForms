@@ -2,6 +2,7 @@
 import type { Editor } from '@tiptap/react';
 import { ToolbarButton } from './ToolbarBtn.js';
 import HeadingDropdown from './HeadingDropDown.js';
+import TextColorPicker from './TextColorPicker.js';
 
 
 function Divider() {
@@ -44,7 +45,8 @@ export default function RichTextToolbar({ editor }: { editor: Editor }) {
       <Divider />
       {/* Headings */}
 
-
+ <TextColorPicker editor={editor} />
+      <Divider />
       <HeadingDropdown editor={editor} />
 
 
@@ -145,7 +147,7 @@ export default function RichTextToolbar({ editor }: { editor: Editor }) {
 
       {editor.isActive('table') && (
         <>
-          
+
 
           <ToolbarButton
             title="Add Row Above"
