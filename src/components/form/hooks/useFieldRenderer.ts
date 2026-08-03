@@ -555,7 +555,7 @@ export default function useFieldRenderer({
 
                             });
                     }
-                    return
+                   
                 }
                 if (!value) return;
                 // ---------- AJAX CHAIN (ARRAY SAFE) ----------

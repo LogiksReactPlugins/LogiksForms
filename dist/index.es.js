@@ -6898,7 +6898,6 @@ function oL({
           console.log("normalizedRow", _e), _e && ce.target.split(",").map((Ce) => Ce.trim()).forEach((Ce) => {
             t.setFieldValue(Ce, _e[Ce] ?? "");
           });
-          return;
         }
         if (!Pe) return;
         for (const Re of Ee) {
