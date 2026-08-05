@@ -137,7 +137,7 @@ export default function CardFormView({
       }
       return
     }
-    methods?.handleAction?.({ [method]: val }, formik.values)
+    methods?.handleActions?.({ [method]: val }, formik.values)
 
   }
 

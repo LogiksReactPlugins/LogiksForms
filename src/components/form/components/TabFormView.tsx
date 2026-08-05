@@ -209,7 +209,7 @@ export default function TabFormView({
       }
       return;
     }
-    methods?.handleAction?.({ [method]: val }, formik.values);
+    methods?.handleActions?.({ [method]: val }, formik.values);
   }
 
   const [fieldLoading, setFieldLoading] = React.useState<
