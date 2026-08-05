@@ -72255,7 +72255,7 @@ function boe({
       }
       return;
     }
-    a?.handleAction?.({ [ne]: ue }, U.values);
+    a?.handleActions?.({ [ne]: ue }, U.values);
   }
   const J = () => {
     U.resetForm(), b && (b.current = []);
@@ -72521,7 +72521,7 @@ function Aoe({
       }
       return;
     }
-    a?.handleAction?.({ [ge]: ye }, J.values);
+    a?.handleActions?.({ [ge]: ye }, J.values);
   }
   const [Y, ve] = Je.useState({}), rt = (ge, ye) => {
     ve((ce) => ({
@@ -72792,7 +72792,7 @@ function Coe({
       }
       return;
     }
-    a?.handleAction?.({ [ne]: ue }, W.values);
+    a?.handleActions?.({ [ne]: ue }, W.values);
   }
   const J = () => {
     W.resetForm(), g && (g.current = []);
@@ -104274,7 +104274,7 @@ function ele({
       }
       return;
     }
-    a?.handleAction?.({ [ne]: ue }, U.values);
+    a?.handleActions?.({ [ne]: ue }, U.values);
   }
   const J = () => {
     U.resetForm(), b && (b.current = []);

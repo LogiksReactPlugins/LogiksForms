@@ -151,7 +151,7 @@ export default function NormalFormView({
       }
       return
     }
-    methods?.handleAction?.({ [method]: val }, formik.values)
+    methods?.handleActions?.({ [method]: val }, formik.values)
 
   }
 
