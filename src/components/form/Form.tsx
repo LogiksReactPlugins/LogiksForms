@@ -9,6 +9,7 @@ import {
   getGeoFieldKeys,
   getSuccessMessage,
   groupFields,
+  normalizeRowSafe,
   replacePlaceholders,
   transformedObject,
 } from "./utils.js";
@@ -37,21 +38,23 @@ export default function LogiksForm({
   let viewMode: ViewMode = determineViewMode(formJson);
   const sqlOpsUrls = formJson.endPoints;
   const refid = formJson?.source?.refid;
-  
- 
-  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(initialvalues ?? {});
+
+
+  const [resolvedData, setResolvedData] = React.useState<Record<string, any>>(
+    () => normalizeRowSafe(initialvalues ?? {})
+  );
   const filesToDelete = React.useRef<string[]>([]);
   const formRef = React.useRef<NormalFormViewHandle>(null);
   const operation = sqlOpsUrls?.operation;
 
   const effectiveOperation =
-  operation === "clone" ? "create" : operation;
+    operation === "clone" ? "create" : operation;
 
   const shouldFetchData = operation !== "create";
   const shouldCreate = operation === "create" || operation === "clone";
-   const groupedFields = groupFields(formJson?.fields ?? {}, effectiveOperation);
+  const groupedFields = groupFields(formJson?.fields ?? {}, effectiveOperation);
 
-  
+console.log("initalvalues ", normalizeRowSafe(initialvalues ?? {}))
   // const isLocationRequired =
   //   location_required && formJson.location_required !== false;
 
@@ -133,9 +136,11 @@ export default function LogiksForm({
   }, [geoFieldKeys, altitudeFieldKeys]);
 
   React.useEffect(() => {
+    const normalizedInitialValues = normalizeRowSafe(initialvalues ?? {});
+
     setResolvedData((prev) => ({
       ...prev,
-      ...(initialvalues ?? {}),
+      ...normalizedInitialValues,
     }));
   }, [initialvalues]);
 
@@ -240,10 +245,10 @@ export default function LogiksForm({
                   refid: refid,
                 }),
               },
-           
-            fields: transformedObject(formJson.fields, effectiveOperation),
 
-          }, source?.dbopsid, formJson?.module_refid);
+              fields: transformedObject(formJson.fields, effectiveOperation),
+
+            }, source?.dbopsid, formJson?.module_refid);
 
           if (isMounted) safeSetResolvedData(data);
         } catch (err) {

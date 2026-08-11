@@ -151,9 +151,11 @@ export default function NormalFormView({
       }
       return
     }
-    methods?.handleActions?.({ [method]: val }, formik.values)
+    methods?.handleActions?.({ [method]: val }, data)
 
   }
+  console.log("---data---",data);
+   console.log("---form values---",formik.values)
 
   const resetForm = () => {
     formik.resetForm();

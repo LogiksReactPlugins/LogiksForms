@@ -127,7 +127,7 @@ export default function AccordionFormView({
       }
       return
     }
-    methods?.handleActions?.({ [method]: val }, formik.values)
+    methods?.handleActions?.({ [method]: val }, data)
 
   }
 
