@@ -88,8 +88,6 @@ export default function CardFormView({
     onSubmit: async (values) => {
       try {
 
-
-
         let filteredValues = filterSavableValues(values, flatFields);
         const res = await onSubmit(filteredValues);
         console.log("res", res)
@@ -100,6 +98,31 @@ export default function CardFormView({
 
     }
   })
+
+      const handleSubmit = async (
+      e: React.FormEvent<HTMLFormElement>
+    ) => {
+      e.preventDefault();
+    
+      const errors = await formik.validateForm();
+    
+      if (Object.keys(errors).length > 0) {
+        formik.setTouched(
+          Object.keys(errors).reduce<Record<string, boolean>>(
+            (acc, key) => {
+              acc[key] = true;
+              return acc;
+            },
+            {}
+          )
+        );
+    
+        alert("Please fill all required fields before submitting.");
+        return;
+      }
+    
+      formik.handleSubmit(e);
+    };
 
   React.useImperativeHandle(ref, () => ({
     populateForm: (payload: Record<string, any>) => {
@@ -164,7 +187,7 @@ export default function CardFormView({
 
       <div className="bg-white animate-in fade-in duration-300">
 
-        <form onSubmit={formik.handleSubmit} className="p-4 mx-auto">
+        <form onSubmit={handleSubmit} className="p-4 mx-auto">
           <div className="space-y-2">
             {commonFields.length > 0 && (
               <Card title="Common">

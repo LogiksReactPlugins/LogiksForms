@@ -19,6 +19,7 @@ export default function Accordion({ title, children, isFirst }: AccordionProps) 
         {/* Header with gradient background */}
         <button
           onClick={() => setIsOpen(!isOpen)}
+          type='button'
           className="w-full bg-gray-50 flex justify-between items-center px-6 py-3 b text-left transition-all duration-300 "
         >
           <div className="flex items-center space-x-3">

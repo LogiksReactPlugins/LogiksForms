@@ -542,8 +542,6 @@ export default function useFieldRenderer({
                     }
 
                     let normalizedRow = normalizeRowSafe(row);
-                    console.log("normalizedRow", normalizedRow);
-
 
                     if (normalizedRow) {
                         ac.target
@@ -555,16 +553,25 @@ export default function useFieldRenderer({
 
                             });
                     }
-                   
+
                 }
-                if (!value) return;
+
                 // ---------- AJAX CHAIN (ARRAY SAFE) ----------
                 for (const chain of ajaxChains) {
                     setFieldLoading?.(chain.target, true);
-                    const src = chain.src;
+                   
                     if (!chain || typeof chain !== "object") continue;
+                     const src = chain.src;
                     if (!src || typeof src !== "object") continue;
                     if (!sqlOpsUrls) continue;
+
+                    if (value === "" || value === null || value === undefined) {
+                        formik.setFieldValue(chain.target, formik.initialValues[chain.target]);
+
+                        setFieldOptions?.(chain.target, []);
+                        setFieldLoading?.(chain.target, false);
+                        continue;
+                    }
 
                     let responseData: any;
 
@@ -645,10 +652,10 @@ export default function useFieldRenderer({
                     let labelKey = field.labelKey ?? "title";
 
                     const rawItems = Array.isArray(responseData?.results?.options) ?
-                        responseData?.results?.options : Array.isArray(responseData.data)
-                            ? responseData.data
-                            : Array.isArray(responseData.results)
-                                ? responseData.results
+                        responseData?.results?.options : Array.isArray(responseData?.data)
+                            ? responseData?.data
+                            : Array.isArray(responseData?.results)
+                                ? responseData?.results
                                 : responseData
 
 
