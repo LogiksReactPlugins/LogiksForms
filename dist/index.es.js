@@ -4467,7 +4467,7 @@ const Iy = (e) => e == null || e === "", fo = (e) => e.type === "string", Ou = (
           break;
         case "mobile":
           fo(h) && (h = h.matches(
-            /^[1-9][0-9]*$/,
+            /^\+?[1-9][0-9]{7,14}$/,
             "Invalid mobile number format"
           ));
           break;
