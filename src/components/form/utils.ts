@@ -235,7 +235,7 @@ export const intializeForm = (
           case "mobile":
             if (isStringValidator(validator)) {
               validator = (validator as Yup.StringSchema).matches(
-                /^[1-9][0-9]*$/,
+               /^\+?[1-9][0-9]{7,14}$/,
                 "Invalid mobile number format"
               );
             }
