@@ -373,6 +373,28 @@ export const intializeForm = (
   });
 };
 
+export const hasMissingParameters = (
+    parameter: string | Record<string, string> | undefined,
+    values: Record<string, any>
+): boolean => {
+    if (!parameter) {
+        return false;
+    }
+
+    const fields =
+        typeof parameter === "string"
+            ? [parameter]
+            : Object.values(parameter);
+
+    return fields.some((fieldName) => {
+        const value = values[fieldName];
+
+        return value === undefined ||
+            value === null ||
+            value === "";
+    });
+};
+
 
 type ColWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 

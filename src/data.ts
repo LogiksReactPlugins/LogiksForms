@@ -1,9 +1,9 @@
 
 
 export const example10 = {
-    "endPoints": {
-        "baseURL": "http://192.168.0.20:9999",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6IkRJVkI2Kzh2Ym53NDN3YzhGMFZpRDZlbGpscTlhN0pQMlhrbFgvMnN3b3lrRE0wWTBKYS9FTFpjaHJnc0dnWDZlakgzSW9qK2ZPWFVhUkdtZ0hRT2NyTHpzM3RLUTVXd21Xbk5GcWdNWlZPYXJNWWt2STdqeTUxelVYWmRBcDArbkhyOTZBVUdVbG5VclFzMGJlYitWb3ppWmMrZHFvVjlUQ3dQcEtHajMvMXpPdmY2aVYvYkpJbStrckhqZ201UDE4UFU0WTdqNmJjOExlb0hwUzY3VTMvR2FzQ3Z0R2VZQlJNZitlOUtEeUwxREZ6NGxoR0tkaTNsSWoyZ0s5WEZyQ3FvN3E4YVVqNlFSb24zQm9DT1hGL1JTOUJqQzlqd05oOUk0aENXc3FUdkN4QW4za2tQc3gycHg2VkZaeEUwYVFyVEFsd1F4RjNjWkVCN3JsR0tscVBjR1RuOEgvZzRpOFhYT09uUVd4cUdSYUs4SVZYMUQ5a2hjOXVGZ3dmK2JGN1dobnNWTHQzeEdIZDVjY25FMXNOVEhrbkxiQ1VCVWhCMERPYStiUEEwKy9CUUtTb2hGOUJHTlZTN1l5cTBmY05ITHgwVGpuUzErS0hZK3UvQmFWR2hrdGpxUlpCQ3I1VVpTM25iNzhnRUhBPT0iLCJpYXQiOjE3ODAwNDQ0NTcsImV4cCI6MTc4MDA0ODA1NywianRpIjoiYWNjOjE6MTc4MDA0NDQ1NzE1MDp3ZWIifQ.R8ZTHkRNS4AFIQG5zcOFOJ6XckvIZKIpPWKv9jXJ6js",
+      "endPoints": {
+        "baseURL": "https://welapp.dev2.silkdemo.in",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwicGF5bG9hZCI6Ik5lZnFqbnYvbmdVZUdWZTRHUDRnZWpmTWxCdVJsR09mZmhOZmgrNyt2UmRGK2ZOQi81LzNldDd6WmExSnloUmxOSTByWUhGb3JCcnh0R3lobHNQSUJoZVAvNUQvRFpZdU05bXdRcUpFdGpJZlRsQitPQk82L21ETkhyK0t5STdPazZxa1BnakMrTitlV1pXYmlyNU9hYzBabmpJdFBmWFI3VkkwUHpQL2VheDdUVXhuaEdNQ2pZTCsyRVZBd0dlTkZRdmQwbjlvWWJqS0N4Y1d0RnhqdDZrZ1dmcWwzTUN4dHE5eDIvajZ4QTJrRFlFU0hBPT0iLCJpYXQiOjE3ODcyMTkwMzIsImV4cCI6MTc4NzIyMjYzMiwianRpIjoiYWNjOjE6MTc4NzIxOTAzMjAyMjp3ZWIifQ.inFEBcTNKx2Fpkv9eITEvFTTXhl1o1B4-ZX6uZdzTRs",
         "dbopsGetHash": "/api/dbops",
         "dbopsGetRefId": "/api/dbops/save",
         "dbopsCreate": "/api/dbops/create",
@@ -12,68 +12,30 @@ export const example10 = {
         "registerQuery": "/api/query/save",
         "runQuery": "/api/query/run",
         "uploadURL": "/api/files/upload",
-        "operation": "create",
-    },
-    "toolbar": {
-        "camera": {
-            "type": "method",
-            "method": "getPANDetails",
-            "tooltip": "Capture image",
-            "icon": "fa fa-camera",
-            "class": "btn-primary"
-        },
-          "qrcode": {
-    "type": "method",
-    "method": "getPANDetails",
-    "tooltip": "Scan QR",
-    "icon": "fa fa-user",
-    "class": "btn-primary"
-  },
-  "doc": {
-    "type": "api",
-    "endpoint": "/api/dbops",
-    "method":"POST",
-    "tooltip": "Get PAN Details",
-    "icon": "fa fa-user",
-    "class": "btn-primary"
-  }
-       
+        "operation": "update",
     },
     "hooks": {
         "presubmit": [
-            "hse.avoidSpecialCharacters"
+            "precastTracking.girdenNoValidator"
+        ],
+        "postsubmit": [
+            "precastTracking.girdenNo",
+            "precastTracking.updateStatus",
+            "precastTracking.Creategirden"
         ]
     },
     "source": {
         "type": "sql",
-        "dbopsid": "forms%40hse.induction%40"
+        "dbopsid": "forms%40precastTracking.span%4079"
     },
     "forcefill": {
         "guid": "#SESS_GUID#"
     },
-    "gotolink": "infoview/hse.induction/{hashid}",
     "fields": {
-        "location_id": {
-            "label": "Code Editor",
-            "type": "richtextarea",
-            "required": true,
-            "width": 12,
-            height: "70vh",
-            language: "javascript",
-
-        },
         "company_code_id": {
             "label": "Company/ SPV",
             "type": "select",
-            "buttons": {
-                "api@hse.someAction": {
-                    "label": "Add",
-                    "icon": "fa fa-plus",
-
-                },
-
-            },
-            "parameter": "company_id",
+            "parameter": "company_code_id",
             "required": true,
             "source": {
                 "type": "api",
@@ -91,7 +53,8 @@ export const example10 = {
                 }
             ],
             "no-option": "Select Company/ SPV",
-            "width": 12,
+            "persistent": true,
+            "width": 4,
             "options": []
         },
         "sector_id": {
@@ -104,11 +67,59 @@ export const example10 = {
             },
             "ajaxchain": [
                 {
-                    "target": "project_function_id",
+                    "target": "project_id",
                     "src": {
                         "type": "api",
                         "method": "post",
-                        "endpoint": "/api/services/eofficeGlobal/get_project_function?module=hse&type=project"
+                        "endpoint": "/api/services/eofficeGlobal/get_project_function?type=project&module=precastTracking"
+                    }
+                }
+            ],
+            "persistent": true,
+            "required": true,
+            "width": 4,
+            "options": []
+        },
+        "project_id": {
+            "label": "Project",
+            "type": "select",
+            "required": true,
+            "persistent": true,
+            "width": 4,
+            "no-option": "Select Project",
+            "parameter": {
+                "company_code_id": "company_code_id",
+                "sector_id": "sector_id",
+                
+            },
+            "ajaxchain": [
+                {
+                    "target": "design_refrence",
+                    "src": {
+                        "type": "api",
+                        "method": "post",
+                        "endpoint": "/api/services/precastTracking/get_design_reference"
+                    }
+                }
+            ],
+            "options": []
+        },
+        "design_refrence": {
+            "label": "Structure Name",
+            "type": "select",
+            "parameter": {
+                "project_id": "project_id",
+                "sector_id": "sector_id",
+                "company_code_id": "company_code_id",
+                "design_refrence": "design_refrence"
+            },
+            "ajaxchain": [
+                {
+                    "target": "span_from",
+                    "src": {
+                        "type": "api",
+                        "method": "post",
+                        "endpoint": "/api/services/precastTracking/getSpanByProject"
                     }
                 }
             ],
@@ -116,77 +127,61 @@ export const example10 = {
             "width": 4,
             "options": []
         },
-        "project_function_id": {
-            "label": "Project Function",
+        "work_package": {
+            "label": "Work Package",
+            "type": "text",
+            "hidden": true,
+            "disabled": true,
+            "required": false,
+            "width": 6
+        },
+        "span_from": {
+            "label": "Span From - To",
             "type": "select",
+            "ajaxchain": [
+                {
+                    "target": "gr_no",
+                    "parameter": "span_from",
+                    "src": {
+                        "type": "api",
+                        "method": "post",
+                        "endpoint": "/api/services/precastTracking/get_gr_no"
+                    }
+                }
+            ],
             "required": true,
             "width": 4,
-            "no-option": "Select Project Function",
             "options": []
         },
-        "date": {
-            "label": "Induction Date",
-            "type": "date",
-            "required": true,
-            "max": "today",
-            "width": 4
-        },
-
-        "photo_attendance": {
-            "label": "Induction Photo/Attendance (Max. Sizes:10MB)",
-            "type": "camera",
-            "multiple": true,
-            "width": 4
-        },
-        "conducted_by_department": {
-            "label": "Conducted By Department",
+        "category": {
+            "label": "Girder Category Name",
             "type": "select",
-            "groupid": "hse_conducted_by_department",
+            "parameter": {
+                "company_code_id": "company_code_id",
+                "sector_id": "sector_id",
+                "project_id": "project_id",
+                "design_refrence": "design_refrence"
+            },
+            "source": {
+                "type": "api",
+                "method": "post",
+                "endpoint": "/api/services/precastTracking/get_girder_category"
+            },
             "required": true,
-            "width": 4,
-            "options": [
-                {
-                    "title": "WEL HSE",
-                    "value": "wel_hse",
-                    "class": null,
-                    "privilege": "*"
-                },
-                {
-                    "title": "Contractor",
-                    "value": "contractor",
-                    "class": null,
-                    "privilege": "*"
-                }
-            ]
+            "orderby": "design_tbl.id desc",
+            "width": 6,
+            "options": []
         },
-        "conducted_by_name": {
-            "label": "Conducted By (Name)",
-            "type": "select",
+        "gr_no": {
+            "label": "Girder Sequence No",
             "multiple": true,
-            "width": 4,
-            "search": true,
-            "options": [
-
-                {
-                    "title": "Vasudeo Gaichor",
-                    "value": "vasudeo"
-                },
-                {
-                    "title": "Omkar Chavan",
-                    "value": "omkar"
-                }
-            ]
-        },
-        "participant_count": {
-            "label": "Participant Count",
-            "type": "suggest",
+            "type": "select",
             "required": true,
-            "min": 1,
-            "width": 4
+            "width": 6,
+            "options": []
         }
     },
-
-    "module_refid": "hse.induction",
+    "module_refid": "precastTracking.span",
     "module_type": "forms"
 }
 

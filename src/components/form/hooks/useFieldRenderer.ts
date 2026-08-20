@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import type { FieldRendererProps, FormField, OptionItem, sqlQueryProps } from "../Form.types.js";
-import { buildApiParams, buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchColumns, handlePersist, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
+import { buildApiParams, buildFileValue, flattenOptions, formatOptions, getFirstRow, getSearchColumns, handlePersist, hasMissingParameters, isAutocompleteConfig, mergeOptions, normalizeOptions, normalizeRowSafe, replacePlaceholders, resetChain } from "../utils.js";
 import { deleteFile, fetchDataByquery, uploadFiles } from "../service.js";
 
 //DRY implementation pending
@@ -146,6 +146,34 @@ export default function useFieldRenderer({
 
     const key = field.name;
 
+    const normalizeForKey = (value: unknown): unknown => {
+        if (Array.isArray(value)) {
+            return value.map(normalizeForKey);
+        }
+
+        if (value && typeof value === "object") {
+            return Object.fromEntries(
+                Object.entries(value).map(([key, value]) => [
+                    key,
+                    normalizeForKey(value),
+                ])
+            );
+        }
+
+        if (value !== null && value !== undefined) {
+            return String(value);
+        }
+
+        return value;
+    };
+
+
+
+    const formikInitialValuesKey = useMemo(
+        () => JSON.stringify(normalizeForKey(formik.initialValues)),
+        [formik.initialValues]
+    );
+
     useEffect(() => {
         let isMounted = true;
 
@@ -200,6 +228,9 @@ export default function useFieldRenderer({
                         let payload: Record<string, any> = {};
                         if (source.refid) {
                             payload.refid = source.refid;
+                        }
+                        if (hasMissingParameters(field.parameter, formik.values)) {
+                            return;
                         }
                         if (field.parameter) {
                             const params = buildApiParams({ field, formValues: formik.values });
@@ -327,6 +358,7 @@ export default function useFieldRenderer({
             isMounted = false;
         };
     }, [
+        formikInitialValuesKey,
         field.options,
         field.source,
         field.table,
@@ -450,10 +482,13 @@ export default function useFieldRenderer({
     }, [filteredOptions, highlightedIndex]);
 
 
+    console.log("[AjaxChain dependencies]", formikInitialValuesKey);
 
     useEffect(() => {
         const ac = field.autocomplete;          // always single
-        const aj = field.ajaxchain;             // single | array | undefined
+        const aj = field.ajaxchain;
+
+        // single | array | undefined
 
         if (!ac && !aj) return;
 
@@ -474,6 +509,9 @@ export default function useFieldRenderer({
 
                     if ("type" in src && src.type === "api" && value) {
                         let curr_field = field.name;
+                        if (hasMissingParameters(field.parameter, formik.values)) {
+                            return;
+                        }
 
                         if (typeof field.parameter === "string" && field.parameter) {
                             curr_field = field.parameter
@@ -559,9 +597,9 @@ export default function useFieldRenderer({
                 // ---------- AJAX CHAIN (ARRAY SAFE) ----------
                 for (const chain of ajaxChains) {
                     setFieldLoading?.(chain.target, true);
-                   
+
                     if (!chain || typeof chain !== "object") continue;
-                     const src = chain.src;
+                    const src = chain.src;
                     if (!src || typeof src !== "object") continue;
                     if (!sqlOpsUrls) continue;
 
@@ -577,6 +615,9 @@ export default function useFieldRenderer({
 
                     if ("type" in src && src.type === "api") {
                         let curr_field = field.name;
+                        if (hasMissingParameters(field.parameter, formik.values)) {
+                            return;
+                        }
 
                         if (typeof field.parameter === "string" && field.parameter) {
                             curr_field = field.parameter
@@ -680,7 +721,7 @@ export default function useFieldRenderer({
         };
 
         run();
-    }, [formik.values[field.name]]);
+    }, [formikInitialValuesKey, formik.values[field.name]]);
 
 
 
