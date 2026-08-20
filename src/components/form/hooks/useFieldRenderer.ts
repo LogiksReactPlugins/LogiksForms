@@ -170,7 +170,7 @@ export default function useFieldRenderer({
 
 
     const formikInitialValuesKey = useMemo(
-        () => JSON.stringify(normalizeForKey(formik.initialValues)),
+        () => JSON.stringify(formik.initialValues),
         [formik.initialValues]
     );
 
